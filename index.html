@@ -1,11 +1,471 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pear Phone OS</title>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Pear Phone OS</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #ffffff;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #phone-container {
+            position: relative;
+
+            width: min(100vw, 1000px);
+            aspect-ratio: 1212 / 1188;
+
+            background-image: url("pear-phone.png");
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        /*
+        -------------------------------------------------------
+        INVISIBLE APP BUTTONS
+        These sit directly over the icons in the picture.
+        -------------------------------------------------------
+        */
+
+        .hotspot {
+            position: absolute;
+
+            border: none;
+            background: transparent;
+
+            cursor: pointer;
+
+            border-radius: 50%;
+
+            transition:
+                transform 0.12s ease,
+                background 0.12s ease;
+        }
+
+        .hotspot:hover {
+            background: rgba(255,255,255,0.06);
+            transform: scale(1.04);
+        }
+
+        .hotspot:active {
+            transform: scale(0.93);
+        }
+
+        /*
+        MAIN ICONS
+        */
+
+        #messages {
+            left: 43%;
+            top: 26%;
+            width: 9%;
+            aspect-ratio: 1;
+        }
+
+        #camera {
+            left: 54%;
+            top: 26%;
+            width: 9%;
+            aspect-ratio: 1;
+        }
+
+        #splashface {
+            left: 38%;
+            top: 36%;
+            width: 9%;
+            aspect-ratio: 1;
+        }
+
+        #stocks {
+            left: 47.5%;
+            top: 36%;
+            width: 9%;
+            aspect-ratio: 1;
+        }
+
+        #maps {
+            left: 57%;
+            top: 36%;
+            width: 9%;
+            aspect-ratio: 1;
+        }
+
+        #photos {
+            left: 38%;
+            top: 47%;
+            width: 9%;
+            aspect-ratio: 1;
+        }
+
+        #weather {
+            left: 47.5%;
+            top: 47%;
+            width: 9%;
+            aspect-ratio: 1;
+        }
+
+        #notes {
+            left: 57%;
+            top: 47%;
+            width: 9%;
+            aspect-ratio: 1;
+        }
+
+        #peartunes {
+            left: 32%;
+            top: 56%;
+            width: 9%;
+            aspect-ratio: 1;
+        }
+
+        #settings {
+            left: 42%;
+            top: 56%;
+            width: 9%;
+            aspect-ratio: 1;
+        }
+
+        #clock {
+            left: 52%;
+            top: 56%;
+            width: 9%;
+            aspect-ratio: 1;
+        }
+
+        #videos {
+            left: 62%;
+            top: 56%;
+            width: 9%;
+            aspect-ratio: 1;
+        }
+
+        /*
+        BOTTOM DOCK
+        */
+
+        #phone {
+            left: 32%;
+            top: 66%;
+            width: 9%;
+            aspect-ratio: 1;
+        }
+
+        #mail {
+            left: 42%;
+            top: 66%;
+            width: 9%;
+            aspect-ratio: 1;
+        }
+
+        #compass {
+            left: 52%;
+            top: 66%;
+            width: 9%;
+            aspect-ratio: 1;
+        }
+
+        #music {
+            left: 62%;
+            top: 66%;
+            width: 9%;
+            aspect-ratio: 1;
+        }
+
+        /*
+        HOME BUTTON
+        */
+
+        #home {
+            position: absolute;
+
+            left: 46%;
+            top: 79%;
+
+            width: 8%;
+            aspect-ratio: 1;
+
+            border: none;
+            border-radius: 50%;
+
+            background: transparent;
+
+            cursor: pointer;
+        }
+
+        /*
+        APP WINDOW
+        */
+
+        #overlay {
+            position: fixed;
+            inset: 0;
+
+            display: none;
+
+            justify-content: center;
+            align-items: center;
+
+            padding: 20px;
+
+            background: rgba(0,0,0,.6);
+
+            backdrop-filter: blur(7px);
+
+            z-index: 1000;
+        }
+
+        #overlay.open {
+            display: flex;
+        }
+
+        #app-window {
+            width: min(430px, 94vw);
+            max-height: 88vh;
+
+            overflow: hidden;
+
+            background: #f4f5f7;
+
+            border-radius: 25px;
+
+            box-shadow:
+                0 25px 80px rgba(0,0,0,.5);
+        }
+
+        .window-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            padding: 12px;
+
+            background:
+                linear-gradient(
+                    #ffffff,
+                    #e6e7e9
+                );
+
+            border-bottom: 1px solid #ccc;
+
+            font-weight: bold;
+        }
+
+        .back {
+            width: 34px;
+            height: 34px;
+
+            border-radius: 50%;
+
+            border: 1px solid #bbb;
+
+            background: linear-gradient(
+                #fff,
+                #ddd
+            );
+
+            font-size: 25px;
+
+            cursor: pointer;
+        }
+
+        .window-body {
+            padding: 16px;
+
+            max-height: calc(88vh - 60px);
+
+            overflow-y: auto;
+        }
+
+        .bubble {
+            width: max-content;
+            max-width: 80%;
+
+            padding: 10px 13px;
+
+            margin-bottom: 8px;
+
+            border-radius: 18px;
+
+            background: #dedfe2;
+        }
+
+        .bubble.me {
+            margin-left: auto;
+
+            background:
+                linear-gradient(
+                    #58b8ff,
+                    #1487df
+                );
+
+            color: white;
+        }
+
+        .button {
+            padding: 10px 14px;
+
+            border-radius: 12px;
+
+            border: 1px solid #bbb;
+
+            background:
+                linear-gradient(
+                    #fff,
+                    #ddd
+                );
+
+            cursor: pointer;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+
+            padding: 10px;
+
+            border: 1px solid #bbb;
+
+            border-radius: 12px;
+
+            outline: none;
+        }
+
+        textarea {
+            min-height: 180px;
+        }
+
+        .photos {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3,1fr);
+
+            gap: 7px;
+        }
+
+        .photos img {
+            width: 100%;
+
+            aspect-ratio: 1;
+
+            object-fit: cover;
+
+            border-radius: 12px;
+        }
+
+        .camera-video {
+            width: 100%;
+
+            background: black;
+
+            border-radius: 18px;
+        }
+
+        .stock {
+            display: flex;
+
+            justify-content: space-between;
+
+            padding: 12px;
+
+            margin-bottom: 8px;
+
+            background: white;
+
+            border: 1px solid #ddd;
+
+            border-radius: 14px;
+        }
+
+        @media (max-width: 600px) {
+
+            #phone-container {
+                width: 100vw;
+            }
+
+        }
+    </style>
 </head>
+
 <body>
+
+<div id="phone-container">
+
+    <!-- MAIN APPS -->
+
+    <button class="hotspot" id="messages"></button>
+
+    <button class="hotspot" id="camera"></button>
+
+    <button class="hotspot" id="splashface"></button>
+
+    <button class="hotspot" id="stocks"></button>
+
+    <button class="hotspot" id="maps"></button>
+
+    <button class="hotspot" id="photos"></button>
+
+    <button class="hotspot" id="weather"></button>
+
+    <button class="hotspot" id="notes"></button>
+
+    <button class="hotspot" id="peartunes"></button>
+
+    <button class="hotspot" id="settings"></button>
+
+    <button class="hotspot" id="clock"></button>
+
+    <button class="hotspot" id="videos"></button>
+
+
+    <!-- DOCK -->
+
+    <button class="hotspot" id="phone"></button>
+
+    <button class="hotspot" id="mail"></button>
+
+    <button class="hotspot" id="compass"></button>
+
+    <button class="hotspot" id="music"></button>
+
+
+    <!-- HOME -->
+
+    <button id="home"></button>
+
+</div>
+
+
+<!-- APP WINDOW -->
+
+<div id="overlay">
+
+    <div id="app-window"></div>
+
+</div>
+
 
 <script src="app.js"></script>
 

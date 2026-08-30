@@ -3,13 +3,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const overlay =
         document.getElementById("overlay");
 
-    const windowBox =
+    const appWindow =
         document.getElementById("app-window");
 
 
+    /* ==========================================
+       WINDOW SYSTEM
+       ========================================== */
+
     function openApp(title, content) {
 
-        windowBox.innerHTML = `
+        appWindow.innerHTML = `
 
             <div class="window-header">
 
@@ -43,27 +47,59 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function closeApp() {
 
+        const video =
+            appWindow.querySelector("video");
+
+        if (
+            video &&
+            video.srcObject
+        ) {
+
+            video.srcObject
+                .getTracks()
+                .forEach(
+                    track =>
+                        track.stop()
+                );
+        }
+
         overlay.classList.remove("open");
 
-        windowBox.innerHTML = "";
-
+        appWindow.innerHTML = "";
     }
 
 
-    /* =====================================================
+    overlay.addEventListener(
+        "click",
+        event => {
+
+            if (
+                event.target === overlay
+            ) {
+
+                closeApp();
+
+            }
+
+        }
+    );
+
+
+    /* ==========================================
        MESSAGES
-       ===================================================== */
+       ========================================== */
 
     document
         .getElementById("messages")
         .onclick = () => {
 
-            let messages =
+            const messages =
                 JSON.parse(
                     localStorage.getItem(
                         "pearMessages"
                     ) || "[]"
                 );
+
 
             openApp(
                 "Messages",
@@ -78,28 +114,32 @@ document.addEventListener("DOMContentLoaded", () => {
                     welcome to Pear Phone OS 🍐
                 </div>
 
+                <div class="bubble">
+                    this is the classic Pear Phone interface.
+                </div>
+
                 ${
+                    messages
+                        .map(
+                            message => `
 
-                    messages.map(
-                        msg => `
-                            <div class="bubble me">
-                                ${escapeHTML(msg)}
-                            </div>
-                        `
-                    ).join("")
+                                <div class="bubble me">
+                                    ${escapeHTML(message)}
+                                </div>
 
+                            `
+                        )
+                        .join("")
                 }
 
                 <div
-                    style="
-                    display:flex;
-                    gap:8px;
-                    margin-top:12px;
-                    ">
+                    class="row"
+                    style="margin-top:12px">
 
                     <input
                         id="messageInput"
-                        placeholder="iMessage">
+                        placeholder="iMessage"
+                        style="flex:1">
 
                     <button
                         class="button"
@@ -113,29 +153,38 @@ document.addEventListener("DOMContentLoaded", () => {
             );
 
 
+            const input =
+                document.getElementById(
+                    "messageInput"
+                );
+
+
             document
                 .getElementById("send")
                 .onclick = () => {
 
-                    const input =
-                        document.getElementById(
-                            "messageInput"
-                        );
+                    const value =
+                        input.value.trim();
 
-                    if (!input.value.trim())
+                    if (!value)
                         return;
 
-                    messages.push(
-                        input.value.trim()
-                    );
+
+                    messages.push(value);
+
 
                     localStorage.setItem(
                         "pearMessages",
-                        JSON.stringify(messages)
+                        JSON.stringify(
+                            messages.slice(-50)
+                        )
                     );
 
+
                     document
-                        .getElementById("messages")
+                        .getElementById(
+                            "messages"
+                        )
                         .click();
 
                 };
@@ -143,13 +192,13 @@ document.addEventListener("DOMContentLoaded", () => {
         };
 
 
-    /* =====================================================
+    /* ==========================================
        CAMERA
-       ===================================================== */
+       ========================================== */
 
     document
         .getElementById("camera")
-        .onclick = async () => {
+        .onclick = () => {
 
             openApp(
                 "Camera",
@@ -157,13 +206,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 `
 
                 <video
-                    id="video"
+                    id="cameraVideo"
                     class="camera-video"
                     autoplay
                     playsinline>
                 </video>
 
-                <br><br>
+                <br>
 
                 <button
                     class="button"
@@ -183,12 +232,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 </canvas>
 
                 <img
-                    id="photo"
+                    id="captured"
                     style="
-                    display:none;
-                    width:100%;
-                    margin-top:10px;
-                    border-radius:18px;
+                        display:none;
+                        width:100%;
+                        margin-top:10px;
+                        border-radius:18px;
                     ">
 
                 `
@@ -196,7 +245,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
             const video =
-                document.getElementById("video");
+                document.getElementById(
+                    "cameraVideo"
+                );
 
 
             document
@@ -208,20 +259,27 @@ document.addEventListener("DOMContentLoaded", () => {
                     try {
 
                         const stream =
-                            await navigator.mediaDevices
+                            await navigator
+                                .mediaDevices
                                 .getUserMedia({
-                                    video: true,
-                                    audio: false
+                                    video: {
+                                        facingMode:
+                                            "environment"
+                                    },
+
+                                    audio:false
                                 });
+
 
                         video.srcObject =
                             stream;
 
                     }
-                    catch {
+
+                    catch(error) {
 
                         alert(
-                            "Camera permission was denied."
+                            "Camera permission was denied. Allow camera access in Safari."
                         );
 
                     }
@@ -235,26 +293,30 @@ document.addEventListener("DOMContentLoaded", () => {
                 )
                 .onclick = () => {
 
-                    if (!video.videoWidth) {
+                    if (
+                        !video.videoWidth
+                    ) {
 
                         alert(
                             "Start the camera first."
                         );
 
                         return;
-
                     }
+
 
                     const canvas =
                         document.getElementById(
                             "canvas"
                         );
 
+
                     canvas.width =
                         video.videoWidth;
 
                     canvas.height =
                         video.videoHeight;
+
 
                     canvas
                         .getContext("2d")
@@ -264,34 +326,45 @@ document.addEventListener("DOMContentLoaded", () => {
                             0
                         );
 
+
                     const image =
                         canvas.toDataURL(
-                            "image/jpeg"
+                            "image/jpeg",
+                            .9
                         );
 
-                    const photo =
+
+                    const captured =
                         document.getElementById(
-                            "photo"
+                            "captured"
                         );
 
-                    photo.src = image;
 
-                    photo.style.display =
+                    captured.src =
+                        image;
+
+                    captured.style.display =
                         "block";
 
-                    let photos =
+
+                    const photos =
                         JSON.parse(
                             localStorage.getItem(
                                 "pearPhotos"
                             ) || "[]"
                         );
 
+
                     photos.unshift(image);
+
 
                     localStorage.setItem(
                         "pearPhotos",
                         JSON.stringify(
-                            photos.slice(0, 30)
+                            photos.slice(
+                                0,
+                                30
+                            )
                         )
                     );
 
@@ -300,9 +373,9 @@ document.addEventListener("DOMContentLoaded", () => {
         };
 
 
-    /* =====================================================
+    /* ==========================================
        PHOTOS
-       ===================================================== */
+       ========================================== */
 
     document
         .getElementById("photos")
@@ -315,6 +388,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     ) || "[]"
                 );
 
+
             openApp(
                 "Photos",
 
@@ -322,7 +396,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 <input
                     type="file"
-                    id="importPhotos"
+                    id="import"
                     accept="image/*"
                     multiple>
 
@@ -331,20 +405,24 @@ document.addEventListener("DOMContentLoaded", () => {
                 <div class="photos">
 
                     ${
-
                         photos.length
 
                         ?
 
-                        photos.map(
-                            image =>
-                                `<img src="${image}">`
-                        ).join("")
+                        photos
+                            .map(
+                                image =>
+                                    `<img src="${image}">`
+                            )
+                            .join("")
 
                         :
 
-                        `<p>No photos yet.</p>`
-
+                        `
+                        <p>
+                            No photos yet.
+                        </p>
+                        `
                     }
 
                 </div>
@@ -354,9 +432,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
             document
-                .getElementById(
-                    "importPhotos"
-                )
+                .getElementById("import")
                 .onchange = event => {
 
                     const files =
@@ -364,25 +440,32 @@ document.addEventListener("DOMContentLoaded", () => {
                             event.target.files
                         );
 
+
                     Promise.all(
 
-                        files.map(file =>
-                            new Promise(resolve => {
+                        files.map(
+                            file =>
 
-                                const reader =
-                                    new FileReader();
+                                new Promise(
+                                    resolve => {
 
-                                reader.onload =
-                                    () =>
-                                        resolve(
-                                            reader.result
+                                        const reader =
+                                            new FileReader();
+
+
+                                        reader.onload =
+                                            () =>
+                                                resolve(
+                                                    reader.result
+                                                );
+
+
+                                        reader.readAsDataURL(
+                                            file
                                         );
 
-                                reader.readAsDataURL(
-                                    file
-                                );
-
-                            })
+                                    }
+                                )
                         )
 
                     ).then(images => {
@@ -393,9 +476,13 @@ document.addEventListener("DOMContentLoaded", () => {
                                 [
                                     ...images,
                                     ...photos
-                                ]
+                                ].slice(
+                                    0,
+                                    30
+                                )
                             )
                         );
+
 
                         document
                             .getElementById(
@@ -410,9 +497,9 @@ document.addEventListener("DOMContentLoaded", () => {
         };
 
 
-    /* =====================================================
+    /* ==========================================
        NOTES
-       ===================================================== */
+       ========================================== */
 
     document
         .getElementById("notes")
@@ -447,7 +534,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
             document
-                .getElementById("saveNote")
+                .getElementById(
+                    "saveNote"
+                )
                 .onclick = () => {
 
                     const title =
@@ -457,6 +546,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             )
                             .value;
 
+
                     const body =
                         document
                             .getElementById(
@@ -464,14 +554,15 @@ document.addEventListener("DOMContentLoaded", () => {
                             )
                             .value;
 
+
                     localStorage.setItem(
                         "pearLastNote",
-
                         JSON.stringify({
                             title,
                             body
                         })
                     );
+
 
                     alert(
                         "Note saved 🍐"
@@ -482,9 +573,9 @@ document.addEventListener("DOMContentLoaded", () => {
         };
 
 
-    /* =====================================================
+    /* ==========================================
        STOCKS
-       ===================================================== */
+       ========================================== */
 
     document
         .getElementById("stocks")
@@ -496,45 +587,82 @@ document.addEventListener("DOMContentLoaded", () => {
                 `
 
                 <div class="stock">
+
                     <span>
-                        <b>AAPL</b><br>
+                        <b>AAPL</b>
+                        <br>
                         Apple
                     </span>
 
                     <span>
-                        $229.87<br>
+                        $229.87
+                        <br>
+
                         <small style="color:green">
                             +1.8%
                         </small>
                     </span>
+
                 </div>
 
+
                 <div class="stock">
+
                     <span>
-                        <b>MSFT</b><br>
+                        <b>MSFT</b>
+                        <br>
                         Microsoft
                     </span>
 
                     <span>
-                        $532.44<br>
+                        $532.44
+                        <br>
+
                         <small style="color:green">
                             +0.9%
                         </small>
                     </span>
+
                 </div>
 
+
                 <div class="stock">
+
                     <span>
-                        <b>TSLA</b><br>
+                        <b>TSLA</b>
+                        <br>
                         Tesla
                     </span>
 
                     <span>
-                        $318.26<br>
+                        $318.26
+                        <br>
+
                         <small style="color:red">
                             -1.2%
                         </small>
                     </span>
+
+                </div>
+
+
+                <div class="stock">
+
+                    <span>
+                        <b>PEAR</b>
+                        <br>
+                        Pear Inc.
+                    </span>
+
+                    <span>
+                        $99.99
+                        <br>
+
+                        <small style="color:green">
+                            +4.2%
+                        </small>
+                    </span>
+
                 </div>
 
                 `
@@ -543,9 +671,9 @@ document.addEventListener("DOMContentLoaded", () => {
         };
 
 
-    /* =====================================================
+    /* ==========================================
        MAPS
-       ===================================================== */
+       ========================================== */
 
     document
         .getElementById("maps")
@@ -558,28 +686,43 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 <div style="
                     height:250px;
+
                     border-radius:20px;
+
                     background:
-                    linear-gradient(
-                        135deg,
-                        #d6e5c7,
-                        #e8dfba
-                    );
+                        linear-gradient(
+                            135deg,
+                            #d6e5c7,
+                            #e9dfb9
+                        );
+
                     display:flex;
-                    align-items:center;
                     justify-content:center;
-                    font-size:60px;
+                    align-items:center;
+
+                    font-size:65px;
                 ">
+
                     📍
+
                 </div>
 
-                <h3>Pear Park</h3>
+
+                <h3>
+                    Pear Park
+                </h3>
+
 
                 <p>
                     12 Pear Street · 5 min away
                 </p>
 
-                <button class="button">
+
+                <button
+                    class="button"
+                    onclick="
+                        alert('Route started!')
+                    ">
                     Start Route
                 </button>
 
@@ -589,9 +732,9 @@ document.addEventListener("DOMContentLoaded", () => {
         };
 
 
-    /* =====================================================
+    /* ==========================================
        WEATHER
-       ===================================================== */
+       ========================================== */
 
     document
         .getElementById("weather")
@@ -608,24 +751,32 @@ document.addEventListener("DOMContentLoaded", () => {
                 ">
 
                     <div style="
-                        font-size:70px;
+                        font-size:72px;
                     ">
                         ☀️
                     </div>
 
+
                     <div style="
                         font-size:60px;
-                        font-weight:bold;
+                        font-weight:900;
                     ">
                         24°
                     </div>
+
 
                     <h3>
                         Sunny
                     </h3>
 
+
                     <p>
                         Feels like 25°
+                    </p>
+
+
+                    <p style="color:#777">
+                        Today: 18° — 27°
                     </p>
 
                 </div>
@@ -636,9 +787,9 @@ document.addEventListener("DOMContentLoaded", () => {
         };
 
 
-    /* =====================================================
+    /* ==========================================
        CLOCK
-       ===================================================== */
+       ========================================== */
 
     document
         .getElementById("clock")
@@ -652,10 +803,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 <div
                     id="bigClock"
                     style="
-                    font-size:55px;
-                    text-align:center;
-                    font-weight:bold;
-                    padding:30px 0;
+                        font-size:55px;
+                        text-align:center;
+                        font-weight:900;
+                        padding:35px 0;
                     ">
                 </div>
 
@@ -670,23 +821,32 @@ document.addEventListener("DOMContentLoaded", () => {
                         "bigClock"
                     );
 
-                if (!clock)
+
+                if(!clock)
                     return;
+
 
                 clock.textContent =
                     new Date()
                         .toLocaleTimeString(
                             [],
                             {
-                                hour:"numeric",
-                                minute:"2-digit",
-                                second:"2-digit"
+                                hour:
+                                    "numeric",
+
+                                minute:
+                                    "2-digit",
+
+                                second:
+                                    "2-digit"
                             }
                         );
 
             }
 
+
             updateClock();
+
 
             setInterval(
                 updateClock,
@@ -696,9 +856,9 @@ document.addEventListener("DOMContentLoaded", () => {
         };
 
 
-    /* =====================================================
+    /* ==========================================
        SETTINGS
-       ===================================================== */
+       ========================================== */
 
     document
         .getElementById("settings")
@@ -711,12 +871,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 <button
                     class="button"
-                    onclick="
-                        document.body.style.filter =
-                        document.body.style.filter
-                        ? ''
-                        : 'brightness(.8)'
-                    ">
+                    id="darkMode">
                     Toggle Display
                 </button>
 
@@ -724,22 +879,45 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 <button
                     class="button"
-                    onclick="
-                        localStorage.clear();
-                        location.reload();
-                    ">
+                    id="reset">
                     Reset Pear OS
                 </button>
 
                 `
             );
 
+
+            document
+                .getElementById(
+                    "darkMode"
+                )
+                .onclick = () => {
+
+                    document.body.style.filter =
+                        document.body.style.filter
+                            ?
+                            ""
+                            :
+                            "brightness(.8)";
+                };
+
+
+            document
+                .getElementById("reset")
+                .onclick = () => {
+
+                    localStorage.clear();
+
+                    location.reload();
+
+                };
+
         };
 
 
-    /* =====================================================
-       OTHER APPS
-       ===================================================== */
+    /* ==========================================
+       SPLASHFACE
+       ========================================== */
 
     document
         .getElementById("splashface")
@@ -749,79 +927,128 @@ document.addEventListener("DOMContentLoaded", () => {
                 "SplashFace",
 
                 `
+
                 <div style="
                     text-align:center;
-                    padding:30px;
+                    padding:35px;
                 ">
-                    <h1>Sf</h1>
-                    <h2>SplashFace</h2>
+
+                    <div style="
+                        font-size:65px;
+                        font-weight:900;
+                        color:#3e73bb;
+                    ">
+                        Sf
+                    </div>
+
+                    <h2>
+                        SplashFace
+                    </h2>
+
                     <p>
                         Welcome back!
                     </p>
+
                 </div>
+
                 `
             );
 
         };
+
+
+    /* ==========================================
+       PEARTUNES / MUSIC
+       ========================================== */
+
+    function openMusic(){
+
+        openApp(
+            "PearTunes",
+
+            `
+
+            <div style="
+                text-align:center;
+                padding:15px;
+            ">
+
+                <div style="
+                    font-size:75px;
+                    color:#df42b6;
+                ">
+                    ♫
+                </div>
+
+                <h2>
+                    PearTunes
+                </h2>
+
+            </div>
+
+
+            <div class="stock">
+
+                Pearadise
+
+                <button
+                    class="button"
+                    onclick="
+                        alert('Playing Pearadise')
+                    ">
+                    ▶
+                </button>
+
+            </div>
+
+
+            <div class="stock">
+
+                Sunset Drive
+
+                <button
+                    class="button"
+                    onclick="
+                        alert('Playing Sunset Drive')
+                    ">
+                    ▶
+                </button>
+
+            </div>
+
+
+            <div class="stock">
+
+                Electric Orchard
+
+                <button
+                    class="button"
+                    onclick="
+                        alert('Playing Electric Orchard')
+                    ">
+                    ▶
+                </button>
+
+            </div>
+
+            `
+        );
+    }
 
 
     document
         .getElementById("peartunes")
-        .onclick =
+        .onclick = openMusic;
+
+
     document
         .getElementById("music")
-        .onclick = () => {
+        .onclick = openMusic;
 
-            openApp(
-                "PearTunes",
 
-                `
-
-                <div style="
-                    text-align:center;
-                    padding:20px;
-                ">
-
-                    <div style="
-                        font-size:70px;
-                        color:#df3caf;
-                    ">
-                        ♫
-                    </div>
-
-                    <h2>
-                        PearTunes
-                    </h2>
-
-                </div>
-
-                <div class="stock">
-                    Pearadise
-                    <button
-                        class="button"
-                        onclick="
-                        alert('Playing Pearadise')
-                        ">
-                        ▶
-                    </button>
-                </div>
-
-                <div class="stock">
-                    Sunset Drive
-                    <button
-                        class="button"
-                        onclick="
-                        alert('Playing Sunset Drive')
-                        ">
-                        ▶
-                    </button>
-                </div>
-
-                `
-            );
-
-        };
-
+    /* ==========================================
+       PHONE
+       ========================================== */
 
     document
         .getElementById("phone")
@@ -831,10 +1058,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 "Phone",
 
                 `
+
                 <div style="
                     text-align:center;
                     padding:30px;
                 ">
+
                     <div style="
                         font-size:70px;
                     ">
@@ -846,15 +1075,21 @@ document.addEventListener("DOMContentLoaded", () => {
                     </h2>
 
                     <p>
-                        Phone calling is not
-                        connected in this web demo.
+                        Phone calling is not connected
+                        in this web demo.
                     </p>
+
                 </div>
+
                 `
             );
 
         };
 
+
+    /* ==========================================
+       MAIL
+       ========================================== */
 
     document
         .getElementById("mail")
@@ -864,12 +1099,16 @@ document.addEventListener("DOMContentLoaded", () => {
                 "Mail",
 
                 `
+
                 <h2>
                     Inbox
                 </h2>
 
+
                 <div class="stock">
+
                     <div>
+
                         <b>
                             Welcome to Pear OS
                         </b>
@@ -879,13 +1118,20 @@ document.addEventListener("DOMContentLoaded", () => {
                         <small>
                             Pear Team
                         </small>
+
                     </div>
+
                 </div>
+
                 `
             );
 
         };
 
+
+    /* ==========================================
+       COMPASS
+       ========================================== */
 
     document
         .getElementById("compass")
@@ -895,22 +1141,37 @@ document.addEventListener("DOMContentLoaded", () => {
                 "Compass",
 
                 `
+
                 <div style="
                     text-align:center;
-                    font-size:100px;
-                    padding:25px;
+                    padding:35px;
                 ">
-                    🧭
 
-                    <h3>
+                    <div style="
+                        font-size:100px;
+                    ">
+                        🧭
+                    </div>
+
+                    <h2>
                         North
-                    </h3>
+                    </h2>
+
+                    <p>
+                        0°
+                    </p>
+
                 </div>
+
                 `
             );
 
         };
 
+
+    /* ==========================================
+       VIDEOS
+       ========================================== */
 
     document
         .getElementById("videos")
@@ -920,12 +1181,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 "Videos",
 
                 `
+
                 <div style="
                     text-align:center;
-                    padding:30px;
+                    padding:35px;
                 ">
+
                     <div style="
-                        font-size:70px;
+                        font-size:75px;
                     ">
                         🎬
                     </div>
@@ -937,16 +1200,18 @@ document.addEventListener("DOMContentLoaded", () => {
                     <p>
                         No videos yet.
                     </p>
+
                 </div>
+
                 `
             );
 
         };
 
 
-    /* =====================================================
-       HOME
-       ===================================================== */
+    /* ==========================================
+       HOME BUTTON
+       ========================================== */
 
     document
         .getElementById("home")
@@ -954,17 +1219,23 @@ document.addEventListener("DOMContentLoaded", () => {
         closeApp;
 
 
-    function escapeHTML(text){
+    /* ==========================================
+       ESCAPE HTML
+       ========================================== */
 
-        return String(text)
-            .replace(/[&<>"']/g, char => ({
-                "&":"&amp;",
-                "<":"&lt;",
-                ">":"&gt;",
-                '"':"&quot;",
-                "'":"&#039;"
-            }[char]));
+    function escapeHTML(value){
 
+        return String(value)
+            .replace(
+                /[&<>"']/g,
+                character => ({
+                    "&":"&amp;",
+                    "<":"&lt;",
+                    ">":"&gt;",
+                    '"':"&quot;",
+                    "'":"&#039;"
+                }[character])
+            );
     }
 
 });

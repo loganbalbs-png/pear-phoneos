@@ -1,1677 +1,478 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Pear Phone OS</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #ffffff;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #phone-container {
+            position: relative;
+
+            width: min(100vw, 1000px);
+            aspect-ratio: 1212 / 1188;
+
+            background-image: url("pear-phone.png");
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+
+            /* ONLY CHANGE: zoom the entire Pear Phone out */
+            transform: scale(0.78);
+            transform-origin: center center;
+
+            overflow: visible;
+        }
+
+        /*
+        -------------------------------------------------------
+        INVISIBLE APP BUTTONS
+        These sit directly over the icons in the picture.
+        -------------------------------------------------------
+        */
+
+        .hotspot {
+            position: absolute;
+
+            border: none;
+            background: transparent;
+
+            cursor: pointer;
+
+            border-radius: 50%;
+
+            transition:
+                transform 0.12s ease,
+                background 0.12s ease;
+        }
+
+        .hotspot:hover {
+            background: rgba(255,255,255,0.06);
+            transform: scale(1.04);
+        }
+
+        .hotspot:active {
+            transform: scale(0.93);
+        }
+
+        /*
+        MAIN ICONS
+        */
+
+        #messages {
+            left: 43%;
+            top: 26%;
+            width: 9%;
+            aspect-ratio: 1;
+        }
+
+        #camera {
+            left: 54%;
+            top: 26%;
+            width: 9%;
+            aspect-ratio: 1;
+        }
+
+        #splashface {
+            left: 38%;
+            top: 36%;
+            width: 9%;
+            aspect-ratio: 1;
+        }
+
+        #stocks {
+            left: 47.5%;
+            top: 36%;
+            width: 9%;
+            aspect-ratio: 1;
+        }
+
+        #maps {
+            left: 57%;
+            top: 36%;
+            width: 9%;
+            aspect-ratio: 1;
+        }
+
+        #photos {
+            left: 38%;
+            top: 47%;
+            width: 9%;
+            aspect-ratio: 1;
+        }
+
+        #weather {
+            left: 47.5%;
+            top: 47%;
+            width: 9%;
+            aspect-ratio: 1;
+        }
+
+        #notes {
+            left: 57%;
+            top: 47%;
+            width: 9%;
+            aspect-ratio: 1;
+        }
+
+        #peartunes {
+            left: 32%;
+            top: 56%;
+            width: 9%;
+            aspect-ratio: 1;
+        }
+
+        #settings {
+            left: 42%;
+            top: 56%;
+            width: 9%;
+            aspect-ratio: 1;
+        }
+
+        #clock {
+            left: 52%;
+            top: 56%;
+            width: 9%;
+            aspect-ratio: 1;
+        }
+
+        #videos {
+            left: 62%;
+            top: 56%;
+            width: 9%;
+            aspect-ratio: 1;
+        }
+
+        /*
+        BOTTOM DOCK
+        */
+
+        #phone {
+            left: 32%;
+            top: 66%;
+            width: 9%;
+            aspect-ratio: 1;
+        }
+
+        #mail {
+            left: 42%;
+            top: 66%;
+            width: 9%;
+            aspect-ratio: 1;
+        }
+
+        #compass {
+            left: 52%;
+            top: 66%;
+            width: 9%;
+            aspect-ratio: 1;
+        }
+
+        #music {
+            left: 62%;
+            top: 66%;
+            width: 9%;
+            aspect-ratio: 1;
+        }
+
+        /*
+        HOME BUTTON
+        */
+
+        #home {
+            position: absolute;
+
+            left: 46%;
+            top: 79%;
+
+            width: 8%;
+            aspect-ratio: 1;
+
+            border: none;
+            border-radius: 50%;
 
-<meta name="viewport"
-      content="width=device-width,
-      initial-scale=1.0,
-      viewport-fit=cover">
+            background: transparent;
 
-<title>Pear Phone OS</title>
+            cursor: pointer;
+        }
 
-<style>
+        /*
+        APP WINDOW
+        */
 
-* {
-    box-sizing: border-box;
-}
+        #overlay {
+            position: fixed;
+            inset: 0;
 
-html, body {
-    margin: 0;
-    width: 100%;
-    height: 100%;
-}
+            display: none;
 
-body {
-    background: white;
+            justify-content: center;
+            align-items: center;
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
+            padding: 20px;
 
-    overflow: hidden;
+            background: rgba(0,0,0,.6);
 
-    font-family: Arial, Helvetica, sans-serif;
-}
+            backdrop-filter: blur(7px);
 
+            z-index: 1000;
+        }
 
-/* ======================================================
-   PEAR PHONE
-   ====================================================== */
+        #overlay.open {
+            display: flex;
+        }
 
-#pear-phone {
+        #app-window {
+            width: min(430px, 94vw);
+            max-height: 88vh;
 
-    position: relative;
+            overflow: hidden;
 
-    width: min(92vw, 520px);
+            background: #f4f5f7;
 
-    /*
-       Smaller than before so the entire phone
-       stays visible on screen.
-    */
+            border-radius: 25px;
 
-    height: min(94vh, 950px);
+            box-shadow:
+                0 25px 80px rgba(0,0,0,.5);
+        }
 
-    aspect-ratio: 0.58;
+        .window-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
 
-    background:
+            padding: 12px;
 
-        radial-gradient(
-            circle at 50% 8%,
-            #747b83 0,
-            #30353b 18%,
-            #111317 45%,
-            #030405 100%
-        );
+            background:
+                linear-gradient(
+                    #ffffff,
+                    #e6e7e9
+                );
 
-    border-radius:
-        48% 48% 43% 43%
-        /
-        27% 27% 61% 61%;
+            border-bottom: 1px solid #ccc;
 
-    border: 4px solid #5a5d61;
+            font-weight: bold;
+        }
 
-    box-shadow:
+        .back {
+            width: 34px;
+            height: 34px;
 
-        inset 8px 8px 18px rgba(255,255,255,.15),
+            border-radius: 50%;
 
-        inset -18px -25px 35px rgba(0,0,0,.95),
+            border: 1px solid #bbb;
 
-        0 25px 55px rgba(0,0,0,.35);
+            background: linear-gradient(
+                #fff,
+                #ddd
+            );
 
-}
+            font-size: 25px;
 
+            cursor: pointer;
+        }
 
-/* ======================================================
-   METAL PANEL
-   ====================================================== */
+        .window-body {
+            padding: 16px;
 
-#metal {
+            max-height: calc(88vh - 60px);
 
-    position: absolute;
+            overflow-y: auto;
+        }
 
-    left: 8%;
-    right: 8%;
+        .bubble {
+            width: max-content;
+            max-width: 80%;
 
-    top: 4%;
-    bottom: 4%;
+            padding: 10px 13px;
 
-    border-radius:
-        46% 46% 40% 40%
-        /
-        24% 24% 39% 39%;
+            margin-bottom: 8px;
 
-    background-color: #9ba7b5;
+            border-radius: 18px;
 
-    background-image:
-        radial-gradient(
-            circle,
-            rgba(55,73,95,.65) 1px,
-            transparent 1.5px
-        );
+            background: #dedfe2;
+        }
 
-    background-size: 11px 11px;
+        .bubble.me {
+            margin-left: auto;
 
-    box-shadow:
+            background:
+                linear-gradient(
+                    #58b8ff,
+                    #1487df
+                );
 
-        inset 0 8px 18px rgba(255,255,255,.25),
+            color: white;
+        }
 
-        inset 0 -15px 22px rgba(0,0,0,.3);
+        .button {
+            padding: 10px 14px;
 
-}
+            border-radius: 12px;
 
+            border: 1px solid #bbb;
 
-/* ======================================================
-   TOP GAUGES
-   ====================================================== */
+            background:
+                linear-gradient(
+                    #fff,
+                    #ddd
+                );
 
-.gauges {
+            cursor: pointer;
+        }
 
-    position: absolute;
+        input,
+        textarea {
+            width: 100%;
 
-    top: 6%;
+            padding: 10px;
 
-    left: 12%;
-    right: 12%;
+            border: 1px solid #bbb;
 
-    height: 22%;
+            border-radius: 12px;
 
-    z-index: 5;
-}
+            outline: none;
+        }
 
+        textarea {
+            min-height: 180px;
+        }
 
-.gauge {
+        .photos {
+            display: grid;
 
-    position: absolute;
+            grid-template-columns:
+                repeat(3,1fr);
 
-    border-radius: 50%;
+            gap: 7px;
+        }
 
-    background:
-        radial-gradient(
-            circle at 35% 25%,
-            #b8d2f2,
-            #6d83aa 45%,
-            #1a2743 72%,
-            #06080e 100%
-        );
+        .photos img {
+            width: 100%;
 
-    border: 4px solid #18213a;
+            aspect-ratio: 1;
 
-    box-shadow:
+            object-fit: cover;
 
-        inset 0 0 0 2px #687da5,
+            border-radius: 12px;
+        }
 
-        inset 0 0 14px rgba(0,0,0,.75),
+        .camera-video {
+            width: 100%;
 
-        0 3px 7px rgba(0,0,0,.8);
-}
+            background: black;
 
+            border-radius: 18px;
+        }
 
-/* LEFT */
+        .stock {
+            display: flex;
 
-#gauge1 {
+            justify-content: space-between;
 
-    left: 0;
+            padding: 12px;
 
-    top: 20%;
+            margin-bottom: 8px;
 
-    width: 31%;
+            background: white;
 
-    aspect-ratio: 1;
-}
+            border: 1px solid #ddd;
 
+            border-radius: 14px;
+        }
 
-/* MIDDLE */
+        @media (max-width: 600px) {
 
-#gauge2 {
+            #phone-container {
+                width: 100vw;
 
-    left: 39%;
+                /* ONLY CHANGE: more zoomed out on phone */
+                transform: scale(0.68);
+                transform-origin: center center;
+            }
 
-    top: 0;
-
-    width: 22%;
-
-    aspect-ratio: 1;
-
-    display: flex;
-
-    align-items: end;
-
-    justify-content: center;
-}
-
-
-/* RIGHT */
-
-#gauge3 {
-
-    right: 0;
-
-    top: 17%;
-
-    width: 31%;
-
-    aspect-ratio: 1;
-}
-
-
-/* SBIMAIL GAUGE */
-
-#gauge1::before {
-
-    content: "";
-
-    position: absolute;
-
-    left: 17%;
-    top: 18%;
-
-    width: 66%;
-    height: 48%;
-
-    border-radius: 50%;
-
-    background:
-        radial-gradient(
-            circle at 50% 100%,
-            #0b1830 0 33%,
-            #f1f7ff 34% 100%
-        );
-}
-
-
-#gauge1::after {
-
-    content: "SBIMAIL";
-
-    position: absolute;
-
-    bottom: 15%;
-
-    left: 50%;
-
-    transform: translateX(-50%);
-
-    color: #b5ddff;
-
-    font-size: 7px;
-
-    font-weight: 900;
-}
-
-
-/* SIGNAL */
-
-.signal {
-
-    display: flex;
-
-    align-items: end;
-
-    gap: 3px;
-
-    width: 55%;
-    height: 55%;
-
-    margin-top: 20%;
-}
-
-
-.signal span {
-
-    width: 8%;
-
-    border-radius: 4px;
-
-    background:
-        linear-gradient(
-            #e7ffff,
-            #5edbff,
-            #168cff
-        );
-}
-
-
-.signal span:nth-child(1) {
-    height: 25%;
-}
-
-.signal span:nth-child(2) {
-    height: 40%;
-}
-
-.signal span:nth-child(3) {
-    height: 55%;
-}
-
-.signal span:nth-child(4) {
-    height: 72%;
-}
-
-.signal span:nth-child(5) {
-    height: 90%;
-}
-
-
-/* BATTERY */
-
-.battery-line {
-
-    position: absolute;
-
-    width: 44%;
-    height: 4px;
-
-    top: 47%;
-    left: 28%;
-
-    background: white;
-
-    transform: rotate(-12deg);
-}
-
-
-.battery-line::after {
-
-    content: "";
-
-    position: absolute;
-
-    right: -7px;
-
-    top: -5px;
-
-    border: 6px solid transparent;
-
-    border-left-color: red;
-}
-
-
-.battery-h,
-.battery-l {
-
-    position: absolute;
-
-    color: white;
-
-    font-weight: bold;
-
-    font-size: 8px;
-}
-
-
-.battery-h {
-    top: 23%;
-    left: 17%;
-}
-
-
-.battery-l {
-    bottom: 17%;
-    left: 17%;
-}
-
-
-.battery-blue {
-
-    position: absolute;
-
-    width: 28%;
-    height: 8%;
-
-    right: 15%;
-    bottom: 19%;
-
-    background: #27aff2;
-
-    box-shadow:
-        inset 0 0 0 2px #7891b4;
-}
-
-
-/* ======================================================
-   BLUE SCREEN
-   ====================================================== */
-
-#screen {
-
-    position: absolute;
-
-    left: 10%;
-    right: 10%;
-
-    top: 21%;
-
-    bottom: 20%;
-
-    z-index: 10;
-
-    overflow: hidden;
-
-    border-radius:
-        40% 40% 43% 43%
-        /
-        18% 18% 15% 15%;
-
-    border: 5px solid #05070b;
-
-    background:
-
-        radial-gradient(
-            ellipse at 50% 13%,
-            #52d3ff 0,
-            transparent 34%
-        ),
-
-        radial-gradient(
-            ellipse at 50% 58%,
-            #1681ef 0,
-            #0d4bc9 53%,
-            #072a78 100%
-        );
-
-    box-shadow:
-
-        inset 0 0 40px rgba(0,0,0,.35),
-
-        inset 0 0 80px rgba(0,140,255,.22),
-
-        0 4px 12px rgba(0,0,0,.9);
-}
-
-
-/* STATUS BAR */
-
-#status {
-
-    position: absolute;
-
-    top: 1.5%;
-    left: 5%;
-    right: 5%;
-
-    display: flex;
-
-    justify-content: space-between;
-
-    color: white;
-
-    font-size: 9px;
-
-    font-weight: bold;
-
-    z-index: 20;
-
-    text-shadow:
-        0 1px 3px #001;
-}
-
-
-/* ======================================================
-   APPS
-   ====================================================== */
-
-#apps {
-
-    position: absolute;
-
-    left: 7%;
-    right: 7%;
-
-    top: 9%;
-    bottom: 18%;
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(3,1fr);
-
-    grid-template-rows:
-        repeat(4,1fr);
-
-    gap: 5px 3px;
-
-    align-items: center;
-
-    justify-items: center;
-
-    z-index: 15;
-}
-
-
-.app {
-
-    border: none;
-
-    background: transparent;
-
-    color: white;
-
-    display: flex;
-
-    flex-direction: column;
-
-    align-items: center;
-
-    justify-content: center;
-
-    gap: 3px;
-
-    font-weight: bold;
-
-    font-size: 8px;
-
-    cursor: pointer;
-
-    padding: 0;
-
-    text-shadow:
-        0 2px 3px #001;
-}
-
-
-.icon {
-
-    width: 58px;
-
-    aspect-ratio: 1;
-
-    border-radius: 50%;
-
-    position: relative;
-
-    overflow: hidden;
-
-    border: 3px solid #090909;
-
-    box-shadow:
-
-        0 3px 5px rgba(0,0,0,.7),
-
-        inset 0 2px 4px rgba(255,255,255,.6),
-
-        inset 0 -5px 8px rgba(0,0,0,.4);
-}
-
-
-/* ICON SHINE */
-
-.icon::before {
-
-    content: "";
-
-    position: absolute;
-
-    left: 12%;
-    right: 12%;
-
-    top: 6%;
-
-    height: 24%;
-
-    border-radius: 50%;
-
-    background:
-        rgba(255,255,255,.3);
-
-    filter: blur(2px);
-
-    z-index: 2;
-}
-
-
-.green {
-    background:
-        radial-gradient(
-            circle at 35% 25%,
-            #a1ff91,
-            #42d951 55%,
-            #088f1d
-        );
-}
-
-
-.gray {
-    background:
-        radial-gradient(
-            circle at 35% 25%,
-            #f7f7f7,
-            #aaa 55%,
-            #454545
-        );
-}
-
-
-.blue {
-    background:
-        radial-gradient(
-            circle at 35% 25%,
-            #b8e0ff,
-            #5995dc 55%,
-            #1d448b
-        );
-}
-
-
-.cyan {
-    background:
-        radial-gradient(
-            circle at 35% 25%,
-            #e0fbff,
-            #72ccee 55%,
-            #2979b4
-        );
-}
-
-
-.yellow {
-    background:
-        radial-gradient(
-            circle at 35% 25%,
-            #fffedf,
-            #e7df84 55%,
-            #af9639
-        );
-}
-
-
-.white {
-    background:
-        radial-gradient(
-            circle at 35% 25%,
-            white,
-            #ddd 60%,
-            #999
-        );
-}
-
-
-.pink {
-    background:
-        radial-gradient(
-            circle at 35% 25%,
-            #ffb3ec,
-            #e951c2 55%,
-            #9c147e
-        );
-}
-
-
-.orange {
-    background:
-        radial-gradient(
-            circle at 35% 25%,
-            #fff19b,
-            #ffc02c 55%,
-            #d97912
-        );
-}
-
-
-.icon-text {
-
-    position: absolute;
-
-    left: 50%;
-    top: 50%;
-
-    transform:
-        translate(-50%,-50%);
-
-    color: white;
-
-    font-size: 27px;
-
-    font-weight: 900;
-
-    z-index: 3;
-}
-
-
-/* ======================================================
-   BASIC ICON ART
-   ====================================================== */
-
-.message-icon::after {
-
-    content: "•••";
-
-    position: absolute;
-
-    left: 50%;
-    top: 53%;
-
-    transform:
-        translate(-50%,-50%);
-
-    color: #43cc45;
-
-    font-size: 11px;
-
-    letter-spacing: 2px;
-
-    background: white;
-
-    border-radius: 9px;
-
-    padding: 8px 5px 5px;
-
-    z-index: 3;
-}
-
-
-.camera-icon::after {
-
-    content: "";
-
-    position: absolute;
-
-    width: 47%;
-
-    height: 30%;
-
-    left: 26%;
-    top: 35%;
-
-    background: #333;
-
-    border-radius: 6px;
-
-    border: 2px solid #111;
-
-    z-index: 3;
-}
-
-
-.camera-icon::before {
-
-    content: "";
-
-    position: absolute;
-
-    width: 22%;
-
-    height: 22%;
-
-    left: 39%;
-    top: 39%;
-
-    border-radius: 50%;
-
-    background: #18202a;
-
-    border: 4px solid #aeb6bc;
-
-    z-index: 4;
-}
-
-
-.stock-icon::after {
-
-    content: "↗";
-
-    position: absolute;
-
-    left: 50%;
-    top: 50%;
-
-    transform:
-        translate(-50%,-50%);
-
-    color: white;
-
-    font-size: 31px;
-
-    font-weight: 900;
-
-    z-index: 3;
-}
-
-
-/* ======================================================
-   DOCK
-   ====================================================== */
-
-#dock {
-
-    position: absolute;
-
-    left: 7%;
-    right: 7%;
-
-    bottom: 0;
-
-    height: 18%;
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(4,1fr);
-
-    align-items: center;
-
-    justify-items: center;
-
-    background:
-        linear-gradient(
-            rgba(150,165,195,.04),
-            rgba(150,165,195,.35)
-        );
-
-    border-top:
-        1px solid
-        rgba(255,255,255,.18);
-
-    z-index: 20;
-}
-
-
-#dock .app {
-
-    width: 100%;
-}
-
-
-#dock .icon {
-
-    width: 62px;
-}
-
-
-/* ======================================================
-   HOME BUTTON
-   ====================================================== */
-
-#home {
-
-    position: absolute;
-
-    left: 50%;
-
-    bottom: 2%;
-
-    transform:
-        translateX(-50%);
-
-    width: 66px;
-    height: 66px;
-
-    border-radius: 50%;
-
-    border: 2px solid #555;
-
-    background:
-        radial-gradient(
-            circle at 35% 30%,
-            #505050,
-            #171717 60%,
-            #050505
-        );
-
-    box-shadow:
-
-        inset 0 0 14px #000,
-
-        0 4px 8px #000;
-
-    z-index: 30;
-
-    cursor: pointer;
-}
-
-
-#home::after {
-
-    content: "";
-
-    position: absolute;
-
-    left: 50%;
-    top: 50%;
-
-    width: 31px;
-    height: 34px;
-
-    transform:
-        translate(-50%,-50%)
-        rotate(-25deg);
-
-    border: 3px solid white;
-
-    border-top-color: transparent;
-
-    border-radius: 50%;
-}
-
-
-/* ======================================================
-   APP WINDOWS
-   ====================================================== */
-
-#overlay {
-
-    position: fixed;
-
-    inset: 0;
-
-    z-index: 1000;
-
-    display: none;
-
-    align-items: center;
-
-    justify-content: center;
-
-    padding: 15px;
-
-    background:
-        rgba(0,0,0,.58);
-
-    backdrop-filter:
-        blur(6px);
-}
-
-
-#overlay.open {
-
-    display: flex;
-}
-
-
-#window {
-
-    width: min(430px,94vw);
-
-    max-height: 88vh;
-
-    overflow: hidden;
-
-    background: #f3f4f6;
-
-    color: #111;
-
-    border-radius: 24px;
-
-    box-shadow:
-        0 25px 75px rgba(0,0,0,.55);
-}
-
-
-.header {
-
-    height: 56px;
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 10px;
-
-    padding: 10px 13px;
-
-    background:
-        linear-gradient(#fff,#e5e6e8);
-
-    border-bottom:
-        1px solid #ccc;
-
-    font-size: 18px;
-
-    font-weight: 900;
-}
-
-
-.back {
-
-    width: 34px;
-    height: 34px;
-
-    border-radius: 50%;
-
-    border: 1px solid #bbb;
-
-    background:
-        linear-gradient(#fff,#ddd);
-
-    font-size: 24px;
-
-    cursor: pointer;
-}
-
-
-.content {
-
-    padding: 16px;
-
-    max-height: 82vh;
-
-    overflow-y: auto;
-}
-
-
-.bubble {
-
-    padding: 10px 13px;
-
-    width: max-content;
-
-    max-width: 82%;
-
-    background: #dedfe3;
-
-    border-radius: 18px;
-
-    margin-bottom: 8px;
-}
-
-
-.bubble.me {
-
-    margin-left: auto;
-
-    background:
-        linear-gradient(
-            #59b9ff,
-            #1289df
-        );
-
-    color: white;
-}
-
-
-.action {
-
-    padding: 10px 14px;
-
-    border-radius: 12px;
-
-    border: 1px solid #bbb;
-
-    background:
-        linear-gradient(#fff,#ddd);
-
-    font-weight: 700;
-
-    cursor: pointer;
-}
-
-
-.photo-grid {
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(3,1fr);
-
-    gap: 7px;
-}
-
-
-.photo-grid img {
-
-    width: 100%;
-
-    aspect-ratio: 1;
-
-    object-fit: cover;
-
-    border-radius: 12px;
-}
-
-
-.stock {
-
-    display: flex;
-
-    justify-content: space-between;
-
-    padding: 12px;
-
-    margin-bottom: 8px;
-
-    background: white;
-
-    border: 1px solid #ddd;
-
-    border-radius: 14px;
-}
-
-
-/* ======================================================
-   MOBILE
-   ====================================================== */
-
-@media(max-width:600px) {
-
-    #pear-phone {
-
-        width: 82vw;
-
-        height: 92vh;
-
-        min-height: 0;
-
-    }
-
-
-    .icon {
-
-        width: 52px;
-
-    }
-
-
-    #dock .icon {
-
-        width: 54px;
-
-    }
-
-
-    #home {
-
-        width: 58px;
-        height: 58px;
-
-    }
-
-}
-
-
-@media(max-height:700px) {
-
-    #pear-phone {
-
-        width: 72vw;
-
-        height: 90vh;
-
-    }
-
-
-    .icon {
-
-        width: 46px;
-
-    }
-
-
-    #dock .icon {
-
-        width: 48px;
-
-    }
-
-}
-
-</style>
+        }
+    </style>
 </head>
-
 
 <body>
 
-<div id="pear-phone">
+<div id="phone-container">
 
-    <div id="metal"></div>
+    <!-- MAIN APPS -->
 
+    <button class="hotspot" id="messages"></button>
 
-    <div class="gauges">
+    <button class="hotspot" id="camera"></button>
 
-        <div
-            class="gauge"
-            id="gauge1">
-        </div>
+    <button class="hotspot" id="splashface"></button>
 
+    <button class="hotspot" id="stocks"></button>
 
-        <div
-            class="gauge"
-            id="gauge2">
+    <button class="hotspot" id="maps"></button>
 
-            <div class="signal">
+    <button class="hotspot" id="photos"></button>
 
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
+    <button class="hotspot" id="weather"></button>
 
-            </div>
+    <button class="hotspot" id="notes"></button>
 
-        </div>
+    <button class="hotspot" id="peartunes"></button>
 
+    <button class="hotspot" id="settings"></button>
 
-        <div
-            class="gauge"
-            id="gauge3">
+    <button class="hotspot" id="clock"></button>
 
-            <div class="battery-line">
-            </div>
+    <button class="hotspot" id="videos"></button>
 
-            <span class="battery-h">
-                H
-            </span>
 
-            <span class="battery-l">
-                L
-            </span>
+    <!-- DOCK -->
 
-            <span class="battery-blue">
-            </span>
+    <button class="hotspot" id="phone"></button>
 
-        </div>
+    <button class="hotspot" id="mail"></button>
 
-    </div>
+    <button class="hotspot" id="compass"></button>
 
+    <button class="hotspot" id="music"></button>
 
-    <!-- SCREWS -->
 
-    <div
-        style="
-        position:absolute;
-        left:6%;
-        top:30%;
-        color:#aaa;
-        font-weight:bold;
-        font-size:20px;
-        z-index:50;">
-        +
-    </div>
+    <!-- HOME -->
 
-
-    <div
-        style="
-        position:absolute;
-        right:6%;
-        top:27%;
-        color:#aaa;
-        font-weight:bold;
-        font-size:20px;
-        z-index:50;">
-        +
-    </div>
-
-
-    <div
-        style="
-        position:absolute;
-        left:2%;
-        top:64%;
-        color:#aaa;
-        font-weight:bold;
-        font-size:20px;
-        z-index:50;">
-        +
-    </div>
-
-
-    <div
-        style="
-        position:absolute;
-        right:1%;
-        top:65%;
-        color:#aaa;
-        font-weight:bold;
-        font-size:20px;
-        z-index:50;">
-        +
-    </div>
-
-
-    <!-- SCREEN -->
-
-    <section id="screen">
-
-        <div id="status">
-
-            <span id="time">
-                9:41
-            </span>
-
-            <span>
-                PEAR
-            </span>
-
-            <span>
-                ◔ ◉ ▰
-            </span>
-
-        </div>
-
-
-        <div id="apps">
-
-            <button
-                class="app"
-                id="messages">
-
-                <div
-                    class="
-                    icon
-                    green
-                    message-icon">
-                </div>
-
-                <span>
-                    Messages
-                </span>
-
-            </button>
-
-
-            <button
-                class="app"
-                id="camera">
-
-                <div
-                    class="
-                    icon
-                    gray
-                    camera-icon">
-                </div>
-
-                <span>
-                    Camera
-                </span>
-
-            </button>
-
-
-            <button
-                class="app"
-                id="splashface">
-
-                <div
-                    class="
-                    icon
-                    blue">
-
-                    <span class="icon-text">
-                        Sf
-                    </span>
-
-                </div>
-
-                <span>
-                    SplashFace
-                </span>
-
-            </button>
-
-
-            <button
-                class="app"
-                id="stocks">
-
-                <div
-                    class="
-                    icon
-                    cyan
-                    stock-icon">
-                </div>
-
-                <span>
-                    Stocks
-                </span>
-
-            </button>
-
-
-            <button
-                class="app"
-                id="maps">
-
-                <div
-                    class="
-                    icon
-                    yellow">
-
-                    <span class="icon-text">
-                        📍
-                    </span>
-
-                </div>
-
-                <span>
-                    Maps
-                </span>
-
-            </button>
-
-
-            <button
-                class="app"
-                id="photos">
-
-                <div
-                    class="
-                    icon
-                    white">
-
-                    <span class="icon-text">
-                        🌈
-                    </span>
-
-                </div>
-
-                <span>
-                    Photos
-                </span>
-
-            </button>
-
-
-            <button
-                class="
-                app"
-                id="weather">
-
-                <div
-                    class="
-                    icon
-                    cyan">
-
-                    <span class="icon-text">
-                        ☀
-                    </span>
-
-                </div>
-
-                <span>
-                    Weather
-                </span>
-
-            </button>
-
-
-            <button
-                class="app"
-                id="notes">
-
-                <div
-                    class="
-                    icon
-                    white">
-
-                    <span
-                        style="
-                        position:absolute;
-                        top:12%;
-                        left:0;
-                        width:100%;
-                        height:33%;
-                        background:#ffd938;
-                        ">
-                    </span>
-
-                    <span
-                        style="
-                        position:absolute;
-                        top:53%;
-                        left:18%;
-                        width:64%;
-                        height:3px;
-                        background:#888;
-                        box-shadow:
-                        0 8px #888,
-                        0 16px #888;
-                        ">
-                    </span>
-
-                </div>
-
-                <span>
-                    Notes
-                </span>
-
-            </button>
-
-
-            <button
-                class="app"
-                id="peartunes">
-
-                <div
-                    class="
-                    icon
-                    pink">
-
-                    <span class="icon-text">
-                        ♫
-                    </span>
-
-                </div>
-
-                <span>
-                    PearTunes
-                </span>
-
-            </button>
-
-
-            <button
-                class="app"
-                id="settings">
-
-                <div
-                    class="
-                    icon
-                    gray">
-
-                    <span class="icon-text">
-                        ⚙
-                    </span>
-
-                </div>
-
-                <span>
-                    Settings
-                </span>
-
-            </button>
-
-
-            <button
-                class="app"
-                id="clock">
-
-                <div
-                    class="
-                    icon
-                    white">
-
-                    <span class="icon-text">
-                        ◷
-                    </span>
-
-                </div>
-
-                <span>
-                    Clock
-                </span>
-
-            </button>
-
-
-            <button
-                class="app"
-                id="videos">
-
-                <div
-                    class="
-                    icon
-                    cyan">
-
-                    <span class="icon-text">
-                        ▶
-                    </span>
-
-                </div>
-
-                <span>
-                    Videos
-                </span>
-
-            </button>
-
-        </div>
-
-
-        <!-- DOCK -->
-
-        <div id="dock">
-
-            <button
-                class="app"
-                id="phone">
-
-                <div
-                    class="
-                    icon
-                    green">
-
-                    <span class="icon-text">
-                        ☎
-                    </span>
-
-                </div>
-
-            </button>
-
-
-            <button
-                class="app"
-                id="mail">
-
-                <div
-                    class="
-                    icon
-                    blue">
-
-                    <span class="icon-text">
-                        ✉
-                    </span>
-
-                </div>
-
-            </button>
-
-
-            <button
-                class="app"
-                id="compass">
-
-                <div
-                    class="
-                    icon
-                    cyan">
-
-                    <span class="icon-text">
-                        🧭
-                    </span>
-
-                </div>
-
-            </button>
-
-
-            <button
-                class="app"
-                id="music">
-
-                <div
-                    class="
-                    icon
-                    orange">
-
-                    <span class="icon-text">
-                        ♫
-                    </span>
-
-                </div>
-
-            </button>
-
-        </div>
-
-    </section>
-
-
-    <!-- HOME BUTTON -->
-
-    <button
-        id="home"
-        aria-label="Home">
-    </button>
+    <button id="home"></button>
 
 </div>
 
 
-<!-- APP WINDOWS -->
+<!-- APP WINDOW -->
 
 <div id="overlay">
 
-    <div id="window">
-    </div>
+    <div id="app-window"></div>
 
 </div>
 

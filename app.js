@@ -1,270 +1,970 @@
-// ========================================
-// PEAR PHONE
-// ========================================
+document.addEventListener("DOMContentLoaded", () => {
 
-const appWindow = document.getElementById("appWindow");
-const appTitle = document.getElementById("appTitle");
-const appContent = document.getElementById("appContent");
+    const overlay =
+        document.getElementById("overlay");
 
-
-// ========================================
-// OPEN AN APP
-// ========================================
-
-function openApp(appName) {
-
-    appTitle.textContent = appName;
-
-    let content = "";
-
-    switch (appName) {
-
-        case "Pear Mail":
-            content = `
-                <h2>✉️ Pear Mail</h2>
-                <p>No new messages.</p>
-            `;
-            break;
+    const windowBox =
+        document.getElementById("app-window");
 
 
-        case "Pear Music":
-            content = `
-                <h2>🎵 Pear Music</h2>
-                <p>Now Playing</p>
+    function openApp(title, content) {
 
-                <button onclick="alert('Playing music!')">
-                    ▶ Play
-                </button>
-            `;
-            break;
+        windowBox.innerHTML = `
 
+            <div class="window-header">
 
-        case "Pear Camera":
-            content = `
-                <h2>📷 Pear Camera</h2>
-                <p>Camera opened.</p>
-
-                <button onclick="takePicture()">
-                    Take Picture
-                </button>
-            `;
-            break;
-
-
-        case "Pear Maps":
-            content = `
-                <h2>🗺️ Pear Maps</h2>
-                <p>Where would you like to go?</p>
-
-                <input
-                    type="text"
-                    placeholder="Search location..."
-                >
-
-                <button onclick="alert('Searching...')">
-                    Search
-                </button>
-            `;
-            break;
-
-
-        case "Pear Messages":
-            content = `
-                <h2>💬 Pear Messages</h2>
-
-                <p>Mom: Where are you?</p>
-                <p>Chloe: I'm coming!</p>
-
-                <input
-                    type="text"
-                    id="messageInput"
-                    placeholder="Message..."
-                >
-
-                <button onclick="sendMessage()">
-                    Send
-                </button>
-            `;
-            break;
-
-
-        case "Pear Photos":
-            content = `
-                <h2>🖼️ Pear Photos</h2>
-                <p>Your photo library is empty.</p>
-            `;
-            break;
-
-
-        case "Pear Browser":
-            content = `
-                <h2>🌐 Pear Browser</h2>
-
-                <input
-                    type="text"
-                    id="browserInput"
-                    placeholder="Search the web..."
-                >
-
-                <button onclick="searchBrowser()">
-                    Search
-                </button>
-            `;
-            break;
-
-
-        case "Pear TV":
-            content = `
-                <h2>📺 Pear TV</h2>
-                <p>Welcome to Pear TV!</p>
-
-                <button onclick="alert('Playing show...')">
-                    ▶ Watch
-                </button>
-            `;
-            break;
-
-
-        case "Pear Games":
-            content = `
-                <h2>🎮 Pear Games</h2>
-
-                <p>Choose a game:</p>
-
-                <button onclick="alert('Game loading...')">
-                    Snake
+                <button
+                    class="back"
+                    id="back">
+                    ‹
                 </button>
 
-                <button onclick="alert('Game loading...')">
-                    Tic Tac Toe
-                </button>
-            `;
-            break;
+                <span>
+                    ${title}
+                </span>
+
+            </div>
+
+            <div class="window-body">
+
+                ${content}
+
+            </div>
+
+        `;
+
+        overlay.classList.add("open");
+
+        document
+            .getElementById("back")
+            .onclick = closeApp;
+    }
 
 
-        case "Pear Notes":
-            content = `
-                <h2>📝 Pear Notes</h2>
+    function closeApp() {
 
-                <textarea
-                    id="notes"
-                    rows="6"
-                    placeholder="Write a note..."
-                ></textarea>
+        overlay.classList.remove("open");
+
+        windowBox.innerHTML = "";
+
+    }
+
+
+    /* =====================================================
+       MESSAGES
+       ===================================================== */
+
+    document
+        .getElementById("messages")
+        .onclick = () => {
+
+            let messages =
+                JSON.parse(
+                    localStorage.getItem(
+                        "pearMessages"
+                    ) || "[]"
+                );
+
+            openApp(
+                "Messages",
+
+                `
+
+                <div class="bubble">
+                    hey 👋
+                </div>
+
+                <div class="bubble">
+                    welcome to Pear Phone OS 🍐
+                </div>
+
+                ${
+
+                    messages.map(
+                        msg => `
+                            <div class="bubble me">
+                                ${escapeHTML(msg)}
+                            </div>
+                        `
+                    ).join("")
+
+                }
+
+                <div
+                    style="
+                    display:flex;
+                    gap:8px;
+                    margin-top:12px;
+                    ">
+
+                    <input
+                        id="messageInput"
+                        placeholder="iMessage">
+
+                    <button
+                        class="button"
+                        id="send">
+                        Send
+                    </button>
+
+                </div>
+
+                `
+            );
+
+
+            document
+                .getElementById("send")
+                .onclick = () => {
+
+                    const input =
+                        document.getElementById(
+                            "messageInput"
+                        );
+
+                    if (!input.value.trim())
+                        return;
+
+                    messages.push(
+                        input.value.trim()
+                    );
+
+                    localStorage.setItem(
+                        "pearMessages",
+                        JSON.stringify(messages)
+                    );
+
+                    document
+                        .getElementById("messages")
+                        .click();
+
+                };
+
+        };
+
+
+    /* =====================================================
+       CAMERA
+       ===================================================== */
+
+    document
+        .getElementById("camera")
+        .onclick = async () => {
+
+            openApp(
+                "Camera",
+
+                `
+
+                <video
+                    id="video"
+                    class="camera-video"
+                    autoplay
+                    playsinline>
+                </video>
 
                 <br><br>
 
-                <button onclick="saveNote()">
-                    Save
+                <button
+                    class="button"
+                    id="startCamera">
+                    Start Camera
                 </button>
-            `;
-            break;
+
+                <button
+                    class="button"
+                    id="takePhoto">
+                    Take Photo
+                </button>
+
+                <canvas
+                    id="canvas"
+                    style="display:none">
+                </canvas>
+
+                <img
+                    id="photo"
+                    style="
+                    display:none;
+                    width:100%;
+                    margin-top:10px;
+                    border-radius:18px;
+                    ">
+
+                `
+            );
 
 
-        case "Pear Weather":
-            content = `
-                <h2>☀️ Pear Weather</h2>
-
-                <p>Today's Weather</p>
-
-                <h1>☀️ 22°C</h1>
-
-                <p>Sunny</p>
-            `;
-            break;
+            const video =
+                document.getElementById("video");
 
 
-        case "Settings":
-            content = `
-                <h2>⚙️ Settings</h2>
+            document
+                .getElementById(
+                    "startCamera"
+                )
+                .onclick = async () => {
 
-                <p>Wi-Fi: Connected</p>
-                <p>Bluetooth: On</p>
-                <p>Battery: 87%</p>
-            `;
-            break;
+                    try {
+
+                        const stream =
+                            await navigator.mediaDevices
+                                .getUserMedia({
+                                    video: true,
+                                    audio: false
+                                });
+
+                        video.srcObject =
+                            stream;
+
+                    }
+                    catch {
+
+                        alert(
+                            "Camera permission was denied."
+                        );
+
+                    }
+
+                };
 
 
-        default:
-            content = `
-                <h2>${appName}</h2>
-                <p>This app isn't available yet.</p>
-            `;
+            document
+                .getElementById(
+                    "takePhoto"
+                )
+                .onclick = () => {
+
+                    if (!video.videoWidth) {
+
+                        alert(
+                            "Start the camera first."
+                        );
+
+                        return;
+
+                    }
+
+                    const canvas =
+                        document.getElementById(
+                            "canvas"
+                        );
+
+                    canvas.width =
+                        video.videoWidth;
+
+                    canvas.height =
+                        video.videoHeight;
+
+                    canvas
+                        .getContext("2d")
+                        .drawImage(
+                            video,
+                            0,
+                            0
+                        );
+
+                    const image =
+                        canvas.toDataURL(
+                            "image/jpeg"
+                        );
+
+                    const photo =
+                        document.getElementById(
+                            "photo"
+                        );
+
+                    photo.src = image;
+
+                    photo.style.display =
+                        "block";
+
+                    let photos =
+                        JSON.parse(
+                            localStorage.getItem(
+                                "pearPhotos"
+                            ) || "[]"
+                        );
+
+                    photos.unshift(image);
+
+                    localStorage.setItem(
+                        "pearPhotos",
+                        JSON.stringify(
+                            photos.slice(0, 30)
+                        )
+                    );
+
+                };
+
+        };
+
+
+    /* =====================================================
+       PHOTOS
+       ===================================================== */
+
+    document
+        .getElementById("photos")
+        .onclick = () => {
+
+            const photos =
+                JSON.parse(
+                    localStorage.getItem(
+                        "pearPhotos"
+                    ) || "[]"
+                );
+
+            openApp(
+                "Photos",
+
+                `
+
+                <input
+                    type="file"
+                    id="importPhotos"
+                    accept="image/*"
+                    multiple>
+
+                <br><br>
+
+                <div class="photos">
+
+                    ${
+
+                        photos.length
+
+                        ?
+
+                        photos.map(
+                            image =>
+                                `<img src="${image}">`
+                        ).join("")
+
+                        :
+
+                        `<p>No photos yet.</p>`
+
+                    }
+
+                </div>
+
+                `
+            );
+
+
+            document
+                .getElementById(
+                    "importPhotos"
+                )
+                .onchange = event => {
+
+                    const files =
+                        Array.from(
+                            event.target.files
+                        );
+
+                    Promise.all(
+
+                        files.map(file =>
+                            new Promise(resolve => {
+
+                                const reader =
+                                    new FileReader();
+
+                                reader.onload =
+                                    () =>
+                                        resolve(
+                                            reader.result
+                                        );
+
+                                reader.readAsDataURL(
+                                    file
+                                );
+
+                            })
+                        )
+
+                    ).then(images => {
+
+                        localStorage.setItem(
+                            "pearPhotos",
+                            JSON.stringify(
+                                [
+                                    ...images,
+                                    ...photos
+                                ]
+                            )
+                        );
+
+                        document
+                            .getElementById(
+                                "photos"
+                            )
+                            .click();
+
+                    });
+
+                };
+
+        };
+
+
+    /* =====================================================
+       NOTES
+       ===================================================== */
+
+    document
+        .getElementById("notes")
+        .onclick = () => {
+
+            openApp(
+                "Notes",
+
+                `
+
+                <input
+                    id="noteTitle"
+                    placeholder="Note title">
+
+                <br><br>
+
+                <textarea
+                    id="noteBody"
+                    placeholder="Start typing...">
+                </textarea>
+
+                <br><br>
+
+                <button
+                    class="button"
+                    id="saveNote">
+                    Save Note
+                </button>
+
+                `
+            );
+
+
+            document
+                .getElementById("saveNote")
+                .onclick = () => {
+
+                    const title =
+                        document
+                            .getElementById(
+                                "noteTitle"
+                            )
+                            .value;
+
+                    const body =
+                        document
+                            .getElementById(
+                                "noteBody"
+                            )
+                            .value;
+
+                    localStorage.setItem(
+                        "pearLastNote",
+
+                        JSON.stringify({
+                            title,
+                            body
+                        })
+                    );
+
+                    alert(
+                        "Note saved 🍐"
+                    );
+
+                };
+
+        };
+
+
+    /* =====================================================
+       STOCKS
+       ===================================================== */
+
+    document
+        .getElementById("stocks")
+        .onclick = () => {
+
+            openApp(
+                "Stocks",
+
+                `
+
+                <div class="stock">
+                    <span>
+                        <b>AAPL</b><br>
+                        Apple
+                    </span>
+
+                    <span>
+                        $229.87<br>
+                        <small style="color:green">
+                            +1.8%
+                        </small>
+                    </span>
+                </div>
+
+                <div class="stock">
+                    <span>
+                        <b>MSFT</b><br>
+                        Microsoft
+                    </span>
+
+                    <span>
+                        $532.44<br>
+                        <small style="color:green">
+                            +0.9%
+                        </small>
+                    </span>
+                </div>
+
+                <div class="stock">
+                    <span>
+                        <b>TSLA</b><br>
+                        Tesla
+                    </span>
+
+                    <span>
+                        $318.26<br>
+                        <small style="color:red">
+                            -1.2%
+                        </small>
+                    </span>
+                </div>
+
+                `
+            );
+
+        };
+
+
+    /* =====================================================
+       MAPS
+       ===================================================== */
+
+    document
+        .getElementById("maps")
+        .onclick = () => {
+
+            openApp(
+                "Maps",
+
+                `
+
+                <div style="
+                    height:250px;
+                    border-radius:20px;
+                    background:
+                    linear-gradient(
+                        135deg,
+                        #d6e5c7,
+                        #e8dfba
+                    );
+                    display:flex;
+                    align-items:center;
+                    justify-content:center;
+                    font-size:60px;
+                ">
+                    📍
+                </div>
+
+                <h3>Pear Park</h3>
+
+                <p>
+                    12 Pear Street · 5 min away
+                </p>
+
+                <button class="button">
+                    Start Route
+                </button>
+
+                `
+            );
+
+        };
+
+
+    /* =====================================================
+       WEATHER
+       ===================================================== */
+
+    document
+        .getElementById("weather")
+        .onclick = () => {
+
+            openApp(
+                "Weather",
+
+                `
+
+                <div style="
+                    text-align:center;
+                    padding:25px;
+                ">
+
+                    <div style="
+                        font-size:70px;
+                    ">
+                        ☀️
+                    </div>
+
+                    <div style="
+                        font-size:60px;
+                        font-weight:bold;
+                    ">
+                        24°
+                    </div>
+
+                    <h3>
+                        Sunny
+                    </h3>
+
+                    <p>
+                        Feels like 25°
+                    </p>
+
+                </div>
+
+                `
+            );
+
+        };
+
+
+    /* =====================================================
+       CLOCK
+       ===================================================== */
+
+    document
+        .getElementById("clock")
+        .onclick = () => {
+
+            openApp(
+                "Clock",
+
+                `
+
+                <div
+                    id="bigClock"
+                    style="
+                    font-size:55px;
+                    text-align:center;
+                    font-weight:bold;
+                    padding:30px 0;
+                    ">
+                </div>
+
+                `
+            );
+
+
+            function updateClock(){
+
+                const clock =
+                    document.getElementById(
+                        "bigClock"
+                    );
+
+                if (!clock)
+                    return;
+
+                clock.textContent =
+                    new Date()
+                        .toLocaleTimeString(
+                            [],
+                            {
+                                hour:"numeric",
+                                minute:"2-digit",
+                                second:"2-digit"
+                            }
+                        );
+
+            }
+
+            updateClock();
+
+            setInterval(
+                updateClock,
+                1000
+            );
+
+        };
+
+
+    /* =====================================================
+       SETTINGS
+       ===================================================== */
+
+    document
+        .getElementById("settings")
+        .onclick = () => {
+
+            openApp(
+                "Settings",
+
+                `
+
+                <button
+                    class="button"
+                    onclick="
+                        document.body.style.filter =
+                        document.body.style.filter
+                        ? ''
+                        : 'brightness(.8)'
+                    ">
+                    Toggle Display
+                </button>
+
+                <br><br>
+
+                <button
+                    class="button"
+                    onclick="
+                        localStorage.clear();
+                        location.reload();
+                    ">
+                    Reset Pear OS
+                </button>
+
+                `
+            );
+
+        };
+
+
+    /* =====================================================
+       OTHER APPS
+       ===================================================== */
+
+    document
+        .getElementById("splashface")
+        .onclick = () => {
+
+            openApp(
+                "SplashFace",
+
+                `
+                <div style="
+                    text-align:center;
+                    padding:30px;
+                ">
+                    <h1>Sf</h1>
+                    <h2>SplashFace</h2>
+                    <p>
+                        Welcome back!
+                    </p>
+                </div>
+                `
+            );
+
+        };
+
+
+    document
+        .getElementById("peartunes")
+        .onclick =
+    document
+        .getElementById("music")
+        .onclick = () => {
+
+            openApp(
+                "PearTunes",
+
+                `
+
+                <div style="
+                    text-align:center;
+                    padding:20px;
+                ">
+
+                    <div style="
+                        font-size:70px;
+                        color:#df3caf;
+                    ">
+                        ♫
+                    </div>
+
+                    <h2>
+                        PearTunes
+                    </h2>
+
+                </div>
+
+                <div class="stock">
+                    Pearadise
+                    <button
+                        class="button"
+                        onclick="
+                        alert('Playing Pearadise')
+                        ">
+                        ▶
+                    </button>
+                </div>
+
+                <div class="stock">
+                    Sunset Drive
+                    <button
+                        class="button"
+                        onclick="
+                        alert('Playing Sunset Drive')
+                        ">
+                        ▶
+                    </button>
+                </div>
+
+                `
+            );
+
+        };
+
+
+    document
+        .getElementById("phone")
+        .onclick = () => {
+
+            openApp(
+                "Phone",
+
+                `
+                <div style="
+                    text-align:center;
+                    padding:30px;
+                ">
+                    <div style="
+                        font-size:70px;
+                    ">
+                        ☎
+                    </div>
+
+                    <h2>
+                        Phone
+                    </h2>
+
+                    <p>
+                        Phone calling is not
+                        connected in this web demo.
+                    </p>
+                </div>
+                `
+            );
+
+        };
+
+
+    document
+        .getElementById("mail")
+        .onclick = () => {
+
+            openApp(
+                "Mail",
+
+                `
+                <h2>
+                    Inbox
+                </h2>
+
+                <div class="stock">
+                    <div>
+                        <b>
+                            Welcome to Pear OS
+                        </b>
+
+                        <br>
+
+                        <small>
+                            Pear Team
+                        </small>
+                    </div>
+                </div>
+                `
+            );
+
+        };
+
+
+    document
+        .getElementById("compass")
+        .onclick = () => {
+
+            openApp(
+                "Compass",
+
+                `
+                <div style="
+                    text-align:center;
+                    font-size:100px;
+                    padding:25px;
+                ">
+                    🧭
+
+                    <h3>
+                        North
+                    </h3>
+                </div>
+                `
+            );
+
+        };
+
+
+    document
+        .getElementById("videos")
+        .onclick = () => {
+
+            openApp(
+                "Videos",
+
+                `
+                <div style="
+                    text-align:center;
+                    padding:30px;
+                ">
+                    <div style="
+                        font-size:70px;
+                    ">
+                        🎬
+                    </div>
+
+                    <h2>
+                        Videos
+                    </h2>
+
+                    <p>
+                        No videos yet.
+                    </p>
+                </div>
+                `
+            );
+
+        };
+
+
+    /* =====================================================
+       HOME
+       ===================================================== */
+
+    document
+        .getElementById("home")
+        .onclick =
+        closeApp;
+
+
+    function escapeHTML(text){
+
+        return String(text)
+            .replace(/[&<>"']/g, char => ({
+                "&":"&amp;",
+                "<":"&lt;",
+                ">":"&gt;",
+                '"':"&quot;",
+                "'":"&#039;"
+            }[char]));
+
     }
 
-    appContent.innerHTML = content;
-
-    appWindow.classList.add("active");
-}
-
-
-// ========================================
-// CLOSE APP
-// ========================================
-
-function closeApp() {
-    appWindow.classList.remove("active");
-}
-
-
-// ========================================
-// CAMERA
-// ========================================
-
-function takePicture() {
-    alert("📸 Picture taken!");
-}
-
-
-// ========================================
-// MESSAGES
-// ========================================
-
-function sendMessage() {
-
-    const input = document.getElementById("messageInput");
-
-    if (!input.value.trim()) {
-        alert("Type a message first!");
-        return;
-    }
-
-    alert("Message sent!");
-
-    input.value = "";
-}
-
-
-// ========================================
-// BROWSER
-// ========================================
-
-function searchBrowser() {
-
-    const input = document.getElementById("browserInput");
-
-    if (!input.value.trim()) {
-        alert("Enter something to search.");
-        return;
-    }
-
-    window.open(
-        "https://www.google.com/search?q=" +
-        encodeURIComponent(input.value),
-        "_blank"
-    );
-}
-
-
-// ========================================
-// NOTES
-// ========================================
-
-function saveNote() {
-
-    const note = document.getElementById("notes").value;
-
-    localStorage.setItem("pearNote", note);
-
-    alert("Note saved!");
-}
+});

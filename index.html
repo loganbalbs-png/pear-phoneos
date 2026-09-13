@@ -1,1322 +1,221 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width,
-        initial-scale=1,
-        maximum-scale=1,
-        user-scalable=no,
-        viewport-fit=cover"
-    >
-
-    <meta
-        name="apple-mobile-web-app-capable"
-        content="yes"
-    >
-
-    <meta
-        name="apple-mobile-web-app-status-bar-style"
-        content="black-translucent"
-    >
-
-    <title>Pear Phone OS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pear Phone</title>
 
     <style>
-
         * {
             box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
         }
 
-        html,
         body {
             margin: 0;
-            padding: 0;
-
-            width: 100%;
-            height: 100%;
-
-            overflow: hidden;
-
-            background:
-                radial-gradient(
-                    circle at 50% 35%,
-                    #188eff 0%,
-                    #0753d4 45%,
-                    #05256c 100%
-                );
-        }
-
-        body {
-            font-family:
-                Arial,
-                Helvetica,
-                sans-serif;
-
-            color: white;
-        }
-
-        /* =====================================
-           FULL IPHONE 17 SCREEN
-           ===================================== */
-
-        #pear-screen {
-
-            position: relative;
-
-            width: 100%;
-            height: 100%;
-
-            min-height: 100dvh;
-
-            overflow: hidden;
-
-            padding-top:
-                env(safe-area-inset-top);
-
-            padding-bottom:
-                env(safe-area-inset-bottom);
-
-            background:
-                radial-gradient(
-                    ellipse at 50% 28%,
-                    rgba(73,211,255,.7),
-                    transparent 31%
-                ),
-                radial-gradient(
-                    ellipse at 50% 65%,
-                    #0e67e8 0%,
-                    #0b3cba 52%,
-                    #06246d 100%
-                );
-        }
-
-        /* =====================================
-           TOP
-           ===================================== */
-
-        #status-bar {
-
-            position: absolute;
-
-            top:
-                calc(
-                    env(safe-area-inset-top)
-                    + 7px
-                );
-
-            left: 18px;
-            right: 18px;
-
+            min-height: 100vh;
             display: flex;
-
-            justify-content:
-                space-between;
-
-            align-items: center;
-
-            font-size: 13px;
-
-            font-weight: 700;
-
-            text-shadow:
-                0 2px 4px rgba(0,0,0,.7);
-
-            z-index: 20;
-        }
-
-        #title {
-
-            position: absolute;
-
-            top:
-                calc(
-                    env(safe-area-inset-top)
-                    + 34px
-                );
-
-            width: 100%;
-
-            text-align: center;
-
-            font-size: 15px;
-
-            font-weight: 800;
-
-            text-shadow:
-                0 2px 4px rgba(0,0,0,.5);
-        }
-
-
-        /* =====================================
-           APP GRID
-           ===================================== */
-
-        #apps {
-
-            position: absolute;
-
-            left: 7%;
-            right: 7%;
-
-            top:
-                calc(
-                    env(safe-area-inset-top)
-                    + 76px
-                );
-
-            bottom:
-                calc(
-                    env(safe-area-inset-bottom)
-                    + 122px
-                );
-
-            display: grid;
-
-            grid-template-columns:
-                repeat(3, 1fr);
-
-            grid-template-rows:
-                repeat(4, 1fr);
-
-            column-gap: 3px;
-
-            row-gap: 4px;
-
-            align-items: center;
-
-            justify-items: center;
-        }
-
-
-        .app {
-
-            width: 100%;
-
-            display: flex;
-
-            flex-direction:
-                column;
-
-            align-items: center;
-
             justify-content: center;
-
-            gap: 5px;
-
-            background: none;
-
-            border: 0;
-
-            padding: 0;
-
-            color: white;
-
-            cursor: pointer;
-
-            font-size: 12px;
-
-            font-weight: 700;
-
-            text-shadow:
-                0 2px 4px rgba(0,0,0,.7);
-        }
-
-
-        /* =====================================
-           ICONS
-           ===================================== */
-
-        .icon {
-
-            width: clamp(
-                58px,
-                16vw,
-                78px
-            );
-
-            height: clamp(
-                58px,
-                16vw,
-                78px
-            );
-
-            border-radius: 50%;
-
-            position: relative;
-
-            display: flex;
-
             align-items: center;
-
-            justify-content: center;
-
-            border: 3px solid #101010;
-
-            box-shadow:
-
-                0 3px 6px
-                rgba(0,0,0,.7),
-
-                inset 0 2px 4px
-                rgba(255,255,255,.65),
-
-                inset 0 -4px 7px
-                rgba(0,0,0,.4);
+            background: #eeeeee;
+            font-family: Arial, sans-serif;
         }
 
-
-        .icon::before {
-
-            content: "";
-
-            position: absolute;
-
-            left: 12%;
-
-            right: 12%;
-
-            top: 8%;
-
-            height: 23%;
-
-            border-radius: 50%;
-
-            background:
-                rgba(255,255,255,.27);
-
-            filter: blur(2px);
+        .phone-container {
+            position: relative;
+            width: 380px;
+            max-width: 90vw;
         }
 
-
-        .icon.green {
-            background:
-                radial-gradient(
-                    circle at 35% 25%,
-                    #9bff8f,
-                    #39db48 55%,
-                    #07951e
-                );
-        }
-
-
-        .icon.gray {
-            background:
-                radial-gradient(
-                    circle at 35% 25%,
-                    #f8f8f8,
-                    #aaa 55%,
-                    #4a4a4a
-                );
-        }
-
-
-        .icon.blue {
-            background:
-                radial-gradient(
-                    circle at 35% 25%,
-                    #a9d9ff,
-                    #4d91db 55%,
-                    #143d87
-                );
-        }
-
-
-        .icon.cyan {
-            background:
-                radial-gradient(
-                    circle at 35% 25%,
-                    #d7fbff,
-                    #69cdec 55%,
-                    #2775b3
-                );
-        }
-
-
-        .icon.yellow {
-            background:
-                radial-gradient(
-                    circle at 35% 25%,
-                    #ffffd8,
-                    #eadf71 55%,
-                    #b39a3d
-                );
-        }
-
-
-        .icon.white {
-            background:
-                radial-gradient(
-                    circle at 35% 25%,
-                    white,
-                    #dadada 60%,
-                    #aaa
-                );
-        }
-
-
-        .icon.pink {
-            background:
-                radial-gradient(
-                    circle at 35% 25%,
-                    #ffaded,
-                    #e84cc3 55%,
-                    #9c137b
-                );
-        }
-
-
-        .icon.orange {
-            background:
-                radial-gradient(
-                    circle at 35% 25%,
-                    #fff09a,
-                    #ffc332 55%,
-                    #d77611
-                );
-        }
-
-
-        .icon svg {
-
+        .phone-image {
             width: 100%;
-            height: 100%;
-
             display: block;
         }
 
+        /*
+        APP BUTTONS
+        Change these positions if your Pear Phone image
+        has the apps in different locations.
+        */
 
-        .icon-text {
-
-            font-size: 27px;
-
-            font-weight: 900;
-
-            color: white;
-
-            text-shadow:
-                0 2px 2px rgba(0,0,0,.45);
-        }
-
-
-        .app:active .icon {
-
-            transform:
-                scale(.90);
-        }
-
-
-        /* =====================================
-           DOCK
-           ===================================== */
-
-        #dock {
-
+        .app {
             position: absolute;
-
-            left: 7%;
-            right: 7%;
-
-            bottom:
-                calc(
-                    env(safe-area-inset-bottom)
-                    + 23px
-                );
-
-            height: 84px;
-
-            display: grid;
-
-            grid-template-columns:
-                repeat(4,1fr);
-
-            align-items: center;
-
-            justify-items: center;
-
-            padding: 6px 0;
-
-            border-top:
-                1px solid
-                rgba(255,255,255,.18);
-
-            background:
-                linear-gradient(
-                    rgba(150,165,200,.05),
-                    rgba(150,165,200,.35)
-                );
-        }
-
-
-        #dock .app {
-
-            width: 100%;
-        }
-
-
-        #dock .icon {
-
-            width: 62px;
-            height: 62px;
-        }
-
-
-        #dock .app span:last-child {
-
-            display: none;
-        }
-
-
-        /* =====================================
-           BADGE
-           ===================================== */
-
-        .badge {
-
-            position: absolute;
-
-            right: -2px;
-
-            top: -5px;
-
-            min-width: 21px;
-
-            height: 21px;
-
-            padding: 0 5px;
-
-            border-radius: 50%;
-
-            background:
-                linear-gradient(
-                    #ff6b6b,
-                    #d81818
-                );
-
-            border:
-                2px solid white;
-
-            color: white;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            font-size: 10px;
-
-            font-weight: 900;
-
-            box-shadow:
-                0 2px 5px
-                rgba(0,0,0,.7);
-        }
-
-
-        /* =====================================
-           APP WINDOW
-           ===================================== */
-
-        #overlay {
-
-            position: fixed;
-
-            inset: 0;
-
-            z-index: 100;
-
-            display: none;
-
-            align-items:
-                flex-start;
-
-            justify-content:
-                center;
-
-            padding:
-                calc(
-                    env(safe-area-inset-top)
-                    + 12px
-                )
-                12px
-                calc(
-                    env(safe-area-inset-bottom)
-                    + 12px
-                );
-
-            background:
-                rgba(0,0,0,.62);
-
-            backdrop-filter:
-                blur(8px);
-        }
-
-
-        #overlay.open {
-
-            display: flex;
-        }
-
-
-        #window {
-
-            width: 100%;
-
-            max-width: 430px;
-
-            max-height:
-                calc(
-                    100dvh
-                    -
-                    env(safe-area-inset-top)
-                    -
-                    env(safe-area-inset-bottom)
-                    -
-                    24px
-                );
-
-            overflow: hidden;
-
-            border-radius: 25px;
-
-            background:
-                #f4f5f7;
-
-            color: #111;
-
-            box-shadow:
-                0 25px 80px
-                rgba(0,0,0,.55);
-        }
-
-
-        .header {
-
-            height: 58px;
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 10px;
-
-            padding: 10px 13px;
-
-            background:
-                linear-gradient(
-                    #fff,
-                    #e5e6e8
-                );
-
-            border-bottom:
-                1px solid #ccc;
-
-            font-size: 18px;
-
-            font-weight: 900;
-        }
-
-
-        .back {
-
-            width: 35px;
-            height: 35px;
-
-            border-radius: 50%;
-
-            border: 1px solid #bbb;
-
-            background:
-                linear-gradient(
-                    #fff,
-                    #ddd
-                );
-
-            font-size: 25px;
-
+            border: none;
+            background: transparent;
             cursor: pointer;
+            width: 55px;
+            height: 55px;
+            border-radius: 14px;
         }
 
-
-        .content {
-
-            padding: 16px;
-
-            max-height:
-                calc(
-                    100dvh - 90px
-                );
-
-            overflow-y: auto;
+        .app:hover {
+            background: rgba(255,255,255,0.15);
         }
 
-
-        .bubble {
-
-            padding:
-                10px 13px;
-
-            width:
-                max-content;
-
-            max-width: 82%;
-
-            margin-bottom: 8px;
-
-            border-radius: 18px;
-
-            background: #dedfe3;
+        /* Row 1 */
+        .app1 {
+            left: 21%;
+            top: 27%;
         }
 
-
-        .bubble.me {
-
-            margin-left: auto;
-
-            background:
-                linear-gradient(
-                    #58b9ff,
-                    #1389df
-                );
-
-            color: white;
+        .app2 {
+            left: 39%;
+            top: 27%;
         }
 
-
-        input,
-        textarea {
-
-            border:
-                1px solid #bbb;
-
-            border-radius: 12px;
-
-            padding: 10px;
-
-            font-size: 16px;
-
-            outline: none;
+        .app3 {
+            left: 57%;
+            top: 27%;
         }
 
-
-        textarea {
-
-            width: 100%;
-
-            height: 180px;
+        .app4 {
+            left: 75%;
+            top: 27%;
         }
 
-
-        .action {
-
-            border:
-                1px solid #bbb;
-
-            border-radius: 12px;
-
-            padding: 10px 14px;
-
-            background:
-                linear-gradient(
-                    #fff,
-                    #ddd
-                );
-
-            font-weight: 700;
+        /* Row 2 */
+        .app5 {
+            left: 21%;
+            top: 40%;
         }
 
-
-        .photo-grid {
-
-            display: grid;
-
-            grid-template-columns:
-                repeat(3,1fr);
-
-            gap: 7px;
+        .app6 {
+            left: 39%;
+            top: 40%;
         }
 
-
-        .photo-grid img {
-
-            width: 100%;
-
-            aspect-ratio: 1;
-
-            object-fit: cover;
-
-            border-radius: 12px;
+        .app7 {
+            left: 57%;
+            top: 40%;
         }
 
+        .app8 {
+            left: 75%;
+            top: 40%;
+        }
 
-        .stock {
+        /* Row 3 */
+        .app9 {
+            left: 21%;
+            top: 53%;
+        }
 
-            display: flex;
+        .app10 {
+            left: 39%;
+            top: 53%;
+        }
 
-            justify-content:
-                space-between;
+        .app11 {
+            left: 57%;
+            top: 53%;
+        }
 
-            padding: 12px;
+        .app12 {
+            left: 75%;
+            top: 53%;
+        }
 
+        /* Popup */
+        .app-window {
+            display: none;
+            position: absolute;
+            left: 10%;
+            top: 15%;
+            width: 80%;
+            height: 70%;
             background: white;
-
-            border:
-                1px solid #ddd;
-
-            border-radius: 13px;
-
-            margin-bottom: 8px;
+            border-radius: 20px;
+            z-index: 20;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.35);
         }
 
-
-        .map {
-
-            height: 240px;
-
-            border-radius: 18px;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #d6e5c8,
-                    #e7dfba
-                );
-
-            display:flex;
-
-            align-items:center;
-
-            justify-content:center;
-
-            font-size:65px;
+        .app-window.active {
+            display: block;
         }
 
-
-        /* =====================================
-           SMALL IPHONE SCREENS
-           ===================================== */
-
-        @media(max-height:700px){
-
-            #apps {
-
-                top:
-                    calc(
-                        env(safe-area-inset-top)
-                        + 68px
-                    );
-
-                bottom:
-                    calc(
-                        env(safe-area-inset-bottom)
-                        + 105px
-                    );
-
-                row-gap: 2px;
-            }
-
-
-            .icon {
-
-                width: 51px;
-                height: 51px;
-            }
-
-
-            .app {
-
-                font-size: 9px;
-            }
-
-
-            #dock {
-
-                height: 70px;
-            }
-
-
-            #dock .icon {
-
-                width: 50px;
-                height: 50px;
-            }
+        .app-header {
+            height: 55px;
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+            border-bottom: 1px solid #ddd;
+            font-weight: bold;
         }
 
+        .close-button {
+            margin-right: 12px;
+            border: none;
+            background: #eee;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .app-content {
+            padding: 20px;
+            text-align: center;
+        }
     </style>
-
 </head>
-
 
 <body>
 
+    <div class="phone-container">
 
-<div id="pear-screen">
+        <!-- YOUR PEAR PHONE IMAGE -->
+        <img
+            src="images/pear-phone.png"
+            class="phone-image"
+            alt="Pear Phone"
+        >
+
+        <!-- CLICKABLE APPS -->
+
+        <button class="app app1" onclick="openApp('Pear Mail')"></button>
+        <button class="app app2" onclick="openApp('Pear Music')"></button>
+        <button class="app app3" onclick="openApp('Pear Camera')"></button>
+        <button class="app app4" onclick="openApp('Pear Maps')"></button>
+
+        <button class="app app5" onclick="openApp('Pear Messages')"></button>
+        <button class="app app6" onclick="openApp('Pear Photos')"></button>
+        <button class="app app7" onclick="openApp('Pear Browser')"></button>
+        <button class="app app8" onclick="openApp('Pear TV')"></button>
+
+        <button class="app app9" onclick="openApp('Pear Games')"></button>
+        <button class="app app10" onclick="openApp('Pear Notes')"></button>
+        <button class="app app11" onclick="openApp('Pear Weather')"></button>
+        <button class="app app12" onclick="openApp('Settings')"></button>
 
 
-    <!-- STATUS -->
+        <!-- APP WINDOW -->
 
-    <div id="status-bar">
+        <div id="appWindow" class="app-window">
 
-        <span id="time">
-            9:41
-        </span>
+            <div class="app-header">
 
-        <span>
-            PEAR
-        </span>
+                <button
+                    class="close-button"
+                    onclick="closeApp()"
+                >
+                    ×
+                </button>
 
-        <span>
-            ◔ ◉ ▰
-        </span>
+                <span id="appTitle">App</span>
+
+            </div>
+
+            <div
+                id="appContent"
+                class="app-content"
+            ></div>
+
+        </div>
 
     </div>
 
-
-    <div id="title">
-        Pear Phone OS
-    </div>
-
-
-    <!-- APP GRID -->
-
-    <div id="apps">
-
-        <button
-            class="app"
-            id="messages">
-
-            <div class="icon green">
-
-                <svg viewBox="0 0 100 100">
-
-                    <path
-                        d="M27 38
-                           C27 30 33 25 41 25
-                           H61
-                           C69 25 75 30 75 38
-                           V52
-                           C75 60 69 65 61 65
-                           H49
-                           L37 75
-                           V65
-                           H41
-                           C33 65 27 60 27 52Z"
-                        fill="white"
-                    />
-
-                </svg>
-
-                <span class="badge">
-                    5
-                </span>
-
-            </div>
-
-            <span>
-                Messages
-            </span>
-
-        </button>
-
-
-        <button
-            class="app"
-            id="camera">
-
-            <div class="icon gray">
-
-                <svg viewBox="0 0 100 100">
-
-                    <rect
-                        x="20"
-                        y="34"
-                        width="60"
-                        height="38"
-                        rx="7"
-                        fill="#333"
-                    />
-
-                    <rect
-                        x="34"
-                        y="27"
-                        width="18"
-                        height="9"
-                        rx="3"
-                        fill="#222"
-                    />
-
-                    <circle
-                        cx="50"
-                        cy="53"
-                        r="15"
-                        fill="#111"
-                        stroke="#aaa"
-                        stroke-width="3"
-                    />
-
-                    <circle
-                        cx="50"
-                        cy="53"
-                        r="8"
-                        fill="#394d5b"
-                    />
-
-                </svg>
-
-            </div>
-
-            <span>
-                Camera
-            </span>
-
-        </button>
-
-
-        <button
-            class="app"
-            id="splashface">
-
-            <div class="icon blue">
-
-                <span class="icon-text">
-                    Sf
-                </span>
-
-            </div>
-
-            <span>
-                SplashFace
-            </span>
-
-        </button>
-
-
-        <button
-            class="app"
-            id="stocks">
-
-            <div class="icon cyan">
-
-                <svg viewBox="0 0 100 100">
-
-                    <polyline
-                        points="14,64 28,54 40,62 50,41 62,55 73,34 87,44"
-                        fill="none"
-                        stroke="white"
-                        stroke-width="5"
-                        stroke-linecap="round"
-                    />
-
-                </svg>
-
-            </div>
-
-            <span>
-                Stocks
-            </span>
-
-        </button>
-
-
-        <button
-            class="app"
-            id="maps">
-
-            <div class="icon yellow">
-
-                <svg viewBox="0 0 100 100">
-
-                    <path
-                        d="M15 28L38 20L62 30L85 20"
-                        stroke="#67b24c"
-                        stroke-width="15"
-                        fill="none"
-                    />
-
-                    <path
-                        d="M16 74L39 62L62 70L85 58"
-                        stroke="#f4efe0"
-                        stroke-width="11"
-                        fill="none"
-                    />
-
-                    <circle
-                        cx="58"
-                        cy="47"
-                        r="11"
-                        fill="#e13737"
-                        stroke="white"
-                        stroke-width="3"
-                    />
-
-                </svg>
-
-            </div>
-
-            <span>
-                Maps
-            </span>
-
-        </button>
-
-
-        <button
-            class="app"
-            id="photos">
-
-            <div class="icon white">
-
-                <span
-                    style="
-                    font-size:32px">
-                    🌈
-                </span>
-
-            </div>
-
-            <span>
-                Photos
-            </span>
-
-        </button>
-
-
-        <button
-            class="app"
-            id="weather">
-
-            <div class="icon cyan">
-
-                <span
-                    style="
-                    font-size:31px">
-                    🌤️
-                </span>
-
-            </div>
-
-            <span>
-                Weather
-            </span>
-
-        </button>
-
-
-        <button
-            class="app"
-            id="notes">
-
-            <div class="icon white">
-
-                <div
-                    style="
-                    width:100%;
-                    height:40%;
-                    background:#ffd936;
-                    position:absolute;
-                    top:10%;
-                    ">
-                </div>
-
-                <div
-                    style="
-                    position:absolute;
-                    top:50%;
-                    width:65%;
-                    height:3px;
-                    background:#888;
-                    box-shadow:
-                    0 8px #888,
-                    0 16px #888;
-                    ">
-                </div>
-
-            </div>
-
-            <span>
-                Notes
-            </span>
-
-        </button>
-
-
-        <button
-            class="app"
-            id="peartunes">
-
-            <div class="icon pink">
-
-                <span class="icon-text">
-                    ♫
-                </span>
-
-            </div>
-
-            <span>
-                PearTunes
-            </span>
-
-        </button>
-
-
-        <button
-            class="app"
-            id="settings">
-
-            <div class="icon gray">
-
-                <span
-                    class="icon-text"
-                    style="
-                    font-size:29px">
-                    ⚙
-                </span>
-
-            </div>
-
-            <span>
-                Settings
-            </span>
-
-        </button>
-
-
-        <button
-            class="app"
-            id="clock">
-
-            <div class="icon white">
-
-                <span
-                    style="
-                    font-size:32px">
-                    🕘
-                </span>
-
-            </div>
-
-            <span>
-                Clock
-            </span>
-
-        </button>
-
-
-        <button
-            class="app"
-            id="videos">
-
-            <div class="icon cyan">
-
-                <span
-                    style="
-                    font-size:29px">
-                    🎬
-                </span>
-
-            </div>
-
-            <span>
-                Videos
-            </span>
-
-        </button>
-
-    </div>
-
-
-    <!-- DOCK -->
-
-    <div id="dock">
-
-
-        <button
-            class="app"
-            id="phone">
-
-            <div class="icon green">
-
-                <span class="icon-text">
-                    ☎
-                </span>
-
-            </div>
-
-        </button>
-
-
-        <button
-            class="app"
-            id="mail">
-
-            <div class="icon blue">
-
-                <span
-                    style="
-                    font-size:29px">
-                    ✉
-                </span>
-
-            </div>
-
-        </button>
-
-
-        <button
-            class="app"
-            id="compass">
-
-            <div class="icon cyan">
-
-                <span
-                    style="
-                    font-size:31px">
-                    🧭
-                </span>
-
-            </div>
-
-        </button>
-
-
-        <button
-            class="app"
-            id="music">
-
-            <div class="icon orange">
-
-                <span
-                    class="icon-text">
-                    ♫
-                </span>
-
-            </div>
-
-        </button>
-
-
-    </div>
-
-
-</div>
-
-
-<!-- APP WINDOW -->
-
-<div id="overlay">
-
-    <div id="window"></div>
-
-</div>
-
-
-<script src="app.js"></script>
+    <script src="script.js"></script>
 
 </body>
 </html>

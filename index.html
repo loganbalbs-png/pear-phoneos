@@ -30,9 +30,9 @@ body {
 }
 
 
-/* =================================
-   PEAR PHONE IMAGE
-================================= */
+/* =========================================
+   PEAR PHONE
+========================================= */
 
 #phone-container {
     position: relative;
@@ -42,24 +42,25 @@ body {
     aspect-ratio: 1212 / 1188;
 
     background-image: url("pear-phone.png");
+
+    background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
-    background-size: contain;
 }
 
 
-/* =================================
-   CLICKABLE APPS
-================================= */
+/* =========================================
+   CLICKABLE APP BUTTONS
+========================================= */
 
 .hotspot {
     position: absolute;
 
     border: none;
-    background: transparent;
-
     padding: 0;
     margin: 0;
+
+    background: transparent;
 
     border-radius: 50%;
 
@@ -68,10 +69,15 @@ body {
     z-index: 20;
 
     touch-action: manipulation;
+
+    -webkit-appearance: none;
+    appearance: none;
 }
 
 
-/* APP LOCATIONS */
+/* =========================================
+   APP LOCATIONS
+========================================= */
 
 #messages {
     left: 43.1%;
@@ -198,6 +204,7 @@ body {
     aspect-ratio: 1;
 
     border: none;
+
     background: transparent;
 
     border-radius: 50%;
@@ -208,24 +215,24 @@ body {
 }
 
 
-/* =================================
-   APP WINDOW
-   ONLY COVERS PEAR PHONE
-================================= */
+/* =========================================
+   PEAR-SHAPED APP WINDOW
+========================================= */
 
 #overlay {
+
     position: absolute;
 
     /*
-       The Pear Phone itself sits
-       inside the image.
+       This fills the actual Pear Phone
+       instead of the computer screen.
     */
 
-    left: 25%;
-    top: 7%;
+    left: 24%;
+    top: 3%;
 
-    width: 50%;
-    height: 88%;
+    width: 52%;
+    height: 94%;
 
     z-index: 100;
 
@@ -234,38 +241,22 @@ body {
     overflow: hidden;
 
     /*
-       This creates the Pear Phone shape.
-       Everything outside this shape
-       remains completely untouched.
+       Actual pear-phone silhouette.
+       Rounded top,
+       narrow upper section,
+       wider bottom.
     */
 
-    clip-path: polygon(
-        50% 0%,
-        43% 2%,
-        38% 6%,
-        34% 12%,
-        31% 20%,
-        27% 30%,
-        24% 41%,
-        23% 51%,
-        24% 62%,
-        27% 73%,
-        31% 82%,
-        36% 89%,
-        43% 95%,
-        50% 100%,
-        57% 95%,
-        64% 89%,
-        69% 82%,
-        73% 73%,
-        76% 62%,
-        77% 51%,
-        76% 41%,
-        73% 30%,
-        69% 20%,
-        66% 12%,
-        62% 6%,
-        57% 2%
+    clip-path: path(
+        "M 50 0
+         C 34 0 24 9 24 23
+         C 24 35 13 42 8 55
+         C 1 75 8 91 22 97
+         C 30 101 40 103 50 103
+         C 60 103 70 101 78 97
+         C 92 91 99 75 92 55
+         C 87 42 76 35 76 23
+         C 76 9 66 0 50 0 Z"
     );
 }
 
@@ -274,11 +265,12 @@ body {
 }
 
 
-/* =================================
-   APP CONTENT
-================================= */
+/* =========================================
+   APP
+========================================= */
 
 #app-window {
+
     width: 100%;
     height: 100%;
 
@@ -287,16 +279,21 @@ body {
     color: #111;
 
     display: flex;
+
     flex-direction: column;
 
     overflow: hidden;
 }
 
 
-/* HEADER */
+/* =========================================
+   APP HEADER
+========================================= */
 
 .header {
+
     display: flex;
+
     align-items: center;
 
     gap: 8px;
@@ -318,7 +315,9 @@ body {
     font-weight: bold;
 }
 
+
 .back {
+
     width: 30px;
     height: 30px;
 
@@ -338,9 +337,12 @@ body {
 }
 
 
-/* CONTENT */
+/* =========================================
+   APP CONTENT
+========================================= */
 
 .content {
+
     flex: 1;
 
     min-height: 0;
@@ -351,6 +353,7 @@ body {
 
     font-size: 12px;
 }
+
 
 .content h1 {
     font-size: 21px;
@@ -365,9 +368,12 @@ body {
 }
 
 
-/* BUTTONS */
+/* =========================================
+   BUTTONS
+========================================= */
 
 .button {
+
     padding: 7px 11px;
 
     border-radius: 9px;
@@ -388,10 +394,13 @@ body {
 }
 
 
-/* INPUTS */
+/* =========================================
+   INPUTS
+========================================= */
 
 input,
 textarea {
+
     width: 100%;
 
     padding: 8px;
@@ -403,14 +412,18 @@ textarea {
     font-size: 12px;
 }
 
+
 textarea {
     min-height: 100px;
 }
 
 
-/* CARDS */
+/* =========================================
+   CARDS
+========================================= */
 
 .card {
+
     background: white;
 
     border: 1px solid #ddd;
@@ -423,9 +436,12 @@ textarea {
 }
 
 
-/* MESSAGES */
+/* =========================================
+   MESSAGES
+========================================= */
 
 .message {
+
     width: max-content;
 
     max-width: 80%;
@@ -439,7 +455,9 @@ textarea {
     margin-bottom: 6px;
 }
 
+
 .message.me {
+
     margin-left: auto;
 
     background: #1689e8;
@@ -448,9 +466,12 @@ textarea {
 }
 
 
-/* GRID */
+/* =========================================
+   GRID
+========================================= */
 
 .grid {
+
     display: grid;
 
     grid-template-columns:
@@ -460,9 +481,9 @@ textarea {
 }
 
 
-/* =================================
-   MOBILE
-================================= */
+/* =========================================
+   PHONE SIZE
+========================================= */
 
 @media (max-width: 600px) {
 
@@ -482,7 +503,7 @@ textarea {
 <div id="phone-container">
 
 
-    <!-- CLICKABLE PEAR PHONE APPS -->
+    <!-- APPS -->
 
     <button
         class="hotspot"
@@ -490,11 +511,13 @@ textarea {
         aria-label="Messages">
     </button>
 
+
     <button
         class="hotspot"
         id="camera"
         aria-label="Camera">
     </button>
+
 
     <button
         class="hotspot"
@@ -502,11 +525,13 @@ textarea {
         aria-label="SplashFace">
     </button>
 
+
     <button
         class="hotspot"
         id="stocks"
         aria-label="Stocks">
     </button>
+
 
     <button
         class="hotspot"
@@ -514,11 +539,13 @@ textarea {
         aria-label="Maps">
     </button>
 
+
     <button
         class="hotspot"
         id="photos"
         aria-label="Photos">
     </button>
+
 
     <button
         class="hotspot"
@@ -526,11 +553,13 @@ textarea {
         aria-label="Weather">
     </button>
 
+
     <button
         class="hotspot"
         id="notes"
         aria-label="Notes">
     </button>
+
 
     <button
         class="hotspot"
@@ -538,11 +567,13 @@ textarea {
         aria-label="PearTunes">
     </button>
 
+
     <button
         class="hotspot"
         id="settings"
         aria-label="Settings">
     </button>
+
 
     <button
         class="hotspot"
@@ -550,11 +581,13 @@ textarea {
         aria-label="Clock">
     </button>
 
+
     <button
         class="hotspot"
         id="videos"
         aria-label="Videos">
     </button>
+
 
     <button
         class="hotspot"
@@ -562,17 +595,20 @@ textarea {
         aria-label="Phone">
     </button>
 
+
     <button
         class="hotspot"
         id="mail"
         aria-label="Mail">
     </button>
 
+
     <button
         class="hotspot"
         id="compass"
         aria-label="Compass">
     </button>
+
 
     <button
         class="hotspot"
@@ -589,7 +625,7 @@ textarea {
     </button>
 
 
-    <!-- APP WINDOW -->
+    <!-- PEAR PHONE APP WINDOW -->
 
     <div id="overlay">
 
@@ -602,7 +638,6 @@ textarea {
 
 
 <script src="app.js"></script>
-
 
 </body>
 </html>

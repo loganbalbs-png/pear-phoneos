@@ -36,19 +36,22 @@ body {
 #phone-container {
     position: relative;
 
-    /* EVEN MORE ZOOMED IN */
-    width: min(135vh, 1200px);
+    /* EVEN BIGGER */
+    width: min(155vh, 1400px);
 
     height: auto;
 
     aspect-ratio: 1212 / 1188;
 
     background-image: url("pear-phone.png");
+
     background-repeat: no-repeat;
+
     background-position: center;
+
     background-size: contain;
 
-    /* TURN PHONE SIDEWAYS */
+    /* SIDEWAYS */
     transform: rotate(90deg);
 }
 
@@ -280,7 +283,7 @@ textarea {
 
 
 /* =========================================================
-   PEAR PHONE ICON POSITIONS
+   ICON POSITIONS
    ========================================================= */
 
 #messages {
@@ -404,13 +407,13 @@ textarea {
 
 
 /* =========================================================
-   KEEP PHONE SIDEWAYS
+   KEEP SIDEWAYS AND VERY LARGE
    ========================================================= */
 
 @media (orientation: portrait) {
 
     #phone-container {
-        width: min(135vh, 1200px);
+        width: min(155vh, 1400px);
         transform: rotate(90deg);
     }
 
@@ -419,7 +422,7 @@ textarea {
 @media (orientation: landscape) {
 
     #phone-container {
-        width: min(135vh, 1200px);
+        width: min(155vh, 1400px);
         transform: rotate(90deg);
     }
 
@@ -435,7 +438,7 @@ textarea {
 
 
     <!-- =====================================================
-         INVISIBLE APP ICONS
+         INVISIBLE CLICKABLE APP ICONS
          ===================================================== -->
 
     <button
@@ -573,7 +576,7 @@ textarea {
 
 
 <!-- =========================================================
-     EXISTING INTERACTIVE APP JAVASCRIPT
+     INTERACTIVE APPS
      ========================================================= -->
 
 <script src="app.js"></script>

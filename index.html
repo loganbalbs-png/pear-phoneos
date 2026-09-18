@@ -18,16 +18,9 @@ body {
     width: 100%;
     height: 100%;
     overflow: hidden;
-
     font-family: Arial, Helvetica, sans-serif;
-
     background: #111;
 }
-
-
-/* =========================================================
-   SCREEN
-   ========================================================= */
 
 body {
     display: flex;
@@ -41,31 +34,22 @@ body {
    ========================================================= */
 
 #phone-container {
-
     position: relative;
 
-    /*
-       ZOOMED IN
-    */
-    width: min(115vh, 1000px);
+    /* EVEN MORE ZOOMED IN */
+    width: min(135vh, 1200px);
 
     height: auto;
 
     aspect-ratio: 1212 / 1188;
 
     background-image: url("pear-phone.png");
-
     background-repeat: no-repeat;
-
     background-position: center;
-
     background-size: contain;
 
-    /*
-       TURN THE WHOLE PEAR PHONE SIDEWAYS
-    */
+    /* TURN PHONE SIDEWAYS */
     transform: rotate(90deg);
-
 }
 
 
@@ -74,12 +58,7 @@ body {
    ========================================================= */
 
 #overlay {
-
     position: absolute;
-
-    /*
-       SMALL APP BOX INSIDE THE PHONE
-    */
 
     left: 31%;
     top: 22%;
@@ -99,9 +78,7 @@ body {
 
     box-shadow:
         0 3px 15px rgba(0,0,0,.45);
-
 }
-
 
 #overlay.open {
     display: block;
@@ -113,16 +90,13 @@ body {
    ========================================================= */
 
 #app {
-
     width: 100%;
     height: 100%;
 
     display: flex;
-
     flex-direction: column;
 
     overflow: hidden;
-
 }
 
 
@@ -131,36 +105,26 @@ body {
    ========================================================= */
 
 #app-header {
-
     min-height: 38px;
 
     background: #eee;
 
     display: flex;
-
     align-items: center;
-
     justify-content: space-between;
 
     padding: 6px 9px;
 
     font-size: 14px;
-
     font-weight: bold;
 
     flex-shrink: 0;
-
 }
 
-
 #app-title {
-
     overflow: hidden;
-
     white-space: nowrap;
-
     text-overflow: ellipsis;
-
 }
 
 
@@ -169,7 +133,6 @@ body {
    ========================================================= */
 
 #close-app {
-
     border: none;
 
     background: #ff5f57;
@@ -177,7 +140,6 @@ body {
     color: white;
 
     width: 22px;
-
     height: 22px;
 
     border-radius: 50%;
@@ -185,7 +147,6 @@ body {
     cursor: pointer;
 
     font-weight: bold;
-
 }
 
 
@@ -194,7 +155,6 @@ body {
    ========================================================= */
 
 #app-content {
-
     flex: 1;
 
     overflow: auto;
@@ -202,21 +162,18 @@ body {
     padding: 10px;
 
     font-size: 13px;
-
 }
 
 
 /* =========================================================
-   APP BUTTONS
+   BUTTONS
    ========================================================= */
 
 button {
     cursor: pointer;
 }
 
-
 .app-button {
-
     border: none;
 
     border-radius: 7px;
@@ -228,14 +185,10 @@ button {
     background: #ddd;
 
     font-size: 12px;
-
 }
 
-
 .app-button:active {
-
     transform: scale(.95);
-
 }
 
 
@@ -246,7 +199,6 @@ button {
 input,
 textarea,
 select {
-
     width: 100%;
 
     padding: 7px;
@@ -258,16 +210,11 @@ select {
     border-radius: 6px;
 
     font-family: inherit;
-
 }
 
-
 textarea {
-
     resize: vertical;
-
     min-height: 60px;
-
 }
 
 
@@ -276,7 +223,6 @@ textarea {
    ========================================================= */
 
 .card {
-
     background: #f2f2f2;
 
     border-radius: 8px;
@@ -284,16 +230,11 @@ textarea {
     padding: 9px;
 
     margin-bottom: 7px;
-
 }
 
-
 .small {
-
     font-size: 11px;
-
     opacity: .7;
-
 }
 
 
@@ -302,29 +243,23 @@ textarea {
    ========================================================= */
 
 .row {
-
     display: flex;
 
     gap: 5px;
 
     align-items: center;
-
 }
 
-
 .row > * {
-
     flex: 1;
-
 }
 
 
 /* =========================================================
-   INVISIBLE PEAR PHONE ICON BUTTONS
+   INVISIBLE CLICKABLE ICONS
    ========================================================= */
 
 .hotspot {
-
     position: absolute;
 
     border: none;
@@ -332,253 +267,176 @@ textarea {
     background: transparent;
 
     padding: 0;
-
     margin: 0;
 
     cursor: pointer;
 
     z-index: 50;
-
 }
 
-
-/*
-   These stay attached to the phone because they are
-   inside #phone-container.
-*/
-
-
-#messages {
-
-    left: 43.1%;
-    top: 25.7%;
-    width: 9.6%;
-
-    aspect-ratio: 1;
-
-}
-
-
-#camera {
-
-    left: 54%;
-    top: 25.7%;
-    width: 9.6%;
-
-    aspect-ratio: 1;
-
-}
-
-
-#splashface {
-
-    left: 38%;
-    top: 36.1%;
-    width: 9.6%;
-
-    aspect-ratio: 1;
-
-}
-
-
-#stocks {
-
-    left: 47.5%;
-    top: 36.1%;
-    width: 9.6%;
-
-    aspect-ratio: 1;
-
-}
-
-
-#maps {
-
-    left: 57%;
-    top: 36.1%;
-    width: 9.6%;
-
-    aspect-ratio: 1;
-
-}
-
-
-#photos {
-
-    left: 38%;
-    top: 46.9%;
-    width: 9.6%;
-
-    aspect-ratio: 1;
-
-}
-
-
-#weather {
-
-    left: 47.5%;
-    top: 46.9%;
-    width: 9.6%;
-
-    aspect-ratio: 1;
-
-}
-
-
-#notes {
-
-    left: 57%;
-    top: 46.9%;
-    width: 9.6%;
-
-    aspect-ratio: 1;
-
-}
-
-
-#peartunes {
-
-    left: 32%;
-    top: 55.9%;
-    width: 9.6%;
-
-    aspect-ratio: 1;
-
-}
-
-
-#settings {
-
-    left: 42%;
-    top: 55.9%;
-    width: 9.6%;
-
-    aspect-ratio: 1;
-
-}
-
-
-#clock {
-
-    left: 52%;
-    top: 55.9%;
-    width: 9.6%;
-
-    aspect-ratio: 1;
-
-}
-
-
-#videos {
-
-    left: 62%;
-    top: 55.9%;
-    width: 9.6%;
-
-    aspect-ratio: 1;
-
-}
-
-
-#phone {
-
-    left: 32%;
-    top: 65.9%;
-    width: 9.6%;
-
-    aspect-ratio: 1;
-
-}
-
-
-#mail {
-
-    left: 42%;
-    top: 65.9%;
-    width: 9.6%;
-
-    aspect-ratio: 1;
-
-}
-
-
-#compass {
-
-    left: 52%;
-    top: 65.9%;
-    width: 9.6%;
-
-    aspect-ratio: 1;
-
-}
-
-
-#music {
-
-    left: 62%;
-    top: 65.9%;
-    width: 9.6%;
-
-    aspect-ratio: 1;
-
-}
-
-
-#home {
-
-    left: 46%;
-    top: 78.8%;
-    width: 8.2%;
-
-    aspect-ratio: 1;
-
+.hotspot:active {
+    transform: scale(.90);
 }
 
 
 /* =========================================================
-   KEEP IT SIDEWAYS ON EVERY SCREEN
+   PEAR PHONE ICON POSITIONS
+   ========================================================= */
+
+#messages {
+    left: 43.1%;
+    top: 25.7%;
+    width: 9.6%;
+    aspect-ratio: 1;
+}
+
+#camera {
+    left: 54%;
+    top: 25.7%;
+    width: 9.6%;
+    aspect-ratio: 1;
+}
+
+#splashface {
+    left: 38%;
+    top: 36.1%;
+    width: 9.6%;
+    aspect-ratio: 1;
+}
+
+#stocks {
+    left: 47.5%;
+    top: 36.1%;
+    width: 9.6%;
+    aspect-ratio: 1;
+}
+
+#maps {
+    left: 57%;
+    top: 36.1%;
+    width: 9.6%;
+    aspect-ratio: 1;
+}
+
+#photos {
+    left: 38%;
+    top: 46.9%;
+    width: 9.6%;
+    aspect-ratio: 1;
+}
+
+#weather {
+    left: 47.5%;
+    top: 46.9%;
+    width: 9.6%;
+    aspect-ratio: 1;
+}
+
+#notes {
+    left: 57%;
+    top: 46.9%;
+    width: 9.6%;
+    aspect-ratio: 1;
+}
+
+#peartunes {
+    left: 32%;
+    top: 55.9%;
+    width: 9.6%;
+    aspect-ratio: 1;
+}
+
+#settings {
+    left: 42%;
+    top: 55.9%;
+    width: 9.6%;
+    aspect-ratio: 1;
+}
+
+#clock {
+    left: 52%;
+    top: 55.9%;
+    width: 9.6%;
+    aspect-ratio: 1;
+}
+
+#videos {
+    left: 62%;
+    top: 55.9%;
+    width: 9.6%;
+    aspect-ratio: 1;
+}
+
+#phone {
+    left: 32%;
+    top: 65.9%;
+    width: 9.6%;
+    aspect-ratio: 1;
+}
+
+#mail {
+    left: 42%;
+    top: 65.9%;
+    width: 9.6%;
+    aspect-ratio: 1;
+}
+
+#compass {
+    left: 52%;
+    top: 65.9%;
+    width: 9.6%;
+    aspect-ratio: 1;
+}
+
+#music {
+    left: 62%;
+    top: 65.9%;
+    width: 9.6%;
+    aspect-ratio: 1;
+}
+
+#home {
+    left: 46%;
+    top: 78.8%;
+    width: 8.2%;
+    aspect-ratio: 1;
+}
+
+
+/* =========================================================
+   KEEP PHONE SIDEWAYS
    ========================================================= */
 
 @media (orientation: portrait) {
 
     #phone-container {
-
-        width: min(115vh, 1000px);
-
+        width: min(135vh, 1200px);
         transform: rotate(90deg);
-
     }
 
 }
 
-
 @media (orientation: landscape) {
 
     #phone-container {
-
-        width: min(115vh, 1000px);
-
+        width: min(135vh, 1200px);
         transform: rotate(90deg);
-
     }
 
 }
 
 </style>
-
 </head>
 
 
 <body>
 
-
 <div id="phone-container">
 
 
     <!-- =====================================================
-         INVISIBLE CLICKABLE ICONS
+         INVISIBLE APP ICONS
          ===================================================== -->
-
 
     <button
         class="hotspot"
@@ -586,13 +444,11 @@ textarea {
         onclick="openApp('messages')">
     </button>
 
-
     <button
         class="hotspot"
         id="camera"
         onclick="openApp('camera')">
     </button>
-
 
     <button
         class="hotspot"
@@ -600,13 +456,11 @@ textarea {
         onclick="openApp('splashface')">
     </button>
 
-
     <button
         class="hotspot"
         id="stocks"
         onclick="openApp('stocks')">
     </button>
-
 
     <button
         class="hotspot"
@@ -614,13 +468,11 @@ textarea {
         onclick="openApp('maps')">
     </button>
 
-
     <button
         class="hotspot"
         id="photos"
         onclick="openApp('photos')">
     </button>
-
 
     <button
         class="hotspot"
@@ -628,13 +480,11 @@ textarea {
         onclick="openApp('weather')">
     </button>
 
-
     <button
         class="hotspot"
         id="notes"
         onclick="openApp('notes')">
     </button>
-
 
     <button
         class="hotspot"
@@ -642,13 +492,11 @@ textarea {
         onclick="openApp('peartunes')">
     </button>
 
-
     <button
         class="hotspot"
         id="settings"
         onclick="openApp('settings')">
     </button>
-
 
     <button
         class="hotspot"
@@ -656,13 +504,11 @@ textarea {
         onclick="openApp('clock')">
     </button>
 
-
     <button
         class="hotspot"
         id="videos"
         onclick="openApp('videos')">
     </button>
-
 
     <button
         class="hotspot"
@@ -670,13 +516,11 @@ textarea {
         onclick="openApp('phone')">
     </button>
 
-
     <button
         class="hotspot"
         id="mail"
         onclick="openApp('mail')">
     </button>
-
 
     <button
         class="hotspot"
@@ -684,13 +528,11 @@ textarea {
         onclick="openApp('compass')">
     </button>
 
-
     <button
         class="hotspot"
         id="music"
         onclick="openApp('peartunes')">
     </button>
-
 
     <button
         class="hotspot"
@@ -713,7 +555,6 @@ textarea {
                     Pear Phone
                 </span>
 
-
                 <button
                     id="close-app"
                     onclick="closeApp()">
@@ -722,23 +563,20 @@ textarea {
 
             </div>
 
-
             <div id="app-content"></div>
 
         </div>
 
     </div>
 
-
 </div>
 
 
 <!-- =========================================================
-     INTERACTIVE APPS
+     EXISTING INTERACTIVE APP JAVASCRIPT
      ========================================================= -->
 
 <script src="app.js"></script>
-
 
 </body>
 </html>

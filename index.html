@@ -3,45 +3,98 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Pear Phone OS</title>
 
 <style>
+
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
-html, body {
-  margin: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  font-family: Arial, Helvetica, sans-serif;
-  background: #111;
-}
-
+html,
 body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+
+    font-family: Arial, Helvetica, sans-serif;
+
+    background: #111;
 }
+
 
 /* =========================================================
-   BIG / ZOOMED-IN PEAR PHONE
+   SCREEN
+   ========================================================= */
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+/* =========================================================
+   PEAR PHONE
    ========================================================= */
 
 #phone-container {
-  position: relative;
 
-  /* NEW BIGGER SIZE */
-  width: min(115vw, 950px);
+    position: relative;
 
-  height: auto;
-  aspect-ratio: 1212 / 1188;
+    /*
+       BIGGER PHONE
+    */
+    width: min(95vh, 900px);
 
-  background-image: url("pear-phone.png");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
+    height: auto;
+
+    aspect-ratio: 1212 / 1188;
+
+    background-image: url("pear-phone.png");
+
+    background-repeat: no-repeat;
+
+    background-position: center;
+
+    background-size: contain;
+
+    /*
+       TURN PHONE VERTICALLY
+    */
+    transform: rotate(90deg);
+}
+
+
+/* =========================================================
+   REMOVE "PIANO BLACK"
+   ========================================================= */
+
+/*
+   This covers the Piano Black wording on the original
+   Pear Phone image without changing the phone itself.
+*/
+
+#piano-black-cover {
+
+    position: absolute;
+
+    left: 27%;
+
+    bottom: 3%;
+
+    width: 46%;
+
+    height: 7%;
+
+    background: #111;
+
+    z-index: 15;
+
+    pointer-events: none;
+
 }
 
 
@@ -50,49 +103,75 @@ body {
    ========================================================= */
 
 .hotspot {
-  position: absolute;
-  border: none;
-  background: transparent;
-  padding: 0;
-  margin: 0;
-  cursor: pointer;
-  z-index: 20;
+
+    position: absolute;
+
+    border: none;
+
+    background: transparent;
+
+    padding: 0;
+
+    margin: 0;
+
+    cursor: pointer;
+
+    z-index: 20;
+
 }
 
+
+/* CLICK EFFECT */
+
 .hotspot:active {
-  transform: scale(.92);
+
+    transform: scale(.90);
+
 }
 
 
 /* =========================================================
-   APP BOX
+   APP WINDOW
    ========================================================= */
 
 #overlay {
-  position: absolute;
 
-  left: 31%;
-  top: 22%;
+    position: absolute;
 
-  width: 38%;
-  height: 47%;
+    /*
+       SMALL BOX INSIDE PHONE
+    */
 
-  background: white;
+    left: 31%;
 
-  z-index: 100;
+    top: 22%;
 
-  display: none;
+    width: 38%;
 
-  overflow: hidden;
+    height: 47%;
 
-  border-radius: 8px;
+    background: white;
 
-  box-shadow:
-    0 3px 15px rgba(0,0,0,.45);
+    z-index: 100;
+
+    display: none;
+
+    overflow: hidden;
+
+    border-radius: 8px;
+
+    box-shadow:
+        0 3px 15px rgba(0,0,0,.45);
+
 }
 
+
+/* SHOW APP */
+
 #overlay.open {
-  display: block;
+
+    display: block;
+
 }
 
 
@@ -101,460 +180,659 @@ body {
    ========================================================= */
 
 #app {
-  width: 100%;
-  height: 100%;
 
-  display: flex;
-  flex-direction: column;
+    width: 100%;
 
-  overflow: hidden;
+    height: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    overflow: hidden;
+
 }
 
 
-/* APP HEADER */
+/* =========================================================
+   APP HEADER
+   ========================================================= */
 
 #app-header {
-  min-height: 38px;
 
-  background: #eee;
+    min-height: 38px;
 
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+    background: #eee;
 
-  padding: 6px 9px;
+    display: flex;
 
-  font-size: 14px;
-  font-weight: bold;
+    align-items: center;
 
-  flex-shrink: 0;
+    justify-content: space-between;
+
+    padding: 6px 9px;
+
+    font-size: 14px;
+
+    font-weight: bold;
+
+    flex-shrink: 0;
+
 }
+
 
 #app-title {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+
+    overflow: hidden;
+
+    white-space: nowrap;
+
+    text-overflow: ellipsis;
+
 }
 
 
-/* CLOSE BUTTON */
+/* =========================================================
+   CLOSE BUTTON
+   ========================================================= */
 
 #close-app {
-  border: none;
 
-  background: #ff5f57;
+    border: none;
 
-  color: white;
+    background: #ff5f57;
 
-  width: 22px;
-  height: 22px;
+    color: white;
 
-  border-radius: 50%;
+    width: 22px;
 
-  cursor: pointer;
+    height: 22px;
 
-  font-weight: bold;
+    border-radius: 50%;
+
+    cursor: pointer;
+
+    font-weight: bold;
+
 }
 
 
-/* APP CONTENT */
+/* =========================================================
+   APP CONTENT
+   ========================================================= */
 
 #app-content {
-  flex: 1;
 
-  overflow: auto;
+    flex: 1;
 
-  padding: 10px;
+    overflow: auto;
 
-  font-size: 13px;
+    padding: 10px;
+
+    font-size: 13px;
+
 }
 
 
-/* GENERAL BUTTON */
+/* =========================================================
+   BUTTONS
+   ========================================================= */
 
 button {
-  cursor: pointer;
+
+    cursor: pointer;
+
 }
+
 
 .app-button {
-  border: none;
 
-  border-radius: 7px;
+    border: none;
 
-  padding: 7px 10px;
+    border-radius: 7px;
 
-  margin: 3px;
+    padding: 7px 10px;
 
-  background: #ddd;
+    margin: 3px;
 
-  font-size: 12px;
+    background: #ddd;
+
+    font-size: 12px;
+
 }
+
 
 .app-button:active {
-  transform: scale(.95);
+
+    transform: scale(.95);
+
 }
 
 
-/* INPUTS */
+/* =========================================================
+   INPUTS
+   ========================================================= */
 
 input,
 textarea,
 select {
-  width: 100%;
 
-  padding: 7px;
+    width: 100%;
 
-  margin: 4px 0;
+    padding: 7px;
 
-  border: 1px solid #bbb;
+    margin: 4px 0;
 
-  border-radius: 6px;
+    border: 1px solid #bbb;
 
-  font-family: inherit;
+    border-radius: 6px;
+
+    font-family: inherit;
+
 }
+
 
 textarea {
-  resize: vertical;
-  min-height: 60px;
-}
 
+    resize: vertical;
 
-/* CARDS */
+    min-height: 60px;
 
-.card {
-  background: #f2f2f2;
-
-  border-radius: 8px;
-
-  padding: 9px;
-
-  margin-bottom: 7px;
-}
-
-.small {
-  font-size: 11px;
-  opacity: .7;
-}
-
-
-/* ROWS */
-
-.row {
-  display: flex;
-
-  gap: 5px;
-
-  align-items: center;
-}
-
-.row > * {
-  flex: 1;
 }
 
 
 /* =========================================================
-   PEAR PHONE ICON POSITIONS
+   CARDS
+   ========================================================= */
+
+.card {
+
+    background: #f2f2f2;
+
+    border-radius: 8px;
+
+    padding: 9px;
+
+    margin-bottom: 7px;
+
+}
+
+
+.small {
+
+    font-size: 11px;
+
+    opacity: .7;
+
+}
+
+
+/* =========================================================
+   ROWS
+   ========================================================= */
+
+.row {
+
+    display: flex;
+
+    gap: 5px;
+
+    align-items: center;
+
+}
+
+
+.row > * {
+
+    flex: 1;
+
+}
+
+
+/* =========================================================
+   PEAR PHONE ICONS
    ========================================================= */
 
 #messages {
-  left: 43.1%;
-  top: 25.7%;
-  width: 9.6%;
-  aspect-ratio: 1;
+
+    left: 43.1%;
+
+    top: 25.7%;
+
+    width: 9.6%;
+
+    aspect-ratio: 1;
+
 }
+
 
 #camera {
-  left: 54%;
-  top: 25.7%;
-  width: 9.6%;
-  aspect-ratio: 1;
+
+    left: 54%;
+
+    top: 25.7%;
+
+    width: 9.6%;
+
+    aspect-ratio: 1;
+
 }
+
 
 #splashface {
-  left: 38%;
-  top: 36.1%;
-  width: 9.6%;
-  aspect-ratio: 1;
+
+    left: 38%;
+
+    top: 36.1%;
+
+    width: 9.6%;
+
+    aspect-ratio: 1;
+
 }
+
 
 #stocks {
-  left: 47.5%;
-  top: 36.1%;
-  width: 9.6%;
-  aspect-ratio: 1;
+
+    left: 47.5%;
+
+    top: 36.1%;
+
+    width: 9.6%;
+
+    aspect-ratio: 1;
+
 }
+
 
 #maps {
-  left: 57%;
-  top: 36.1%;
-  width: 9.6%;
-  aspect-ratio: 1;
+
+    left: 57%;
+
+    top: 36.1%;
+
+    width: 9.6%;
+
+    aspect-ratio: 1;
+
 }
+
 
 #photos {
-  left: 38%;
-  top: 46.9%;
-  width: 9.6%;
-  aspect-ratio: 1;
+
+    left: 38%;
+
+    top: 46.9%;
+
+    width: 9.6%;
+
+    aspect-ratio: 1;
+
 }
+
 
 #weather {
-  left: 47.5%;
-  top: 46.9%;
-  width: 9.6%;
-  aspect-ratio: 1;
+
+    left: 47.5%;
+
+    top: 46.9%;
+
+    width: 9.6%;
+
+    aspect-ratio: 1;
+
 }
+
 
 #notes {
-  left: 57%;
-  top: 46.9%;
-  width: 9.6%;
-  aspect-ratio: 1;
+
+    left: 57%;
+
+    top: 46.9%;
+
+    width: 9.6%;
+
+    aspect-ratio: 1;
+
 }
+
 
 #peartunes {
-  left: 32%;
-  top: 55.9%;
-  width: 9.6%;
-  aspect-ratio: 1;
+
+    left: 32%;
+
+    top: 55.9%;
+
+    width: 9.6%;
+
+    aspect-ratio: 1;
+
 }
+
 
 #settings {
-  left: 42%;
-  top: 55.9%;
-  width: 9.6%;
-  aspect-ratio: 1;
+
+    left: 42%;
+
+    top: 55.9%;
+
+    width: 9.6%;
+
+    aspect-ratio: 1;
+
 }
+
 
 #clock {
-  left: 52%;
-  top: 55.9%;
-  width: 9.6%;
-  aspect-ratio: 1;
+
+    left: 52%;
+
+    top: 55.9%;
+
+    width: 9.6%;
+
+    aspect-ratio: 1;
+
 }
+
 
 #videos {
-  left: 62%;
-  top: 55.9%;
-  width: 9.6%;
-  aspect-ratio: 1;
+
+    left: 62%;
+
+    top: 55.9%;
+
+    width: 9.6%;
+
+    aspect-ratio: 1;
+
 }
+
 
 #phone {
-  left: 32%;
-  top: 65.9%;
-  width: 9.6%;
-  aspect-ratio: 1;
+
+    left: 32%;
+
+    top: 65.9%;
+
+    width: 9.6%;
+
+    aspect-ratio: 1;
+
 }
+
 
 #mail {
-  left: 42%;
-  top: 65.9%;
-  width: 9.6%;
-  aspect-ratio: 1;
+
+    left: 42%;
+
+    top: 65.9%;
+
+    width: 9.6%;
+
+    aspect-ratio: 1;
+
 }
+
 
 #compass {
-  left: 52%;
-  top: 65.9%;
-  width: 9.6%;
-  aspect-ratio: 1;
+
+    left: 52%;
+
+    top: 65.9%;
+
+    width: 9.6%;
+
+    aspect-ratio: 1;
+
 }
+
 
 #music {
-  left: 62%;
-  top: 65.9%;
-  width: 9.6%;
-  aspect-ratio: 1;
+
+    left: 62%;
+
+    top: 65.9%;
+
+    width: 9.6%;
+
+    aspect-ratio: 1;
+
 }
 
+
 #home {
-  left: 46%;
-  top: 78.8%;
-  width: 8.2%;
-  aspect-ratio: 1;
+
+    left: 46%;
+
+    top: 78.8%;
+
+    width: 8.2%;
+
+    aspect-ratio: 1;
+
 }
 
 
 /* =========================================================
-   PORTRAIT DISPLAY
+   KEEP PHONE VERTICAL
    ========================================================= */
 
 @media (orientation: portrait) {
 
-  #phone-container {
-    width: min(115vw, 950px);
+    #phone-container {
 
-    transform: none;
-  }
+        width: min(96vh, 950px);
+
+        transform: rotate(90deg);
+
+    }
 
 }
 
 
 /* =========================================================
-   LANDSCAPE DISPLAY
+   LANDSCAPE
    ========================================================= */
 
 @media (orientation: landscape) {
 
-  #phone-container {
-    width: min(115vh, 950px);
+    #phone-container {
 
-    max-height: 115vh;
+        width: min(96vh, 950px);
 
-    transform: none;
-  }
+        transform: rotate(90deg);
+
+    }
 
 }
+
 </style>
+
 </head>
 
 
 <body>
 
+
 <div id="phone-container">
 
-  <!-- =====================================================
-       INVISIBLE ICON BUTTONS
-       ===================================================== -->
 
-  <button
-    class="hotspot"
-    id="messages"
-    onclick="openApp('messages')">
-  </button>
+    <!-- =====================================================
+         PIANO BLACK COVER
+         ===================================================== -->
 
-  <button
-    class="hotspot"
-    id="camera"
-    onclick="openApp('camera')">
-  </button>
-
-  <button
-    class="hotspot"
-    id="splashface"
-    onclick="openApp('splashface')">
-  </button>
-
-  <button
-    class="hotspot"
-    id="stocks"
-    onclick="openApp('stocks')">
-  </button>
-
-  <button
-    class="hotspot"
-    id="maps"
-    onclick="openApp('maps')">
-  </button>
-
-  <button
-    class="hotspot"
-    id="photos"
-    onclick="openApp('photos')">
-  </button>
-
-  <button
-    class="hotspot"
-    id="weather"
-    onclick="openApp('weather')">
-  </button>
-
-  <button
-    class="hotspot"
-    id="notes"
-    onclick="openApp('notes')">
-  </button>
-
-  <button
-    class="hotspot"
-    id="peartunes"
-    onclick="openApp('peartunes')">
-  </button>
-
-  <button
-    class="hotspot"
-    id="settings"
-    onclick="openApp('settings')">
-  </button>
-
-  <button
-    class="hotspot"
-    id="clock"
-    onclick="openApp('clock')">
-  </button>
-
-  <button
-    class="hotspot"
-    id="videos"
-    onclick="openApp('videos')">
-  </button>
-
-  <button
-    class="hotspot"
-    id="phone"
-    onclick="openApp('phone')">
-  </button>
-
-  <button
-    class="hotspot"
-    id="mail"
-    onclick="openApp('mail')">
-  </button>
-
-  <button
-    class="hotspot"
-    id="compass"
-    onclick="openApp('compass')">
-  </button>
-
-  <button
-    class="hotspot"
-    id="music"
-    onclick="openApp('peartunes')">
-  </button>
-
-  <button
-    class="hotspot"
-    id="home"
-    onclick="closeApp()">
-  </button>
+    <div id="piano-black-cover"></div>
 
 
-  <!-- =====================================================
-       APP WINDOW
-       ===================================================== -->
-
-  <div id="overlay">
-
-    <div id="app">
-
-      <div id="app-header">
-
-        <span id="app-title">
-          Pear Phone
-        </span>
-
-        <button
-          id="close-app"
-          onclick="closeApp()">
-          ×
-        </button>
-
-      </div>
+    <!-- =====================================================
+         INVISIBLE APP ICONS
+         ===================================================== -->
 
 
-      <div id="app-content"></div>
+    <button
+        class="hotspot"
+        id="messages"
+        onclick="openApp('messages')">
+    </button>
+
+
+    <button
+        class="hotspot"
+        id="camera"
+        onclick="openApp('camera')">
+    </button>
+
+
+    <button
+        class="hotspot"
+        id="splashface"
+        onclick="openApp('splashface')">
+    </button>
+
+
+    <button
+        class="hotspot"
+        id="stocks"
+        onclick="openApp('stocks')">
+    </button>
+
+
+    <button
+        class="hotspot"
+        id="maps"
+        onclick="openApp('maps')">
+    </button>
+
+
+    <button
+        class="hotspot"
+        id="photos"
+        onclick="openApp('photos')">
+    </button>
+
+
+    <button
+        class="hotspot"
+        id="weather"
+        onclick="openApp('weather')">
+    </button>
+
+
+    <button
+        class="hotspot"
+        id="notes"
+        onclick="openApp('notes')">
+    </button>
+
+
+    <button
+        class="hotspot"
+        id="peartunes"
+        onclick="openApp('peartunes')">
+    </button>
+
+
+    <button
+        class="hotspot"
+        id="settings"
+        onclick="openApp('settings')">
+    </button>
+
+
+    <button
+        class="hotspot"
+        id="clock"
+        onclick="openApp('clock')">
+    </button>
+
+
+    <button
+        class="hotspot"
+        id="videos"
+        onclick="openApp('videos')">
+    </button>
+
+
+    <button
+        class="hotspot"
+        id="phone"
+        onclick="openApp('phone')">
+    </button>
+
+
+    <button
+        class="hotspot"
+        id="mail"
+        onclick="openApp('mail')">
+    </button>
+
+
+    <button
+        class="hotspot"
+        id="compass"
+        onclick="openApp('compass')">
+    </button>
+
+
+    <button
+        class="hotspot"
+        id="music"
+        onclick="openApp('peartunes')">
+    </button>
+
+
+    <button
+        class="hotspot"
+        id="home"
+        onclick="closeApp()">
+    </button>
+
+
+    <!-- =====================================================
+         APP WINDOW
+         ===================================================== -->
+
+    <div id="overlay">
+
+
+        <div id="app">
+
+
+            <div id="app-header">
+
+                <span id="app-title">
+                    Pear Phone
+                </span>
+
+
+                <button
+                    id="close-app"
+                    onclick="closeApp()">
+                    ×
+                </button>
+
+            </div>
+
+
+            <div id="app-content"></div>
+
+
+        </div>
+
 
     </div>
 
-  </div>
 
 </div>
 
 
-<!-- YOUR EXISTING INTERACTIVE APPS -->
+<!-- =========================================================
+     INTERACTIVE APPS
+     ========================================================= -->
+
 <script src="app.js"></script>
+
 
 </body>
 </html>

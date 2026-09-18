@@ -2,16 +2,12 @@ const overlay = document.getElementById("overlay");
 const appWindow = document.getElementById("app-window");
 
 function openApp(title, content) {
-
     appWindow.innerHTML = `
         <div class="header">
             <button class="back" onclick="closeApp()">‹</button>
             <span>${title}</span>
         </div>
-
-        <div class="content">
-            ${content}
-        </div>
+        <div class="content">${content}</div>
     `;
 
     overlay.classList.add("open");
@@ -22,55 +18,53 @@ function closeApp() {
 }
 
 
-/* MESSAGES */
+/* =========================
+   MESSAGES
+========================= */
+
+const chats = {
+    Chloe: ["Hey!! 👋", "What are you doing?", "We should hang out!"],
+    Sam: ["Yo!", "Did you see this?", "😂"],
+    Cat: ["Meow.", "MEOW.", "😸"]
+};
 
 function openMessages() {
-
     openApp("Messages", `
         <h2>Messages</h2>
 
-        <div class="card" onclick="chat('Chloe')">
+        <div class="card" onclick="openChat('Chloe')">
             👩 <b>Chloe</b>
             <br>
-            Hey! What are you doing?
+            We should hang out!
         </div>
 
-        <div class="card" onclick="chat('Sam')">
+        <div class="card" onclick="openChat('Sam')">
             👨 <b>Sam</b>
             <br>
-            Wanna hang out?
+            Did you see this?
         </div>
 
-        <div class="card" onclick="chat('Cat')">
+        <div class="card" onclick="openChat('Cat')">
             🐱 <b>Cat</b>
             <br>
             Meow.
         </div>
+
+        <button class="button" onclick="newChat()">
+            ➕ New Message
+        </button>
     `);
 }
 
-function chat(name) {
-
+function openChat(name) {
     openApp(name, `
         <div id="chatMessages">
-
-            <div class="message">
-                Hey! 👋
-            </div>
-
-            <div class="message">
-                What's up?
-            </div>
-
-            <div class="message me">
-                Just using my Pear Phone 😂
-            </div>
-
+            ${chats[name].map(x =>
+                `<div class="message">${x}</div>`
+            ).join("")}
         </div>
 
         <input id="messageInput" placeholder="iMessage">
-
-        <br><br>
 
         <button class="button"
                 onclick="sendMessage('${name}')">
@@ -80,72 +74,76 @@ function chat(name) {
 }
 
 function sendMessage(name) {
-
-    const input =
-        document.getElementById("messageInput");
+    const input = document.getElementById("messageInput");
 
     if (!input.value.trim()) return;
 
     document.getElementById("chatMessages").innerHTML += `
-        <div class="message me">
-            ${input.value}
-        </div>
+        <div class="message me">${input.value}</div>
     `;
 
     input.value = "";
 
     setTimeout(() => {
-
         document.getElementById("chatMessages").innerHTML += `
             <div class="message">
-                ${name === "Cat"
-                    ? "Meow 😸"
-                    : "Haha that's awesome!"
-                }
+                ${name === "Cat" ? "Meow 😸" : "Sounds good!"}
             </div>
         `;
-
     }, 700);
 }
 
+function newChat() {
+    openApp("New Message", `
+        <input id="newContact" placeholder="Contact">
 
-/* CAMERA */
+        <textarea id="newMessage"
+                  placeholder="Message"></textarea>
+
+        <button class="button"
+                onclick="alert('Message sent! 💬')">
+            Send
+        </button>
+    `);
+}
+
+
+/* =========================
+   CAMERA
+========================= */
 
 let cameraStream = null;
 
 function openCamera() {
-
     openApp("Camera", `
         <video id="cameraVideo"
                autoplay
                playsinline
-               style="width:100%;background:#000;border-radius:12px">
+               style="width:100%;background:#000;border-radius:9px">
         </video>
 
-        <br><br>
+        <br>
 
-        <button class="button"
-                onclick="startCamera()">
+        <button class="button" onclick="startCamera()">
             📷 Start
         </button>
 
-        <button class="button"
-                onclick="takePhoto()">
-            📸 Take Photo
+        <button class="button" onclick="takePhoto()">
+            📸 Capture
         </button>
 
-        <canvas id="cameraCanvas"
-                style="display:none">
-        </canvas>
+        <button class="button" onclick="stopCamera()">
+            ⏹ Stop
+        </button>
+
+        <canvas id="cameraCanvas" style="display:none"></canvas>
 
         <div id="cameraResult"></div>
     `);
 }
 
 async function startCamera() {
-
     try {
-
         cameraStream =
             await navigator.mediaDevices.getUserMedia({
                 video:true
@@ -155,111 +153,103 @@ async function startCamera() {
             cameraStream;
 
     } catch(error) {
+        alert("Camera permission is unavailable.");
+    }
+}
 
-        alert("Camera unavailable.");
-
+function stopCamera() {
+    if (cameraStream) {
+        cameraStream.getTracks().forEach(track => track.stop());
+        cameraStream = null;
     }
 }
 
 function takePhoto() {
-
-    const video =
-        document.getElementById("cameraVideo");
+    const video = document.getElementById("cameraVideo");
 
     if (!video.srcObject) {
-
         alert("Start the camera first!");
-
         return;
     }
 
-    const canvas =
-        document.getElementById("cameraCanvas");
+    const canvas = document.getElementById("cameraCanvas");
 
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
 
-    canvas.getContext("2d")
-        .drawImage(
-            video,
-            0,
-            0,
-            canvas.width,
-            canvas.height
-        );
+    canvas.getContext("2d").drawImage(
+        video, 0, 0,
+        canvas.width,
+        canvas.height
+    );
 
-    const image =
-        canvas.toDataURL("image/png");
+    const image = canvas.toDataURL("image/png");
 
     document.getElementById("cameraResult").innerHTML = `
-        <br>
         <img src="${image}"
-             style="width:100%;border-radius:10px">
+             style="width:100%;border-radius:8px">
     `;
 }
 
 
-/* SPLASHFACE */
+/* =========================
+   SPLASHFACE
+========================= */
 
 function openSplashFace() {
-
     openApp("SplashFace", `
         <h2>🌊 SplashFace</h2>
 
         <div class="card">
-
             <b>Chloe</b>
-
-            <p>
-                Beach day!! ☀️🌊
-            </p>
+            <p>Beach day!! ☀️🌊</p>
 
             <button class="button"
                     onclick="likePost(this)">
-                ❤️ Like <span>24</span>
+                ❤️ <span>24</span>
             </button>
 
+            <button class="button"
+                    onclick="commentPost()">
+                💬 Comment
+            </button>
         </div>
 
         <div class="card">
-
             <b>Sam</b>
-
-            <p>
-                Just got a new Pear Phone 🍐📱
-            </p>
+            <p>New Pear Phone! 🍐</p>
 
             <button class="button"
                     onclick="likePost(this)">
-                ❤️ Like <span>8</span>
+                ❤️ <span>8</span>
             </button>
-
         </div>
 
         <button class="button"
                 onclick="newPost()">
-            ➕ Post
+            ➕ Create Post
         </button>
     `);
 }
 
 function likePost(button) {
+    const span = button.querySelector("span");
+    span.textContent = Number(span.textContent) + 1;
+}
 
-    const number =
-        button.querySelector("span");
+function commentPost() {
+    const comment = prompt("Write a comment:");
 
-    number.textContent =
-        Number(number.textContent) + 1;
+    if (comment) {
+        alert("Comment posted! 💬");
+    }
 }
 
 function newPost() {
-
-    openApp("New Post", `
+    openApp("Create Post", `
         <textarea id="postText"
                   placeholder="What's happening?">
         </textarea>
-
-        <br><br>
 
         <button class="button"
                 onclick="publishPost()">
@@ -269,73 +259,137 @@ function newPost() {
 }
 
 function publishPost() {
-
     const text =
         document.getElementById("postText").value;
 
     if (!text.trim()) {
-
         alert("Write something first!");
-
         return;
     }
 
-    alert("Posted! 🌊");
-
+    alert("Posted to SplashFace! 🌊");
     openSplashFace();
 }
 
 
-/* STOCKS */
+/* =========================
+   STOCKS
+========================= */
+
+let stockValues = {
+    AAPL: 238.45,
+    MSFT: 511.20,
+    TSLA: 341.88,
+    NVDA: 178.42
+};
 
 function openStocks() {
-
     openApp("Stocks", `
         <h2>📈 Stocks</h2>
 
-        <div class="card">
-            <b>🍎 AAPL</b>
-            <br>
-            $238.45
-            <br>
-            +2.31%
-        </div>
+        <div id="stocksList"></div>
 
-        <div class="card">
-            <b>💻 MSFT</b>
-            <br>
-            $511.20
-            <br>
-            +1.42%
-        </div>
-
-        <div class="card">
-            <b>🚀 TSLA</b>
-            <br>
-            $341.88
-            <br>
-            -0.82%
-        </div>
+        <input id="stockSearch"
+               placeholder="Add ticker e.g. GOOG">
 
         <button class="button"
-                onclick="alert('Prices refreshed! 📊')">
+                onclick="addStock()">
+            ➕ Add Stock
+        </button>
+
+        <button class="button"
+                onclick="refreshStocks()">
             🔄 Refresh
+        </button>
+    `);
+
+    drawStocks();
+}
+
+function drawStocks() {
+    const list = document.getElementById("stocksList");
+
+    if (!list) return;
+
+    list.innerHTML = Object.keys(stockValues).map(symbol => `
+        <div class="card"
+             onclick="stockDetails('${symbol}')">
+
+            <b>${symbol}</b>
+
+            <br>
+
+            $${stockValues[symbol].toFixed(2)}
+
+            <br>
+
+            <small>
+                Tap for details
+            </small>
+        </div>
+    `).join("");
+}
+
+function refreshStocks() {
+    Object.keys(stockValues).forEach(symbol => {
+        stockValues[symbol] +=
+            (Math.random() - 0.5) * 8;
+    });
+
+    drawStocks();
+}
+
+function addStock() {
+    const input =
+        document.getElementById("stockSearch");
+
+    const symbol =
+        input.value.trim().toUpperCase();
+
+    if (!symbol) return;
+
+    stockValues[symbol] =
+        Math.random() * 400 + 20;
+
+    input.value = "";
+
+    drawStocks();
+}
+
+function stockDetails(symbol) {
+    openApp(symbol, `
+        <h2>📊 ${symbol}</h2>
+
+        <h1>
+            $${stockValues[symbol].toFixed(2)}
+        </h1>
+
+        <div class="progress">
+            <div style="width:${Math.random()*80+10}%"></div>
+        </div>
+
+        <p>
+            Today's activity
+        </p>
+
+        <button class="button"
+                onclick="openStocks()">
+            Back to Watchlist
         </button>
     `);
 }
 
 
-/* MAPS */
+/* =========================
+   MAPS
+========================= */
 
 function openMaps() {
-
     openApp("Maps", `
         <h2>🗺️ Pear Maps</h2>
 
         <input id="mapSearch"
                placeholder="Search a place">
-
-        <br><br>
 
         <button class="button"
                 onclick="searchMap()">
@@ -344,7 +398,7 @@ function openMaps() {
 
         <div class="card"
              style="
-             height:150px;
+             height:130px;
              display:flex;
              align-items:center;
              justify-content:center;
@@ -353,30 +407,59 @@ function openMaps() {
             🗺️
         </div>
 
-        <p id="mapResult">
-            Search somewhere.
-        </p>
+        <div id="mapResults">
+            <p>Search for a destination.</p>
+        </div>
+
+        <button class="button"
+                onclick="findMe()">
+            📍 Find Me
+        </button>
     `);
 }
 
 function searchMap() {
-
     const place =
         document.getElementById("mapSearch").value;
 
     if (!place.trim()) return;
 
-    document.getElementById("mapResult").innerHTML =
-        "📍 Searching for <b>" +
-        place +
-        "</b>...";
+    document.getElementById("mapResults").innerHTML = `
+        <div class="card">
+            📍 <b>${place}</b>
+            <br>
+            Destination found!
+            <br><br>
+            <button class="button"
+                    onclick="startRoute('${place}')">
+                🚗 Start Route
+            </button>
+        </div>
+    `;
+}
+
+function startRoute(place) {
+    alert("Route started to " + place + " 🚗");
+}
+
+function findMe() {
+    if (!navigator.geolocation) {
+        alert("Location unavailable.");
+        return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+        () => alert("📍 Your location was found!"),
+        () => alert("Location permission was denied.")
+    );
 }
 
 
-/* PHOTOS */
+/* =========================
+   PHOTOS
+========================= */
 
 function openPhotos() {
-
     openApp("Photos", `
         <h2>📸 Photos</h2>
 
@@ -392,7 +475,6 @@ function openPhotos() {
 }
 
 function loadPhotos(event) {
-
     const grid =
         document.getElementById("photoGrid");
 
@@ -400,10 +482,9 @@ function loadPhotos(event) {
 
     Array.from(event.target.files).forEach(file => {
 
-        const reader =
-            new FileReader();
+        const reader = new FileReader();
 
-        reader.onload = function(e) {
+        reader.onload = e => {
 
             grid.innerHTML += `
                 <img src="${e.target.result}"
@@ -411,8 +492,9 @@ function loadPhotos(event) {
                      width:100%;
                      aspect-ratio:1;
                      object-fit:cover;
-                     border-radius:9px;
-                     ">
+                     border-radius:8px;
+                     "
+                     onclick="viewPhoto(this.src)">
             `;
         };
 
@@ -420,81 +502,121 @@ function loadPhotos(event) {
     });
 }
 
+function viewPhoto(src) {
+    openApp("Photo", `
+        <img src="${src}"
+             style="width:100%;border-radius:10px">
 
-/* WEATHER */
+        <br><br>
+
+        <button class="button"
+                onclick="openPhotos()">
+            Back
+        </button>
+    `);
+}
+
+
+/* =========================
+   WEATHER
+========================= */
 
 function openWeather() {
 
     openApp("Weather", `
         <div style="text-align:center">
 
-            <div style="font-size:55px">
+            <div class="big-icon">
                 ☀️
             </div>
 
             <h1>22°C</h1>
 
-            <h3>Sunny</h3>
+            <p>Sunny</p>
 
         </div>
 
         <div class="grid">
 
             <div class="card">
-                🌅 18°C
+                🌅<br>
+                Morning<br>
+                18°C
             </div>
 
             <div class="card">
-                ☀️ 24°C
+                ☀️<br>
+                Afternoon<br>
+                24°C
             </div>
 
             <div class="card">
-                🌇 21°C
+                🌇<br>
+                Evening<br>
+                21°C
             </div>
 
             <div class="card">
-                🌙 16°C
+                🌙<br>
+                Night<br>
+                16°C
             </div>
 
         </div>
+
+        <button class="button"
+                onclick="changeWeather()">
+            🔄 Refresh
+        </button>
     `);
 }
 
+function changeWeather() {
 
-/* NOTES */
+    const weather =
+        ["☀️ Sunny","🌧️ Rain","⛅ Cloudy","❄️ Snow"];
+
+    const choice =
+        weather[
+            Math.floor(
+                Math.random() * weather.length
+            )
+        ];
+
+    alert("Weather updated: " + choice);
+}
+
+
+/* =========================
+   NOTES
+========================= */
 
 function openNotes() {
+
+    const saved =
+        localStorage.getItem("pearNote") || "";
 
     openApp("Notes", `
         <h2>📝 Notes</h2>
 
-        <textarea id="note"
-                  placeholder="Write something...">
-        </textarea>
+        <input id="noteTitle"
+               placeholder="Title">
 
-        <br><br>
+        <textarea id="note"
+                  placeholder="Write your note...">${saved}</textarea>
 
         <button class="button"
                 onclick="saveNote()">
-            Save
+            💾 Save
         </button>
 
         <button class="button"
                 onclick="clearNote()">
-            Clear
+            🗑 Clear
         </button>
 
         <p id="noteStatus"></p>
     `);
-
-    const saved =
-        localStorage.getItem("pearNote");
-
-    if (saved) {
-
-        document.getElementById("note").value =
-            saved;
-    }
 }
 
 function saveNote() {
@@ -519,7 +641,9 @@ function clearNote() {
 }
 
 
-/* PEARTUNES */
+/* =========================
+   PEARTUNES
+========================= */
 
 let audio = new Audio();
 
@@ -528,14 +652,18 @@ function openPearTunes() {
     openApp("PearTunes", `
         <div style="text-align:center">
 
-            <div style="font-size:55px">
+            <div class="big-icon">
                 🎵
             </div>
 
             <h2>PearTunes</h2>
 
+            <p id="songName">
+                Pear Phone Radio
+            </p>
+
             <button class="button"
-                    onclick="demoMusic()">
+                    onclick="playDemoSong()">
                 ▶️ Play
             </button>
 
@@ -544,17 +672,21 @@ function openPearTunes() {
                 ⏸ Pause
             </button>
 
+            <button class="button"
+                    onclick="nextSong()">
+                ⏭ Next
+            </button>
+
             <br><br>
 
             <input type="file"
                    accept="audio/*"
                    onchange="loadMusic(event)">
-
         </div>
     `);
 }
 
-function demoMusic() {
+function playDemoSong() {
 
     const AudioContext =
         window.AudioContext ||
@@ -569,22 +701,45 @@ function demoMusic() {
     const gain =
         context.createGain();
 
-    oscillator.frequency.value = 440;
+    oscillator.type = "sine";
+
+    oscillator.frequency.value =
+        440;
 
     oscillator.connect(gain);
-
     gain.connect(context.destination);
 
     oscillator.start();
 
     gain.gain.exponentialRampToValueAtTime(
         0.001,
-        context.currentTime + 1
+        context.currentTime + 1.5
     );
 
     oscillator.stop(
-        context.currentTime + 1
+        context.currentTime + 1.5
     );
+}
+
+function nextSong() {
+
+    const songs =
+        [
+            "Pear Radio",
+            "Pear Chill",
+            "Pear Beats",
+            "Pear FM"
+        ];
+
+    const song =
+        songs[
+            Math.floor(
+                Math.random() * songs.length
+            )
+        ];
+
+    document.getElementById("songName")
+        .textContent = song;
 }
 
 function loadMusic(event) {
@@ -597,11 +752,17 @@ function loadMusic(event) {
     audio.src =
         URL.createObjectURL(file);
 
+    document.getElementById("songName")
+        .textContent =
+        file.name;
+
     audio.play();
 }
 
 
-/* SETTINGS */
+/* =========================
+   SETTINGS
+========================= */
 
 function openSettings() {
 
@@ -609,6 +770,9 @@ function openSettings() {
         <h2>⚙️ Settings</h2>
 
         <div class="card">
+            <b>Appearance</b>
+
+            <br><br>
 
             <button class="button"
                     onclick="toggleDarkMode()">
@@ -616,8 +780,33 @@ function openSettings() {
             </button>
 
             <button class="button"
+                    onclick="normalMode()">
+                ☀️ Light Mode
+            </button>
+        </div>
+
+        <div class="card">
+
+            <b>Sound</b>
+
+            <br><br>
+
+            <button class="button"
+                    onclick="testSound()">
+                🔊 Test Sound
+            </button>
+
+        </div>
+
+        <div class="card">
+
+            <b>Pear Phone</b>
+
+            <br><br>
+
+            <button class="button"
                     onclick="resetPhone()">
-                🔄 Reset
+                🔄 Reset Data
             </button>
 
         </div>
@@ -628,21 +817,39 @@ function toggleDarkMode() {
 
     document.getElementById("app-window")
         .style.background =
-        document.getElementById("app-window")
-        .style.background === "rgb(20, 20, 20)"
-        ? "#f2f2f7"
-        : "#141414";
+        "#181818";
+
+    document.getElementById("app-window")
+        .style.color =
+        "white";
+}
+
+function normalMode() {
+
+    document.getElementById("app-window")
+        .style.background =
+        "#f2f2f7";
+
+    document.getElementById("app-window")
+        .style.color =
+        "#111";
+}
+
+function testSound() {
+    alert("🔊 Pear Phone sound works!");
 }
 
 function resetPhone() {
 
     localStorage.clear();
 
-    alert("Pear Phone reset!");
+    alert("Pear Phone data reset!");
 }
 
 
-/* CLOCK */
+/* =========================
+   CLOCK
+========================= */
 
 let stopwatchSeconds = 0;
 let stopwatchTimer = null;
@@ -652,7 +859,7 @@ function openClock() {
     openApp("Clock", `
         <div style="text-align:center">
 
-            <div style="font-size:55px">
+            <div class="big-icon">
                 🕐
             </div>
 
@@ -679,6 +886,15 @@ function openClock() {
                 <button class="button"
                         onclick="resetStopwatch()">
                     🔄
+                </button>
+
+            </div>
+
+            <div class="card">
+
+                <button class="button"
+                        onclick="setTimer()">
+                    ⏱ Set Timer
                 </button>
 
             </div>
@@ -712,7 +928,9 @@ function startStopwatch() {
             stopwatchSeconds++;
 
             const minutes =
-                Math.floor(stopwatchSeconds / 60);
+                Math.floor(
+                    stopwatchSeconds / 60
+                );
 
             const seconds =
                 stopwatchSeconds % 60;
@@ -739,16 +957,32 @@ function resetStopwatch() {
 
     stopwatchSeconds = 0;
 
-    const element =
+    const display =
         document.getElementById("stopwatch");
 
-    if (element) {
-        element.textContent = "00:00";
+    if (display) {
+        display.textContent = "00:00";
     }
 }
 
+function setTimer() {
 
-/* VIDEOS */
+    const seconds =
+        Number(prompt("Timer length in seconds:"));
+
+    if (!seconds || seconds <= 0) return;
+
+    alert("Timer started! ⏱");
+
+    setTimeout(() => {
+        alert("⏰ Timer finished!");
+    }, seconds * 1000);
+}
+
+
+/* =========================
+   VIDEOS
+========================= */
 
 function openVideos() {
 
@@ -759,16 +993,21 @@ function openVideos() {
                accept="video/*"
                onchange="loadVideo(event)">
 
-        <br><br>
-
         <video id="videoPlayer"
                controls
                style="
                width:100%;
                background:#000;
-               border-radius:10px;
+               border-radius:9px;
                ">
         </video>
+
+        <br>
+
+        <button class="button"
+                onclick="fullscreenVideo()">
+            ⛶ Fullscreen
+        </button>
     `);
 }
 
@@ -783,8 +1022,20 @@ function loadVideo(event) {
         URL.createObjectURL(file);
 }
 
+function fullscreenVideo() {
 
-/* PHONE */
+    const video =
+        document.getElementById("videoPlayer");
+
+    if (video.requestFullscreen) {
+        video.requestFullscreen();
+    }
+}
+
+
+/* =========================
+   PHONE
+========================= */
 
 let phoneNumber = "";
 
@@ -855,21 +1106,17 @@ function clearNumber() {
 function callNumber() {
 
     if (!phoneNumber) {
-
         alert("Enter a number first!");
-
         return;
     }
 
-    alert(
-        "Calling " +
-        phoneNumber +
-        " 📞"
-    );
+    alert("Calling " + phoneNumber + " 📞");
 }
 
 
-/* MAIL */
+/* =========================
+   MAIL
+========================= */
 
 function openMail() {
 
@@ -881,19 +1128,30 @@ function openMail() {
 
             <b>Apple</b>
 
-            <p>
-                Your Pear Phone order shipped!
-            </p>
+            <br>
+
+            Your Pear Phone order shipped! 📦
+
+        </div>
+
+        <div class="card"
+             onclick="readMomMail()">
+
+            <b>Mom</b>
+
+            <br>
+
+            Don't forget dinner ❤️
 
         </div>
 
         <div class="card">
 
-            <b>Mom</b>
+            <b>School</b>
 
-            <p>
-                Don't forget dinner ❤️
-            </p>
+            <br>
+
+            New assignment available.
 
         </div>
 
@@ -911,7 +1169,23 @@ function readMail() {
 
         <p>
             Your Pear Phone accessories
-            are on the way!
+            are officially on the way!
+        </p>
+
+        <button class="button"
+                onclick="openMail()">
+            Back
+        </button>
+    `);
+}
+
+function readMomMail() {
+
+    openApp("Mail", `
+        <h2>❤️ Mom</h2>
+
+        <p>
+            Don't forget dinner tonight!
         </p>
 
         <button class="button"
@@ -926,15 +1200,9 @@ function composeMail() {
     openApp("Compose", `
         <input placeholder="To">
 
-        <br><br>
-
         <input placeholder="Subject">
 
-        <br><br>
-
         <textarea placeholder="Message"></textarea>
-
-        <br><br>
 
         <button class="button"
                 onclick="alert('Email sent! 📧')">
@@ -944,14 +1212,17 @@ function composeMail() {
 }
 
 
-/* COMPASS */
+/* =========================
+   COMPASS
+========================= */
 
 function openCompass() {
 
     openApp("Compass", `
         <div style="text-align:center">
 
-            <div style="font-size:80px">
+            <div id="compassIcon"
+                 class="big-icon">
                 🧭
             </div>
 
@@ -961,7 +1232,12 @@ function openCompass() {
 
             <button class="button"
                     onclick="calibrateCompass()">
-                Calibrate
+                🧭 Calibrate
+            </button>
+
+            <button class="button"
+                    onclick="randomDirection()">
+                🔄 Random Direction
             </button>
 
         </div>
@@ -969,6 +1245,13 @@ function openCompass() {
 }
 
 function calibrateCompass() {
+
+    alert("Compass calibrated! 🧭");
+
+    randomDirection();
+}
+
+function randomDirection() {
 
     const directions =
         ["NORTH","EAST","SOUTH","WEST"];
@@ -986,7 +1269,9 @@ function calibrateCompass() {
 }
 
 
-/* CONNECT ALL APPS */
+/* =========================
+   CONNECT APPS
+========================= */
 
 document.getElementById("messages").onclick =
     openMessages;

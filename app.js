@@ -1,7 +1,7 @@
 const overlay = document.getElementById("overlay");
 const appWindow = document.getElementById("app-window");
 
-function openApp(title, html) {
+function openApp(title, content) {
     appWindow.innerHTML = `
         <div class="header">
             <button class="back" onclick="closeApp()">‹</button>
@@ -9,7 +9,7 @@ function openApp(title, html) {
         </div>
 
         <div class="content">
-            ${html}
+            ${content}
         </div>
     `;
 
@@ -27,52 +27,39 @@ function closeApp() {
 ========================= */
 
 function openMessages() {
-
     openApp("Messages", `
         <h2>Messages</h2>
 
-        <div class="card" onclick="chat('Chloe')">
-            👩 Chloe
-            <br>
-            <small>Hey!! What are you doing?</small>
+        <div class="card" onclick="openChat('Chloe')">
+            👩 <b>Chloe</b>
+            <p>Hey! What are you doing?</p>
         </div>
 
-        <div class="card" onclick="chat('Sam')">
-            👨 Sam
-            <br>
-            <small>Wanna hang out?</small>
+        <div class="card" onclick="openChat('Sam')">
+            👨 <b>Sam</b>
+            <p>Wanna hang out?</p>
         </div>
 
-        <div class="card" onclick="chat('Cat')">
-            🐱 Cat
-            <br>
-            <small>Meow.</small>
+        <div class="card" onclick="openChat('Cat')">
+            🐱 <b>Cat</b>
+            <p>Meow.</p>
         </div>
     `);
 }
 
-function chat(name) {
-
+function openChat(name) {
     openApp(name, `
-        <div id="chat">
-
-            <div class="message">
-                Hey! 👋
-            </div>
-
-            <div class="message">
-                What's up?
-            </div>
-
-            <div class="message me">
-                Just using my Pear Phone 😂
-            </div>
-
+        <div id="chatMessages">
+            <div class="message">Hey! 👋</div>
+            <div class="message">What's up?</div>
+            <div class="message me">Just using my Pear Phone 😂</div>
         </div>
 
         <br>
 
-        <input id="msgInput" placeholder="iMessage">
+        <input id="messageInput" placeholder="iMessage">
+
+        <br><br>
 
         <button class="button" onclick="sendMessage('${name}')">
             Send
@@ -81,31 +68,23 @@ function chat(name) {
 }
 
 function sendMessage(name) {
-
-    const input = document.getElementById("msgInput");
+    const input = document.getElementById("messageInput");
 
     if (!input.value.trim()) return;
 
-    document.getElementById("chat").innerHTML += `
-        <div class="message me">
-            ${input.value}
-        </div>
+    document.getElementById("chatMessages").innerHTML += `
+        <div class="message me">${input.value}</div>
     `;
 
     input.value = "";
 
     setTimeout(() => {
-
-        document.getElementById("chat").innerHTML += `
+        document.getElementById("chatMessages").innerHTML += `
             <div class="message">
-                ${name === "Cat"
-                    ? "Meow 😸"
-                    : "Haha that's awesome!"
-                }
+                ${name === "Cat" ? "Meow 😸" : "Haha that's awesome!"}
             </div>
         `;
-
-    }, 800);
+    }, 700);
 }
 
 
@@ -113,20 +92,17 @@ function sendMessage(name) {
    CAMERA
 ========================= */
 
-let cameraStream;
+let cameraStream = null;
 
 function openCamera() {
-
     openApp("Camera", `
-
         <video id="cameraVideo"
-               class="camera-video"
                autoplay
                playsinline
-               style="width:100%;background:black;border-radius:18px">
+               style="width:100%;background:#000;border-radius:18px">
         </video>
 
-        <br>
+        <br><br>
 
         <button class="button" onclick="startCamera()">
             📷 Start Camera
@@ -143,30 +119,25 @@ function openCamera() {
 }
 
 async function startCamera() {
-
     try {
-
         cameraStream =
             await navigator.mediaDevices.getUserMedia({
-                video: true
+                video:true
             });
 
         document.getElementById("cameraVideo").srcObject =
             cameraStream;
 
-    } catch (error) {
-
-        alert("Camera permission was denied or unavailable.");
-
+    } catch(error) {
+        alert("Camera permission was denied or the camera is unavailable.");
     }
 }
 
 function takePhoto() {
-
     const video = document.getElementById("cameraVideo");
 
     if (!video.srcObject) {
-        alert("Start the camera first!");
+        alert("Press Start Camera first!");
         return;
     }
 
@@ -195,69 +166,18 @@ function takePhoto() {
 
 
 /* =========================
-   PHOTOS
-========================= */
-
-function openPhotos() {
-
-    openApp("Photos", `
-
-        <h2>📷 My Photos</h2>
-
-        <input type="file"
-               accept="image/*"
-               multiple
-               onchange="loadPhotos(event)">
-
-        <div id="photoGrid"
-             class="grid">
-        </div>
-    `);
-}
-
-function loadPhotos(event) {
-
-    const grid = document.getElementById("photoGrid");
-
-    grid.innerHTML = "";
-
-    [...event.target.files].forEach(file => {
-
-        const reader = new FileReader();
-
-        reader.onload = function(e) {
-
-            grid.innerHTML += `
-                <img src="${e.target.result}"
-                     style="
-                     width:100%;
-                     border-radius:14px;
-                     aspect-ratio:1;
-                     object-fit:cover;
-                     ">
-            `;
-        };
-
-        reader.readAsDataURL(file);
-    });
-}
-
-
-/* =========================
    SPLASHFACE
 ========================= */
 
 function openSplashFace() {
-
     openApp("SplashFace", `
-
         <h2>🌊 SplashFace</h2>
 
         <div class="card">
             <b>Chloe</b>
             <p>Beach day!! ☀️🌊</p>
-            <button class="button"
-                    onclick="likePost(this)">
+
+            <button class="button" onclick="likePost(this)">
                 ❤️ Like <span>24</span>
             </button>
         </div>
@@ -265,46 +185,41 @@ function openSplashFace() {
         <div class="card">
             <b>Sam</b>
             <p>Just got a new Pear Phone 🍐📱</p>
-            <button class="button"
-                    onclick="likePost(this)">
+
+            <button class="button" onclick="likePost(this)">
                 ❤️ Like <span>8</span>
             </button>
         </div>
 
-        <button class="button"
-                onclick="newPost()">
+        <button class="button" onclick="createPost()">
             ➕ Create Post
         </button>
     `);
 }
 
 function likePost(button) {
+    const number = button.querySelector("span");
 
-    const span = button.querySelector("span");
-
-    span.textContent =
-        Number(span.textContent) + 1;
+    number.textContent =
+        Number(number.textContent) + 1;
 }
 
-function newPost() {
-
+function createPost() {
     openApp("New Post", `
-
         <h2>Create a Post</h2>
 
         <textarea id="postText"
-                  placeholder="What's happening?">
-        </textarea>
+                  placeholder="What's happening?"></textarea>
 
-        <button class="button"
-                onclick="publishPost()">
+        <br><br>
+
+        <button class="button" onclick="publishPost()">
             Post
         </button>
     `);
 }
 
 function publishPost() {
-
     const text =
         document.getElementById("postText").value;
 
@@ -324,40 +239,36 @@ function publishPost() {
 ========================= */
 
 function openStocks() {
-
     openApp("Stocks", `
-
         <h2>📈 Stocks</h2>
 
         <div class="card">
             <b>🍎 AAPL</b>
             <h2>$238.45</h2>
-            <span>+2.31%</span>
+            <p>+2.31%</p>
         </div>
 
         <div class="card">
             <b>💻 MSFT</b>
             <h2>$511.20</h2>
-            <span>+1.42%</span>
+            <p>+1.42%</p>
         </div>
 
         <div class="card">
             <b>🚀 TSLA</b>
             <h2>$341.88</h2>
-            <span>-0.82%</span>
+            <p>-0.82%</p>
         </div>
 
-        <button class="button"
-                onclick="randomStocks()">
-            🔄 Refresh Prices
+        <button class="button" onclick="refreshStocks()">
+            🔄 Refresh
         </button>
 
         <p id="stockMessage"></p>
     `);
 }
 
-function randomStocks() {
-
+function refreshStocks() {
     document.getElementById("stockMessage").textContent =
         "Prices updated! 📊";
 }
@@ -368,25 +279,26 @@ function randomStocks() {
 ========================= */
 
 function openMaps() {
-
     openApp("Maps", `
-
         <h2>🗺️ Pear Maps</h2>
 
         <input id="mapSearch"
                placeholder="Search a place">
 
-        <button class="button"
-                onclick="searchMap()">
+        <br><br>
+
+        <button class="button" onclick="searchMap()">
             Search
         </button>
 
         <div class="card"
-             style="height:250px;
-                    display:flex;
-                    align-items:center;
-                    justify-content:center;
-                    font-size:70px">
+             style="
+             height:250px;
+             display:flex;
+             align-items:center;
+             justify-content:center;
+             font-size:70px;
+             ">
             🗺️
         </div>
 
@@ -397,14 +309,61 @@ function openMaps() {
 }
 
 function searchMap() {
-
     const place =
         document.getElementById("mapSearch").value;
 
     if (!place.trim()) return;
 
     document.getElementById("mapResult").innerHTML =
-        `📍 Searching for <b>${place}</b>...`;
+        "📍 Searching for <b>" + place + "</b>...";
+}
+
+
+/* =========================
+   PHOTOS
+========================= */
+
+function openPhotos() {
+    openApp("Photos", `
+        <h2>📸 Photos</h2>
+
+        <input type="file"
+               accept="image/*"
+               multiple
+               onchange="loadPhotos(event)">
+
+        <div id="photoGrid"
+             class="grid"
+             style="margin-top:15px">
+        </div>
+    `);
+}
+
+function loadPhotos(event) {
+    const grid =
+        document.getElementById("photoGrid");
+
+    grid.innerHTML = "";
+
+    Array.from(event.target.files).forEach(file => {
+
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+
+            grid.innerHTML += `
+                <img src="${e.target.result}"
+                     style="
+                     width:100%;
+                     aspect-ratio:1;
+                     object-fit:cover;
+                     border-radius:14px;
+                     ">
+            `;
+        };
+
+        reader.readAsDataURL(file);
+    });
 }
 
 
@@ -413,38 +372,42 @@ function searchMap() {
 ========================= */
 
 function openWeather() {
-
     openApp("Weather", `
+        <div style="text-align:center">
 
-        <div class="big">☀️</div>
+            <div style="font-size:80px">
+                ☀️
+            </div>
 
-        <h1 style="text-align:center">
-            22°C
-        </h1>
+            <h1>22°C</h1>
 
-        <h2 style="text-align:center">
-            Sunny
-        </h2>
+            <h2>Sunny</h2>
+
+        </div>
 
         <div class="grid">
 
             <div class="card">
-                🌅 Morning<br>
+                🌅 Morning
+                <br>
                 18°C
             </div>
 
             <div class="card">
-                ☀️ Afternoon<br>
+                ☀️ Afternoon
+                <br>
                 24°C
             </div>
 
             <div class="card">
-                🌇 Evening<br>
+                🌇 Evening
+                <br>
                 21°C
             </div>
 
             <div class="card">
-                🌙 Night<br>
+                🌙 Night
+                <br>
                 16°C
             </div>
 
@@ -458,21 +421,19 @@ function openWeather() {
 ========================= */
 
 function openNotes() {
-
     openApp("Notes", `
-
         <h2>📝 Notes</h2>
 
         <textarea id="note"
                   placeholder="Write something..."></textarea>
 
-        <button class="button"
-                onclick="saveNote()">
-            Save Note
+        <br><br>
+
+        <button class="button" onclick="saveNote()">
+            Save
         </button>
 
-        <button class="button"
-                onclick="clearNote()">
+        <button class="button" onclick="clearNote()">
             Clear
         </button>
 
@@ -488,7 +449,6 @@ function openNotes() {
 }
 
 function saveNote() {
-
     const text =
         document.getElementById("note").value;
 
@@ -502,7 +462,6 @@ function saveNote() {
 }
 
 function clearNote() {
-
     document.getElementById("note").value = "";
 
     localStorage.removeItem("pearNote");
@@ -516,56 +475,81 @@ function clearNote() {
 let audio = new Audio();
 
 function openPearTunes() {
-
     openApp("PearTunes", `
+        <div style="text-align:center">
 
-        <div class="big">🎵</div>
+            <div style="font-size:80px">
+                🎵
+            </div>
 
-        <h2 style="text-align:center">
-            PearTunes
-        </h2>
+            <h2>PearTunes</h2>
 
-        <div class="card"
-             style="text-align:center">
+            <div class="card">
 
-            <h3 id="songTitle">
-                Pear Phone Radio
-            </h3>
+                <h3 id="songTitle">
+                    Pear Phone Radio
+                </h3>
 
-            <button class="button"
-                    onclick="playMusic()">
-                ▶️ Play
-            </button>
+                <button class="button"
+                        onclick="demoMusic()">
+                    ▶️ Play Demo
+                </button>
 
-            <button class="button"
-                    onclick="pauseMusic()">
-                ⏸ Pause
-            </button>
+                <button class="button"
+                        onclick="pauseMusic()">
+                    ⏸ Pause
+                </button>
 
-            <button class="button"
-                    onclick="demoSong()">
-                🎶 Demo Song
-            </button>
+            </div>
+
+            <input type="file"
+                   accept="audio/*"
+                   onchange="loadMusic(event)">
 
         </div>
-
-        <input type="file"
-               accept="audio/*"
-               onchange="loadSong(event)">
     `);
 }
 
-function playMusic() {
-    audio.play();
+function demoMusic() {
+
+    const AudioContext =
+        window.AudioContext ||
+        window.webkitAudioContext;
+
+    const context =
+        new AudioContext();
+
+    const oscillator =
+        context.createOscillator();
+
+    const gain =
+        context.createGain();
+
+    oscillator.frequency.value = 440;
+
+    oscillator.connect(gain);
+    gain.connect(context.destination);
+
+    oscillator.start();
+
+    gain.gain.exponentialRampToValueAtTime(
+        0.001,
+        context.currentTime + 1
+    );
+
+    oscillator.stop(
+        context.currentTime + 1
+    );
 }
 
 function pauseMusic() {
     audio.pause();
 }
 
-function loadSong(event) {
+function loadMusic(event) {
 
-    const file = event.target.files[0];
+    const file =
+        event.target.files[0];
 
     if (!file) return;
 
@@ -578,47 +562,13 @@ function loadSong(event) {
     audio.play();
 }
 
-function demoSong() {
-
-    const AudioContext =
-        window.AudioContext ||
-        window.webkitAudioContext;
-
-    const ctx = new AudioContext();
-
-    const oscillator =
-        ctx.createOscillator();
-
-    const gain =
-        ctx.createGain();
-
-    oscillator.frequency.value = 440;
-
-    oscillator.connect(gain);
-
-    gain.connect(ctx.destination);
-
-    oscillator.start();
-
-    gain.gain.exponentialRampToValueAtTime(
-        0.001,
-        ctx.currentTime + 1
-    );
-
-    oscillator.stop(
-        ctx.currentTime + 1
-    );
-}
-
 
 /* =========================
    SETTINGS
 ========================= */
 
 function openSettings() {
-
     openApp("Settings", `
-
         <h2>⚙️ Settings</h2>
 
         <div class="card">
@@ -629,13 +579,13 @@ function openSettings() {
             </button>
 
             <button class="button"
-                    onclick="increaseText()">
+                    onclick="biggerText()">
                 🔠 Bigger Text
             </button>
 
             <button class="button"
                     onclick="resetPhone()">
-                🔄 Reset Pear Phone
+                🔄 Reset Phone
             </button>
 
         </div>
@@ -655,7 +605,7 @@ function toggleDarkMode() {
         "Theme changed!";
 }
 
-function increaseText() {
+function biggerText() {
 
     document.body.style.fontSize = "18px";
 
@@ -675,112 +625,106 @@ function resetPhone() {
    CLOCK
 ========================= */
 
-let stopwatchInterval;
-let stopwatchSeconds = 0;
+let stopwatch = 0;
+let stopwatchTimer = null;
 
 function openClock() {
 
     openApp("Clock", `
+        <div style="text-align:center">
 
-        <div class="big">
-            🕐
-        </div>
+            <div style="font-size:80px">
+                🕐
+            </div>
 
-        <h1 id="currentTime"
-            style="text-align:center">
-            --
-        </h1>
+            <h1 id="time">
+                ${new Date().toLocaleTimeString()}
+            </h1>
 
-        <div class="card"
-             style="text-align:center">
+            <div class="card">
 
-            <h2 id="stopwatch">
-                00:00
-            </h2>
+                <h2 id="stopwatch">
+                    00:00
+                </h2>
 
-            <button class="button"
-                    onclick="startStopwatch()">
-                ▶️ Start
-            </button>
+                <button class="button"
+                        onclick="startStopwatch()">
+                    ▶️ Start
+                </button>
 
-            <button class="button"
-                    onclick="stopStopwatch()">
-                ⏸ Stop
-            </button>
+                <button class="button"
+                        onclick="stopStopwatch()">
+                    ⏸ Stop
+                </button>
 
-            <button class="button"
-                    onclick="resetStopwatch()">
-                🔄 Reset
-            </button>
+                <button class="button"
+                        onclick="resetStopwatch()">
+                    🔄 Reset
+                </button>
+
+            </div>
 
         </div>
     `);
 
-    updateClock();
-
-    setInterval(() => {
-
-        const clock =
-            document.getElementById("currentTime");
-
-        if (clock) {
-            updateClock();
-        }
-
-    }, 1000);
+    updateTime();
 }
 
-function updateClock() {
+function updateTime() {
 
-    const clock =
-        document.getElementById("currentTime");
+    const element =
+        document.getElementById("time");
 
-    if (!clock) return;
+    if (!element) return;
 
-    clock.textContent =
+    element.textContent =
         new Date().toLocaleTimeString();
+
+    setTimeout(updateTime,1000);
 }
 
 function startStopwatch() {
 
-    if (stopwatchInterval) return;
+    if (stopwatchTimer) return;
 
-    stopwatchInterval =
+    stopwatchTimer =
         setInterval(() => {
 
-            stopwatchSeconds++;
+            stopwatch++;
 
             const minutes =
-                Math.floor(stopwatchSeconds / 60);
+                Math.floor(stopwatch / 60);
 
             const seconds =
-                stopwatchSeconds % 60;
+                stopwatch % 60;
 
             document.getElementById("stopwatch")
                 .textContent =
-                `${String(minutes).padStart(2,"0")}:${String(seconds).padStart(2,"0")}`;
+                String(minutes).padStart(2,"0")
+                + ":" +
+                String(seconds).padStart(2,"0");
 
-        }, 1000);
+        },1000);
 }
 
 function stopStopwatch() {
 
-    clearInterval(stopwatchInterval);
+    clearInterval(stopwatchTimer);
 
-    stopwatchInterval = null;
+    stopwatchTimer = null;
 }
 
 function resetStopwatch() {
 
     stopStopwatch();
 
-    stopwatchSeconds = 0;
+    stopwatch = 0;
 
-    const display =
+    const element =
         document.getElementById("stopwatch");
 
-    if (display) {
-        display.textContent = "00:00";
+    if (element) {
+        element.textContent = "00:00";
     }
 }
 
@@ -792,25 +736,29 @@ function resetStopwatch() {
 function openVideos() {
 
     openApp("Videos", `
-
         <h2>🎬 Videos</h2>
 
         <input type="file"
                accept="video/*"
                onchange="loadVideo(event)">
 
+        <br><br>
+
         <video id="videoPlayer"
                controls
-               style="width:100%;
-                      border-radius:15px;
-                      background:black">
+               style="
+               width:100%;
+               background:#000;
+               border-radius:15px;
+               ">
         </video>
     `);
 }
 
 function loadVideo(event) {
 
-    const file = event.target.files[0];
+    const file =
+        event.target.files[0];
 
     if (!file) return;
 
@@ -827,25 +775,38 @@ let phoneNumber = "";
 
 function openPhone() {
 
+    phoneNumber = "";
+
     openApp("Phone", `
+        <h2 style="text-align:center">
+            📞 Phone
+        </h2>
 
         <h1 id="phoneNumber"
             style="text-align:center">
-            ${phoneNumber || " "}
         </h1>
 
         <div class="grid">
 
-            ${["1","2","3","4","5","6","7","8","9","*","0","#"]
-            .map(n => `
-                <button class="button"
-                        style="font-size:22px"
-                        onclick="dial('${n}')">
-                    ${n}
-                </button>
-            `).join("")}
+            <button class="button" onclick="dial('1')">1</button>
+            <button class="button" onclick="dial('2')">2</button>
+            <button class="button" onclick="dial('3')">3</button>
+
+            <button class="button" onclick="dial('4')">4</button>
+            <button class="button" onclick="dial('5')">5</button>
+            <button class="button" onclick="dial('6')">6</button>
+
+            <button class="button" onclick="dial('7')">7</button>
+            <button class="button" onclick="dial('8')">8</button>
+            <button class="button" onclick="dial('9')">9</button>
+
+            <button class="button" onclick="dial('*')">*</button>
+            <button class="button" onclick="dial('0')">0</button>
+            <button class="button" onclick="dial('#')">#</button>
 
         </div>
+
+        <br>
 
         <button class="button"
                 onclick="callNumber()">
@@ -898,7 +859,6 @@ function callNumber() {
 function openMail() {
 
     openApp("Mail", `
-
         <h2>📧 Pear Mail</h2>
 
         <div class="card"
@@ -931,9 +891,8 @@ function openMail() {
 
 function readMail() {
 
-    openApp("Apple", `
-
-        <h2>Your order shipped! 📦</h2>
+    openApp("Mail", `
+        <h2>📦 Your order shipped!</h2>
 
         <p>
             Your Pear Phone accessories
@@ -942,7 +901,7 @@ function readMail() {
 
         <button class="button"
                 onclick="openMail()">
-            Back to Inbox
+            Back
         </button>
     `);
 }
@@ -950,12 +909,13 @@ function readMail() {
 function composeMail() {
 
     openApp("Compose", `
-
         <input placeholder="To">
 
         <input placeholder="Subject">
 
         <textarea placeholder="Message"></textarea>
+
+        <br>
 
         <button class="button"
                 onclick="alert('Email sent! 📧')">
@@ -972,33 +932,35 @@ function composeMail() {
 function openCompass() {
 
     openApp("Compass", `
+        <div style="text-align:center">
 
-        <div class="big">
-            🧭
+            <div style="font-size:100px">
+                🧭
+            </div>
+
+            <h1 id="direction">
+                NORTH
+            </h1>
+
+            <p>
+                Tap calibrate to change direction.
+            </p>
+
+            <button class="button"
+                    onclick="calibrateCompass()">
+                🧭 Calibrate
+            </button>
+
         </div>
-
-        <h1 id="direction"
-            style="text-align:center">
-            North
-        </h1>
-
-        <p style="text-align:center">
-            Rotate your device to use the compass.
-        </p>
-
-        <button class="button"
-                onclick="randomDirection()">
-            🧭 Calibrate
-        </button>
     `);
 }
 
-function randomDirection() {
+function calibrateCompass() {
 
     const directions =
-        ["North","East","South","West"];
+        ["NORTH","EAST","SOUTH","WEST"];
 
-    const direction =
+    const random =
         directions[
             Math.floor(
                 Math.random() * directions.length
@@ -1007,76 +969,76 @@ function randomDirection() {
 
     document.getElementById("direction")
         .textContent =
-        direction;
+        random;
 }
 
 
 /* =========================
-   CLICK SYSTEM
+   APP CLICK CONNECTIONS
 ========================= */
 
-document.getElementById("messages")
-    .onclick = openMessages;
+document.getElementById("messages").onclick =
+    openMessages;
 
-document.getElementById("camera")
-    .onclick = openCamera;
+document.getElementById("camera").onclick =
+    openCamera;
 
-document.getElementById("splashface")
-    .onclick = openSplashFace;
+document.getElementById("splashface").onclick =
+    openSplashFace;
 
-document.getElementById("stocks")
-    .onclick = openStocks;
+document.getElementById("stocks").onclick =
+    openStocks;
 
-document.getElementById("maps")
-    .onclick = openMaps;
+document.getElementById("maps").onclick =
+    openMaps;
 
-document.getElementById("photos")
-    .onclick = openPhotos;
+document.getElementById("photos").onclick =
+    openPhotos;
 
-document.getElementById("weather")
-    .onclick = openWeather;
+document.getElementById("weather").onclick =
+    openWeather;
 
-document.getElementById("notes")
-    .onclick = openNotes;
+document.getElementById("notes").onclick =
+    openNotes;
 
-document.getElementById("peartunes")
-    .onclick = openPearTunes;
+document.getElementById("peartunes").onclick =
+    openPearTunes;
 
-document.getElementById("settings")
-    .onclick = openSettings;
+document.getElementById("settings").onclick =
+    openSettings;
 
-document.getElementById("clock")
-    .onclick = openClock;
+document.getElementById("clock").onclick =
+    openClock;
 
-document.getElementById("videos")
-    .onclick = openVideos;
+document.getElementById("videos").onclick =
+    openVideos;
 
-document.getElementById("phone")
-    .onclick = openPhone;
+document.getElementById("phone").onclick =
+    openPhone;
 
-document.getElementById("mail")
-    .onclick = openMail;
+document.getElementById("mail").onclick =
+    openMail;
 
-document.getElementById("compass")
-    .onclick = openCompass;
+document.getElementById("compass").onclick =
+    openCompass;
 
-document.getElementById("music")
-    .onclick = openPearTunes;
+document.getElementById("music").onclick =
+    openPearTunes;
 
-document.getElementById("home")
-    .onclick = closeApp;
+document.getElementById("home").onclick =
+    closeApp;
 
 
-/* Touchscreen support */
+/* TOUCHSCREEN SUPPORT */
 
 document.querySelectorAll(".hotspot").forEach(button => {
 
-    button.addEventListener("pointerup", function(event) {
+    button.addEventListener("touchend", function(event) {
 
         event.preventDefault();
 
         this.click();
 
-    });
+    }, {passive:false});
 
 });

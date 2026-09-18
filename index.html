@@ -43,14 +43,14 @@ body {
 
     background-image: url("pear-phone.png");
 
+    background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
-    background-size: contain;
 }
 
 
 /* =====================================================
-   CLICKABLE ICONS
+   CLICKABLE APPS
 ===================================================== */
 
 .hotspot {
@@ -69,11 +69,14 @@ body {
     z-index: 50;
 
     touch-action: manipulation;
+
+    -webkit-appearance: none;
+    appearance: none;
 }
 
 
 /* =====================================================
-   ICON POSITIONS
+   APP POSITIONS
 ===================================================== */
 
 #messages {
@@ -214,8 +217,8 @@ body {
 
 
 /* =====================================================
-   APP SCREEN
-   FULL PEAR PHONE SHAPE
+   APP WINDOW
+   THIS IS THE PEAR PHONE SHAPE
 ===================================================== */
 
 #overlay {
@@ -223,15 +226,15 @@ body {
     position: absolute;
 
     /*
-       The app occupies the entire
-       Pear Phone body.
+       The overlay uses the FULL
+       Pear Phone container.
     */
 
-    left: 24.5%;
-    top: 13%;
+    left: 0;
+    top: 0;
 
-    width: 51%;
-    height: 78%;
+    width: 100%;
+    height: 100%;
 
     z-index: 100;
 
@@ -240,19 +243,12 @@ body {
     overflow: hidden;
 
     /*
-       REAL PEAR-LIKE PHONE SHAPE
-
-       Narrower at the top,
-       widest around the middle/bottom,
-       rounded bottom.
+       Smooth Pear Phone silhouette.
+       No polygon.
+       No weird corners.
     */
 
-    border-radius:
-        46% 54%
-        42% 58%
-        /
-        22% 22%
-        78% 78%;
+    clip-path: url("#pearPhoneShape");
 }
 
 
@@ -262,7 +258,7 @@ body {
 
 
 /* =====================================================
-   APP
+   APP SCREEN
 ===================================================== */
 
 #app-window {
@@ -294,9 +290,9 @@ body {
 
     gap: 10px;
 
-    min-height: 48px;
+    min-height: 52px;
 
-    padding: 8px 12px;
+    padding: 10px 15px;
 
     background:
         linear-gradient(
@@ -306,7 +302,7 @@ body {
 
     border-bottom: 1px solid #aaa;
 
-    font-size: 15px;
+    font-size: 17px;
 
     font-weight: bold;
 }
@@ -314,8 +310,8 @@ body {
 
 .back {
 
-    width: 32px;
-    height: 32px;
+    width: 34px;
+    height: 34px;
 
     border-radius: 50%;
 
@@ -327,14 +323,14 @@ body {
             #ddd
         );
 
-    font-size: 22px;
+    font-size: 23px;
 
     cursor: pointer;
 }
 
 
 /* =====================================================
-   APP CONTENT
+   CONTENT
 ===================================================== */
 
 .content {
@@ -345,22 +341,22 @@ body {
 
     overflow-y: auto;
 
-    padding: 14px;
+    padding: 18px;
 
-    font-size: 13px;
+    font-size: 14px;
 }
 
 
 .content h1 {
-    font-size: 23px;
+    font-size: 25px;
 }
 
 .content h2 {
-    font-size: 19px;
+    font-size: 20px;
 }
 
 .content h3 {
-    font-size: 15px;
+    font-size: 16px;
 }
 
 
@@ -370,9 +366,9 @@ body {
 
 .button {
 
-    padding: 8px 12px;
+    padding: 9px 14px;
 
-    border-radius: 10px;
+    border-radius: 11px;
 
     border: 1px solid #aaa;
 
@@ -382,7 +378,7 @@ body {
             #ddd
         );
 
-    font-size: 12px;
+    font-size: 13px;
 
     font-weight: bold;
 
@@ -399,18 +395,18 @@ textarea {
 
     width: 100%;
 
-    padding: 9px;
+    padding: 10px;
 
     border: 1px solid #aaa;
 
-    border-radius: 10px;
+    border-radius: 11px;
 
-    font-size: 13px;
+    font-size: 14px;
 }
 
 
 textarea {
-    min-height: 120px;
+    min-height: 140px;
 }
 
 
@@ -424,11 +420,11 @@ textarea {
 
     border: 1px solid #ddd;
 
-    border-radius: 12px;
+    border-radius: 13px;
 
-    padding: 11px;
+    padding: 13px;
 
-    margin-bottom: 9px;
+    margin-bottom: 10px;
 }
 
 
@@ -442,13 +438,13 @@ textarea {
 
     max-width: 80%;
 
-    padding: 8px 11px;
+    padding: 9px 12px;
 
     background: #ddd;
 
-    border-radius: 16px;
+    border-radius: 17px;
 
-    margin-bottom: 7px;
+    margin-bottom: 8px;
 }
 
 
@@ -478,7 +474,7 @@ textarea {
 
 
 /* =====================================================
-   MOBILE
+   PHONE SIZE
 ===================================================== */
 
 @media (max-width: 600px) {
@@ -489,6 +485,20 @@ textarea {
 
 }
 
+
+/* =====================================================
+   THE ACTUAL PEAR SHAPE
+===================================================== */
+
+#pear-shape-definitions {
+
+    position: absolute;
+
+    width: 0;
+    height: 0;
+
+}
+
 </style>
 </head>
 
@@ -496,10 +506,75 @@ textarea {
 <body>
 
 
+<!-- =====================================================
+     SCALABLE PEAR SHAPE
+===================================================== -->
+
+<svg
+    id="pear-shape-definitions"
+    xmlns="http://www.w3.org/2000/svg">
+
+    <defs>
+
+        <clipPath
+            id="pearPhoneShape"
+            clipPathUnits="objectBoundingBox">
+
+            <path
+                d="
+                M 0.50 0.00
+
+                C 0.39 0.00,
+                  0.31 0.05,
+                  0.29 0.16
+
+                C 0.28 0.24,
+                  0.24 0.30,
+                  0.20 0.37
+
+                C 0.14 0.47,
+                  0.10 0.59,
+                  0.12 0.70
+
+                C 0.14 0.83,
+                  0.23 0.92,
+                  0.34 0.97
+
+                C 0.44 1.01,
+                  0.56 1.01,
+                  0.66 0.97
+
+                C 0.77 0.92,
+                  0.86 0.83,
+                  0.88 0.70
+
+                C 0.90 0.59,
+                  0.86 0.47,
+                  0.80 0.37
+
+                C 0.76 0.30,
+                  0.72 0.24,
+                  0.71 0.16
+
+                C 0.69 0.05,
+                  0.61 0.00,
+                  0.50 0.00
+
+                Z
+                "
+            />
+
+        </clipPath>
+
+    </defs>
+
+</svg>
+
+
 <div id="phone-container">
 
 
-    <!-- MESSAGES -->
+    <!-- APPS -->
 
     <button
         class="hotspot"
@@ -508,16 +583,12 @@ textarea {
     </button>
 
 
-    <!-- CAMERA -->
-
     <button
         class="hotspot"
         id="camera"
         aria-label="Camera">
     </button>
 
-
-    <!-- SPLASHFACE -->
 
     <button
         class="hotspot"
@@ -526,16 +597,12 @@ textarea {
     </button>
 
 
-    <!-- STOCKS -->
-
     <button
         class="hotspot"
         id="stocks"
         aria-label="Stocks">
     </button>
 
-
-    <!-- MAPS -->
 
     <button
         class="hotspot"
@@ -544,16 +611,12 @@ textarea {
     </button>
 
 
-    <!-- PHOTOS -->
-
     <button
         class="hotspot"
         id="photos"
         aria-label="Photos">
     </button>
 
-
-    <!-- WEATHER -->
 
     <button
         class="hotspot"
@@ -562,16 +625,12 @@ textarea {
     </button>
 
 
-    <!-- NOTES -->
-
     <button
         class="hotspot"
         id="notes"
         aria-label="Notes">
     </button>
 
-
-    <!-- PEARTUNES -->
 
     <button
         class="hotspot"
@@ -580,16 +639,12 @@ textarea {
     </button>
 
 
-    <!-- SETTINGS -->
-
     <button
         class="hotspot"
         id="settings"
         aria-label="Settings">
     </button>
 
-
-    <!-- CLOCK -->
 
     <button
         class="hotspot"
@@ -598,16 +653,12 @@ textarea {
     </button>
 
 
-    <!-- VIDEOS -->
-
     <button
         class="hotspot"
         id="videos"
         aria-label="Videos">
     </button>
 
-
-    <!-- PHONE -->
 
     <button
         class="hotspot"
@@ -616,8 +667,6 @@ textarea {
     </button>
 
 
-    <!-- MAIL -->
-
     <button
         class="hotspot"
         id="mail"
@@ -625,16 +674,12 @@ textarea {
     </button>
 
 
-    <!-- COMPASS -->
-
     <button
         class="hotspot"
         id="compass"
         aria-label="Compass">
     </button>
 
-
-    <!-- MUSIC -->
 
     <button
         class="hotspot"
@@ -651,7 +696,9 @@ textarea {
     </button>
 
 
-    <!-- APP WINDOW -->
+    <!-- =================================================
+         APP WINDOW
+    ================================================= -->
 
     <div id="overlay">
 

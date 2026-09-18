@@ -2,310 +2,313 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pear Phone OS</title>
 
 <style>
-*{
-  box-sizing:border-box;
-  -webkit-tap-highlight-color:transparent;
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
-html,body{
-  margin:0;
-  width:100%;
-  height:100%;
-  overflow:hidden;
-  background:#fff;
+html, body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #ffffff;
 }
 
-body{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: Arial, sans-serif;
 }
 
-/* PEAR PHONE */
+/* PHONE */
 
-#phone-container{
-  position:relative;
-  width:min(95vw,700px);
-  aspect-ratio:1212 / 1188;
-  background:url("pear-phone.png") center/contain no-repeat;
-  background-color:#fff;
+#phone-container {
+  position: relative;
+  width: min(82vw, 520px);
+  aspect-ratio: 1212 / 1188;
+  background: url("pear-phone.png") center / contain no-repeat;
 }
 
-/* INVISIBLE CLICKABLE APP BUTTONS */
+/* CLICKABLE ICONS */
 
-.hotspot{
-  position:absolute;
-  border:0;
-  background:transparent;
-  padding:0;
-  margin:0;
-  border-radius:50%;
-  cursor:pointer;
-  touch-action:manipulation;
-  -webkit-appearance:none;
-  appearance:none;
-  z-index:50;
+.hotspot {
+  position: absolute;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 20;
+  touch-action: manipulation;
 }
 
-.hotspot:active{
-  transform:scale(.93);
+/* ICON POSITIONS */
+
+#messages {
+  left: 43.1%;
+  top: 25.7%;
+  width: 9.6%;
+  aspect-ratio: 1;
 }
 
-/* APP LOCATIONS */
-
-#messages{
-  left:43.1%;
-  top:25.7%;
-  width:9.6%;
-  aspect-ratio:1;
+#camera {
+  left: 54%;
+  top: 25.7%;
+  width: 9.6%;
+  aspect-ratio: 1;
 }
 
-#camera{
-  left:54%;
-  top:25.7%;
-  width:9.6%;
-  aspect-ratio:1;
+#splashface {
+  left: 38%;
+  top: 36.1%;
+  width: 9.6%;
+  aspect-ratio: 1;
 }
 
-#splashface{
-  left:38%;
-  top:36.1%;
-  width:9.6%;
-  aspect-ratio:1;
+#stocks {
+  left: 47.5%;
+  top: 36.1%;
+  width: 9.6%;
+  aspect-ratio: 1;
 }
 
-#stocks{
-  left:47.5%;
-  top:36.1%;
-  width:9.6%;
-  aspect-ratio:1;
+#maps {
+  left: 57%;
+  top: 36.1%;
+  width: 9.6%;
+  aspect-ratio: 1;
 }
 
-#maps{
-  left:57%;
-  top:36.1%;
-  width:9.6%;
-  aspect-ratio:1;
+#photos {
+  left: 38%;
+  top: 46.9%;
+  width: 9.6%;
+  aspect-ratio: 1;
 }
 
-#photos{
-  left:38%;
-  top:46.9%;
-  width:9.6%;
-  aspect-ratio:1;
+#weather {
+  left: 47.5%;
+  top: 46.9%;
+  width: 9.6%;
+  aspect-ratio: 1;
 }
 
-#weather{
-  left:47.5%;
-  top:46.9%;
-  width:9.6%;
-  aspect-ratio:1;
+#notes {
+  left: 57%;
+  top: 46.9%;
+  width: 9.6%;
+  aspect-ratio: 1;
 }
 
-#notes{
-  left:57%;
-  top:46.9%;
-  width:9.6%;
-  aspect-ratio:1;
+#peartunes {
+  left: 32%;
+  top: 55.9%;
+  width: 9.6%;
+  aspect-ratio: 1;
 }
 
-#peartunes{
-  left:32%;
-  top:55.9%;
-  width:9.6%;
-  aspect-ratio:1;
+#settings {
+  left: 42%;
+  top: 55.9%;
+  width: 9.6%;
+  aspect-ratio: 1;
 }
 
-#settings{
-  left:42%;
-  top:55.9%;
-  width:9.6%;
-  aspect-ratio:1;
+#clock {
+  left: 52%;
+  top: 55.9%;
+  width: 9.6%;
+  aspect-ratio: 1;
 }
 
-#clock{
-  left:52%;
-  top:55.9%;
-  width:9.6%;
-  aspect-ratio:1;
+#videos {
+  left: 62%;
+  top: 55.9%;
+  width: 9.6%;
+  aspect-ratio: 1;
 }
 
-#videos{
-  left:62%;
-  top:55.9%;
-  width:9.6%;
-  aspect-ratio:1;
+#phone {
+  left: 32%;
+  top: 65.9%;
+  width: 9.6%;
+  aspect-ratio: 1;
 }
 
-#phone{
-  left:32%;
-  top:65.9%;
-  width:9.6%;
-  aspect-ratio:1;
+#mail {
+  left: 42%;
+  top: 65.9%;
+  width: 9.6%;
+  aspect-ratio: 1;
 }
 
-#mail{
-  left:42%;
-  top:65.9%;
-  width:9.6%;
-  aspect-ratio:1;
+#compass {
+  left: 52%;
+  top: 65.9%;
+  width: 9.6%;
+  aspect-ratio: 1;
 }
 
-#compass{
-  left:52%;
-  top:65.9%;
-  width:9.6%;
-  aspect-ratio:1;
-}
-
-#music{
-  left:62%;
-  top:65.9%;
-  width:9.6%;
-  aspect-ratio:1;
+#music {
+  left: 62%;
+  top: 65.9%;
+  width: 9.6%;
+  aspect-ratio: 1;
 }
 
 /* HOME BUTTON */
 
-#home{
-  position:absolute;
-  left:46%;
-  top:78.8%;
-  width:8.2%;
-  aspect-ratio:1;
-  border:0;
-  background:transparent;
-  border-radius:50%;
-  cursor:pointer;
-  z-index:60;
+#home {
+  position: absolute;
+  left: 46%;
+  top: 78.8%;
+  width: 8.2%;
+  aspect-ratio: 1;
+  border: 0;
+  background: transparent;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 30;
 }
 
-/* APP SCREEN */
+/* APP WINDOW
+   THIS STAYS INSIDE THE PHONE */
 
-#overlay{
-  position:fixed;
-  inset:0;
-  z-index:1000;
-  display:none;
-  align-items:stretch;
-  justify-content:stretch;
-  background:#f4f5f7;
+#overlay {
+  position: absolute;
+  left: 25.5%;
+  top: 18.5%;
+  width: 49%;
+  height: 58%;
+  z-index: 100;
+  display: none;
+  overflow: hidden;
+  border-radius: 12%;
 }
 
-#overlay.open{
-  display:flex;
+#overlay.open {
+  display: block;
 }
 
-#app-window{
-  width:100vw;
-  height:100dvh;
-  overflow:hidden;
-  background:#f4f5f7;
-  color:#111;
-  display:flex;
-  flex-direction:column;
+#app-window {
+  width: 100%;
+  height: 100%;
+  background: #f2f2f7;
+  color: #111;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
-.header{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding:11px 13px;
-  padding-top:calc(env(safe-area-inset-top) + 10px);
-  background:linear-gradient(#fff,#e7e8ea);
-  border-bottom:1px solid #ccc;
-  font-size:18px;
-  font-weight:900;
+/* APP HEADER */
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 42px;
+  padding: 6px 8px;
+  background: linear-gradient(#ffffff, #e5e5e5);
+  border-bottom: 1px solid #bbb;
+  font-size: 13px;
+  font-weight: bold;
 }
 
-.back{
-  width:34px;
-  height:34px;
-  border-radius:50%;
-  border:1px solid #bbb;
-  background:linear-gradient(#fff,#ddd);
-  font-size:25px;
-  cursor:pointer;
+.back {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid #aaa;
+  background: linear-gradient(#fff, #ddd);
+  font-size: 20px;
+  line-height: 20px;
+  cursor: pointer;
 }
 
-.content{
-  padding:16px;
-  overflow:auto;
-  flex:1;
+.content {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 10px;
+  font-size: 12px;
 }
 
-.button{
-  padding:10px 14px;
-  border-radius:12px;
-  border:1px solid #bbb;
-  background:linear-gradient(#fff,#ddd);
-  font-weight:700;
-  cursor:pointer;
+.content h1 {
+  font-size: 20px;
 }
 
-input,textarea{
-  font-size:16px;
-  padding:10px;
-  border:1px solid #bbb;
-  border-radius:12px;
-  outline:none;
+.content h2 {
+  font-size: 16px;
 }
 
-textarea{
-  width:100%;
-  min-height:180px;
+.content h3 {
+  font-size: 14px;
 }
 
-.card{
-  background:#fff;
-  border:1px solid #ddd;
-  border-radius:14px;
-  padding:14px;
-  margin-bottom:10px;
+.button {
+  padding: 7px 10px;
+  border-radius: 9px;
+  border: 1px solid #aaa;
+  background: linear-gradient(#fff, #ddd);
+  font-size: 11px;
+  font-weight: bold;
+  cursor: pointer;
 }
 
-.message{
-  padding:10px 13px;
-  width:max-content;
-  max-width:82%;
-  background:#dedfe3;
-  border-radius:18px;
-  margin-bottom:8px;
+input,
+textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #aaa;
+  border-radius: 9px;
+  font-size: 12px;
 }
 
-.message.me{
-  margin-left:auto;
-  background:linear-gradient(#58b9ff,#1389df);
-  color:#fff;
+textarea {
+  min-height: 100px;
 }
 
-.grid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:10px;
+.card {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 9px;
+  margin-bottom: 7px;
 }
 
-/* KEEP PHONE LARGE ON SMALL SCREENS */
-
-@media(max-width:600px){
-  #phone-container{
-    width:100vw;
-    transform:scale(.9);
-    transform-origin:center center;
-  }
+.message {
+  padding: 7px 10px;
+  width: max-content;
+  max-width: 80%;
+  background: #ddd;
+  border-radius: 14px;
+  margin-bottom: 6px;
 }
 
-@media(max-height:700px){
-  #phone-container{
-    width:100vw;
-    transform:scale(.9);
-    transform-origin:center center;
+.message.me {
+  margin-left: auto;
+  background: #1689e8;
+  color: white;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px;
+}
+
+/* KEEP NORMAL SIZE ON PHONES */
+
+@media (max-width: 600px) {
+  #phone-container {
+    width: 90vw;
   }
 }
 </style>
@@ -315,44 +318,34 @@ textarea{
 
 <div id="phone-container">
 
-  <button class="hotspot" id="messages" aria-label="Messages"></button>
+  <button class="hotspot" id="messages"></button>
+  <button class="hotspot" id="camera"></button>
 
-  <button class="hotspot" id="camera" aria-label="Camera"></button>
+  <button class="hotspot" id="splashface"></button>
+  <button class="hotspot" id="stocks"></button>
+  <button class="hotspot" id="maps"></button>
 
-  <button class="hotspot" id="splashface" aria-label="SplashFace"></button>
+  <button class="hotspot" id="photos"></button>
+  <button class="hotspot" id="weather"></button>
+  <button class="hotspot" id="notes"></button>
 
-  <button class="hotspot" id="stocks" aria-label="Stocks"></button>
+  <button class="hotspot" id="peartunes"></button>
+  <button class="hotspot" id="settings"></button>
+  <button class="hotspot" id="clock"></button>
+  <button class="hotspot" id="videos"></button>
 
-  <button class="hotspot" id="maps" aria-label="Maps"></button>
+  <button class="hotspot" id="phone"></button>
+  <button class="hotspot" id="mail"></button>
+  <button class="hotspot" id="compass"></button>
+  <button class="hotspot" id="music"></button>
 
-  <button class="hotspot" id="photos" aria-label="Photos"></button>
+  <button id="home"></button>
 
-  <button class="hotspot" id="weather" aria-label="Weather"></button>
+  <!-- APP SCREEN IS INSIDE PHONE -->
+  <div id="overlay">
+    <div id="app-window"></div>
+  </div>
 
-  <button class="hotspot" id="notes" aria-label="Notes"></button>
-
-  <button class="hotspot" id="peartunes" aria-label="PearTunes"></button>
-
-  <button class="hotspot" id="settings" aria-label="Settings"></button>
-
-  <button class="hotspot" id="clock" aria-label="Clock"></button>
-
-  <button class="hotspot" id="videos" aria-label="Videos"></button>
-
-  <button class="hotspot" id="phone" aria-label="Phone"></button>
-
-  <button class="hotspot" id="mail" aria-label="Mail"></button>
-
-  <button class="hotspot" id="compass" aria-label="Compass"></button>
-
-  <button class="hotspot" id="music" aria-label="Music"></button>
-
-  <button id="home" aria-label="Home"></button>
-
-</div>
-
-<div id="overlay">
-  <div id="app-window"></div>
 </div>
 
 <script src="app.js"></script>

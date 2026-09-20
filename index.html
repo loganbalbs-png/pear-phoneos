@@ -18,9 +18,7 @@ body {
     width: 100%;
     height: 100%;
     overflow: hidden;
-
     font-family: Arial, Helvetica, sans-serif;
-
     background: #111;
 }
 
@@ -30,16 +28,14 @@ body {
     align-items: center;
 }
 
-
 /* =========================================================
-   PEAR PHONE
+   PHONE
    ========================================================= */
 
 #phone-container {
 
     position: relative;
 
-    /* BIG BUT SLIGHTLY SMALLER THAN 180VH */
     width: min(170vh, 1500px);
 
     height: auto;
@@ -54,14 +50,46 @@ body {
 
     background-size: contain;
 
-    /* TURN THE PHONE SIDEWAYS */
+    /* KEEP PHONE FACING THE SAME WAY */
     transform: rotate(90deg);
 
+    touch-action: pan-y;
 }
 
+/* =========================================================
+   PAGE 2 IMAGE
+   ========================================================= */
+
+#page2 {
+
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    background-image: url("page2.png");
+
+    background-repeat: no-repeat;
+
+    background-position: center;
+
+    background-size: contain;
+
+    display: none;
+
+    z-index: 50;
+
+    pointer-events: none;
+}
+
+#phone-container.page-two #page2 {
+    display: block;
+}
 
 /* =========================================================
-   CLICKABLE ICONS
+   HOTSPOTS
    ========================================================= */
 
 .hotspot {
@@ -87,11 +115,7 @@ body {
     -webkit-tap-highlight-color: transparent;
 
     touch-action: manipulation;
-
 }
-
-
-/* Make the actual clickable area a little larger */
 
 .hotspot::after {
 
@@ -108,11 +132,7 @@ body {
     height: 130%;
 
     background: transparent;
-
 }
-
-
-/* Touch feedback */
 
 .hotspot:active {
 
@@ -120,6 +140,288 @@ body {
 
 }
 
+/* =========================================================
+   PAGE 1 HOTSPOTS
+   ========================================================= */
+
+#messages {
+    left: 43.1%;
+    top: 25.7%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+#camera {
+    left: 54%;
+    top: 25.7%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+#splashface {
+    left: 38%;
+    top: 36.1%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+#stocks {
+    left: 47.5%;
+    top: 36.1%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+#maps {
+    left: 57%;
+    top: 36.1%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+#photos {
+    left: 38%;
+    top: 46.9%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+#weather {
+    left: 47.5%;
+    top: 46.9%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+#notes {
+    left: 57%;
+    top: 46.9%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+#peartunes {
+    left: 32%;
+    top: 55.9%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+#settings {
+    left: 42%;
+    top: 55.9%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+#clock {
+    left: 52%;
+    top: 55.9%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+#videos {
+    left: 62%;
+    top: 55.9%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+#phone {
+    left: 32%;
+    top: 65.9%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+#mail {
+    left: 42%;
+    top: 65.9%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+#compass {
+    left: 52%;
+    top: 65.9%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+#music {
+    left: 62%;
+    top: 65.9%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+#home {
+    left: 46%;
+    top: 78.8%;
+    width: 9%;
+    aspect-ratio: 1;
+}
+
+/* =========================================================
+   PAGE 2 HOTSPOTS
+   ========================================================= */
+
+.page2-hotspot {
+
+    display: none;
+
+    z-index: 250;
+}
+
+#phone-container.page-two .page2-hotspot {
+
+    display: block;
+}
+
+/* Lingo */
+
+#p2-lingo {
+    left: 41%;
+    top: 24%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+/* SplashFace */
+
+#p2-splash {
+    left: 55%;
+    top: 24%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+/* Thumb */
+
+#p2-thumb {
+    left: 33%;
+    top: 35%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+/* DanWarp */
+
+#p2-danwarp {
+    left: 47%;
+    top: 36%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+/* Image */
+
+#p2-image {
+    left: 61%;
+    top: 35%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+/* Chrono */
+
+#p2-chrono {
+    left: 33%;
+    top: 47%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+/* ZapLook */
+
+#p2-zaplook {
+    left: 47%;
+    top: 48%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+/* Weather */
+
+#p2-weather {
+    left: 62%;
+    top: 47%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+/* Music */
+
+#p2-music {
+    left: 27%;
+    top: 59%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+/* Monkey */
+
+#p2-monkey {
+    left: 40%;
+    top: 62%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+/* Remark */
+
+#p2-remark {
+    left: 54%;
+    top: 62%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+/* Settings */
+
+#p2-settings {
+    left: 68%;
+    top: 59%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+/* Phone */
+
+#p2-phone {
+    left: 26%;
+    top: 72%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+/* Mail */
+
+#p2-mail {
+    left: 40%;
+    top: 73%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+/* Compass */
+
+#p2-compass {
+    left: 54%;
+    top: 73%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+/* Bottom Music */
+
+#p2-music2 {
+    left: 68%;
+    top: 72%;
+    width: 10%;
+    aspect-ratio: 1;
+}
 
 /* =========================================================
    APP WINDOW
@@ -149,24 +451,11 @@ body {
 
     box-shadow:
         0 4px 18px rgba(0,0,0,.5);
-
 }
-
-
-/* App is open */
 
 #overlay.open {
-
     display: block;
-
 }
-
-
-/* =========================================================
-   IMPORTANT:
-   app.js expects this exact ID:
-   app-window
-   ========================================================= */
 
 #app-window {
 
@@ -179,12 +468,10 @@ body {
     background: #f2f2f7;
 
     color: #111;
-
 }
 
-
 /* =========================================================
-   APP HEADER
+   APP STYLES
    ========================================================= */
 
 .header {
@@ -212,11 +499,7 @@ body {
     top: 0;
 
     z-index: 5;
-
 }
-
-
-/* Back button */
 
 .back {
 
@@ -235,26 +518,14 @@ body {
     line-height: 20px;
 
     cursor: pointer;
-
 }
-
-
-/* =========================================================
-   APP CONTENT
-   ========================================================= */
 
 .content {
 
     padding: 10px;
 
     font-size: 13px;
-
 }
-
-
-/* =========================================================
-   APP BUTTONS
-   ========================================================= */
 
 .button {
 
@@ -275,20 +546,11 @@ body {
     cursor: pointer;
 
     touch-action: manipulation;
-
 }
-
 
 .button:active {
-
     transform: scale(.94);
-
 }
-
-
-/* =========================================================
-   INPUTS
-   ========================================================= */
 
 input,
 textarea,
@@ -307,22 +569,14 @@ select {
     font-family: inherit;
 
     font-size: 13px;
-
 }
-
 
 textarea {
 
     min-height: 65px;
 
     resize: vertical;
-
 }
-
-
-/* =========================================================
-   CARDS
-   ========================================================= */
 
 .card {
 
@@ -338,20 +592,11 @@ textarea {
         0 1px 4px rgba(0,0,0,.12);
 
     cursor: pointer;
-
 }
-
 
 .card:active {
-
     transform: scale(.98);
-
 }
-
-
-/* =========================================================
-   GRID
-   ========================================================= */
 
 .grid {
 
@@ -361,13 +606,7 @@ textarea {
         repeat(2, 1fr);
 
     gap: 7px;
-
 }
-
-
-/* =========================================================
-   LARGE ICON
-   ========================================================= */
 
 .big-icon {
 
@@ -376,13 +615,7 @@ textarea {
     text-align: center;
 
     margin: 8px;
-
 }
-
-
-/* =========================================================
-   MESSAGE STYLES
-   ========================================================= */
 
 .message {
 
@@ -395,22 +628,14 @@ textarea {
     margin: 5px 0;
 
     max-width: 85%;
-
 }
-
 
 .message.me {
 
     margin-left: auto;
 
     background: #cfe8ff;
-
 }
-
-
-/* =========================================================
-   STOCK PROGRESS
-   ========================================================= */
 
 .progress {
 
@@ -421,281 +646,46 @@ textarea {
     border-radius: 10px;
 
     overflow: hidden;
-
 }
-
 
 .progress div {
 
     height: 100%;
 
     background: #5cb85c;
-
 }
 
-
 /* =========================================================
-   ICON POSITIONS
+   PAGE INDICATOR
    ========================================================= */
 
+#page-dots {
 
-/* Messages */
+    position: absolute;
 
-#messages {
+    bottom: 3%;
 
-    left: 43.1%;
+    left: 50%;
 
-    top: 25.7%;
+    transform: translateX(-50%);
 
-    width: 10%;
+    z-index: 600;
 
-    aspect-ratio: 1;
+    color: white;
 
+    font-size: 16px;
+
+    pointer-events: none;
+
+    letter-spacing: 5px;
 }
 
-
-/* Camera */
-
-#camera {
-
-    left: 54%;
-
-    top: 25.7%;
-
-    width: 10%;
-
-    aspect-ratio: 1;
-
+#phone-container.page-two #page-dots {
+    color: white;
 }
-
-
-/* SplashFace */
-
-#splashface {
-
-    left: 38%;
-
-    top: 36.1%;
-
-    width: 10%;
-
-    aspect-ratio: 1;
-
-}
-
-
-/* Stocks */
-
-#stocks {
-
-    left: 47.5%;
-
-    top: 36.1%;
-
-    width: 10%;
-
-    aspect-ratio: 1;
-
-}
-
-
-/* Maps */
-
-#maps {
-
-    left: 57%;
-
-    top: 36.1%;
-
-    width: 10%;
-
-    aspect-ratio: 1;
-
-}
-
-
-/* Photos */
-
-#photos {
-
-    left: 38%;
-
-    top: 46.9%;
-
-    width: 10%;
-
-    aspect-ratio: 1;
-
-}
-
-
-/* Weather */
-
-#weather {
-
-    left: 47.5%;
-
-    top: 46.9%;
-
-    width: 10%;
-
-    aspect-ratio: 1;
-
-}
-
-
-/* Notes */
-
-#notes {
-
-    left: 57%;
-
-    top: 46.9%;
-
-    width: 10%;
-
-    aspect-ratio: 1;
-
-}
-
-
-/* PearTunes */
-
-#peartunes {
-
-    left: 32%;
-
-    top: 55.9%;
-
-    width: 10%;
-
-    aspect-ratio: 1;
-
-}
-
-
-/* Settings */
-
-#settings {
-
-    left: 42%;
-
-    top: 55.9%;
-
-    width: 10%;
-
-    aspect-ratio: 1;
-
-}
-
-
-/* Clock */
-
-#clock {
-
-    left: 52%;
-
-    top: 55.9%;
-
-    width: 10%;
-
-    aspect-ratio: 1;
-
-}
-
-
-/* Videos */
-
-#videos {
-
-    left: 62%;
-
-    top: 55.9%;
-
-    width: 10%;
-
-    aspect-ratio: 1;
-
-}
-
-
-/* Phone */
-
-#phone {
-
-    left: 32%;
-
-    top: 65.9%;
-
-    width: 10%;
-
-    aspect-ratio: 1;
-
-}
-
-
-/* Mail */
-
-#mail {
-
-    left: 42%;
-
-    top: 65.9%;
-
-    width: 10%;
-
-    aspect-ratio: 1;
-
-}
-
-
-/* Compass */
-
-#compass {
-
-    left: 52%;
-
-    top: 65.9%;
-
-    width: 10%;
-
-    aspect-ratio: 1;
-
-}
-
-
-/* Music */
-
-#music {
-
-    left: 62%;
-
-    top: 65.9%;
-
-    width: 10%;
-
-    aspect-ratio: 1;
-
-}
-
-
-/* Home */
-
-#home {
-
-    left: 46%;
-
-    top: 78.8%;
-
-    width: 9%;
-
-    aspect-ratio: 1;
-
-}
-
 
 /* =========================================================
-   PHONE SIZE
+   RESPONSIVE
    ========================================================= */
 
 @media (orientation: portrait) {
@@ -705,11 +695,8 @@ textarea {
         width: min(170vh, 1500px);
 
         transform: rotate(90deg);
-
     }
-
 }
-
 
 @media (orientation: landscape) {
 
@@ -718,154 +705,80 @@ textarea {
         width: min(170vh, 1500px);
 
         transform: rotate(90deg);
-
     }
-
 }
 
 </style>
-
 </head>
-
 
 <body>
 
-
 <div id="phone-container">
 
+    <!-- PAGE 2 EXACT IMAGE -->
+    <div id="page2"></div>
 
     <!-- =====================================================
-         CLICKABLE APPS
+         PAGE 1 APPS
          ===================================================== -->
 
+    <button class="hotspot" id="messages"></button>
+    <button class="hotspot" id="camera"></button>
+    <button class="hotspot" id="splashface"></button>
+    <button class="hotspot" id="stocks"></button>
+    <button class="hotspot" id="maps"></button>
+    <button class="hotspot" id="photos"></button>
+    <button class="hotspot" id="weather"></button>
+    <button class="hotspot" id="notes"></button>
+    <button class="hotspot" id="peartunes"></button>
+    <button class="hotspot" id="settings"></button>
+    <button class="hotspot" id="clock"></button>
+    <button class="hotspot" id="videos"></button>
+    <button class="hotspot" id="phone"></button>
+    <button class="hotspot" id="mail"></button>
+    <button class="hotspot" id="compass"></button>
+    <button class="hotspot" id="music"></button>
+    <button class="hotspot" id="home"></button>
 
-    <button
-        class="hotspot"
-        id="messages"
-        aria-label="Messages">
-    </button>
+    <!-- =====================================================
+         PAGE 2 APPS
+         ===================================================== -->
 
+    <button class="hotspot page2-hotspot" id="p2-lingo"></button>
 
-    <button
-        class="hotspot"
-        id="camera"
-        aria-label="Camera">
-    </button>
+    <button class="hotspot page2-hotspot" id="p2-splash"></button>
 
+    <button class="hotspot page2-hotspot" id="p2-thumb"></button>
 
-    <button
-        class="hotspot"
-        id="splashface"
-        aria-label="SplashFace">
-    </button>
+    <button class="hotspot page2-hotspot" id="p2-danwarp"></button>
 
+    <button class="hotspot page2-hotspot" id="p2-image"></button>
 
-    <button
-        class="hotspot"
-        id="stocks"
-        aria-label="Stocks">
-    </button>
+    <button class="hotspot page2-hotspot" id="p2-chrono"></button>
 
+    <button class="hotspot page2-hotspot" id="p2-zaplook"></button>
 
-    <button
-        class="hotspot"
-        id="maps"
-        aria-label="Maps">
-    </button>
+    <button class="hotspot page2-hotspot" id="p2-weather"></button>
 
+    <button class="hotspot page2-hotspot" id="p2-music"></button>
 
-    <button
-        class="hotspot"
-        id="photos"
-        aria-label="Photos">
-    </button>
+    <button class="hotspot page2-hotspot" id="p2-monkey"></button>
 
+    <button class="hotspot page2-hotspot" id="p2-remark"></button>
 
-    <button
-        class="hotspot"
-        id="weather"
-        aria-label="Weather">
-    </button>
+    <button class="hotspot page2-hotspot" id="p2-settings"></button>
 
+    <button class="hotspot page2-hotspot" id="p2-phone"></button>
 
-    <button
-        class="hotspot"
-        id="notes"
-        aria-label="Notes">
-    </button>
+    <button class="hotspot page2-hotspot" id="p2-mail"></button>
 
+    <button class="hotspot page2-hotspot" id="p2-compass"></button>
 
-    <button
-        class="hotspot"
-        id="peartunes"
-        aria-label="PearTunes">
-    </button>
-
-
-    <button
-        class="hotspot"
-        id="settings"
-        aria-label="Settings">
-    </button>
-
-
-    <button
-        class="hotspot"
-        id="clock"
-        aria-label="Clock">
-    </button>
-
-
-    <button
-        class="hotspot"
-        id="videos"
-        aria-label="Videos">
-    </button>
-
-
-    <button
-        class="hotspot"
-        id="phone"
-        aria-label="Phone">
-    </button>
-
-
-    <button
-        class="hotspot"
-        id="mail"
-        aria-label="Mail">
-    </button>
-
-
-    <button
-        class="hotspot"
-        id="compass"
-        aria-label="Compass">
-    </button>
-
-
-    <button
-        class="hotspot"
-        id="music"
-        aria-label="Music">
-    </button>
-
-
-    <button
-        class="hotspot"
-        id="home"
-        aria-label="Home">
-    </button>
-
+    <button class="hotspot page2-hotspot" id="p2-music2"></button>
 
     <!-- =====================================================
          APP WINDOW
-
-         IMPORTANT:
-         This is app-window, NOT app.
-         app.js requires this ID.
          ===================================================== -->
-
 
     <div id="overlay">
 
@@ -873,16 +786,128 @@ textarea {
 
     </div>
 
+    <div id="page-dots">● ○</div>
 
 </div>
 
-
-<!-- =========================================================
-     YOUR INTERACTIVE APPS
-     ========================================================= -->
-
 <script src="app.js"></script>
 
+<script>
+
+/* =========================================================
+   PAGE SWIPING
+   ========================================================= */
+
+let currentPage = 1;
+
+let swipeStartX = 0;
+let swipeStartY = 0;
+
+const phone = document.getElementById("phone-container");
+const overlay = document.getElementById("overlay");
+const dots = document.getElementById("page-dots");
+
+function showPage(page) {
+
+    currentPage = page;
+
+    if (page === 2) {
+
+        phone.classList.add("page-two");
+
+        dots.textContent = "○ ●";
+
+    } else {
+
+        phone.classList.remove("page-two");
+
+        dots.textContent = "● ○";
+    }
+
+    if (overlay.classList.contains("open")) {
+
+        if (typeof closeApp === "function") {
+            closeApp();
+        }
+    }
+}
+
+/* Touch */
+
+phone.addEventListener("touchstart", function(event) {
+
+    if (overlay.classList.contains("open")) return;
+
+    const touch = event.touches[0];
+
+    swipeStartX = touch.clientX;
+    swipeStartY = touch.clientY;
+
+}, { passive: true });
+
+
+phone.addEventListener("touchend", function(event) {
+
+    if (overlay.classList.contains("open")) return;
+
+    const touch = event.changedTouches[0];
+
+    const differenceX =
+        touch.clientX - swipeStartX;
+
+    const differenceY =
+        touch.clientY - swipeStartY;
+
+    if (Math.abs(differenceX) < 60) return;
+
+    if (Math.abs(differenceX) <
+        Math.abs(differenceY)) return;
+
+    if (differenceX < 0) {
+
+        showPage(2);
+
+    } else {
+
+        showPage(1);
+    }
+
+}, { passive: true });
+
+
+/* Mouse drag support too */
+
+let mouseStartX = 0;
+
+phone.addEventListener("mousedown", function(event) {
+
+    if (overlay.classList.contains("open")) return;
+
+    mouseStartX = event.clientX;
+
+});
+
+phone.addEventListener("mouseup", function(event) {
+
+    if (overlay.classList.contains("open")) return;
+
+    const difference =
+        event.clientX - mouseStartX;
+
+    if (Math.abs(difference) < 70) return;
+
+    if (difference < 0) {
+
+        showPage(2);
+
+    } else {
+
+        showPage(1);
+    }
+
+});
+
+</script>
 
 </body>
 </html>

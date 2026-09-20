@@ -8,646 +8,410 @@
 <style>
 *{
   box-sizing:border-box;
-  -webkit-tap-highlight-color:transparent;
+  -webkit-tap-highlight-color:transparent
 }
 
 html,body{
   margin:0;
   width:100%;
   height:100%;
-  overflow:hidden;
-  background:#fff;
+  overflow:hidden
 }
 
 body{
   display:flex;
   align-items:center;
   justify-content:center;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+  background:#fff;
+  font-family:Arial,sans-serif
 }
-
-/* =========================================================
-   PHONE — LARGE / ORIGINAL LOOK
-   ========================================================= */
 
 #phone{
   position:relative;
-
   width:min(86vw,760px);
   aspect-ratio:1212/1188;
-
-  background:
-    url("pear-phone.jpg") center/contain no-repeat,
-    radial-gradient(#20252b,#000);
-
-  /*
-    KEEP THE PHONE SIDEWAYS.
-    DO NOT animate or change this transform.
-  */
+  background:url('pear-phone.jpg') center/contain no-repeat,radial-gradient(#20252b,#000);
   transform:rotate(90deg) scale(.78);
-  transform-origin:center center;
-
-  touch-action:none;
-
-  flex:none;
-}
-
-/* =========================================================
-   PAGE 1
-   ========================================================= */
-
-#page1{
-  position:absolute;
-  inset:0;
-  z-index:20;
+  transform-origin:center;
+  touch-action:none
 }
 
 .hotspot{
   position:absolute;
-
   border:0;
   background:transparent;
-
   padding:0;
-  margin:0;
-
   border-radius:50%;
-
-  z-index:30;
-
-  cursor:pointer;
-
-  touch-action:manipulation;
-
-  -webkit-appearance:none;
-  appearance:none;
-
-  pointer-events:auto;
+  z-index:20;
+  cursor:pointer
 }
 
 .hotspot:active{
   background:#ffffff18;
-  transform:scale(.92);
+  transform:scale(.92)
 }
-
-/* ORIGINAL ICON LOCATIONS */
 
 #page1 button:nth-child(1){
   left:43.1%;
   top:25.7%;
   width:8.3%;
-  aspect-ratio:1;
+  aspect-ratio:1
 }
 
 #page1 button:nth-child(2){
   left:54%;
   top:25.7%;
   width:8.3%;
-  aspect-ratio:1;
+  aspect-ratio:1
 }
 
 #page1 button:nth-child(3){
   left:38%;
   top:36.1%;
   width:8.3%;
-  aspect-ratio:1;
+  aspect-ratio:1
 }
 
 #page1 button:nth-child(4){
   left:47.5%;
   top:36.1%;
   width:8.3%;
-  aspect-ratio:1;
+  aspect-ratio:1
 }
 
 #page1 button:nth-child(5){
   left:57%;
   top:36.1%;
   width:8.3%;
-  aspect-ratio:1;
+  aspect-ratio:1
 }
 
 #page1 button:nth-child(6){
   left:38%;
   top:46.9%;
   width:8.3%;
-  aspect-ratio:1;
+  aspect-ratio:1
 }
 
 #page1 button:nth-child(7){
   left:47.5%;
   top:46.9%;
   width:8.3%;
-  aspect-ratio:1;
+  aspect-ratio:1
 }
 
 #page1 button:nth-child(8){
   left:57%;
   top:46.9%;
   width:8.3%;
-  aspect-ratio:1;
+  aspect-ratio:1
 }
 
 #page1 button:nth-child(9){
   left:32%;
   top:55.9%;
   width:8.3%;
-  aspect-ratio:1;
+  aspect-ratio:1
 }
 
 #page1 button:nth-child(10){
   left:42%;
   top:55.9%;
   width:8.3%;
-  aspect-ratio:1;
+  aspect-ratio:1
 }
 
 #page1 button:nth-child(11){
   left:52%;
   top:55.9%;
   width:8.3%;
-  aspect-ratio:1;
+  aspect-ratio:1
 }
 
 #page1 button:nth-child(12){
   left:62%;
   top:55.9%;
   width:8.3%;
-  aspect-ratio:1;
+  aspect-ratio:1
 }
 
 #page1 button:nth-child(13){
   left:32%;
   top:65.9%;
   width:8.3%;
-  aspect-ratio:1;
+  aspect-ratio:1
 }
 
 #page1 button:nth-child(14){
   left:42%;
   top:65.9%;
   width:8.3%;
-  aspect-ratio:1;
+  aspect-ratio:1
 }
 
 #page1 button:nth-child(15){
   left:52%;
   top:65.9%;
   width:8.3%;
-  aspect-ratio:1;
+  aspect-ratio:1
 }
 
 #page1 button:nth-child(16){
   left:62%;
   top:65.9%;
   width:8.3%;
-  aspect-ratio:1;
+  aspect-ratio:1
 }
-
-/* =========================================================
-   PAGE 2
-   ========================================================= */
 
 #page2{
   display:none;
-
   position:absolute;
-
   left:30%;
   right:25%;
   top:22%;
   bottom:22%;
-
-  z-index:40;
-
+  z-index:21;
   grid-template-columns:repeat(3,1fr);
   grid-auto-rows:1fr;
-
-  gap:5%;
+  gap:5%
 }
 
 #page2 button{
   border:0;
   background:transparent;
-  border-radius:50%;
-
-  cursor:pointer;
+  border-radius:50%
 }
 
 #page2 button:active{
   background:#fff2;
-  transform:scale(.92);
+  transform:scale(.92)
 }
-
-/* =========================================================
-   HOME
-   ========================================================= */
 
 #home{
   position:absolute;
-
   left:46%;
   top:78.8%;
-
   width:8.2%;
   aspect-ratio:1;
-
   border:0;
   background:transparent;
-
   border-radius:50%;
-
-  cursor:pointer;
-
-  z-index:60;
-
-  touch-action:manipulation;
+  z-index:30
 }
-
-/* =========================================================
-   APP OVERLAY
-   ========================================================= */
-
-/*
-   IMPORTANT:
-   This is INSIDE the phone.
-   It does not move the phone.
-   It does not rotate separately.
-*/
 
 #overlay{
   position:absolute;
-
   left:20%;
   top:18%;
-
   width:60%;
   height:59%;
-
   z-index:100;
-
   display:none;
-
   align-items:center;
   justify-content:center;
-
   background:#0006;
-
   border-radius:22px;
-
-  overflow:hidden;
-
-  /*
-    Prevents the overlay from causing the phone
-    to visually jump when opened.
-  */
-  transform:none;
+  overflow:hidden
 }
 
 #overlay.open{
-  display:flex;
+  display:flex
 }
-
-/* =========================================================
-   APP
-   ========================================================= */
 
 #app{
   width:94%;
   height:94%;
-
   background:#f4f5f7;
   color:#111;
-
   border:2px solid #333;
-
   border-radius:17px;
-
   display:flex;
   flex-direction:column;
-
-  overflow:hidden;
-
-  transform:none;
+  overflow:hidden
 }
-
-/* =========================================================
-   APP HEADER
-   ========================================================= */
 
 .head{
   height:42px;
-
   flex:none;
-
   display:flex;
   align-items:center;
-
   gap:8px;
-
   padding:5px 8px;
-
   background:linear-gradient(#fff,#e5e5e5);
-
   border-bottom:1px solid #bbb;
-
-  font-weight:900;
+  font-weight:900
 }
 
 .head button{
   width:30px;
   height:30px;
-
   border-radius:50%;
-
   border:1px solid #aaa;
-
   background:#ddd;
-
-  font-size:20px;
-
-  cursor:pointer;
+  font-size:20px
 }
-
-/* =========================================================
-   APP BODY
-   ========================================================= */
 
 .body{
   flex:1;
-
-  min-height:0;
-
   overflow:auto;
-
-  padding:10px;
-
-  -webkit-overflow-scrolling:touch;
+  padding:10px
 }
 
 .body button{
   border:1px solid #aaa;
-
   border-radius:9px;
-
   background:linear-gradient(#fff,#ddd);
-
   padding:8px;
-
-  font-weight:700;
-
-  cursor:pointer;
+  font-weight:700
 }
 
 .body input,
 .body textarea{
   font-size:16px;
-
   padding:8px;
-
   border:1px solid #aaa;
-
-  border-radius:9px;
-
-  outline:none;
+  border-radius:9px
 }
 
 .body textarea{
   width:100%;
-  min-height:110px;
+  min-height:110px
 }
 
 .row{
   display:flex;
-  gap:6px;
+  gap:6px
 }
 
 .bubble{
   background:#ddd;
-
   border-radius:15px;
-
   padding:8px 10px;
-
   margin-bottom:6px;
-
   width:max-content;
-
-  max-width:85%;
+  max-width:85%
 }
 
 .me{
   margin-left:auto;
-
   background:#168ee8;
-
-  color:#fff;
+  color:#fff
 }
 
 .photos{
   display:grid;
-
   grid-template-columns:repeat(3,1fr);
-
-  gap:5px;
+  gap:5px
 }
 
 .photos img{
   width:100%;
-
   aspect-ratio:1;
-
   object-fit:cover;
-
-  border-radius:7px;
+  border-radius:7px
 }
 
 .video{
   width:100%;
-
   background:#000;
-
-  border-radius:10px;
+  border-radius:10px
 }
 
 .stock{
   display:flex;
-
   justify-content:space-between;
-
   background:#fff;
-
   border:1px solid #ddd;
-
   border-radius:9px;
-
   padding:8px;
-
-  margin-bottom:5px;
+  margin-bottom:5px
 }
 
 .big{
   text-align:center;
-
   font-size:42px;
-
   font-weight:900;
-
-  padding:20px;
+  padding:20px
 }
 
 .map{
   height:150px;
-
   display:grid;
-
   place-items:center;
-
   border-radius:10px;
-
-  background:linear-gradient(
-    135deg,
-    #d8e8ca,
-    #e8dfb5
-  );
-
-  font-size:45px;
+  background:linear-gradient(135deg,#d8e8ca,#e8dfb5);
+  font-size:45px
 }
-
-/* =========================================================
-   KEYBOARD
-   ========================================================= */
 
 #keyboard{
   position:absolute;
-
   left:3%;
   right:3%;
-
   bottom:2%;
-
   z-index:500;
-
   display:none;
-
   grid-template-columns:repeat(10,1fr);
-
   gap:3px;
-
   padding:6px;
-
   background:#202329ee;
-
   border-radius:13px;
-
   transform:translateY(120%);
-
-  transition:transform .2s ease;
+  transition:.2s
 }
 
 #keyboard.show{
   display:grid;
-
-  transform:translateY(0);
+  transform:translateY(0)
 }
 
 #keyboard button{
   height:26px;
-
   border:0;
-
   border-radius:5px;
-
   font-size:9px;
-
-  font-weight:800;
-
-  cursor:pointer;
+  font-weight:800
 }
 
 .space{
-  grid-column:span 5;
+  grid-column:span 5
 }
 
 .wide{
-  grid-column:span 2;
+  grid-column:span 2
 }
-
-/* =========================================================
-   FLASH
-   ========================================================= */
 
 #flash{
   position:absolute;
-
   inset:0;
-
   z-index:600;
-
   pointer-events:none;
-
   opacity:0;
-
-  background:
-    radial-gradient(
-      circle,
-      #fff8,
-      #267dff4d,
-      transparent 70%
-    );
+  background:radial-gradient(circle,#fff8,#267dff4d,transparent 70%)
 }
 
 #flash.go{
-  animation:f .4s ease;
+  animation:f .4s ease
 }
 
 @keyframes f{
   0%{
     opacity:0;
-    transform:scale(.7);
+    transform:scale(.7)
   }
 
   35%{
-    opacity:1;
+    opacity:1
   }
 
   100%{
     opacity:0;
-    transform:scale(1.15);
+    transform:scale(1.15)
   }
 }
-
-/* =========================================================
-   IMPORTANT:
-   NO MOBILE .66 SCALE
-   ========================================================= */
-
-/*
-   The old code was shrinking the phone to .66 here.
-   That is what made it look zoomed out.
-
-   Keep the same large .78 scale everywhere.
-*/
 
 @media(max-width:700px){
-
   #phone{
-    width:min(86vw,760px);
-
-    transform:rotate(90deg) scale(.78);
-
-    transform-origin:center center;
-  }
-}
-
-@media(max-height:700px){
-
-  #phone{
-    width:min(86vw,760px);
-
-    transform:rotate(90deg) scale(.78);
-
-    transform-origin:center center;
+    transform:rotate(90deg) scale(.66)
   }
 }
 </style>

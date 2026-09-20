@@ -1,8 +1,8 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Pear Phone OS</title>
 
 <style>
@@ -16,101 +16,75 @@ html,body{
   width:100%;
   height:100%;
   overflow:hidden;
+  background:#fff;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
 }
 
 body{
   display:flex;
   align-items:center;
   justify-content:center;
-  background:#fff;
-  font-family:Arial,Helvetica,sans-serif;
-  touch-action:none;
 }
 
 /* =========================================================
-   PEAR PHONE
+   PHONE
    ========================================================= */
 
 #phone{
   position:relative;
-
-  /*
-    BIG AGAIN.
-    The phone is rotated, so the size is based on both
-    viewport dimensions instead of being artificially scaled down.
-  */
-  width:min(94vw,94vh,920px);
+  width:min(96vw,96vh,920px);
   aspect-ratio:1212 / 1188;
-
-  background:
-    url("pear-phone.jpg") center/contain no-repeat;
-
+  background:url("pear-phone.jpg") center/contain no-repeat;
   transform:rotate(90deg);
   transform-origin:center center;
-
   touch-action:none;
   user-select:none;
 }
 
 /* =========================================================
-   HOME PAGE LAYERS
+   PAGE LAYERS
    ========================================================= */
 
-.page{
+.page-layer{
   position:absolute;
-  inset:0;
-
-  transition:
-    transform .46s cubic-bezier(.22,.8,.25,1),
-    opacity .35s ease;
-
-  will-change:transform,opacity;
+  z-index:20;
+  pointer-events:none;
 }
 
 #page1{
-  transform:translateY(0) scale(1);
-  opacity:1;
-  pointer-events:auto;
+  inset:0;
 }
 
 #page2{
-  transform:translateY(100%) scale(.94);
-  opacity:0;
-  pointer-events:none;
+  left:28%;
+  top:21%;
+  width:46%;
+  height:58%;
 
-  /*
-    Your exact second-page image.
-    Keep page2.png beside index.html.
-  */
-  background:url("page2.png") center/contain no-repeat;
-}
+  background:url("page2.png") center/100% 100% no-repeat;
 
-#phone.page-two #page1{
-  transform:translateY(-100%) scale(.94);
   opacity:0;
+  transform:translateY(9%) scale(.96);
+
+  transition:
+    opacity .32s cubic-bezier(.2,.8,.2,1),
+    transform .42s cubic-bezier(.2,.8,.2,1);
+
   pointer-events:none;
 }
 
 #phone.page-two #page2{
-  transform:translateY(0) scale(1);
   opacity:1;
+  transform:translateY(0) scale(1);
   pointer-events:auto;
 }
 
-#phone.page-one #page1{
-  transform:translateY(0) scale(1);
-  opacity:1;
-  pointer-events:auto;
-}
-
-#phone.page-one #page2{
-  transform:translateY(100%) scale(.94);
-  opacity:0;
+#phone.page-two #page1{
   pointer-events:none;
 }
 
 /* =========================================================
-   PAGE 1 APP HOTSPOTS
+   PAGE 1 HOTSPOTS
    ========================================================= */
 
 .hotspot{
@@ -119,148 +93,127 @@ body{
   background:transparent;
   padding:0;
   margin:0;
-
   border-radius:50%;
-
-  z-index:20;
-
   cursor:pointer;
   touch-action:manipulation;
-
-  -webkit-appearance:none;
-  appearance:none;
+  z-index:30;
 }
 
 .hotspot:active{
-  background:rgba(255,255,255,.08);
-  transform:scale(.92);
+  transform:scale(.91);
 }
 
-/* Messages */
-#page1 .hotspot:nth-child(1){
+/* Page 1 */
+
+#messages{
   left:43.1%;
   top:25.7%;
-  width:8.3%;
+  width:9.6%;
   aspect-ratio:1;
 }
 
-/* Camera */
-#page1 .hotspot:nth-child(2){
+#camera{
   left:54%;
   top:25.7%;
-  width:8.3%;
+  width:9.6%;
   aspect-ratio:1;
 }
 
-/* SplashFace */
-#page1 .hotspot:nth-child(3){
+#splashface{
   left:38%;
   top:36.1%;
-  width:8.3%;
+  width:9.6%;
   aspect-ratio:1;
 }
 
-/* Stocks */
-#page1 .hotspot:nth-child(4){
+#stocks{
   left:47.5%;
   top:36.1%;
-  width:8.3%;
+  width:9.6%;
   aspect-ratio:1;
 }
 
-/* Maps */
-#page1 .hotspot:nth-child(5){
+#maps{
   left:57%;
   top:36.1%;
-  width:8.3%;
+  width:9.6%;
   aspect-ratio:1;
 }
 
-/* Photos */
-#page1 .hotspot:nth-child(6){
+#photos{
   left:38%;
   top:46.9%;
-  width:8.3%;
+  width:9.6%;
   aspect-ratio:1;
 }
 
-/* Weather */
-#page1 .hotspot:nth-child(7){
+#weather{
   left:47.5%;
   top:46.9%;
-  width:8.3%;
+  width:9.6%;
   aspect-ratio:1;
 }
 
-/* Notes */
-#page1 .hotspot:nth-child(8){
+#notes{
   left:57%;
   top:46.9%;
-  width:8.3%;
+  width:9.6%;
   aspect-ratio:1;
 }
 
-/* PearTunes */
-#page1 .hotspot:nth-child(9){
+#peartunes{
   left:32%;
   top:55.9%;
-  width:8.3%;
+  width:9.6%;
   aspect-ratio:1;
 }
 
-/* Settings */
-#page1 .hotspot:nth-child(10){
+#settings{
   left:42%;
   top:55.9%;
-  width:8.3%;
+  width:9.6%;
   aspect-ratio:1;
 }
 
-/* Clock */
-#page1 .hotspot:nth-child(11){
+#clock{
   left:52%;
   top:55.9%;
-  width:8.3%;
+  width:9.6%;
   aspect-ratio:1;
 }
 
-/* Videos */
-#page1 .hotspot:nth-child(12){
+#videos{
   left:62%;
   top:55.9%;
-  width:8.3%;
+  width:9.6%;
   aspect-ratio:1;
 }
 
-/* Phone */
-#page1 .hotspot:nth-child(13){
+#phone-app{
   left:32%;
   top:65.9%;
-  width:8.3%;
+  width:9.6%;
   aspect-ratio:1;
 }
 
-/* Mail */
-#page1 .hotspot:nth-child(14){
+#mail{
   left:42%;
   top:65.9%;
-  width:8.3%;
+  width:9.6%;
   aspect-ratio:1;
 }
 
-/* Compass */
-#page1 .hotspot:nth-child(15){
+#compass{
   left:52%;
   top:65.9%;
-  width:8.3%;
+  width:9.6%;
   aspect-ratio:1;
 }
 
-/* Music */
-#page1 .hotspot:nth-child(16){
+#music{
   left:62%;
   top:65.9%;
-  width:8.3%;
+  width:9.6%;
   aspect-ratio:1;
 }
 
@@ -268,316 +221,460 @@ body{
    PAGE 2 HOTSPOTS
    ========================================================= */
 
-#page2 .p2{
+.page2-hotspot{
   position:absolute;
   border:0;
   background:transparent;
   padding:0;
-  margin:0;
-  border-radius:50%;
-  z-index:30;
   cursor:pointer;
-  aspect-ratio:1;
+  z-index:40;
+  pointer-events:none;
 }
 
-#page2 .p2:active{
-  background:rgba(255,255,255,.08);
-  transform:scale(.92);
+#phone.page-two .page2-hotspot{
+  pointer-events:auto;
 }
 
-/* Page 2 — 3 columns x 4 rows */
-#page2 .p2:nth-child(1){
-  left:31%;
-  top:25%;
-  width:10%;
+.p2-1{
+  left:4%;
+  top:5%;
+  width:22%;
+  height:21%;
 }
 
-#page2 .p2:nth-child(2){
-  left:45%;
-  top:25%;
-  width:10%;
+.p2-2{
+  left:39%;
+  top:5%;
+  width:22%;
+  height:21%;
 }
 
-#page2 .p2:nth-child(3){
-  left:59%;
-  top:25%;
-  width:10%;
+.p2-3{
+  left:74%;
+  top:5%;
+  width:22%;
+  height:21%;
 }
 
-#page2 .p2:nth-child(4){
-  left:31%;
-  top:38%;
-  width:10%;
+.p2-4{
+  left:4%;
+  top:29%;
+  width:22%;
+  height:21%;
 }
 
-#page2 .p2:nth-child(5){
-  left:45%;
-  top:38%;
-  width:10%;
+.p2-5{
+  left:39%;
+  top:29%;
+  width:22%;
+  height:21%;
 }
 
-#page2 .p2:nth-child(6){
-  left:59%;
-  top:38%;
-  width:10%;
+.p2-6{
+  left:74%;
+  top:29%;
+  width:22%;
+  height:21%;
 }
 
-#page2 .p2:nth-child(7){
-  left:31%;
-  top:51%;
-  width:10%;
+.p2-7{
+  left:4%;
+  top:54%;
+  width:22%;
+  height:21%;
 }
 
-#page2 .p2:nth-child(8){
-  left:45%;
-  top:51%;
-  width:10%;
+.p2-8{
+  left:39%;
+  top:54%;
+  width:22%;
+  height:21%;
 }
 
-#page2 .p2:nth-child(9){
-  left:59%;
-  top:51%;
-  width:10%;
+.p2-9{
+  left:74%;
+  top:54%;
+  width:22%;
+  height:21%;
 }
 
-#page2 .p2:nth-child(10){
-  left:31%;
-  top:64%;
-  width:10%;
+.p2-10{
+  left:4%;
+  top:78%;
+  width:22%;
+  height:18%;
 }
 
-#page2 .p2:nth-child(11){
-  left:45%;
-  top:64%;
-  width:10%;
+.p2-11{
+  left:39%;
+  top:78%;
+  width:22%;
+  height:18%;
 }
 
-#page2 .p2:nth-child(12){
-  left:59%;
-  top:64%;
-  width:10%;
-}
-
-/* =========================================================
-   HOME BUTTON
-   ========================================================= */
-
-#home{
-  position:absolute;
-
-  left:46%;
-  top:78.8%;
-
-  width:8.2%;
-  aspect-ratio:1;
-
-  border:0;
-  background:transparent;
-  border-radius:50%;
-
-  cursor:pointer;
-  z-index:80;
+.p2-12{
+  left:74%;
+  top:78%;
+  width:22%;
+  height:18%;
 }
 
 /* =========================================================
    APP WINDOW
-   IMPORTANT:
-   PHONE = ROTATED 90°
-   APP = ROTATED BACK -90°
    ========================================================= */
 
 #overlay{
   position:absolute;
 
-  left:18%;
-  top:18%;
+  left:27%;
+  top:22%;
+  width:46%;
+  height:56%;
 
-  width:64%;
-  height:64%;
-
-  z-index:300;
+  z-index:100;
 
   display:none;
 
   align-items:center;
   justify-content:center;
 
-  background:rgba(0,0,0,.38);
-
-  border-radius:22px;
+  background:rgba(0,0,0,.22);
+  border-radius:20px;
 
   overflow:hidden;
 
-  /*
-    This is the key fix.
-    The phone rotates +90°.
-    The app rotates -90° so it is upright.
-  */
-  transform:rotate(-90deg);
-  transform-origin:center center;
+  pointer-events:auto;
 }
 
 #overlay.open{
   display:flex;
 }
 
-/* =========================================================
-   APP WINDOW
-   ========================================================= */
-
 #app{
   width:94%;
   height:94%;
 
-  background:#f4f5f7;
-  color:#111;
-
-  border:2px solid #333;
-  border-radius:17px;
+  border-radius:18px;
+  overflow:hidden;
 
   display:flex;
   flex-direction:column;
 
-  overflow:hidden;
+  color:#eef8ff;
+
+  background:
+    linear-gradient(180deg,#102d3d 0%,#071923 100%);
+
+  border:2px solid rgba(255,255,255,.28);
 
   box-shadow:
-    0 10px 30px rgba(0,0,0,.35);
-
-  animation:appOpen .22s ease-out;
-}
-
-@keyframes appOpen{
-  from{
-    opacity:0;
-    transform:scale(.88);
-  }
-
-  to{
-    opacity:1;
-    transform:scale(1);
-  }
+    0 10px 35px rgba(0,0,0,.55),
+    inset 0 1px 0 rgba(255,255,255,.2);
 }
 
 /* =========================================================
    APP HEADER
    ========================================================= */
 
-.head{
-  height:44px;
-  flex:none;
+.app-head{
+  flex:0 0 auto;
+
+  min-height:46px;
 
   display:flex;
   align-items:center;
   gap:8px;
 
-  padding:5px 8px;
+  padding:7px 9px;
 
   background:
-    linear-gradient(#fff,#e5e5e5);
+    linear-gradient(
+      180deg,
+      rgba(89,180,218,.38),
+      rgba(11,38,53,.9)
+    );
 
-  border-bottom:1px solid #bbb;
-
-  font-weight:900;
-  font-size:16px;
+  border-bottom:1px solid rgba(255,255,255,.18);
 }
 
-.head button{
+.app-head button{
   width:31px;
   height:31px;
 
   border-radius:50%;
 
-  border:1px solid #aaa;
+  border:1px solid rgba(255,255,255,.28);
 
-  background:
-    linear-gradient(#fff,#ddd);
+  background:rgba(255,255,255,.13);
+  color:white;
 
-  font-size:20px;
+  font-size:21px;
 
   cursor:pointer;
 }
 
-/* =========================================================
-   APP CONTENT
-   ========================================================= */
-
-.body{
+.app-title{
   flex:1;
+
+  font-size:15px;
+  font-weight:900;
+
+  letter-spacing:.3px;
+}
+
+.app-body{
+  flex:1;
+  min-height:0;
 
   overflow:auto;
 
   padding:10px;
 
-  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
 }
 
-.body button{
-  border:1px solid #aaa;
+.app-body::-webkit-scrollbar{
+  display:none;
+}
 
-  border-radius:9px;
+/* =========================================================
+   GENERAL APP UI
+   ========================================================= */
+
+.card{
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,.13),
+      rgba(255,255,255,.045)
+    );
+
+  border:1px solid rgba(255,255,255,.14);
+
+  border-radius:13px;
+
+  padding:9px;
+
+  margin-bottom:8px;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.08),
+    0 4px 12px rgba(0,0,0,.16);
+}
+
+.hero{
+  border-radius:15px;
+
+  padding:14px;
+
+  margin-bottom:9px;
 
   background:
-    linear-gradient(#fff,#ddd);
+    radial-gradient(
+      circle at 15% 0%,
+      rgba(123,222,255,.6),
+      transparent 45%
+    ),
+    linear-gradient(135deg,#17617d,#0b2638);
 
-  padding:8px;
+  border:1px solid rgba(255,255,255,.2);
 
-  font-weight:700;
-
-  cursor:pointer;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.18),
+    0 8px 18px rgba(0,0,0,.22);
 }
 
-.body button:active{
-  transform:scale(.96);
+.big-number{
+  font-size:30px;
+  font-weight:900;
 }
 
-.body input,
-.body textarea{
-  font-size:16px;
-
-  padding:8px;
-
-  border:1px solid #aaa;
-
-  border-radius:9px;
-
-  outline:none;
-
-  font-family:Arial,sans-serif;
-}
-
-.body textarea{
-  width:100%;
-  min-height:110px;
-  resize:none;
+.muted{
+  opacity:.66;
+  font-size:11px;
 }
 
 .row{
   display:flex;
   gap:6px;
+  align-items:center;
 }
 
-.bubble{
-  background:#ddd;
+.row > *{
+  min-width:0;
+}
 
-  border-radius:15px;
+.app-button{
+  border:1px solid rgba(255,255,255,.2);
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,.17),
+      rgba(255,255,255,.07)
+    );
+
+  color:white;
+
+  border-radius:10px;
 
   padding:8px 10px;
 
+  cursor:pointer;
+
+  font-weight:800;
+
+  font-size:11px;
+}
+
+.app-button:active{
+  transform:scale(.96);
+}
+
+.text-input,
+.app-body input,
+.app-body textarea{
+  width:100%;
+
+  border-radius:10px;
+
+  border:1px solid rgba(255,255,255,.2);
+
+  background:rgba(0,0,0,.24);
+
+  color:white;
+
+  outline:none;
+
+  padding:8px;
+
+  font-size:12px;
+}
+
+.app-body textarea{
+  min-height:80px;
+  resize:none;
+}
+
+.text-input::placeholder,
+.app-body textarea::placeholder{
+  color:rgba(255,255,255,.48);
+}
+
+/* =========================================================
+   MESSAGES
+   ========================================================= */
+
+.message{
+  max-width:82%;
+
+  padding:8px 10px;
+
+  border-radius:14px;
+
   margin-bottom:6px;
 
-  width:max-content;
-  max-width:85%;
+  font-size:11px;
+
+  background:rgba(255,255,255,.12);
+
+  border:1px solid rgba(255,255,255,.08);
 }
 
-.me{
+.message.me{
   margin-left:auto;
 
-  background:#168ee8;
-
-  color:#fff;
+  background:
+    linear-gradient(135deg,#39aee8,#1672ad);
 }
 
-.photos{
+.contact{
+  display:flex;
+  align-items:center;
+  gap:8px;
+
+  padding:8px;
+
+  border-radius:10px;
+
+  background:rgba(255,255,255,.07);
+
+  margin-bottom:5px;
+
+  cursor:pointer;
+}
+
+.avatar{
+  width:28px;
+  height:28px;
+
+  display:grid;
+  place-items:center;
+
+  border-radius:50%;
+
+  background:
+    linear-gradient(135deg,#7fe7ff,#27688e);
+
+  font-weight:900;
+}
+
+/* =========================================================
+   CAMERA
+   ========================================================= */
+
+.camera-frame{
+  position:relative;
+
+  border-radius:14px;
+
+  overflow:hidden;
+
+  background:#000;
+
+  border:2px solid rgba(255,255,255,.18);
+}
+
+.camera-frame video{
+  display:block;
+
+  width:100%;
+
+  aspect-ratio:4/3;
+
+  object-fit:cover;
+}
+
+.camera-crosshair{
+  position:absolute;
+  inset:20%;
+
+  border:1px solid rgba(255,255,255,.35);
+
+  border-radius:50%;
+
+  pointer-events:none;
+}
+
+.camera-controls{
+  display:grid;
+
+  grid-template-columns:repeat(3,1fr);
+
+  gap:5px;
+
+  margin-top:7px;
+}
+
+.camera-controls button{
+  padding:7px 3px;
+}
+
+/* =========================================================
+   PHOTOS
+   ========================================================= */
+
+.photo-grid{
   display:grid;
 
   grid-template-columns:repeat(3,1fr);
@@ -585,92 +682,355 @@ body{
   gap:5px;
 }
 
-.photos img{
+.photo-grid img{
   width:100%;
-
   aspect-ratio:1;
 
   object-fit:cover;
 
-  border-radius:7px;
+  border-radius:8px;
+
+  cursor:pointer;
+
+  border:1px solid rgba(255,255,255,.15);
 }
 
-.video{
-  width:100%;
+/* =========================================================
+   STOCKS
+   ========================================================= */
 
-  background:#000;
-
-  border-radius:10px;
-
-  display:block;
-}
-
-.stock{
+.stock-row{
   display:flex;
-
-  justify-content:space-between;
-
   align-items:center;
-
-  background:#fff;
-
-  border:1px solid #ddd;
-
-  border-radius:9px;
+  justify-content:space-between;
 
   padding:8px;
 
-  margin-bottom:5px;
-}
-
-.big{
-  text-align:center;
-
-  font-size:42px;
-
-  font-weight:900;
-
-  padding:20px;
-}
-
-.map{
-  height:150px;
-
-  display:grid;
-
-  place-items:center;
+  margin-bottom:6px;
 
   border-radius:10px;
 
-  background:
-    linear-gradient(
-      135deg,
-      #d8e8ca,
-      #e8dfb5
-    );
+  background:rgba(255,255,255,.08);
+}
 
-  font-size:45px;
+.chart{
+  width:72px;
+  height:32px;
+}
+
+/* =========================================================
+   MAPS
+   ========================================================= */
+
+.map-box{
+  position:relative;
+
+  height:150px;
+
+  overflow:hidden;
+
+  border-radius:13px;
+
+  background:
+    linear-gradient(30deg,transparent 48%,rgba(52,113,130,.35) 49%,rgba(52,113,130,.35) 51%,transparent 52%),
+    linear-gradient(-30deg,transparent 48%,rgba(52,113,130,.28) 49%,rgba(52,113,130,.28) 51%,transparent 52%),
+    #c8ddca;
+
+  background-size:50px 50px;
+
+  border:1px solid rgba(255,255,255,.2);
+}
+
+.map-road{
+  position:absolute;
+
+  width:150%;
+  height:18px;
+
+  background:#f0e5c9;
+
+  transform:rotate(22deg);
+
+  top:65px;
+  left:-20px;
+}
+
+.pin{
+  position:absolute;
+
+  width:16px;
+  height:16px;
+
+  border-radius:50% 50% 50% 0;
+
+  transform:rotate(-45deg);
+
+  background:#e74747;
+
+  border:2px solid white;
+
+  box-shadow:0 2px 7px rgba(0,0,0,.4);
+}
+
+/* =========================================================
+   WEATHER
+   ========================================================= */
+
+.weather-main{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.weather-icon{
+  font-size:42px;
+}
+
+.forecast{
+  display:grid;
+
+  grid-template-columns:repeat(5,1fr);
+
+  gap:4px;
+}
+
+.forecast div{
+  text-align:center;
+
+  padding:7px 2px;
+
+  border-radius:9px;
+
+  background:rgba(255,255,255,.08);
+
+  font-size:9px;
+}
+
+/* =========================================================
+   MUSIC
+   ========================================================= */
+
+.album{
+  width:85px;
+  height:85px;
+
+  margin:3px auto 10px;
+
+  display:grid;
+  place-items:center;
+
+  border-radius:18px;
+
+  background:
+    radial-gradient(circle,#ff7ad9,#8a277f 48%,#211529);
+
+  font-size:40px;
+
+  box-shadow:
+    0 8px 20px rgba(0,0,0,.4);
+}
+
+.progress{
+  height:5px;
+
+  border-radius:5px;
+
+  background:rgba(255,255,255,.13);
+
+  overflow:hidden;
+}
+
+.progress > div{
+  height:100%;
+  width:42%;
+
+  background:#66d7ff;
+}
+
+/* =========================================================
+   NOTES
+   ========================================================= */
+
+.note-item{
+  padding:8px;
+
+  border-radius:10px;
+
+  background:rgba(255,255,255,.08);
+
+  margin-bottom:5px;
+
+  cursor:pointer;
+}
+
+/* =========================================================
+   PHONE DIALER
+   ========================================================= */
+
+.dial-display{
+  font-size:22px;
+
+  text-align:center;
+
+  min-height:30px;
+
+  margin-bottom:7px;
+
+  font-weight:900;
+}
+
+.dial-grid{
+  display:grid;
+
+  grid-template-columns:repeat(3,1fr);
+
+  gap:5px;
+}
+
+.dial-grid button{
+  height:34px;
+
+  border-radius:10px;
+
+  border:1px solid rgba(255,255,255,.18);
+
+  background:rgba(255,255,255,.1);
+
+  color:white;
+
+  font-size:15px;
+
+  font-weight:800;
+}
+
+/* =========================================================
+   CLOCK
+   ========================================================= */
+
+.clock-face{
+  text-align:center;
+
+  padding:17px 4px;
+}
+
+.clock-time{
+  font-size:31px;
+
+  font-weight:900;
+
+  letter-spacing:1px;
+}
+
+/* =========================================================
+   COMPASS
+   ========================================================= */
+
+.compass{
+  width:115px;
+  height:115px;
+
+  margin:8px auto;
+
+  border-radius:50%;
+
+  border:6px solid #456b7c;
+
+  background:
+    radial-gradient(circle,#173949,#071b27);
+
+  position:relative;
+
+  display:grid;
+  place-items:center;
+
+  box-shadow:
+    inset 0 0 20px rgba(0,0,0,.7),
+    0 7px 18px rgba(0,0,0,.3);
+}
+
+.compass-arrow{
+  width:4px;
+  height:75px;
+
+  background:#f15d5d;
+
+  position:absolute;
+
+  transform-origin:center;
+}
+
+/* =========================================================
+   SETTINGS
+   ========================================================= */
+
+.setting{
+  display:flex;
+
+  justify-content:space-between;
+  align-items:center;
+
+  padding:9px 3px;
+
+  border-bottom:1px solid rgba(255,255,255,.09);
+
+  font-size:11px;
+}
+
+.switch{
+  width:34px;
+  height:19px;
+
+  appearance:none;
+
+  border-radius:20px;
+
+  background:#394852;
+
+  position:relative;
+
+  cursor:pointer;
+}
+
+.switch:after{
+  content:"";
+
+  position:absolute;
+
+  width:15px;
+  height:15px;
+
+  top:2px;
+  left:2px;
+
+  border-radius:50%;
+
+  background:white;
+
+  transition:.2s;
+}
+
+.switch:checked{
+  background:#27a8df;
+}
+
+.switch:checked:after{
+  left:17px;
 }
 
 /* =========================================================
    CUSTOM KEYBOARD
-   It is also rotated back upright.
    ========================================================= */
 
 #keyboard{
   position:absolute;
 
-  /*
-    Narrow/tall in the phone's rotated coordinate system.
-    After -90deg it becomes a normal horizontal keyboard.
-  */
-  left:38%;
-  top:25%;
+  left:27%;
+  top:49%;
 
-  width:24%;
-  height:52%;
+  width:46%;
+  height:29%;
 
-  z-index:500;
+  z-index:300;
 
   display:none;
 
@@ -678,126 +1038,125 @@ body{
 
   gap:3px;
 
-  padding:6px;
-
-  background:rgba(32,35,41,.96);
+  padding:5px;
 
   border-radius:13px;
 
-  transform:
-    rotate(-90deg)
-    translateZ(0);
+  background:
+    linear-gradient(
+      180deg,
+      rgba(20,45,58,.98),
+      rgba(4,18,25,.98)
+    );
 
-  transform-origin:center center;
+  border:1px solid rgba(255,255,255,.24);
 
-  transition:
-    opacity .22s ease,
-    transform .22s ease;
+  box-shadow:0 10px 30px rgba(0,0,0,.6);
 
-  opacity:0;
+  animation:keyboardIn .2s ease-out;
 }
 
 #keyboard.show{
   display:grid;
-
-  opacity:1;
-
-  transform:
-    rotate(-90deg)
-    translateZ(0);
 }
 
 #keyboard button{
-  min-width:0;
-
-  height:26px;
-
-  border:0;
+  border:1px solid rgba(255,255,255,.13);
 
   border-radius:5px;
 
-  font-size:9px;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,.17),
+      rgba(255,255,255,.06)
+    );
+
+  color:white;
+
+  font-size:8px;
 
   font-weight:800;
 
-  background:#f5f5f5;
-
-  color:#111;
+  min-width:0;
 
   cursor:pointer;
 }
 
 #keyboard button:active{
-  transform:scale(.9);
-  background:#ccc;
-}
-
-#keyboard .space{
-  grid-column:span 5;
+  transform:scale(.91);
 }
 
 #keyboard .wide{
   grid-column:span 2;
 }
 
+#keyboard .space{
+  grid-column:span 5;
+}
+
+@keyframes keyboardIn{
+  from{
+    opacity:0;
+    transform:translateY(10px) scale(.97);
+  }
+  to{
+    opacity:1;
+    transform:none;
+  }
+}
+
 /* =========================================================
-   CAMERA FLASH
+   PAGE TRANSITION
    ========================================================= */
 
-#flash{
+#page-flash{
   position:absolute;
 
-  inset:0;
+  left:28%;
+  top:21%;
 
-  z-index:600;
+  width:46%;
+  height:58%;
+
+  z-index:80;
 
   pointer-events:none;
 
+  border-radius:20px;
+
+  background:rgba(255,255,255,.16);
+
   opacity:0;
-
-  background:
-    radial-gradient(
-      circle,
-      rgba(255,255,255,.95),
-      rgba(38,125,255,.3),
-      transparent 70%
-    );
 }
 
-#flash.go{
-  animation:flash .4s ease;
+#page-flash.go{
+  animation:pageFlash .42s ease-out;
 }
 
-@keyframes flash{
+@keyframes pageFlash{
   0%{
     opacity:0;
-    transform:scale(.7);
+    transform:scale(.92);
   }
 
   35%{
-    opacity:1;
+    opacity:.35;
   }
 
   100%{
     opacity:0;
-    transform:scale(1.15);
+    transform:scale(1.03);
   }
 }
 
 /* =========================================================
-   SMALLER SCREENS
-   Still stays zoomed in.
+   SMALL SCREENS
    ========================================================= */
 
-@media(max-width:700px){
+@media(max-width:600px){
   #phone{
-    width:min(96vw,96vh,820px);
-  }
-}
-
-@media(max-height:650px){
-  #phone{
-    width:min(96vw,96vh,780px);
+    width:min(96vw,96vh);
   }
 }
 </style>
@@ -805,55 +1164,58 @@ body{
 
 <body>
 
-<div id="phone" class="page-one">
+<div id="phone">
 
   <!-- PAGE 1 -->
-  <div id="page1" class="page">
+  <div id="page1" class="page-layer">
 
-    <button class="hotspot" data-app="messages"></button>
-    <button class="hotspot" data-app="camera"></button>
-    <button class="hotspot" data-app="splashface"></button>
-    <button class="hotspot" data-app="stocks"></button>
-    <button class="hotspot" data-app="maps"></button>
-    <button class="hotspot" data-app="photos"></button>
-    <button class="hotspot" data-app="weather"></button>
-    <button class="hotspot" data-app="notes"></button>
-    <button class="hotspot" data-app="peartunes"></button>
-    <button class="hotspot" data-app="settings"></button>
-    <button class="hotspot" data-app="clock"></button>
-    <button class="hotspot" data-app="videos"></button>
-    <button class="hotspot" data-app="phone"></button>
-    <button class="hotspot" data-app="mail"></button>
-    <button class="hotspot" data-app="compass"></button>
-    <button class="hotspot" data-app="music"></button>
+    <button class="hotspot" id="messages" data-app="messages"></button>
+    <button class="hotspot" id="camera" data-app="camera"></button>
+    <button class="hotspot" id="splashface" data-app="splashface"></button>
+    <button class="hotspot" id="stocks" data-app="stocks"></button>
+    <button class="hotspot" id="maps" data-app="maps"></button>
+    <button class="hotspot" id="photos" data-app="photos"></button>
+    <button class="hotspot" id="weather" data-app="weather"></button>
+    <button class="hotspot" id="notes" data-app="notes"></button>
+    <button class="hotspot" id="peartunes" data-app="peartunes"></button>
+    <button class="hotspot" id="settings" data-app="settings"></button>
+    <button class="hotspot" id="clock" data-app="clock"></button>
+    <button class="hotspot" id="videos" data-app="videos"></button>
+
+    <button class="hotspot" id="phone-app" data-app="phone"></button>
+    <button class="hotspot" id="mail" data-app="mail"></button>
+    <button class="hotspot" id="compass" data-app="compass"></button>
+    <button class="hotspot" id="music" data-app="music"></button>
+
+    <button class="hotspot" id="home" data-home="true"></button>
 
   </div>
 
   <!-- PAGE 2 -->
-  <div id="page2" class="page">
+  <div id="page2" class="page-layer">
 
-    <button class="p2" data-app="messages"></button>
-    <button class="p2" data-app="camera"></button>
-    <button class="p2" data-app="photos"></button>
+    <button class="page2-hotspot p2-1" data-app="messages"></button>
+    <button class="page2-hotspot p2-2" data-app="camera"></button>
+    <button class="page2-hotspot p2-3" data-app="photos"></button>
 
-    <button class="p2" data-app="weather"></button>
-    <button class="p2" data-app="maps"></button>
-    <button class="p2" data-app="videos"></button>
+    <button class="page2-hotspot p2-4" data-app="notes"></button>
+    <button class="page2-hotspot p2-5" data-app="stocks"></button>
+    <button class="page2-hotspot p2-6" data-app="weather"></button>
 
-    <button class="p2" data-app="music"></button>
-    <button class="p2" data-app="notes"></button>
-    <button class="p2" data-app="settings"></button>
+    <button class="page2-hotspot p2-7" data-app="maps"></button>
+    <button class="page2-hotspot p2-8" data-app="peartunes"></button>
+    <button class="page2-hotspot p2-9" data-app="settings"></button>
 
-    <button class="p2" data-app="clock"></button>
-    <button class="p2" data-app="phone"></button>
-    <button class="p2" data-app="mail"></button>
+    <button class="page2-hotspot p2-10" data-app="clock"></button>
+    <button class="page2-hotspot p2-11" data-app="videos"></button>
+    <button class="page2-hotspot p2-12" data-app="compass"></button>
 
   </div>
 
-  <!-- HOME BUTTON -->
-  <button id="home" aria-label="Home"></button>
+  <!-- PAGE EFFECT -->
+  <div id="page-flash"></div>
 
-  <!-- APP WINDOW -->
+  <!-- APP -->
   <div id="overlay">
     <div id="app"></div>
   </div>
@@ -861,12 +1223,9 @@ body{
   <!-- CUSTOM KEYBOARD -->
   <div id="keyboard"></div>
 
-  <!-- CAMERA FLASH -->
-  <div id="flash"></div>
-
 </div>
 
-<script src="app.js?v=20260920-fixed"></script>
+<script src="app.js"></script>
 
 </body>
 </html>

@@ -1,2730 +1,2193 @@
-/*
-============================================================
-PEAR PHONE OS
-============================================================
+(() => {
 
-This file is loaded by index.html.
+"use strict";
 
-IMPORTANT:
-Do not put another app.js script on the page.
+/* =========================================================
+   ELEMENTS
+   ========================================================= */
 
-The app router uses ONE event listener and data-app IDs.
-That prevents neighboring icons from opening the wrong app.
+const phone =
+  document.getElementById("phone");
 
-Camera:
-- Uses navigator.mediaDevices.getUserMedia()
-- Uses the real connected camera
-- Allows camera selection
-- Takes photos
-- Saves photos into Photos
-============================================================
-*/
+const page1 =
+  document.getElementById("page1");
 
-document.addEventListener("DOMContentLoaded", () => {
+const page2 =
+  document.getElementById("page2");
 
-  "use strict";
+const overlay =
+  document.getElementById("app-overlay");
 
+const appWindow =
+  document.getElementById("app-window");
 
-  /* ========================================================
-     ELEMENTS
-     ======================================================== */
+const home =
+  document.getElementById("home");
 
-  const phone = document.getElementById("phone-container");
+const keyboard =
+  document.getElementById("pear-keyboard");
 
-  const overlay = document.getElementById("app-overlay");
-
-  const appWindow = document.getElementById("app-window");
-
-  const homeButton = document.getElementById("home");
-
-  const keyboard = document.getElementById("pear-keyboard");
-
-  const transition = document.getElementById("page-transition");
+const transition =
+  document.getElementById("page-transition");
 
 
-  /* ========================================================
-     APP STATE
-     ======================================================== */
+/* =========================================================
+   STATE
+   ========================================================= */
 
-  let currentCameraStream = null;
+let currentPage = 1;
 
-  let currentCameraDeviceId = "";
+let dragStartY = null;
 
-  let activeInput = null;
+let keyboardTarget = null;
 
-  let currentPage = 1;
+let cameraStream = null;
 
-  let touchStartX = 0;
-
-  let touchStartY = 0;
-
-  let mouseStartX = 0;
-
-  let mouseStartY = 0;
-
-  let mouseDragging = false;
+let clockTimer = null;
 
 
-  /* ========================================================
-     LOCAL STORAGE HELPERS
-     ======================================================== */
+/* =========================================================
+   HTML ESCAPE
+   ========================================================= */
 
-  function readJSON(key, fallback) {
+function escapeHTML(value) {
 
-    try {
+  return String(value).replace(
+    /[&<>"']/g,
+    character => {
 
-      const value = localStorage.getItem(key);
+      const replacements = {
 
-      if (!value) return fallback;
+        "&": "&amp;",
 
-      return JSON.parse(value);
+        "<": "&lt;",
 
-    } catch {
+        ">": "&gt;",
 
-      return fallback;
+        '"': "&quot;",
+
+        "'": "&#39;"
+
+      };
+
+      return replacements[character];
 
     }
+  );
 
-  }
+}
 
 
-  function writeJSON(key, value) {
+/* =========================================================
+   OPEN APP
+   ========================================================= */
 
-    try {
+function openApp(id) {
 
-      localStorage.setItem(
-        key,
-        JSON.stringify(value)
+  closeKeyboard();
+
+  switch(id) {
+
+    case "messages":
+      messages();
+      break;
+
+    case "camera":
+      camera();
+      break;
+
+    case "photos":
+      photos();
+      break;
+
+    case "notes":
+      notes();
+      break;
+
+    case "stocks":
+      stocks();
+      break;
+
+    case "maps":
+      maps();
+      break;
+
+    case "weather":
+      weather();
+      break;
+
+    case "clock":
+      clock();
+      break;
+
+    case "settings":
+      settings();
+      break;
+
+    case "splashface":
+      splashFace();
+      break;
+
+    case "peartunes":
+      music();
+      break;
+
+    case "music":
+      music();
+      break;
+
+    case "videos":
+      videos();
+      break;
+
+    case "phone":
+      phoneApp();
+      break;
+
+    case "mail":
+      mail();
+      break;
+
+    case "compass":
+      compass();
+      break;
+
+    default:
+      simple(
+        "Pear OS",
+        `
+        <div class="big">
+          ${escapeHTML(id)}
+        </div>
+        `
       );
 
-    } catch (error) {
-
-      console.error("Pear OS storage error:", error);
-
-    }
-
   }
 
+}
 
-  /* ========================================================
-     HTML ESCAPE
-     ======================================================== */
 
-  function escapeHTML(value) {
+/* =========================================================
+   APP WINDOW
+   ========================================================= */
 
-    return String(value)
-      .replaceAll("&", "&amp;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;")
-      .replaceAll('"', "&quot;")
-      .replaceAll("'", "&#039;");
+function openWindow(title, content) {
 
-  }
+  stopCamera();
 
+  clearInterval(clockTimer);
 
-  /* ========================================================
-     APP WINDOW
-     ======================================================== */
+  appWindow.innerHTML = `
 
-  function openWindow(title, content) {
+    <div class="app-header">
 
-    stopCamera();
+      <button
+        id="app-back"
+        aria-label="Back">
+        ‹
+      </button>
 
-    hideKeyboard();
+      <span>
+        ${escapeHTML(title)}
+      </span>
 
-    appWindow.innerHTML = `
+    </div>
 
-      <div class="app-header">
 
-        <button
-          class="back-button"
-          id="app-back"
-          aria-label="Back">
-          ‹
-        </button>
+    <div class="app-body">
 
-        <div class="window-title">
-          ${escapeHTML(title)}
-        </div>
+      ${content}
 
-      </div>
+    </div>
 
-      <div class="app-content">
-        ${content}
-      </div>
+  `;
 
-    `;
+  overlay.classList.add("open");
 
-    overlay.classList.add("open");
 
-    const back = document.getElementById("app-back");
-
-    if (back) {
-
-      back.addEventListener(
-        "click",
-        closeWindow
-      );
-
-    }
-
-    setupKeyboardInputs();
-
-  }
-
-
-  function closeWindow() {
-
-    stopCamera();
-
-    hideKeyboard();
-
-    overlay.classList.remove("open");
-
-    appWindow.innerHTML = "";
-
-  }
-
-
-  /* ========================================================
-     HOME
-     ======================================================== */
-
-  homeButton.addEventListener("click", event => {
-
-    event.preventDefault();
-
-    event.stopPropagation();
-
-    closeWindow();
-
-  });
-
-
-  /* ========================================================
-     APP ROUTER
-     ========================================================
-
-     THIS IS THE IMPORTANT PART.
-
-     Every button contains:
-
-     data-app="camera"
-
-     or:
-
-     data-app="messages"
-
-     etc.
-
-     There is ONE listener.
-
-     No neighboring button gets involved.
-     ======================================================== */
-
-  phone.addEventListener("click", event => {
-
-    const button = event.target.closest("[data-app]");
-
-    if (!button) return;
-
-    event.preventDefault();
-
-    event.stopPropagation();
-
-    const appID = button.getAttribute("data-app");
-
-    if (!appID) return;
-
-    launchApp(appID);
-
-  });
-
-
-  /* ========================================================
-     APP ROUTER FUNCTION
-     ======================================================== */
-
-  function launchApp(appID) {
-
-    switch (appID) {
-
-      case "messages":
-        openMessages();
-        break;
-
-      case "camera":
-        openCamera();
-        break;
-
-      case "splashface":
-        openSplashFace();
-        break;
-
-      case "stocks":
-        openStocks();
-        break;
-
-      case "maps":
-        openMaps();
-        break;
-
-      case "photos":
-        openPhotos();
-        break;
-
-      case "weather":
-        openWeather();
-        break;
-
-      case "notes":
-        openNotes();
-        break;
-
-      case "peartunes":
-        openPearTunes();
-        break;
-
-      case "settings":
-        openSettings();
-        break;
-
-      case "clock":
-        openClock();
-        break;
-
-      case "videos":
-        openVideos();
-        break;
-
-      case "phone":
-        openPhone();
-        break;
-
-      case "mail":
-        openMail();
-        break;
-
-      case "compass":
-        openCompass();
-        break;
-
-      case "music":
-        openMusic();
-        break;
-
-      default:
-
-        console.warn(
-          "Unknown Pear OS app:",
-          appID
-        );
-
-    }
-
-  }
-
-
-  /* ========================================================
-     MESSAGES
-     ======================================================== */
-
-  function openMessages() {
-
-    const messages = readJSON(
-      "pearMessages",
-      []
-    );
-
-    openWindow(
-      "Messages",
-      `
-
-      <div class="chat-list">
-
-        <div class="chat-bubble">
-          hey 👋
-        </div>
-
-        <div class="chat-bubble">
-          welcome to Pear Phone OS 🍐
-        </div>
-
-        ${messages.map(message => `
-
-          <div class="chat-bubble me">
-            ${escapeHTML(message)}
-          </div>
-
-        `).join("")}
-
-      </div>
-
-      <div class="compose-row">
-
-        <input
-          id="message-input"
-          type="text"
-          placeholder="iMessage">
-
-        <button
-          class="button"
-          id="send-message">
-          Send
-        </button>
-
-      </div>
-
-      `
-    );
-
-
-    const input =
-      document.getElementById("message-input");
-
-    const send =
-      document.getElementById("send-message");
-
-
-    function sendMessage() {
-
-      const text =
-        input.value.trim();
-
-      if (!text) return;
-
-      messages.push(text);
-
-      writeJSON(
-        "pearMessages",
-        messages.slice(-50)
-      );
-
-      openMessages();
-
-    }
-
-
-    send.addEventListener(
+  document
+    .getElementById("app-back")
+    .addEventListener(
       "click",
-      sendMessage
+      closeApp
     );
 
 
-    input.addEventListener(
-      "keydown",
-      event => {
+  wireKeyboardInputs();
 
-        if (event.key === "Enter") {
+}
 
-          sendMessage();
 
-        }
+/* =========================================================
+   CLOSE APP
+   ========================================================= */
 
-      }
+function closeApp() {
+
+  stopCamera();
+
+  clearInterval(clockTimer);
+
+  closeKeyboard();
+
+  overlay.classList.remove("open");
+
+  appWindow.innerHTML = "";
+
+}
+
+
+/* =========================================================
+   SIMPLE APP
+   ========================================================= */
+
+function simple(title, content) {
+
+  openWindow(
+    title,
+    content
+  );
+
+}
+
+
+/* =========================================================
+   MESSAGES
+   ========================================================= */
+
+function messages() {
+
+  const saved =
+    JSON.parse(
+      localStorage.getItem(
+        "pearMessages"
+      ) || "[]"
     );
 
-  }
 
+  openWindow(
+    "Messages",
+    `
 
-  /* ========================================================
-     CAMERA
-     ======================================================== */
+    <div>
 
-  async function openCamera() {
-
-    openWindow(
-      "Camera",
-      `
-
-      <div class="camera-container">
-
-        <video
-          id="pear-camera-video"
-          class="camera-video"
-          autoplay
-          playsinline
-          muted>
-        </video>
-
-        <div
-          id="camera-status"
-          class="camera-status">
-          Starting camera...
-        </div>
-
-        <select
-          id="camera-select"
-          class="camera-select">
-          <option>
-            Detecting cameras...
-          </option>
-        </select>
-
-        <div class="camera-controls">
-
-          <button
-            class="button"
-            id="start-camera">
-            ▶ Start
-          </button>
-
-          <button
-            class="button"
-            id="take-photo">
-            📸 Take Photo
-          </button>
-
-          <button
-            class="button"
-            id="switch-camera">
-            🔄 Switch
-          </button>
-
-        </div>
-
-        <img
-          id="captured-photo"
-          class="captured-photo"
-          alt="Captured photo">
-
+      <div class="bubble">
+        Hey 👋
       </div>
 
-      `
+      <div class="bubble">
+        Welcome to Pear Phone.
+      </div>
+
+      ${
+
+        saved
+          .map(
+            message => `
+              <div class="bubble me">
+                ${escapeHTML(message)}
+              </div>
+            `
+          )
+          .join("")
+
+      }
+
+    </div>
+
+
+    <div
+      class="row"
+      style="margin-top:8px">
+
+      <input
+        id="messageInput"
+        style="flex:1"
+        placeholder="Message">
+
+      <button
+        id="sendMessage">
+        Send
+      </button>
+
+    </div>
+
+    `
+  );
+
+
+  const input =
+    document.getElementById(
+      "messageInput"
     );
 
 
-    const video =
-      document.getElementById(
-        "pear-camera-video"
-      );
-
-    const status =
-      document.getElementById(
-        "camera-status"
-      );
-
-    const select =
-      document.getElementById(
-        "camera-select"
-      );
-
-    const startButton =
-      document.getElementById(
-        "start-camera"
-      );
-
-    const takeButton =
-      document.getElementById(
-        "take-photo"
-      );
-
-    const switchButton =
-      document.getElementById(
-        "switch-camera"
-      );
-
-    const photo =
-      document.getElementById(
-        "captured-photo"
-      );
-
-
-    /* --------------------------------------------------------
-       CHECK CAMERA SUPPORT
-       -------------------------------------------------------- */
-
-    if (
-      !navigator.mediaDevices ||
-      !navigator.mediaDevices.getUserMedia
-    ) {
-
-      status.textContent =
-        "Camera is not available in this browser.";
-
-      startButton.disabled = true;
-
-      takeButton.disabled = true;
-
-      switchButton.disabled = true;
-
-      return;
-
-    }
-
-
-    /* --------------------------------------------------------
-       GET CAMERA LIST
-       -------------------------------------------------------- */
-
-    async function loadCameras() {
-
-      try {
-
-        const devices =
-          await navigator.mediaDevices.enumerateDevices();
-
-        const cameras =
-          devices.filter(
-            device =>
-              device.kind === "videoinput"
-          );
-
-
-        select.innerHTML = "";
-
-
-        if (!cameras.length) {
-
-          const option =
-            document.createElement("option");
-
-          option.textContent =
-            "No camera detected";
-
-          select.appendChild(option);
-
-          return;
-
-        }
-
-
-        cameras.forEach(
-          (camera, index) => {
-
-            const option =
-              document.createElement(
-                "option"
-              );
-
-            option.value =
-              camera.deviceId;
-
-            option.textContent =
-              camera.label ||
-              `Camera ${index + 1}`;
-
-            select.appendChild(option);
-
-          }
-        );
-
-
-        if (currentCameraDeviceId) {
-
-          select.value =
-            currentCameraDeviceId;
-
-        }
-
-      } catch (error) {
-
-        console.error(
-          "Camera enumeration error:",
-          error
-        );
-
-      }
-
-    }
-
-
-    /* --------------------------------------------------------
-       START CAMERA
-       -------------------------------------------------------- */
-
-    async function startCamera(deviceId = "") {
-
-      stopCamera();
-
-      status.textContent =
-        "Requesting camera permission...";
-
-
-      try {
-
-        let videoConstraints;
-
-
-        /*
-          If a specific camera was selected,
-          use that exact camera.
-
-          Otherwise use the default/environment
-          camera.
-        */
-
-        if (deviceId) {
-
-          videoConstraints = {
-
-            deviceId: {
-              exact: deviceId
-            },
-
-            width: {
-              ideal:1280
-            },
-
-            height: {
-              ideal:720
-            }
-
-          };
-
-        } else {
-
-          videoConstraints = {
-
-            facingMode: {
-              ideal:"environment"
-            },
-
-            width: {
-              ideal:1280
-            },
-
-            height: {
-              ideal:720
-            }
-
-          };
-
-        }
-
-
-        currentCameraStream =
-          await navigator.mediaDevices
-            .getUserMedia({
-
-              video:videoConstraints,
-
-              audio:false
-
-            });
-
-
-        video.srcObject =
-          currentCameraStream;
-
-
-        currentCameraDeviceId =
-          currentCameraStream
-            .getVideoTracks()[0]
-            ?.getSettings()
-            ?.deviceId || "";
-
-
-        await video.play();
-
-
-        status.textContent =
-          "Camera connected ✓";
-
-
-        /*
-          After permission is granted,
-          browsers expose the camera names.
-        */
-
-        await loadCameras();
-
-
-      } catch (error) {
-
-        console.error(
-          "Pear Camera error:",
-          error
-        );
-
-
-        status.textContent =
-          cameraErrorMessage(error);
-
-      }
-
-    }
-
-
-    /* --------------------------------------------------------
-       CAMERA ERROR MESSAGE
-       -------------------------------------------------------- */
-
-    function cameraErrorMessage(error) {
-
-      if (!error) {
-
-        return "Could not start camera.";
-
-      }
-
-
-      if (
-        error.name ===
-        "NotAllowedError"
-      ) {
-
-        return (
-          "Camera permission was denied. " +
-          "Allow camera access and press Start."
-        );
-
-      }
-
-
-      if (
-        error.name ===
-        "NotFoundError"
-      ) {
-
-        return (
-          "No camera was found. " +
-          "Check the USB camera connection."
-        );
-
-      }
-
-
-      if (
-        error.name ===
-        "NotReadableError"
-      ) {
-
-        return (
-          "Camera is already being used " +
-          "by another program."
-        );
-
-      }
-
-
-      if (
-        error.name ===
-        "SecurityError"
-      ) {
-
-        return (
-          "Camera requires HTTPS or localhost."
-        );
-
-      }
-
-
-      return (
-        "Camera error: " +
-        error.name
-      );
-
-    }
-
-
-    /* --------------------------------------------------------
-       TAKE PHOTO
-       -------------------------------------------------------- */
-
-    function takePhoto() {
-
-      if (!video.videoWidth) {
-
-        status.textContent =
-          "Start the camera first.";
-
-        return;
-
-      }
-
-
-      const canvas =
-        document.createElement("canvas");
-
-
-      canvas.width =
-        video.videoWidth;
-
-      canvas.height =
-        video.videoHeight;
-
-
-      const context =
-        canvas.getContext("2d");
-
-
-      /*
-        Draw the REAL camera frame.
-      */
-
-      context.drawImage(
-        video,
-        0,
-        0,
-        canvas.width,
-        canvas.height
-      );
-
-
-      const image =
-        canvas.toDataURL(
-          "image/jpeg",
-          .88
-        );
-
-
-      photo.src =
-        image;
-
-      photo.style.display =
-        "block";
-
-
-      /*
-        Save to Pear Photos.
-      */
-
-      const photos =
-        readJSON(
-          "pearPhotos",
-          []
-        );
-
-
-      photos.unshift(image);
-
-
-      /*
-        Keep the latest 20 photos.
-      */
-
-      writeJSON(
-        "pearPhotos",
-        photos.slice(0,20)
-      );
-
-
-      status.textContent =
-        "Photo captured ✓";
-
-    }
-
-
-    /* --------------------------------------------------------
-       BUTTON EVENTS
-       -------------------------------------------------------- */
-
-    startButton.addEventListener(
+  document
+    .getElementById("sendMessage")
+    .addEventListener(
       "click",
       () => {
 
-        startCamera(
-          select.value || ""
+        const value =
+          input.value.trim();
+
+        if(!value)
+          return;
+
+
+        saved.push(value);
+
+
+        localStorage.setItem(
+          "pearMessages",
+          JSON.stringify(
+            saved.slice(-50)
+          )
         );
+
+
+        messages();
 
       }
     );
 
 
-    takeButton.addEventListener(
+  input.addEventListener(
+    "keydown",
+    event => {
+
+      if(event.key === "Enter") {
+
+        document
+          .getElementById(
+            "sendMessage"
+          )
+          .click();
+
+      }
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   CAMERA
+   ========================================================= */
+
+async function camera() {
+
+  openWindow(
+    "Camera",
+    `
+
+    <video
+      id="cameraVideo"
+      class="camera-video"
+      autoplay
+      playsinline>
+    </video>
+
+
+    <div
+      class="row"
+      style="
+        margin-top:7px;
+        flex-wrap:wrap;
+      ">
+
+      <button id="startCamera">
+        Start Camera
+      </button>
+
+      <button id="takePhoto">
+        Take Photo
+      </button>
+
+    </div>
+
+
+    <p
+      id="cameraStatus"
+      style="
+        font-size:11px;
+        color:#666;
+      ">
+      Starting camera...
+    </p>
+
+
+    <canvas
+      id="cameraCanvas"
+      hidden>
+    </canvas>
+
+
+    <img
+      id="capturedPhoto"
+      style="
+        display:none;
+        width:100%;
+        margin-top:7px;
+        border-radius:12px;
+      ">
+
+    `
+  );
+
+
+  document
+    .getElementById(
+      "startCamera"
+    )
+    .addEventListener(
+      "click",
+      startCamera
+    );
+
+
+  document
+    .getElementById(
+      "takePhoto"
+    )
+    .addEventListener(
       "click",
       takePhoto
     );
 
 
-    switchButton.addEventListener(
-      "click",
-      async () => {
+  await startCamera();
 
-        const cameras =
-          Array.from(
-            select.options
-          );
-
-        if (cameras.length < 2) {
-
-          status.textContent =
-            "Only one camera detected.";
-
-          return;
-
-        }
+}
 
 
-        let index =
-          select.selectedIndex;
+/* =========================================================
+   START CAMERA
+   ========================================================= */
 
+async function startCamera() {
 
-        index =
-          (index + 1) %
-          cameras.length;
+  const video =
+    document.getElementById(
+      "cameraVideo"
+    );
 
-
-        select.selectedIndex =
-          index;
-
-
-        await startCamera(
-          select.value
-        );
-
-      }
+  const status =
+    document.getElementById(
+      "cameraStatus"
     );
 
 
-    select.addEventListener(
-      "change",
-      () => {
-
-        if (select.value) {
-
-          startCamera(
-            select.value
-          );
-
-        }
-
-      }
-    );
+  if(!video)
+    return;
 
 
-    /*
-      Automatically start the camera.
-    */
+  if(
+    !navigator.mediaDevices ||
+    !navigator.mediaDevices.getUserMedia
+  ) {
 
-    await startCamera();
+    status.textContent =
+      "Camera unavailable. Use HTTPS and a current Chromium browser.";
 
-
-    /*
-      Refresh camera names after permission.
-    */
-
-    await loadCameras();
+    return;
 
   }
 
 
-  /* ========================================================
-     STOP CAMERA
-     ======================================================== */
+  try {
 
-  function stopCamera() {
-
-    if (!currentCameraStream) {
-
-      return;
-
-    }
+    stopCamera();
 
 
-    currentCameraStream
-      .getTracks()
-      .forEach(track => {
+    cameraStream =
+      await navigator
+        .mediaDevices
+        .getUserMedia({
 
-        track.stop();
+          video: {
+            facingMode: {
+              ideal: "environment"
+            }
+          },
 
-      });
-
-
-    currentCameraStream = null;
-
-  }
-
-
-  /* ========================================================
-     PHOTOS
-     ======================================================== */
-
-  function openPhotos() {
-
-    const photos =
-      readJSON(
-        "pearPhotos",
-        []
-      );
-
-
-    openWindow(
-      "Photos",
-      `
-
-      <input
-        type="file"
-        id="photo-import"
-        accept="image/*"
-        multiple>
-
-      <div style="height:7px"></div>
-
-      <div
-        class="photo-grid"
-        id="photo-grid">
-
-        ${
-          photos.length
-
-          ?
-
-          photos.map(
-            (image,index) => `
-
-              <img
-                src="${image}"
-                data-photo-index="${index}"
-                alt="Photo ${index + 1}">
-
-            `
-          ).join("")
-
-          :
-
-          `
-            <div
-              class="empty"
-              style="grid-column:1/-1">
-              No photos yet.
-            </div>
-          `
-        }
-
-      </div>
-
-      `
-    );
-
-
-    const input =
-      document.getElementById(
-        "photo-import"
-      );
-
-
-    input.addEventListener(
-      "change",
-      event => {
-
-        const files =
-          Array.from(
-            event.target.files
-          );
-
-
-        if (!files.length) return;
-
-
-        const imported =
-          [];
-
-
-        let completed = 0;
-
-
-        files.forEach(file => {
-
-          const reader =
-            new FileReader();
-
-
-          reader.onload =
-            () => {
-
-              imported.push(
-                reader.result
-              );
-
-
-              completed++;
-
-
-              if (
-                completed ===
-                files.length
-              ) {
-
-                writeJSON(
-                  "pearPhotos",
-                  [
-                    ...imported,
-                    ...photos
-                  ].slice(0,20)
-                );
-
-
-                openPhotos();
-
-              }
-
-            };
-
-
-          reader.readAsDataURL(
-            file
-          );
+          audio: false
 
         });
 
-      }
+
+    video.srcObject =
+      cameraStream;
+
+
+    await video.play();
+
+
+    status.textContent =
+      "Camera connected ✓";
+
+  }
+
+  catch(error) {
+
+    console.error(error);
+
+
+    status.textContent =
+      "Camera permission/device error. Check browser permissions and make sure the camera is connected.";
+
+  }
+
+}
+
+
+/* =========================================================
+   TAKE PHOTO
+   ========================================================= */
+
+function takePhoto() {
+
+  const video =
+    document.getElementById(
+      "cameraVideo"
+    );
+
+  const canvas =
+    document.getElementById(
+      "cameraCanvas"
+    );
+
+  const image =
+    document.getElementById(
+      "capturedPhoto"
     );
 
 
-    document
-      .querySelectorAll(
-        "[data-photo-index]"
-      )
-      .forEach(image => {
+  if(
+    !video ||
+    !video.videoWidth
+  ) {
 
-        image.addEventListener(
-          "click",
-          () => {
+    alert(
+      "Start the camera first."
+    );
 
-            image.requestFullscreen?.();
-
-          }
-        );
-
-      });
+    return;
 
   }
 
 
-  /* ========================================================
-     NOTES
-     ======================================================== */
+  canvas.width =
+    video.videoWidth;
 
-  function openNotes() {
+  canvas.height =
+    video.videoHeight;
 
-    const notes =
-      readJSON(
-        "pearNotes",
-        []
+
+  const context =
+    canvas.getContext(
+      "2d"
+    );
+
+
+  context.drawImage(
+    video,
+    0,
+    0,
+    canvas.width,
+    canvas.height
+  );
+
+
+  const data =
+    canvas.toDataURL(
+      "image/jpeg",
+      .9
+    );
+
+
+  image.src = data;
+
+  image.style.display =
+    "block";
+
+
+  const saved =
+    JSON.parse(
+      localStorage.getItem(
+        "pearPhotos"
+      ) || "[]"
+    );
+
+
+  saved.unshift(data);
+
+
+  localStorage.setItem(
+    "pearPhotos",
+    JSON.stringify(
+      saved.slice(0,24)
+    )
+  );
+
+}
+
+
+/* =========================================================
+   STOP CAMERA
+   ========================================================= */
+
+function stopCamera() {
+
+  if(cameraStream) {
+
+    cameraStream
+      .getTracks()
+      .forEach(
+        track =>
+          track.stop()
       );
 
+    cameraStream = null;
 
-    openWindow(
-      "Notes",
-      `
+  }
 
-      <div
-        class="note-list">
 
-        ${
-          notes.length
+  const video =
+    document.getElementById(
+      "cameraVideo"
+    );
 
-          ?
 
-          notes.map(
+  if(video)
+    video.srcObject = null;
+
+}
+
+
+/* =========================================================
+   PHOTOS
+   ========================================================= */
+
+function photos() {
+
+  const saved =
+    JSON.parse(
+      localStorage.getItem(
+        "pearPhotos"
+      ) || "[]"
+    );
+
+
+  openWindow(
+    "Photos",
+    `
+
+    <input
+      id="photoImport"
+      type="file"
+      accept="image/*"
+      multiple>
+
+
+    <div
+      style="height:7px">
+    </div>
+
+
+    <div class="photos">
+
+      ${
+
+        saved.length
+
+          ? saved
+              .map(
+                photo => `
+                  <img
+                    src="${photo}"
+                    alt="Photo">
+                `
+              )
+              .join("")
+
+          :
+
+            `
+            <p
+              style="
+                grid-column:1/-1;
+                text-align:center;
+                color:#777;
+              ">
+              No photos yet.
+            </p>
+            `
+
+      }
+
+    </div>
+
+    `
+  );
+
+
+  document
+    .getElementById(
+      "photoImport"
+    )
+    .addEventListener(
+      "change",
+      async event => {
+
+        const files =
+          [
+            ...event.target.files
+          ];
+
+
+        const imported = [];
+
+
+        for(
+          const file
+          of files
+        ) {
+
+          const result =
+            await new Promise(
+              resolve => {
+
+                const reader =
+                  new FileReader();
+
+
+                reader.onload =
+                  () =>
+                    resolve(
+                      reader.result
+                    );
+
+
+                reader.readAsDataURL(
+                  file
+                );
+
+              }
+            );
+
+
+          imported.push(
+            result
+          );
+
+        }
+
+
+        localStorage.setItem(
+          "pearPhotos",
+          JSON.stringify(
+            [
+              ...imported,
+              ...saved
+            ].slice(0,24)
+          )
+        );
+
+
+        photos();
+
+      }
+    );
+
+}
+
+
+/* =========================================================
+   NOTES
+   ========================================================= */
+
+function notes() {
+
+  const saved =
+    JSON.parse(
+      localStorage.getItem(
+        "pearNotes"
+      ) || "[]"
+    );
+
+
+  openWindow(
+    "Notes",
+    `
+
+    <div>
+
+      ${
+
+        saved
+          .map(
             (note,index) => `
 
               <div
-                class="saved-note"
+                class="stock"
                 data-note="${index}">
 
-                <strong>
-                  ${escapeHTML(
-                    note.title ||
-                    "Untitled"
-                  )}
-                </strong>
+                <span>
 
-                <div
-                  style="
-                    color:#777;
-                    font-size:11px;
-                    margin-top:2px;
-                  ">
+                  <b>
+                    ${escapeHTML(
+                      note.title
+                    )}
+                  </b>
 
-                  ${escapeHTML(
-                    (note.body || "")
-                      .slice(0,80)
-                  )}
+                  <br>
 
-                </div>
+                  <small>
+                    ${escapeHTML(
+                      note.body.slice(
+                        0,
+                        70
+                      )
+                    )}
+                  </small>
+
+                </span>
 
               </div>
 
             `
-          ).join("")
+          )
+          .join("")
 
-          :
+      }
 
-          `<div class="empty">
-             No notes yet.
-           </div>`
-
-        }
-
-      </div>
+    </div>
 
 
-      <input
-        class="note-title"
-        id="note-title"
-        placeholder="Note title">
+    <input
+      id="noteTitle"
+      style="
+        width:100%;
+        margin-bottom:6px;
+      "
+      placeholder="Title">
 
 
-      <textarea
-        class="note-body"
-        id="note-body"
-        placeholder="Start typing..."></textarea>
+    <textarea
+      id="noteBody"
+      placeholder="Write your note...">
+    </textarea>
 
 
-      <div style="height:5px"></div>
+    <button
+      id="saveNote"
+      style="margin-top:6px">
+
+      Save Note
+
+    </button>
+
+    `
+  );
 
 
-      <button
-        class="button"
-        id="save-note">
-        Save Note
-      </button>
+  document
+    .querySelectorAll(
+      "[data-note]"
+    )
+    .forEach(
+      element => {
 
-      `
-    );
-
-
-    document
-      .getElementById("save-note")
-      .addEventListener(
-        "click",
-        () => {
-
-          const title =
-            document
-              .getElementById(
-                "note-title"
-              )
-              .value
-              .trim();
-
-
-          const body =
-            document
-              .getElementById(
-                "note-body"
-              )
-              .value
-              .trim();
-
-
-          if (!title && !body) {
-
-            return;
-
-          }
-
-
-          notes.unshift({
-
-            title:
-              title ||
-              "Untitled",
-
-            body,
-
-            date:
-              new Date()
-                .toISOString()
-
-          });
-
-
-          writeJSON(
-            "pearNotes",
-            notes.slice(0,30)
-          );
-
-
-          openNotes();
-
-        }
-      );
-
-
-    document
-      .querySelectorAll(
-        "[data-note]"
-      )
-      .forEach(note => {
-
-        note.addEventListener(
+        element.addEventListener(
           "click",
           () => {
 
-            const index =
-              Number(
-                note.dataset.note
-              );
-
-            const saved =
-              notes[index];
-
-
-            document
-              .getElementById(
-                "note-title"
-              )
-              .value =
-              saved.title || "";
+            const note =
+              saved[
+                Number(
+                  element.dataset.note
+                )
+              ];
 
 
             document
               .getElementById(
-                "note-body"
+                "noteTitle"
               )
               .value =
-              saved.body || "";
+              note.title;
+
+
+            document
+              .getElementById(
+                "noteBody"
+              )
+              .value =
+              note.body;
 
           }
         );
 
-      });
-
-  }
-
-
-  /* ========================================================
-     STOCKS
-     ======================================================== */
-
-  function openStocks() {
-
-    const stocks = [
-
-      [
-        "PEAR",
-        "Pear Inc.",
-        "$99.99",
-        "+4.2%",
-        true
-      ],
-
-      [
-        "AAPL",
-        "Apple",
-        "$229.87",
-        "+1.8%",
-        true
-      ],
-
-      [
-        "MSFT",
-        "Microsoft",
-        "$532.44",
-        "+0.9%",
-        true
-      ],
-
-      [
-        "TSLA",
-        "Tesla",
-        "$318.26",
-        "-1.2%",
-        false
-      ]
-
-    ];
+      }
+    );
 
 
-    openWindow(
-      "Stocks",
-      `
+  document
+    .getElementById(
+      "saveNote"
+    )
+    .addEventListener(
+      "click",
+      () => {
 
-      <div class="stock-list">
+        const title =
+          document
+            .getElementById(
+              "noteTitle"
+            )
+            .value
+            .trim();
 
-        ${stocks.map(
-          stock => `
 
-          <div class="stock-row">
+        const body =
+          document
+            .getElementById(
+              "noteBody"
+            )
+            .value;
 
-            <div>
 
-              <strong>
+        saved.unshift({
+
+          title:
+            title || "Untitled",
+
+          body:
+            body
+
+        });
+
+
+        localStorage.setItem(
+          "pearNotes",
+          JSON.stringify(
+            saved.slice(0,50)
+          )
+        );
+
+
+        notes();
+
+      }
+    );
+
+}
+
+
+/* =========================================================
+   STOCKS
+   ========================================================= */
+
+function stocks() {
+
+  const data = [
+
+    [
+      "AAPL",
+      "Apple",
+      "$229.87",
+      "+1.8%",
+      true
+    ],
+
+    [
+      "MSFT",
+      "Microsoft",
+      "$532.44",
+      "+0.9%",
+      true
+    ],
+
+    [
+      "TSLA",
+      "Tesla",
+      "$318.26",
+      "-1.2%",
+      false
+    ],
+
+    [
+      "PEAR",
+      "Pear Inc.",
+      "$99.99",
+      "+4.2%",
+      true
+    ]
+
+  ];
+
+
+  openWindow(
+    "Stocks",
+
+    data
+      .map(
+        stock => `
+
+          <div class="stock">
+
+            <span>
+
+              <b>
                 ${stock[0]}
-              </strong>
+              </b>
 
-              <div
-                style="
-                  color:#777;
-                  font-size:10px;
-                ">
+              <br>
 
+              <small>
                 ${stock[1]}
+              </small>
 
-              </div>
+            </span>
 
-            </div>
 
-            <div
+            <span
               style="
                 text-align:right;
               ">
 
-              <strong>
+              <b>
                 ${stock[2]}
-              </strong>
+              </b>
 
-              <div
-                class="
-                  ${stock[4]
-                    ? "positive"
-                    : "negative"}
+              <br>
+
+              <small
+                style="
+                  color:
+                    ${stock[4]
+                      ? "green"
+                      : "red"};
                 ">
 
                 ${stock[3]}
 
-              </div>
+              </small>
 
-            </div>
+            </span>
 
           </div>
 
         `
-        ).join("")}
+      )
+      .join("")
+  );
 
-      </div>
+}
 
-      `
+
+/* =========================================================
+   MAPS
+   ========================================================= */
+
+function maps() {
+
+  openWindow(
+    "Maps",
+
+    `
+
+    <div class="map">
+      📍
+    </div>
+
+
+    <h3>
+      Pear Park
+    </h3>
+
+
+    <p>
+      12 Pear Street ·
+      5 min away
+    </p>
+
+
+    <button id="route">
+      Start Route
+    </button>
+
+    `
+  );
+
+
+  document
+    .getElementById(
+      "route"
+    )
+    .addEventListener(
+      "click",
+      event => {
+
+        event.target.textContent =
+          "Route Started ✓";
+
+      }
     );
+
+}
+
+
+/* =========================================================
+   WEATHER
+   ========================================================= */
+
+function weather() {
+
+  openWindow(
+    "Weather",
+
+    `
+
+    <div class="big">
+
+      ☀️
+
+      <br>
+
+      <span
+        style="font-size:42px">
+
+        24°
+
+      </span>
+
+    </div>
+
+
+    <p
+      style="text-align:center">
+
+      Sunny ·
+      Feels like 25°
+
+    </p>
+
+    `
+  );
+
+}
+
+
+/* =========================================================
+   CLOCK
+   ========================================================= */
+
+function clock() {
+
+  openWindow(
+    "Clock",
+
+    `
+
+    <div
+      id="clockText"
+      class="big">
+
+      --:--:--
+
+    </div>
+
+
+    <p
+      style="
+        text-align:center;
+        color:#777;
+      ">
+
+      Local time
+
+    </p>
+
+    `
+  );
+
+
+  function updateClock() {
+
+    const element =
+      document.getElementById(
+        "clockText"
+      );
+
+
+    if(!element)
+      return;
+
+
+    element.textContent =
+      new Date()
+        .toLocaleTimeString(
+          [],
+          {
+            hour:
+              "numeric",
+
+            minute:
+              "2-digit",
+
+            second:
+              "2-digit"
+          }
+        );
 
   }
 
 
-  /* ========================================================
-     MAPS
-     ======================================================== */
-
-  function openMaps() {
-
-    openWindow(
-      "Maps",
-      `
-
-      <div class="map">
-
-        <div class="map-pin">
-          📍
-        </div>
-
-      </div>
+  updateClock();
 
 
-      <h3>
-        Pear Park
-      </h3>
+  clockTimer =
+    setInterval(
+      updateClock,
+      1000
+    );
 
-      <p>
-        12 Pear Street · 5 min away
-      </p>
+}
 
+
+/* =========================================================
+   SETTINGS
+   ========================================================= */
+
+function settings() {
+
+  openWindow(
+    "Settings",
+
+    `
+
+    <label
+      style="
+        display:flex;
+        justify-content:space-between;
+        padding:10px 0;
+        border-bottom:1px solid #ddd;
+      ">
+
+      Dark Mode
+
+      <input
+        id="darkMode"
+        type="checkbox">
+
+    </label>
+
+
+    <button
+      id="resetData"
+      style="margin-top:10px">
+
+      Reset Saved Data
+
+    </button>
+
+    `
+  );
+
+
+  const dark =
+    document.getElementById(
+      "darkMode"
+    );
+
+
+  dark.checked =
+    localStorage.getItem(
+      "pearDark"
+    ) === "1";
+
+
+  dark.addEventListener(
+    "change",
+    () => {
+
+      localStorage.setItem(
+        "pearDark",
+        dark.checked
+          ? "1"
+          : "0"
+      );
+
+    }
+  );
+
+
+  document
+    .getElementById(
+      "resetData"
+    )
+    .addEventListener(
+      "click",
+      () => {
+
+        localStorage.clear();
+
+        location.reload();
+
+      }
+    );
+
+}
+
+
+/* =========================================================
+   SPLASHFACE
+   ========================================================= */
+
+function splashFace() {
+
+  openWindow(
+    "SplashFace",
+
+    `
+
+    <div
+      class="big"
+      style="color:#3f78c7">
+
+      Sf
+
+    </div>
+
+
+    <p
+      style="text-align:center">
+
+      Welcome to SplashFace.
+
+    </p>
+
+    `
+  );
+
+}
+
+
+/* =========================================================
+   MUSIC
+   ========================================================= */
+
+function music() {
+
+  openWindow(
+    "PearTunes",
+
+    `
+
+    <div
+      class="big">
+
+      ♫
+
+    </div>
+
+
+    <div class="stock">
+
+      <span>
+        Pearadise
+      </span>
 
       <button
-        class="button"
-        id="route-button">
+        data-song="Pearadise">
 
-        Start Route
+        ▶
 
       </button>
 
-      `
-    );
+    </div>
 
 
-    document
-      .getElementById(
-        "route-button"
-      )
-      .addEventListener(
-        "click",
-        event => {
+    <div class="stock">
 
-          event.target.textContent =
-            "Route Started ✓";
+      <span>
+        Sunset Drive
+      </span>
 
-        }
-      );
+      <button
+        data-song="Sunset Drive">
 
-  }
+        ▶
 
+      </button>
 
-  /* ========================================================
-     WEATHER
-     ======================================================== */
+    </div>
 
-  function openWeather() {
 
-    openWindow(
-      "Weather",
-      `
+    <div class="stock">
 
-      <div class="weather-card">
+      <span>
+        Electric Orchard
+      </span>
 
-        <div class="weather-icon">
-          ☀️
-        </div>
+      <button
+        data-song="Electric Orchard">
 
-        <div class="temperature">
-          24°
-        </div>
+        ▶
 
-        <h3>
-          Sunny
-        </h3>
+      </button>
 
-        <p>
-          Feels like 25°
-        </p>
+    </div>
 
-        <p>
-          Today: 18° — 27°
-        </p>
+    `
+  );
 
-      </div>
 
-      `
-    );
-
-  }
-
-
-  /* ========================================================
-     CLOCK
-     ======================================================== */
-
-  let clockTimer = null;
-
-
-  function openClock() {
-
-    openWindow(
-      "Clock",
-      `
-
-      <div
-        class="big-clock"
-        id="big-clock">
-
-        --:--:--
-
-      </div>
-
-      <div
-        style="
-          text-align:center;
-          color:#777;
-        ">
-
-        Local time
-
-      </div>
-
-      `
-    );
-
-
-    clearInterval(
-      clockTimer
-    );
-
-
-    function updateClock() {
-
-      const element =
-        document.getElementById(
-          "big-clock"
-        );
-
-
-      if (!element) return;
-
-
-      element.textContent =
-        new Date()
-          .toLocaleTimeString(
-            [],
-            {
-              hour:"numeric",
-              minute:"2-digit",
-              second:"2-digit"
-            }
-          );
-
-    }
-
-
-    updateClock();
-
-
-    clockTimer =
-      setInterval(
-        updateClock,
-        1000
-      );
-
-  }
-
-
-  /* ========================================================
-     SETTINGS
-     ======================================================== */
-
-  function openSettings() {
-
-    const dark =
-      localStorage.getItem(
-        "pearDark"
-      ) === "1";
-
-
-    openWindow(
-      "Settings",
-      `
-
-      <div class="settings-row">
-
-        <span>
-          Dark Mode
-        </span>
-
-        <input
-          id="dark-toggle"
-          type="checkbox"
-          ${dark ? "checked" : ""}>
-
-      </div>
-
-
-      <div class="settings-row">
-
-        <span>
-          Clear Photos
-        </span>
-
-        <button
-          class="button"
-          id="clear-photos">
-
-          Clear
-
-        </button>
-
-      </div>
-
-
-      <div class="settings-row">
-
-        <span>
-          Reset Pear OS
-        </span>
-
-        <button
-          class="button"
-          id="reset-os">
-
-          Reset
-
-        </button>
-
-      </div>
-
-      `
-    );
-
-
-    document
-      .getElementById(
-        "dark-toggle"
-      )
-      .addEventListener(
-        "change",
-        event => {
-
-          localStorage.setItem(
-            "pearDark",
-            event.target.checked
-              ? "1"
-              : "0"
-          );
-
-        }
-      );
-
-
-    document
-      .getElementById(
-        "clear-photos"
-      )
-      .addEventListener(
-        "click",
-        () => {
-
-          localStorage.removeItem(
-            "pearPhotos"
-          );
-
-          alert(
-            "Pear Photos cleared."
-          );
-
-        }
-      );
-
-
-    document
-      .getElementById(
-        "reset-os"
-      )
-      .addEventListener(
-        "click",
-        () => {
-
-          localStorage.clear();
-
-          location.reload();
-
-        }
-      );
-
-  }
-
-
-  /* ========================================================
-     SPLASHFACE
-     ======================================================== */
-
-  function openSplashFace() {
-
-    openWindow(
-      "SplashFace",
-      `
-
-      <div
-        style="
-          text-align:center;
-          padding:20px;
-        ">
-
-        <div
-          style="
-            font-size:50px;
-            font-weight:900;
-            color:#3974c5;
-          ">
-
-          Sf
-
-        </div>
-
-        <h2>
-          SplashFace
-        </h2>
-
-        <p>
-          Welcome back!
-        </p>
-
-        <button
-          class="button"
-          id="post-button">
-
-          Create Post
-
-        </button>
-
-      </div>
-
-      `
-    );
-
-
-    document
-      .getElementById(
-        "post-button"
-      )
-      .addEventListener(
-        "click",
-        () => {
-
-          alert(
-            "Your post was shared! 📸"
-          );
-
-        }
-      );
-
-  }
-
-
-  /* ========================================================
-     PEARTUNES
-     ======================================================== */
-
-  function openPearTunes() {
-
-    openWindow(
-      "PearTunes",
-      `
-
-      <div
-        style="
-          text-align:center;
-          padding:5px 0 10px;
-        ">
-
-        <div
-          style="
-            font-size:50px;
-            color:#dc3eb6;
-          ">
-
-          ♫
-
-        </div>
-
-        <h2>
-          PearTunes
-        </h2>
-
-      </div>
-
-
-      <div class="stock-list">
-
-        <div class="stock-row">
-
-          <span>
-            Pearadise
-          </span>
-
-          <button
-            class="button"
-            data-song="Pearadise">
-
-            ▶
-
-          </button>
-
-        </div>
-
-
-        <div class="stock-row">
-
-          <span>
-            Sunset Drive
-          </span>
-
-          <button
-            class="button"
-            data-song="Sunset Drive">
-
-            ▶
-
-          </button>
-
-        </div>
-
-
-        <div class="stock-row">
-
-          <span>
-            Electric Orchard
-          </span>
-
-          <button
-            class="button"
-            data-song="Electric Orchard">
-
-            ▶
-
-          </button>
-
-        </div>
-
-      </div>
-
-      `
-    );
-
-
-    document
-      .querySelectorAll(
-        "[data-song]"
-      )
-      .forEach(button => {
+  document
+    .querySelectorAll(
+      "[data-song]"
+    )
+    .forEach(
+      button => {
 
         button.addEventListener(
           "click",
           () => {
 
-            alert(
-              "Playing " +
-              button.dataset.song
-            );
+            button.textContent =
+              "✓";
 
           }
         );
 
-      });
-
-  }
-
-
-  /* ========================================================
-     PHONE
-     ======================================================== */
-
-  function openPhone() {
-
-    openWindow(
-      "Phone",
-      `
-
-      <div
-        style="
-          text-align:center;
-          padding:15px;
-        ">
-
-        <div
-          style="
-            font-size:55px;
-          ">
-
-          ☎
-
-        </div>
-
-        <h2>
-          Phone
-        </h2>
-
-        <p>
-          Pear Phone calling
-          interface.
-        </p>
-
-
-        <button
-          class="button"
-          id="fake-call">
-
-          Call Pear Support
-
-        </button>
-
-      </div>
-
-      `
+      }
     );
 
+}
 
-    document
-      .getElementById(
-        "fake-call"
-      )
-      .addEventListener(
-        "click",
-        () => {
 
-          alert(
-            "Calling Pear Support..."
-          );
+/* =========================================================
+   VIDEOS
+   ========================================================= */
 
-        }
-      );
+function videos() {
 
-  }
+  openWindow(
+    "Videos",
 
+    `
 
-  /* ========================================================
-     MAIL
-     ======================================================== */
+    <div class="big">
+      ▶
+    </div>
 
-  function openMail() {
 
-    openWindow(
-      "Mail",
-      `
+    <p
+      style="text-align:center">
 
-      <h3>
-        Inbox
-      </h3>
+      Your videos will appear here.
 
+    </p>
 
-      <div class="stock-row">
-
-        <div>
-
-          <strong>
-            Welcome to Pear OS
-          </strong>
-
-          <div
-            style="
-              color:#777;
-              font-size:10px;
-            ">
-
-            Pear Team
-
-          </div>
-
-        </div>
-
-      </div>
-
-
-      <div
-        style="
-          height:5px;
-        ">
-      </div>
-
-
-      <div class="stock-row">
-
-        <div>
-
-          <strong>
-            Camera Ready
-          </strong>
-
-          <div
-            style="
-              color:#777;
-              font-size:10px;
-            ">
-
-            Pear Photos
-
-          </div>
-
-        </div>
-
-      </div>
-
-      `
-    );
-
-  }
-
-
-  /* ========================================================
-     COMPASS
-     ======================================================== */
-
-  function openCompass() {
-
-    openWindow(
-      "Compass",
-      `
-
-      <div
-        style="
-          text-align:center;
-          padding:15px;
-        ">
-
-        <div
-          id="compass-arrow"
-          style="
-            font-size:75px;
-            transition:transform .4s;
-          ">
-
-          🧭
-
-        </div>
-
-        <h2>
-          North
-        </h2>
-
-        <p>
-          0°
-        </p>
-
-      </div>
-
-      `
-    );
-
-  }
-
-
-  /* ========================================================
-     VIDEOS
-     ======================================================== */
-
-  function openVideos() {
-
-    openWindow(
-      "Videos",
-      `
-
-      <div
-        style="
-          text-align:center;
-          padding:20px;
-        ">
-
-        <div
-          style="
-            font-size:60px;
-          ">
-
-          🎬
-
-        </div>
-
-        <h2>
-          Videos
-        </h2>
-
-        <p>
-          Your videos will appear here.
-        </p>
-
-      </div>
-
-      `
-    );
-
-  }
-
-
-  /* ========================================================
-     MUSIC
-     ======================================================== */
-
-  function openMusic() {
-
-    openPearTunes();
-
-  }
-
-
-  /* ========================================================
-     CUSTOM KEYBOARD
-     ======================================================== */
-
-  function setupKeyboardInputs() {
-
-    const inputs =
-      appWindow.querySelectorAll(
-        "input[type='text'], textarea"
-      );
-
-
-    inputs.forEach(input => {
-
-      input.addEventListener(
-        "focus",
-        () => {
-
-          activeInput =
-            input;
-
-          showKeyboard();
-
-        }
-      );
-
-
-      input.addEventListener(
-        "click",
-        () => {
-
-          activeInput =
-            input;
-
-          showKeyboard();
-
-        }
-      );
-
-    });
-
-  }
-
-
-  function showKeyboard() {
-
-    if (!activeInput) return;
-
-    keyboard.classList.add(
-      "show"
-    );
-
-  }
-
-
-  function hideKeyboard() {
-
-    keyboard.classList.remove(
-      "show"
-    );
-
-    activeInput = null;
-
-  }
-
-
-  /* ========================================================
-     KEYBOARD BUTTONS
-     ======================================================== */
-
-  keyboard
-    .querySelectorAll(
-      ".keyboard-key"
-    )
-    .forEach(key => {
-
-      key.addEventListener(
-        "click",
-        event => {
-
-          event.preventDefault();
-
-          if (!activeInput) return;
-
-
-          const value =
-            key.textContent;
-
-
-          if (value === "⌫") {
-
-            activeInput.value =
-              activeInput.value.slice(
-                0,
-                -1
-              );
-
-            return;
-
-          }
-
-
-          if (value === "SPACE") {
-
-            insertText(" ");
-
-            return;
-
-          }
-
-
-          if (value === "↵") {
-
-            activeInput.dispatchEvent(
-              new KeyboardEvent(
-                "keydown",
-                {
-                  key:"Enter",
-                  bubbles:true
-                }
-              )
-            );
-
-            return;
-
-          }
-
-
-          if (value === "123") {
-
-            return;
-
-          }
-
-
-          insertText(
-            value.toLowerCase()
-          );
-
-        }
-      );
-
-    });
-
-
-  function insertText(text) {
-
-    if (!activeInput) return;
-
-
-    const start =
-      activeInput.selectionStart ??
-      activeInput.value.length;
-
-
-    const end =
-      activeInput.selectionEnd ??
-      activeInput.value.length;
-
-
-    activeInput.value =
-      activeInput.value.slice(
-        0,
-        start
-      ) +
-      text +
-      activeInput.value.slice(
-        end
-      );
-
-
-    const newPosition =
-      start + text.length;
-
-
-    activeInput.setSelectionRange(
-      newPosition,
-      newPosition
-    );
-
-
-    activeInput.dispatchEvent(
-      new Event(
-        "input",
-        {
-          bubbles:true
-        }
-      )
-    );
-
-  }
-
-
-  /* ========================================================
-     SWIPE / PAGE SYSTEM
-     ========================================================
-
-     Swipe UP   = Page 2
-     Swipe DOWN = Page 1
-
-     The actual phone image remains the background.
-     ======================================================== */
-
-  phone.addEventListener(
-    "touchstart",
-    event => {
-
-      if (
-        event.touches.length !== 1
-      ) return;
-
-
-      touchStartX =
-        event.touches[0].clientX;
-
-      touchStartY =
-        event.touches[0].clientY;
-
-    },
-    {
-      passive:true
-    }
+    `
   );
 
-
-  phone.addEventListener(
-    "touchend",
-    event => {
-
-      if (
-        event.changedTouches.length !== 1
-      ) return;
+}
 
 
-      const endX =
-        event.changedTouches[0].clientX;
+/* =========================================================
+   PHONE
+   ========================================================= */
 
-      const endY =
-        event.changedTouches[0].clientY;
+function phoneApp() {
+
+  openWindow(
+    "Phone",
+
+    `
+
+    <div class="big">
+      ☎
+    </div>
 
 
-      const dx =
-        endX - touchStartX;
+    <p
+      style="text-align:center">
 
-      const dy =
-        endY - touchStartY;
+      Phone is ready.
+
+    </p>
+
+    `
+  );
+
+}
 
 
-      if (
-        Math.abs(dy) >
-        Math.abs(dx) &&
-        Math.abs(dy) > 40
-      ) {
+/* =========================================================
+   MAIL
+   ========================================================= */
 
-        if (dy < 0) {
+function mail() {
 
-          goToPage(2);
+  openWindow(
+    "Mail",
 
-        } else {
+    `
 
-          goToPage(1);
+    <h3>
+      Inbox
+    </h3>
 
-        }
+
+    <div class="stock">
+
+      <span>
+
+        <b>
+          Welcome to Pear OS
+        </b>
+
+        <br>
+
+        <small>
+          Pear Team
+        </small>
+
+      </span>
+
+
+      <span>
+        9:41
+      </span>
+
+    </div>
+
+    `
+  );
+
+}
+
+
+/* =========================================================
+   COMPASS
+   ========================================================= */
+
+function compass() {
+
+  openWindow(
+    "Compass",
+
+    `
+
+    <div class="big">
+      🧭
+    </div>
+
+
+    <p
+      style="text-align:center">
+
+      North · 0°
+
+    </p>
+
+    `
+  );
+
+}
+
+
+/* =========================================================
+   KEYBOARD
+   ========================================================= */
+
+const keyboardRows = [
+
+  [
+    "1","2","3","4","5",
+    "6","7","8","9","0"
+  ],
+
+  [
+    "Q","W","E","R","T",
+    "Y","U","I","O","P"
+  ],
+
+  [
+    "A","S","D","F","G",
+    "H","J","K","L","⌫"
+  ],
+
+  [
+    "Z","X","C","V","B",
+    "N","M",",",".","↵"
+  ]
+
+];
+
+
+function buildKeyboard() {
+
+  keyboard.innerHTML = "";
+
+
+  keyboardRows
+    .flat()
+    .forEach(
+      key => {
+
+        const button =
+          document.createElement(
+            "button"
+          );
+
+
+        button.textContent =
+          key;
+
+
+        button.addEventListener(
+          "click",
+          () =>
+            keyboardPress(key)
+        );
+
+
+        keyboard.appendChild(
+          button
+        );
 
       }
+    );
 
-    },
-    {
-      passive:true
-    }
+
+  const space =
+    document.createElement(
+      "button"
+    );
+
+
+  space.textContent =
+    "SPACE";
+
+
+  space.className =
+    "space";
+
+
+  space.addEventListener(
+    "click",
+    () =>
+      insertText(" ")
   );
 
 
-  /* ========================================================
-     MOUSE / TRACKPAD DRAG
-     ======================================================== */
-
-  phone.addEventListener(
-    "mousedown",
-    event => {
-
-      if (event.button !== 0)
-        return;
+  keyboard.appendChild(
+    space
+  );
 
 
-      mouseDragging = true;
+  const done =
+    document.createElement(
+      "button"
+    );
 
-      mouseStartX =
-        event.clientX;
 
-      mouseStartY =
+  done.textContent =
+    "DONE";
+
+
+  done.className =
+    "wide";
+
+
+  done.addEventListener(
+    "click",
+    closeKeyboard
+  );
+
+
+  keyboard.appendChild(
+    done
+  );
+
+}
+
+
+function insertText(text) {
+
+  if(!keyboardTarget)
+    return;
+
+
+  const start =
+    keyboardTarget.selectionStart ??
+    keyboardTarget.value.length;
+
+
+  const end =
+    keyboardTarget.selectionEnd ??
+    start;
+
+
+  keyboardTarget.value =
+    keyboardTarget.value.slice(
+      0,
+      start
+    ) +
+
+    text +
+
+    keyboardTarget.value.slice(
+      end
+    );
+
+
+  keyboardTarget.selectionStart =
+    start + text.length;
+
+
+  keyboardTarget.selectionEnd =
+    start + text.length;
+
+
+  keyboardTarget.dispatchEvent(
+    new Event(
+      "input",
+      {
+        bubbles:true
+      }
+    )
+  );
+
+}
+
+
+function keyboardPress(key) {
+
+  if(key === "⌫") {
+
+    if(!keyboardTarget)
+      return;
+
+
+    const position =
+      keyboardTarget.selectionStart ??
+      keyboardTarget.value.length;
+
+
+    if(position > 0) {
+
+      keyboardTarget.value =
+        keyboardTarget.value.slice(
+          0,
+          position - 1
+        ) +
+
+        keyboardTarget.value.slice(
+          position
+        );
+
+
+      keyboardTarget.selectionStart =
+        position - 1;
+
+      keyboardTarget.selectionEnd =
+        position - 1;
+
+    }
+
+
+    return;
+
+  }
+
+
+  if(key === "↵") {
+
+    if(keyboardTarget) {
+
+      keyboardTarget.dispatchEvent(
+        new KeyboardEvent(
+          "keydown",
+          {
+            key:"Enter",
+            bubbles:true
+          }
+        )
+      );
+
+    }
+
+
+    return;
+
+  }
+
+
+  insertText(
+    key.toLowerCase()
+  );
+
+}
+
+
+function wireKeyboardInputs() {
+
+  appWindow
+    .querySelectorAll(
+      'input:not([type="file"]), textarea'
+    )
+    .forEach(
+      element => {
+
+        element.addEventListener(
+          "focus",
+          () => {
+
+            keyboardTarget =
+              element;
+
+
+            keyboard
+              .classList
+              .add("show");
+
+          }
+        );
+
+      }
+    );
+
+}
+
+
+function closeKeyboard() {
+
+  keyboard
+    .classList
+    .remove("show");
+
+
+  keyboardTarget =
+    null;
+
+}
+
+
+buildKeyboard();
+
+
+/* =========================================================
+   PAGE SWITCHING
+   ========================================================= */
+
+function setPage(number, animate = true) {
+
+  currentPage =
+    number;
+
+
+  page1.style.display =
+    number === 1
+      ? "block"
+      : "none";
+
+
+  page2.style.display =
+    number === 2
+      ? "grid"
+      : "none";
+
+
+  if(animate) {
+
+    transition
+      .classList
+      .remove("go");
+
+
+    void transition.offsetWidth;
+
+
+    transition
+      .classList
+      .add("go");
+
+  }
+
+}
+
+
+/* =========================================================
+   SWIPE
+   ========================================================= */
+
+function finishSwipe(endY) {
+
+  if(dragStartY === null)
+    return;
+
+
+  const distance =
+    endY - dragStartY;
+
+
+  dragStartY =
+    null;
+
+
+  if(
+    Math.abs(distance) < 45
+  )
+    return;
+
+
+  if(distance < 0) {
+
+    /*
+      Swipe UP
+      Page 1 -> Page 2
+    */
+
+    setPage(
+      2,
+      true
+    );
+
+  }
+
+  else {
+
+    /*
+      Swipe DOWN
+      Page 2 -> Page 1
+    */
+
+    setPage(
+      1,
+      true
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   TOUCH
+   ========================================================= */
+
+phone.addEventListener(
+  "touchstart",
+  event => {
+
+    if(
+      !overlay.classList.contains(
+        "open"
+      )
+    ) {
+
+      dragStartY =
+        event.touches[0].clientY;
+
+    }
+
+  },
+  {
+    passive:true
+  }
+);
+
+
+phone.addEventListener(
+  "touchend",
+  event => {
+
+    finishSwipe(
+      event.changedTouches[0]
+        .clientY
+    );
+
+  },
+  {
+    passive:true
+  }
+);
+
+
+/* =========================================================
+   MOUSE DRAG
+   ========================================================= */
+
+phone.addEventListener(
+  "mousedown",
+  event => {
+
+    if(
+      !overlay.classList.contains(
+        "open"
+      )
+    ) {
+
+      dragStartY =
         event.clientY;
 
     }
-  );
+
+  }
+);
 
 
-  window.addEventListener(
-    "mouseup",
-    event => {
+phone.addEventListener(
+  "mouseup",
+  event => {
 
-      if (!mouseDragging)
-        return;
-
-
-      mouseDragging = false;
-
-
-      const dx =
-        event.clientX -
-        mouseStartX;
-
-      const dy =
-        event.clientY -
-        mouseStartY;
-
-
-      if (
-        Math.abs(dy) >
-        Math.abs(dx) &&
-        Math.abs(dy) > 50
-      ) {
-
-        if (dy < 0) {
-
-          goToPage(2);
-
-        } else {
-
-          goToPage(1);
-
-        }
-
-      }
-
-    }
-  );
-
-
-  /* ========================================================
-     KEYBOARD ARROWS
-     ======================================================== */
-
-  window.addEventListener(
-    "keydown",
-    event => {
-
-      /*
-        Do not switch pages while
-        typing into an input.
-      */
-
-      const target =
-        event.target;
-
-
-      if (
-        target &&
-        (
-          target.tagName === "INPUT" ||
-          target.tagName === "TEXTAREA"
-        )
-      ) {
-
-        return;
-
-      }
-
-
-      if (
-        event.key === "ArrowUp"
-      ) {
-
-        goToPage(2);
-
-      }
-
-
-      if (
-        event.key === "ArrowDown"
-      ) {
-
-        goToPage(1);
-
-      }
-
-    }
-  );
-
-
-  /* ========================================================
-     PAGE SWITCH
-     ======================================================== */
-
-  function goToPage(page) {
-
-    if (page !== 1 && page !== 2)
-      return;
-
-
-    if (currentPage === page)
-      return;
-
-
-    currentPage =
-      page;
-
-
-    transition.className =
-      page === 2
-        ? "animate-up"
-        : "animate-down";
-
-
-    /*
-      Page 2 uses the exact page2.png
-      supplied for the project.
-
-      Page 1 returns to pear-phone.jpg.
-    */
-
-    if (page === 2) {
-
-      phone.style.backgroundImage =
-        'url("page2.png")';
-
-    } else {
-
-      phone.style.backgroundImage =
-        'url("pear-phone.jpg")';
-
-    }
-
-
-    /*
-      Page 2 currently hides Page 1
-      hotspots so they cannot accidentally
-      launch Page 1 apps.
-    */
-
-    document
-      .querySelectorAll(
-        ".hotspot"
-      )
-      .forEach(button => {
-
-        button.style.display =
-          page === 1
-            ? ""
-            : "none";
-
-      });
-
-
-    setTimeout(
-      () => {
-
-        transition.className =
-          "";
-
-      },
-      400
+    finishSwipe(
+      event.clientY
     );
 
   }
+);
 
 
-  /* ========================================================
-     OVERLAY CLICK
-     ======================================================== */
+/* =========================================================
+   KEYBOARD PAGE CONTROLS
+   ========================================================= */
 
-  overlay.addEventListener(
-    "click",
-    event => {
+window.addEventListener(
+  "keydown",
+  event => {
 
-      /*
-        Clicking outside the app window
-        isn't possible inside the phone
-        because the overlay fills the app
-        region, but keep this here.
-      */
+    if(
+      event.key === "ArrowUp"
+    ) {
 
-      if (
-        event.target === overlay
-      ) {
-
-        closeWindow();
-
-      }
-
-    }
-  );
-
-
-  /* ========================================================
-     CLEANUP
-     ======================================================== */
-
-  window.addEventListener(
-    "beforeunload",
-    () => {
-
-      stopCamera();
-
-      clearInterval(
-        clockTimer
+      setPage(
+        2,
+        true
       );
 
     }
-  );
 
 
-  /* ========================================================
-     DEBUG MESSAGE
-     ======================================================== */
+    if(
+      event.key === "ArrowDown"
+    ) {
 
-  console.log(
-    "%cPear Phone OS loaded successfully.",
-    "font-weight:bold;font-size:16px;color:#36a846"
-  );
+      setPage(
+        1,
+        true
+      );
 
-  console.log(
-    "App routing is using data-app IDs."
-  );
+    }
 
-  console.log(
-    "Camera uses navigator.mediaDevices.getUserMedia()."
-  );
 
-});
+    if(
+      event.key === "Escape"
+    ) {
+
+      closeApp();
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   EXACT APP ROUTING
+   ========================================================= */
+
+phone.addEventListener(
+  "click",
+  event => {
+
+    const button =
+      event.target.closest(
+        "[data-app]"
+      );
+
+
+    if(!button)
+      return;
+
+
+    event.preventDefault();
+
+    event.stopPropagation();
+
+
+    openApp(
+      button.dataset.app
+    );
+
+  }
+);
+
+
+/* =========================================================
+   HOME
+   ========================================================= */
+
+home.addEventListener(
+  "click",
+  event => {
+
+    event.preventDefault();
+
+    event.stopPropagation();
+
+
+    setPage(
+      1,
+      false
+    );
+
+
+    closeApp();
+
+  }
+);
+
+
+/* =========================================================
+   PREVENT APP WINDOW FROM TRIGGERING SWIPES
+   ========================================================= */
+
+overlay.addEventListener(
+  "touchstart",
+  event => {
+    event.stopPropagation();
+  },
+  {
+    passive:true
+  }
+);
+
+
+overlay.addEventListener(
+  "touchend",
+  event => {
+    event.stopPropagation();
+  },
+  {
+    passive:true
+  }
+);
+
+
+/* =========================================================
+   START ON PAGE 1
+   ========================================================= */
+
+setPage(
+  1,
+  false
+);
+
+})();

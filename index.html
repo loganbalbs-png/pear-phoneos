@@ -1,8 +1,8 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <title>Pear Phone OS</title>
 
 <style>
@@ -16,239 +16,251 @@ html,body{
   width:100%;
   height:100%;
   overflow:hidden;
-  background:#ffffff;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
 }
 
 body{
   display:flex;
   align-items:center;
   justify-content:center;
+  background:#fff;
+  font-family:Arial,Helvetica,sans-serif;
+  touch-action:none;
 }
 
 /* =========================================================
-   PHONE WRAPPER
+   PEAR PHONE
    ========================================================= */
 
-#phone-stage{
-  position:relative;
-  width:100vw;
-  height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  overflow:hidden;
-}
-
-#phone-container{
+#phone{
   position:relative;
 
   /*
-    IMPORTANT:
-    This keeps the original phone image.
-    Nothing is being recreated in CSS.
+    BIG AGAIN.
+    The phone is rotated, so the size is based on both
+    viewport dimensions instead of being artificially scaled down.
   */
-  width:min(88vw,760px);
-  height:min(88vh,760px);
+  width:min(94vw,94vh,920px);
+  aspect-ratio:1212 / 1188;
 
-  background-image:url("./pear-phone.jpg");
-  background-repeat:no-repeat;
-  background-position:center;
-  background-size:contain;
+  background:
+    url("pear-phone.jpg") center/contain no-repeat;
 
   transform:rotate(90deg);
-
   transform-origin:center center;
 
   touch-action:none;
-
   user-select:none;
-  -webkit-user-select:none;
-}
-
-/*
-  If the image takes a moment to load, don't show
-  a giant blank area.
-*/
-#phone-container.loaded{
-  background-color:transparent;
 }
 
 /* =========================================================
-   PAGE 2 IMAGE
+   HOME PAGE LAYERS
    ========================================================= */
 
-#page2-image{
+.page{
   position:absolute;
+  inset:0;
 
-  /*
-    This sits ONLY over the phone screen.
-    It does not cover the shell or the three top circles.
-  */
-  left:37.2%;
-  top:22.8%;
-  width:26.5%;
-  height:54.8%;
+  transition:
+    transform .46s cubic-bezier(.22,.8,.25,1),
+    opacity .35s ease;
 
-  object-fit:cover;
-
-  display:none;
-
-  pointer-events:none;
-
-  z-index:2;
-
-  border-radius:18%;
+  will-change:transform,opacity;
 }
 
-#phone-container.page-two #page2-image{
-  display:block;
+#page1{
+  transform:translateY(0) scale(1);
+  opacity:1;
+  pointer-events:auto;
+}
+
+#page2{
+  transform:translateY(100%) scale(.94);
+  opacity:0;
+  pointer-events:none;
+
+  /*
+    Your exact second-page image.
+    Keep page2.png beside index.html.
+  */
+  background:url("page2.png") center/contain no-repeat;
+}
+
+#phone.page-two #page1{
+  transform:translateY(-100%) scale(.94);
+  opacity:0;
+  pointer-events:none;
+}
+
+#phone.page-two #page2{
+  transform:translateY(0) scale(1);
+  opacity:1;
+  pointer-events:auto;
+}
+
+#phone.page-one #page1{
+  transform:translateY(0) scale(1);
+  opacity:1;
+  pointer-events:auto;
+}
+
+#phone.page-one #page2{
+  transform:translateY(100%) scale(.94);
+  opacity:0;
+  pointer-events:none;
 }
 
 /* =========================================================
-   APP HOTSPOTS
+   PAGE 1 APP HOTSPOTS
    ========================================================= */
 
 .hotspot{
   position:absolute;
-
   border:0;
-  outline:none;
-
   background:transparent;
-
   padding:0;
   margin:0;
 
   border-radius:50%;
 
-  cursor:pointer;
+  z-index:20;
 
+  cursor:pointer;
   touch-action:manipulation;
 
   -webkit-appearance:none;
   appearance:none;
-
-  z-index:10;
 }
 
 .hotspot:active{
-  transform:scale(.90);
+  background:rgba(255,255,255,.08);
+  transform:scale(.92);
 }
 
-/*
-  PAGE 1 ICON LOCATIONS
-*/
-
-#messages{
+/* Messages */
+#page1 .hotspot:nth-child(1){
   left:43.1%;
   top:25.7%;
-  width:9.6%;
+  width:8.3%;
   aspect-ratio:1;
 }
 
-#camera{
+/* Camera */
+#page1 .hotspot:nth-child(2){
   left:54%;
   top:25.7%;
-  width:9.6%;
+  width:8.3%;
   aspect-ratio:1;
 }
 
-#splashface{
+/* SplashFace */
+#page1 .hotspot:nth-child(3){
   left:38%;
   top:36.1%;
-  width:9.6%;
+  width:8.3%;
   aspect-ratio:1;
 }
 
-#stocks{
+/* Stocks */
+#page1 .hotspot:nth-child(4){
   left:47.5%;
   top:36.1%;
-  width:9.6%;
+  width:8.3%;
   aspect-ratio:1;
 }
 
-#maps{
+/* Maps */
+#page1 .hotspot:nth-child(5){
   left:57%;
   top:36.1%;
-  width:9.6%;
+  width:8.3%;
   aspect-ratio:1;
 }
 
-#photos{
+/* Photos */
+#page1 .hotspot:nth-child(6){
   left:38%;
   top:46.9%;
-  width:9.6%;
+  width:8.3%;
   aspect-ratio:1;
 }
 
-#weather{
+/* Weather */
+#page1 .hotspot:nth-child(7){
   left:47.5%;
   top:46.9%;
-  width:9.6%;
+  width:8.3%;
   aspect-ratio:1;
 }
 
-#notes{
+/* Notes */
+#page1 .hotspot:nth-child(8){
   left:57%;
   top:46.9%;
-  width:9.6%;
+  width:8.3%;
   aspect-ratio:1;
 }
 
-#peartunes{
+/* PearTunes */
+#page1 .hotspot:nth-child(9){
   left:32%;
   top:55.9%;
-  width:9.6%;
+  width:8.3%;
   aspect-ratio:1;
 }
 
-#settings{
+/* Settings */
+#page1 .hotspot:nth-child(10){
   left:42%;
   top:55.9%;
-  width:9.6%;
+  width:8.3%;
   aspect-ratio:1;
 }
 
-#clock{
+/* Clock */
+#page1 .hotspot:nth-child(11){
   left:52%;
   top:55.9%;
-  width:9.6%;
+  width:8.3%;
   aspect-ratio:1;
 }
 
-#videos{
+/* Videos */
+#page1 .hotspot:nth-child(12){
   left:62%;
   top:55.9%;
-  width:9.6%;
+  width:8.3%;
   aspect-ratio:1;
 }
 
-#phone{
+/* Phone */
+#page1 .hotspot:nth-child(13){
   left:32%;
   top:65.9%;
-  width:9.6%;
+  width:8.3%;
   aspect-ratio:1;
 }
 
-#mail{
+/* Mail */
+#page1 .hotspot:nth-child(14){
   left:42%;
   top:65.9%;
-  width:9.6%;
+  width:8.3%;
   aspect-ratio:1;
 }
 
-#compass{
+/* Compass */
+#page1 .hotspot:nth-child(15){
   left:52%;
   top:65.9%;
-  width:9.6%;
+  width:8.3%;
   aspect-ratio:1;
 }
 
-#music{
+/* Music */
+#page1 .hotspot:nth-child(16){
   left:62%;
   top:65.9%;
-  width:9.6%;
+  width:8.3%;
   aspect-ratio:1;
 }
 
@@ -256,117 +268,94 @@ body{
    PAGE 2 HOTSPOTS
    ========================================================= */
 
-.page2-hotspot{
-  display:none;
-
+#page2 .p2{
   position:absolute;
-
   border:0;
-  outline:none;
-
   background:transparent;
-
   padding:0;
   margin:0;
-
+  border-radius:50%;
+  z-index:30;
   cursor:pointer;
-
-  z-index:20;
-
-  touch-action:manipulation;
+  aspect-ratio:1;
 }
 
-#phone-container.page-two .page2-hotspot{
-  display:block;
+#page2 .p2:active{
+  background:rgba(255,255,255,.08);
+  transform:scale(.92);
 }
 
-/*
-  These are deliberately inside the page2 screen only.
-  Change data-app values if your page2.png icons are different.
-*/
-
-#p2-app1{
-  left:39%;
-  top:29%;
-  width:8%;
-  height:8%;
+/* Page 2 — 3 columns x 4 rows */
+#page2 .p2:nth-child(1){
+  left:31%;
+  top:25%;
+  width:10%;
 }
 
-#p2-app2{
-  left:49%;
-  top:29%;
-  width:8%;
-  height:8%;
+#page2 .p2:nth-child(2){
+  left:45%;
+  top:25%;
+  width:10%;
 }
 
-#p2-app3{
+#page2 .p2:nth-child(3){
   left:59%;
-  top:29%;
-  width:8%;
-  height:8%;
+  top:25%;
+  width:10%;
 }
 
-#p2-app4{
-  left:39%;
-  top:40%;
-  width:8%;
-  height:8%;
+#page2 .p2:nth-child(4){
+  left:31%;
+  top:38%;
+  width:10%;
 }
 
-#p2-app5{
-  left:49%;
-  top:40%;
-  width:8%;
-  height:8%;
+#page2 .p2:nth-child(5){
+  left:45%;
+  top:38%;
+  width:10%;
 }
 
-#p2-app6{
+#page2 .p2:nth-child(6){
   left:59%;
-  top:40%;
-  width:8%;
-  height:8%;
+  top:38%;
+  width:10%;
 }
 
-#p2-app7{
-  left:39%;
+#page2 .p2:nth-child(7){
+  left:31%;
   top:51%;
-  width:8%;
-  height:8%;
+  width:10%;
 }
 
-#p2-app8{
-  left:49%;
+#page2 .p2:nth-child(8){
+  left:45%;
   top:51%;
-  width:8%;
-  height:8%;
+  width:10%;
 }
 
-#p2-app9{
+#page2 .p2:nth-child(9){
   left:59%;
   top:51%;
-  width:8%;
-  height:8%;
+  width:10%;
 }
 
-#p2-app10{
-  left:39%;
-  top:62%;
-  width:8%;
-  height:8%;
+#page2 .p2:nth-child(10){
+  left:31%;
+  top:64%;
+  width:10%;
 }
 
-#p2-app11{
-  left:49%;
-  top:62%;
-  width:8%;
-  height:8%;
+#page2 .p2:nth-child(11){
+  left:45%;
+  top:64%;
+  width:10%;
 }
 
-#p2-app12{
+#page2 .p2:nth-child(12){
   left:59%;
-  top:62%;
-  width:8%;
-  height:8%;
+  top:64%;
+  width:10%;
 }
 
 /* =========================================================
@@ -384,191 +373,208 @@ body{
 
   border:0;
   background:transparent;
-
   border-radius:50%;
 
   cursor:pointer;
-
-  z-index:30;
+  z-index:80;
 }
 
 /* =========================================================
    APP WINDOW
+   IMPORTANT:
+   PHONE = ROTATED 90°
+   APP = ROTATED BACK -90°
    ========================================================= */
 
 #overlay{
   position:absolute;
 
-  left:0;
-  top:0;
+  left:18%;
+  top:18%;
 
-  width:100%;
-  height:100%;
+  width:64%;
+  height:64%;
+
+  z-index:300;
 
   display:none;
 
   align-items:center;
   justify-content:center;
 
-  z-index:100;
+  background:rgba(0,0,0,.38);
 
-  pointer-events:none;
+  border-radius:22px;
+
+  overflow:hidden;
+
+  /*
+    This is the key fix.
+    The phone rotates +90°.
+    The app rotates -90° so it is upright.
+  */
+  transform:rotate(-90deg);
+  transform-origin:center center;
 }
 
 #overlay.open{
   display:flex;
 }
 
-#app-window{
-  position:absolute;
+/* =========================================================
+   APP WINDOW
+   ========================================================= */
 
-  /*
-    APP IS INSIDE THE PHONE SCREEN.
-  */
-  left:34%;
-  top:23%;
-
-  width:32%;
-  height:55%;
-
-  overflow:hidden;
+#app{
+  width:94%;
+  height:94%;
 
   background:#f4f5f7;
-
   color:#111;
 
-  border-radius:18px;
-
-  border:3px solid rgba(0,0,0,.55);
-
-  box-shadow:
-    0 10px 35px rgba(0,0,0,.55),
-    inset 0 0 0 1px rgba(255,255,255,.5);
+  border:2px solid #333;
+  border-radius:17px;
 
   display:flex;
   flex-direction:column;
 
-  pointer-events:auto;
+  overflow:hidden;
 
-  z-index:200;
+  box-shadow:
+    0 10px 30px rgba(0,0,0,.35);
+
+  animation:appOpen .22s ease-out;
+}
+
+@keyframes appOpen{
+  from{
+    opacity:0;
+    transform:scale(.88);
+  }
+
+  to{
+    opacity:1;
+    transform:scale(1);
+  }
 }
 
 /* =========================================================
    APP HEADER
    ========================================================= */
 
-.window-header{
-  flex:0 0 auto;
+.head{
+  height:44px;
+  flex:none;
 
   display:flex;
   align-items:center;
-
   gap:8px;
 
-  padding:8px;
+  padding:5px 8px;
 
-  background:linear-gradient(#ffffff,#dddddf);
+  background:
+    linear-gradient(#fff,#e5e5e5);
 
-  border-bottom:1px solid #aaa;
-
-  font-size:13px;
+  border-bottom:1px solid #bbb;
 
   font-weight:900;
+  font-size:16px;
 }
 
-.back{
-  width:28px;
-  height:28px;
-
-  flex:0 0 auto;
+.head button{
+  width:31px;
+  height:31px;
 
   border-radius:50%;
 
   border:1px solid #aaa;
 
-  background:linear-gradient(#fff,#ddd);
+  background:
+    linear-gradient(#fff,#ddd);
+
+  font-size:20px;
 
   cursor:pointer;
-
-  font-size:18px;
 }
 
 /* =========================================================
-   APP BODY
+   APP CONTENT
    ========================================================= */
 
-.window-body{
-  flex:1 1 auto;
+.body{
+  flex:1;
 
-  min-height:0;
-
-  overflow-y:auto;
-
-  -webkit-overflow-scrolling:touch;
+  overflow:auto;
 
   padding:10px;
+
+  -webkit-overflow-scrolling:touch;
 }
 
-.button{
-  padding:8px 11px;
-
-  border-radius:10px;
-
+.body button{
   border:1px solid #aaa;
 
-  background:linear-gradient(#fff,#ddd);
+  border-radius:9px;
+
+  background:
+    linear-gradient(#fff,#ddd);
+
+  padding:8px;
 
   font-weight:700;
 
   cursor:pointer;
 }
 
-.row{
-  display:flex;
-  gap:7px;
+.body button:active{
+  transform:scale(.96);
 }
 
-.bubble{
-  padding:8px 10px;
-
-  width:max-content;
-
-  max-width:82%;
-
-  background:#dedfe3;
-
-  border-radius:15px;
-
-  margin-bottom:6px;
-
-  font-size:13px;
-}
-
-.bubble.me{
-  margin-left:auto;
-
-  background:linear-gradient(#58b9ff,#1389df);
-
-  color:#fff;
-}
-
-input,
-textarea{
-  font-size:14px;
+.body input,
+.body textarea{
+  font-size:16px;
 
   padding:8px;
 
   border:1px solid #aaa;
 
-  border-radius:10px;
+  border-radius:9px;
 
   outline:none;
 
-  width:100%;
+  font-family:Arial,sans-serif;
 }
 
-textarea{
-  min-height:100px;
+.body textarea{
+  width:100%;
+  min-height:110px;
+  resize:none;
+}
+
+.row{
+  display:flex;
+  gap:6px;
+}
+
+.bubble{
+  background:#ddd;
+
+  border-radius:15px;
+
+  padding:8px 10px;
+
+  margin-bottom:6px;
+
+  width:max-content;
+  max-width:85%;
+}
+
+.me{
+  margin-left:auto;
+
+  background:#168ee8;
+
+  color:#fff;
 }
 
 .photos{
@@ -586,15 +592,17 @@ textarea{
 
   object-fit:cover;
 
-  border-radius:9px;
+  border-radius:7px;
 }
 
-.camera-video{
+.video{
   width:100%;
 
-  border-radius:12px;
-
   background:#000;
+
+  border-radius:10px;
+
+  display:block;
 }
 
 .stock{
@@ -602,512 +610,263 @@ textarea{
 
   justify-content:space-between;
 
-  padding:9px;
-
-  margin-bottom:6px;
+  align-items:center;
 
   background:#fff;
 
   border:1px solid #ddd;
 
+  border-radius:9px;
+
+  padding:8px;
+
+  margin-bottom:5px;
+}
+
+.big{
+  text-align:center;
+
+  font-size:42px;
+
+  font-weight:900;
+
+  padding:20px;
+}
+
+.map{
+  height:150px;
+
+  display:grid;
+
+  place-items:center;
+
   border-radius:10px;
 
-  font-size:12px;
+  background:
+    linear-gradient(
+      135deg,
+      #d8e8ca,
+      #e8dfb5
+    );
+
+  font-size:45px;
 }
 
 /* =========================================================
    CUSTOM KEYBOARD
+   It is also rotated back upright.
    ========================================================= */
 
-#pear-keyboard{
+#keyboard{
   position:absolute;
 
-  left:30%;
-  right:30%;
+  /*
+    Narrow/tall in the phone's rotated coordinate system.
+    After -90deg it becomes a normal horizontal keyboard.
+  */
+  left:38%;
+  top:25%;
 
-  bottom:14%;
+  width:24%;
+  height:52%;
 
   z-index:500;
 
   display:none;
 
-  padding:5px;
-
-  border-radius:12px;
-
-  background:rgba(25,25,28,.96);
-
-  box-shadow:0 8px 25px rgba(0,0,0,.6);
-
-  transition:
-    opacity .18s ease,
-    transform .18s ease;
-}
-
-#pear-keyboard.visible{
-  display:block;
-
-  animation:keyboardIn .18s ease;
-}
-
-@keyframes keyboardIn{
-  from{
-    opacity:0;
-    transform:translateY(15px) scale(.96);
-  }
-
-  to{
-    opacity:1;
-    transform:translateY(0) scale(1);
-  }
-}
-
-.keyboard-row{
-  display:flex;
+  grid-template-columns:repeat(10,1fr);
 
   gap:3px;
 
-  margin-bottom:3px;
+  padding:6px;
+
+  background:rgba(32,35,41,.96);
+
+  border-radius:13px;
+
+  transform:
+    rotate(-90deg)
+    translateZ(0);
+
+  transform-origin:center center;
+
+  transition:
+    opacity .22s ease,
+    transform .22s ease;
+
+  opacity:0;
 }
 
-.keyboard-key{
-  flex:1;
+#keyboard.show{
+  display:grid;
 
+  opacity:1;
+
+  transform:
+    rotate(-90deg)
+    translateZ(0);
+}
+
+#keyboard button{
   min-width:0;
 
-  height:25px;
+  height:26px;
 
   border:0;
 
   border-radius:5px;
 
-  background:#444;
-
-  color:#fff;
-
   font-size:9px;
 
-  font-weight:700;
+  font-weight:800;
+
+  background:#f5f5f5;
+
+  color:#111;
 
   cursor:pointer;
-
-  padding:0;
 }
 
-.keyboard-key:active{
-  background:#777;
-
-  transform:scale(.94);
+#keyboard button:active{
+  transform:scale(.9);
+  background:#ccc;
 }
 
-.keyboard-wide{
-  flex:2;
+#keyboard .space{
+  grid-column:span 5;
+}
+
+#keyboard .wide{
+  grid-column:span 2;
 }
 
 /* =========================================================
-   PAGE TRANSITION
+   CAMERA FLASH
    ========================================================= */
 
-#page-transition{
-  position:fixed;
+#flash{
+  position:absolute;
 
   inset:0;
 
-  z-index:9999;
+  z-index:600;
 
   pointer-events:none;
 
   opacity:0;
 
-  background:rgba(255,255,255,.75);
-
-  transform:scale(.95);
-
-  transition:
-    opacity .22s ease,
-    transform .22s ease;
+  background:
+    radial-gradient(
+      circle,
+      rgba(255,255,255,.95),
+      rgba(38,125,255,.3),
+      transparent 70%
+    );
 }
 
-#page-transition.active{
-  opacity:1;
+#flash.go{
+  animation:flash .4s ease;
+}
 
-  transform:scale(1);
+@keyframes flash{
+  0%{
+    opacity:0;
+    transform:scale(.7);
+  }
+
+  35%{
+    opacity:1;
+  }
+
+  100%{
+    opacity:0;
+    transform:scale(1.15);
+  }
 }
 
 /* =========================================================
-   ERROR MESSAGE
+   SMALLER SCREENS
+   Still stays zoomed in.
    ========================================================= */
 
-#asset-error{
-  position:fixed;
-
-  left:50%;
-  top:50%;
-
-  transform:translate(-50%,-50%);
-
-  z-index:10000;
-
-  display:none;
-
-  width:min(90vw,500px);
-
-  padding:20px;
-
-  background:#fff;
-
-  border:2px solid #222;
-
-  border-radius:15px;
-
-  box-shadow:0 10px 30px rgba(0,0,0,.3);
-
-  text-align:center;
-
-  font-family:Arial,sans-serif;
+@media(max-width:700px){
+  #phone{
+    width:min(96vw,96vh,820px);
+  }
 }
 
-#asset-error strong{
-  display:block;
-
-  font-size:20px;
-
-  margin-bottom:10px;
+@media(max-height:650px){
+  #phone{
+    width:min(96vw,96vh,780px);
+  }
 }
 </style>
 </head>
 
 <body>
 
-<div id="phone-stage">
+<div id="phone" class="page-one">
 
-  <div id="phone-container">
+  <!-- PAGE 1 -->
+  <div id="page1" class="page">
 
-    <!-- EXACT PAGE 2 IMAGE -->
-    <img
-      id="page2-image"
-      src="./page2.png"
-      alt=""
-    >
-
-    <!-- PAGE 1 -->
-
-    <button class="hotspot" id="messages" data-app="messages" aria-label="Messages"></button>
-
-    <button class="hotspot" id="camera" data-app="camera" aria-label="Camera"></button>
-
-    <button class="hotspot" id="splashface" data-app="splashface" aria-label="SplashFace"></button>
-
-    <button class="hotspot" id="stocks" data-app="stocks" aria-label="Stocks"></button>
-
-    <button class="hotspot" id="maps" data-app="maps" aria-label="Maps"></button>
-
-    <button class="hotspot" id="photos" data-app="photos" aria-label="Photos"></button>
-
-    <button class="hotspot" id="weather" data-app="weather" aria-label="Weather"></button>
-
-    <button class="hotspot" id="notes" data-app="notes" aria-label="Notes"></button>
-
-    <button class="hotspot" id="peartunes" data-app="peartunes" aria-label="PearTunes"></button>
-
-    <button class="hotspot" id="settings" data-app="settings" aria-label="Settings"></button>
-
-    <button class="hotspot" id="clock" data-app="clock" aria-label="Clock"></button>
-
-    <button class="hotspot" id="videos" data-app="videos" aria-label="Videos"></button>
-
-    <button class="hotspot" id="phone" data-app="phone" aria-label="Phone"></button>
-
-    <button class="hotspot" id="mail" data-app="mail" aria-label="Mail"></button>
-
-    <button class="hotspot" id="compass" data-app="compass" aria-label="Compass"></button>
-
-    <button class="hotspot" id="music" data-app="music" aria-label="Music"></button>
-
-
-    <!-- PAGE 2 -->
-
-    <button class="page2-hotspot" id="p2-app1" data-app="messages"></button>
-    <button class="page2-hotspot" id="p2-app2" data-app="camera"></button>
-    <button class="page2-hotspot" id="p2-app3" data-app="photos"></button>
-
-    <button class="page2-hotspot" id="p2-app4" data-app="notes"></button>
-    <button class="page2-hotspot" id="p2-app5" data-app="weather"></button>
-    <button class="page2-hotspot" id="p2-app6" data-app="maps"></button>
-
-    <button class="page2-hotspot" id="p2-app7" data-app="stocks"></button>
-    <button class="page2-hotspot" id="p2-app8" data-app="clock"></button>
-    <button class="page2-hotspot" id="p2-app9" data-app="settings"></button>
-
-    <button class="page2-hotspot" id="p2-app10" data-app="music"></button>
-    <button class="page2-hotspot" id="p2-app11" data-app="videos"></button>
-    <button class="page2-hotspot" id="p2-app12" data-app="phone"></button>
-
-
-    <!-- HOME BUTTON -->
-
-    <button id="home" aria-label="Home"></button>
+    <button class="hotspot" data-app="messages"></button>
+    <button class="hotspot" data-app="camera"></button>
+    <button class="hotspot" data-app="splashface"></button>
+    <button class="hotspot" data-app="stocks"></button>
+    <button class="hotspot" data-app="maps"></button>
+    <button class="hotspot" data-app="photos"></button>
+    <button class="hotspot" data-app="weather"></button>
+    <button class="hotspot" data-app="notes"></button>
+    <button class="hotspot" data-app="peartunes"></button>
+    <button class="hotspot" data-app="settings"></button>
+    <button class="hotspot" data-app="clock"></button>
+    <button class="hotspot" data-app="videos"></button>
+    <button class="hotspot" data-app="phone"></button>
+    <button class="hotspot" data-app="mail"></button>
+    <button class="hotspot" data-app="compass"></button>
+    <button class="hotspot" data-app="music"></button>
 
   </div>
 
+  <!-- PAGE 2 -->
+  <div id="page2" class="page">
+
+    <button class="p2" data-app="messages"></button>
+    <button class="p2" data-app="camera"></button>
+    <button class="p2" data-app="photos"></button>
+
+    <button class="p2" data-app="weather"></button>
+    <button class="p2" data-app="maps"></button>
+    <button class="p2" data-app="videos"></button>
+
+    <button class="p2" data-app="music"></button>
+    <button class="p2" data-app="notes"></button>
+    <button class="p2" data-app="settings"></button>
+
+    <button class="p2" data-app="clock"></button>
+    <button class="p2" data-app="phone"></button>
+    <button class="p2" data-app="mail"></button>
+
+  </div>
+
+  <!-- HOME BUTTON -->
+  <button id="home" aria-label="Home"></button>
 
   <!-- APP WINDOW -->
-
   <div id="overlay">
-    <div id="app-window"></div>
+    <div id="app"></div>
   </div>
 
+  <!-- CUSTOM KEYBOARD -->
+  <div id="keyboard"></div>
 
-  <!-- KEYBOARD -->
-
-  <div id="pear-keyboard">
-
-    <div class="keyboard-row">
-      <button class="keyboard-key">Q</button>
-      <button class="keyboard-key">W</button>
-      <button class="keyboard-key">E</button>
-      <button class="keyboard-key">R</button>
-      <button class="keyboard-key">T</button>
-      <button class="keyboard-key">Y</button>
-      <button class="keyboard-key">U</button>
-      <button class="keyboard-key">I</button>
-      <button class="keyboard-key">O</button>
-      <button class="keyboard-key">P</button>
-    </div>
-
-    <div class="keyboard-row">
-      <button class="keyboard-key">A</button>
-      <button class="keyboard-key">S</button>
-      <button class="keyboard-key">D</button>
-      <button class="keyboard-key">F</button>
-      <button class="keyboard-key">G</button>
-      <button class="keyboard-key">H</button>
-      <button class="keyboard-key">J</button>
-      <button class="keyboard-key">K</button>
-      <button class="keyboard-key">L</button>
-    </div>
-
-    <div class="keyboard-row">
-      <button class="keyboard-key">Z</button>
-      <button class="keyboard-key">X</button>
-      <button class="keyboard-key">C</button>
-      <button class="keyboard-key">V</button>
-      <button class="keyboard-key">B</button>
-      <button class="keyboard-key">N</button>
-      <button class="keyboard-key">M</button>
-      <button class="keyboard-key">⌫</button>
-    </div>
-
-    <div class="keyboard-row">
-      <button class="keyboard-key keyboard-wide">SPACE</button>
-      <button class="keyboard-key">↵</button>
-    </div>
-
-  </div>
+  <!-- CAMERA FLASH -->
+  <div id="flash"></div>
 
 </div>
 
-
-<div id="page-transition"></div>
-
-<div id="asset-error">
-  <strong>Pear Phone image missing</strong>
-  GitHub Pages cannot find <b>pear-phone.jpg</b>.<br><br>
-  Make sure <b>pear-phone.jpg</b> is in the same folder as <b>index.html</b>.
-</div>
-
-
-<script src="./app.js?v=20260920"></script>
-
-<script>
-
-/* =========================================================
-   IMAGE CHECK
-   ========================================================= */
-
-const phoneContainer =
-  document.getElementById("phone-container");
-
-const phoneImage =
-  new Image();
-
-phoneImage.onload = function(){
-
-  phoneContainer.classList.add("loaded");
-
-};
-
-phoneImage.onerror = function(){
-
-  document.getElementById("asset-error").style.display="block";
-
-};
-
-phoneImage.src="./pear-phone.jpg";
-
-
-/* =========================================================
-   PAGE SYSTEM
-   ========================================================= */
-
-let currentPage=1;
-
-let startY=0;
-let startX=0;
-
-function changePage(page){
-
-  if(page===currentPage) return;
-
-  const transition =
-    document.getElementById("page-transition");
-
-  transition.classList.add("active");
-
-  setTimeout(()=>{
-
-    currentPage=page;
-
-    if(page===2){
-
-      phoneContainer.classList.add("page-two");
-
-    }else{
-
-      phoneContainer.classList.remove("page-two");
-
-    }
-
-    setTimeout(()=>{
-
-      transition.classList.remove("active");
-
-    },100);
-
-  },150);
-}
-
-
-/* =========================================================
-   TOUCH SWIPE
-   ========================================================= */
-
-phoneContainer.addEventListener(
-  "touchstart",
-  function(e){
-
-    if(e.touches.length!==1) return;
-
-    startX=e.touches[0].clientX;
-    startY=e.touches[0].clientY;
-
-  },
-  {passive:true}
-);
-
-
-phoneContainer.addEventListener(
-  "touchend",
-  function(e){
-
-    if(e.changedTouches.length!==1) return;
-
-    const endX=e.changedTouches[0].clientX;
-    const endY=e.changedTouches[0].clientY;
-
-    const dy=endY-startY;
-    const dx=endX-startX;
-
-    if(Math.abs(dy)<45) return;
-
-    if(Math.abs(dy)<Math.abs(dx)) return;
-
-    if(dy<0){
-
-      changePage(2);
-
-    }else{
-
-      changePage(1);
-
-    }
-
-  },
-  {passive:true}
-);
-
-
-/* =========================================================
-   MOUSE / TRACKPAD DRAG
-   ========================================================= */
-
-let mouseDown=false;
-
-phoneContainer.addEventListener(
-  "mousedown",
-  function(e){
-
-    mouseDown=true;
-
-    startX=e.clientX;
-    startY=e.clientY;
-
-  }
-);
-
-window.addEventListener(
-  "mouseup",
-  function(e){
-
-    if(!mouseDown) return;
-
-    mouseDown=false;
-
-    const dx=e.clientX-startX;
-    const dy=e.clientY-startY;
-
-    if(Math.abs(dy)<45) return;
-
-    if(Math.abs(dy)<Math.abs(dx)) return;
-
-    if(dy<0){
-
-      changePage(2);
-
-    }else{
-
-      changePage(1);
-
-    }
-
-  }
-);
-
-
-/* =========================================================
-   KEYBOARD
-   ========================================================= */
-
-window.addEventListener(
-  "keydown",
-  function(e){
-
-    if(e.key==="ArrowUp"){
-
-      changePage(2);
-
-    }
-
-    if(e.key==="ArrowDown"){
-
-      changePage(1);
-
-    }
-
-  }
-);
-
-</script>
+<script src="app.js?v=20260920-fixed"></script>
 
 </body>
 </html>

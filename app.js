@@ -1,143 +1,169 @@
 (()=>{
-const P=document.getElementById('phone'),
-O=document.getElementById('overlay'),
-A=document.getElementById('app'),
-K=document.getElementById('keyboard'),
-F=document.getElementById('flash'),
-p1=document.getElementById('page1'),
-p2=document.getElementById('page2');
+const P=document.getElementById('phone');
+const O=document.getElementById('overlay');
+const A=document.getElementById('app');
+const K=document.getElementById('keyboard');
+const p1=document.getElementById('page1');
+const p2=document.getElementById('page2');
 
-let sy=null;
 let target=null;
 let stream=null;
 let timer=null;
 let currentPage=1;
 
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({
-'&':'&amp;',
-'<':'&lt;',
-'>':'&gt;',
-'"':'&quot;',
-"'":'&#39;'
+  '&':'&amp;',
+  '<':'&lt;',
+  '>':'&gt;',
+  '"':'&quot;',
+  "'":'&#39;'
 }[c]));
 
-/* CLOSE APP */
+
+/* =========================
+   CLOSE APP
+========================= */
 
 function close(){
 
- if(stream){
-   stream.getTracks().forEach(t=>t.stop());
-   stream=null;
- }
+  if(stream){
+    stream.getTracks().forEach(t=>t.stop());
+    stream=null;
+  }
 
- clearInterval(timer);
+  clearInterval(timer);
+  timer=null;
 
- K.classList.remove('show');
+  K.classList.remove('show');
 
- target=null;
+  target=null;
 
- O.classList.remove('open');
+  O.classList.remove('open');
 
- A.innerHTML='';
+  A.innerHTML='';
 }
 
 
-/* CREATE APP WINDOW */
+/* =========================
+   OPEN APP WINDOW
+========================= */
 
-function win(t,h){
+function win(title,html){
 
- close();
+  close();
 
- A.innerHTML=`
- <div class="head">
-   <button id="back">‹</button>
-   <span>${esc(t)}</span>
- </div>
+  A.innerHTML=`
+    <div class="head">
+      <button id="back">‹</button>
+      <span>${esc(title)}</span>
+    </div>
 
- <div class="body">
-   ${h}
- </div>
- `;
+    <div class="body">
+      ${html}
+    </div>
+  `;
 
- O.classList.add('open');
+  O.classList.add('open');
 
- const back=document.getElementById('back');
+  const back=document.getElementById('back');
 
- if(back)
-   back.onclick=close;
+  if(back){
+    back.onclick=e=>{
+      e.preventDefault();
+      e.stopPropagation();
+      close();
+    };
+  }
 
- wire();
+  wire();
 }
 
 
-function simple(t,h){
- win(t,h);
+function simple(title,html){
+  win(title,html);
 }
 
 
-/* APP LAUNCHER */
+/* =========================
+   APP LAUNCHER
+========================= */
 
 function launch(id){
 
- switch(id){
+  switch(id){
 
-   case'messages':
-     return messages();
+    case 'messages':
+      messages();
+      break;
 
-   case'camera':
-     return camera();
+    case 'camera':
+      camera();
+      break;
 
-   case'photos':
-     return photos();
+    case 'photos':
+      photos();
+      break;
 
-   case'notes':
-     return notes();
+    case 'notes':
+      notes();
+      break;
 
-   case'stocks':
-     return stocks();
+    case 'stocks':
+      stocks();
+      break;
 
-   case'maps':
-     return maps();
+    case 'maps':
+      maps();
+      break;
 
-   case'weather':
-     return weather();
+    case 'weather':
+      weather();
+      break;
 
-   case'clock':
-     return clock();
+    case 'clock':
+      clock();
+      break;
 
-   case'settings':
-     return settings();
+    case 'settings':
+      settings();
+      break;
 
-   case'peartunes':
-   case'music':
-     return music();
+    case 'peartunes':
+    case 'music':
+      music();
+      break;
 
-   case'phone':
-     return phone();
+    case 'phone':
+      phone();
+      break;
 
-   case'mail':
-     return mail();
+    case 'mail':
+      mail();
+      break;
 
-   case'compass':
-     return compass();
+    case 'compass':
+      compass();
+      break;
 
-   case'splashface':
-     return splashface();
+    case 'splashface':
+      splashface();
+      break;
 
-   case'videos':
-     return videos();
+    case 'videos':
+      videos();
+      break;
 
-   default:
-     return simple(
-       'Pear OS',
-       `
-       <div class="big">🍐</div>
-       <p style="text-align:center">
-         ${esc(id)} opened.
-       </p>
-       `
-     );
- }
+    default:
+      simple(
+        'Pear OS',
+        `
+        <div class="big">🍐</div>
+        <p style="text-align:center">
+          ${esc(id)} opened.
+        </p>
+        `
+      );
+  }
 }
 
 
@@ -147,98 +173,105 @@ function launch(id){
 
 function messages(){
 
- let s=JSON.parse(
-   localStorage.pearMessages||'[]'
- );
+  let saved=localStorage.getItem('pearMessages');
 
- win('Messages',`
+  let list=saved ? JSON.parse(saved) : [];
 
- <div id="chat">
+  win('Messages',`
 
-   <div class="bubble">
-     Hey 👋
-   </div>
+    <div id="chat">
 
-   <div class="bubble">
-     Welcome to Pear Phone.
-   </div>
+      <div class="bubble">
+        Hey 👋
+      </div>
 
-   ${s.map(x=>`
-     <div class="bubble me">
-       ${esc(x)}
-     </div>
-   `).join('')}
+      <div class="bubble">
+        Welcome to Pear Phone.
+      </div>
 
- </div>
+      ${
+        list.map(x=>`
+          <div class="bubble me">
+            ${esc(x)}
+          </div>
+        `).join('')
+      }
 
- <div class="row">
+    </div>
 
-   <input
-     id="mi"
-     style="flex:1"
-     placeholder="Message">
+    <div class="row">
 
-   <button id="send">
-     Send
-   </button>
+      <input
+        id="mi"
+        style="flex:1"
+        placeholder="Message">
 
- </div>
+      <button id="send">
+        Send
+      </button>
 
- <div style="margin-top:7px">
+    </div>
 
-   <button id="clearChat">
-     Clear
-   </button>
+    <div style="margin-top:6px">
 
-   <button id="autoReply">
-     Auto Reply
-   </button>
+      <button id="autoReply">
+        Auto Reply
+      </button>
 
- </div>
+      <button id="clearChat">
+        Clear
+      </button>
 
- `);
+    </div>
 
- const input=document.getElementById('mi');
+  `);
 
- document.getElementById('send').onclick=()=>{
+  const input=document.getElementById('mi');
 
-   const v=input.value.trim();
+  document.getElementById('send').onclick=()=>{
 
-   if(!v)return;
+    const value=input.value.trim();
 
-   s.push(v);
+    if(!value)return;
 
-   localStorage.pearMessages=
-     JSON.stringify(s.slice(-50));
+    list.push(value);
 
-   messages();
- };
+    localStorage.setItem(
+      'pearMessages',
+      JSON.stringify(list.slice(-50))
+    );
 
- input.onkeydown=e=>{
+    messages();
+  };
 
-   if(e.key==='Enter')
-     document.getElementById('send').click();
+  input.onkeydown=e=>{
+    if(e.key==='Enter'){
+      document.getElementById('send').click();
+    }
+  };
 
- };
+  document.getElementById('autoReply').onclick=()=>{
 
- document.getElementById('clearChat').onclick=()=>{
+    list.push(
+      'PearBot: Got your message! 🍐'
+    );
 
-   localStorage.removeItem('pearMessages');
+    localStorage.setItem(
+      'pearMessages',
+      JSON.stringify(list.slice(-50))
+    );
 
-   messages();
+    messages();
+  };
 
- };
+  document.getElementById('clearChat').onclick=()=>{
 
- document.getElementById('autoReply').onclick=()=>{
+    localStorage.removeItem(
+      'pearMessages'
+    );
 
-   s.push('PearBot: Got your message! 🍐');
-
-   localStorage.pearMessages=
-     JSON.stringify(s.slice(-50));
-
-   messages();
-
- };
+    messages();
+  };
 }
 
 
@@ -248,152 +281,149 @@ function messages(){
 
 async function camera(){
 
- win('Camera',`
+  win('Camera',`
 
- <video
-   id="vid"
-   class="video"
-   autoplay
-   playsinline>
- </video>
+    <video
+      id="vid"
+      class="video"
+      autoplay
+      playsinline>
+    </video>
 
- <div class="row" style="margin-top:5px">
+    <div class="row" style="margin-top:5px">
 
-   <button id="start">
-     Start
-   </button>
+      <button id="start">
+        Start Camera
+      </button>
 
-   <button id="snap">
-     Take Photo
-   </button>
+      <button id="snap">
+        Take Photo
+      </button>
 
- </div>
+    </div>
 
- <p
-   id="cs"
-   style="font-size:10px;color:#666">
-   Starting camera…
- </p>
+    <p
+      id="cs"
+      style="font-size:10px;color:#666">
+      Starting camera…
+    </p>
 
- <canvas id="cv" hidden></canvas>
+    <canvas id="cv" hidden></canvas>
 
- <img
-   id="pic"
-   style="
-     display:none;
-     width:100%;
-     margin-top:5px;
-     border-radius:7px">
+    <img
+      id="pic"
+      style="
+        display:none;
+        width:100%;
+        margin-top:5px;
+        border-radius:7px">
 
- `);
+  `);
 
- document.getElementById('start').onclick=startCam;
+  document.getElementById('start').onclick=startCam;
 
- document.getElementById('snap').onclick=snap;
+  document.getElementById('snap').onclick=snap;
 
- await startCam();
+  await startCam();
 }
 
 
 async function startCam(){
 
- const v=document.getElementById('vid');
+  const video=document.getElementById('vid');
+  const status=document.getElementById('cs');
 
- const s=document.getElementById('cs');
+  if(!video)return;
 
- if(!v)return;
+  if(!navigator.mediaDevices ||
+     !navigator.mediaDevices.getUserMedia){
 
- if(!navigator.mediaDevices?.getUserMedia){
+    status.textContent=
+      'Camera unavailable.';
 
-   s.textContent=
-     'Camera unavailable.';
+    return;
+  }
 
-   return;
- }
+  try{
 
- try{
+    if(stream){
+      stream.getTracks().forEach(t=>t.stop());
+    }
 
-   if(stream){
+    stream=
+      await navigator.mediaDevices.getUserMedia({
+        video:{
+          facingMode:{
+            ideal:'environment'
+          }
+        },
+        audio:false
+      });
 
-     stream
-       .getTracks()
-       .forEach(t=>t.stop());
+    video.srcObject=stream;
 
-   }
+    await video.play();
 
-   stream=
-     await navigator.mediaDevices.getUserMedia({
-       video:{
-         facingMode:{
-           ideal:'environment'
-         }
-       },
-       audio:false
-     });
+    status.textContent=
+      'Camera connected ✓';
 
-   v.srcObject=stream;
+  }catch(error){
 
-   await v.play();
+    console.error(error);
 
-   s.textContent=
-     'Camera connected ✓';
+    status.textContent=
+      'Camera permission/device error.';
 
- }catch(e){
-
-   console.error(e);
-
-   s.textContent=
-     'Camera permission/device error.';
-
- }
+  }
 }
 
 
 function snap(){
 
- const v=document.getElementById('vid');
+  const video=document.getElementById('vid');
+  const canvas=document.getElementById('cv');
+  const image=document.getElementById('pic');
 
- const c=document.getElementById('cv');
+  if(!video || !video.videoWidth){
 
- const im=document.getElementById('pic');
+    alert(
+      'Start the camera first.'
+    );
 
- if(!v?.videoWidth){
+    return;
+  }
 
-   alert(
-     'Start the camera first.'
-   );
+  canvas.width=video.videoWidth;
+  canvas.height=video.videoHeight;
 
-   return;
- }
+  canvas
+    .getContext('2d')
+    .drawImage(
+      video,
+      0,
+      0
+    );
 
- c.width=v.videoWidth;
+  const data=
+    canvas.toDataURL(
+      'image/jpeg',
+      .9
+    );
 
- c.height=v.videoHeight;
+  image.src=data;
+  image.style.display='block';
 
- c.getContext('2d')
-   .drawImage(v,0,0);
+  let photosSaved=
+    JSON.parse(
+      localStorage.pearPhotos || '[]'
+    );
 
- const d=
-   c.toDataURL(
-     'image/jpeg',
-     .9
-   );
+  photosSaved.unshift(data);
 
- im.src=d;
-
- im.style.display='block';
-
- let a=
-   JSON.parse(
-     localStorage.pearPhotos||'[]'
-   );
-
- a.unshift(d);
-
- localStorage.pearPhotos=
-   JSON.stringify(
-     a.slice(0,24)
-   );
+  localStorage.pearPhotos=
+    JSON.stringify(
+      photosSaved.slice(0,24)
+    );
 }
 
 
@@ -403,93 +433,96 @@ function snap(){
 
 function photos(){
 
- let a=
-   JSON.parse(
-     localStorage.pearPhotos||'[]'
-   );
+  let list=
+    JSON.parse(
+      localStorage.pearPhotos || '[]'
+    );
 
- win('Photos',`
+  win('Photos',`
 
- <input
-   id="imp"
-   type="file"
-   accept="image/*"
-   multiple>
+    <input
+      id="imp"
+      type="file"
+      accept="image/*"
+      multiple>
 
- <div style="height:5px"></div>
+    <div style="height:5px"></div>
 
- <div class="photos">
+    <div class="photos">
 
- ${
-   a.length
+      ${
+        list.length
 
-   ?
+        ?
 
-   a.map(x=>`
-     <img src="${x}">
-   `).join('')
+        list.map(image=>`
+          <img src="${image}">
+        `).join('')
 
-   :
+        :
 
-   `
-   <p style="
-     grid-column:1/-1;
-     text-align:center">
-     No photos yet.
-   </p>
-   `
- }
+        `
+        <p style="
+          grid-column:1/-1;
+          text-align:center">
+          No photos yet.
+        </p>
+        `
+      }
 
- </div>
+    </div>
 
- <div style="margin-top:7px">
+    <div style="margin-top:6px">
 
-   <button id="clearPhotos">
-     Clear Photos
-   </button>
+      <button id="clearPhotos">
+        Clear Photos
+      </button>
 
- </div>
+    </div>
 
- `);
+  `);
 
- document.getElementById('imp').onchange=
- async e=>{
+  document.getElementById('imp').onchange=
+  async event=>{
 
-   let n=[];
+    const files=event.target.files;
 
-   for(const f of e.target.files){
+    let imported=[];
 
-     n.push(
-       await new Promise(r=>{
+    for(const file of files){
 
-         let q=new FileReader;
+      imported.push(
+        await new Promise(resolve=>{
 
-         q.onload=()=>r(q.result);
+          const reader=
+            new FileReader();
 
-         q.readAsDataURL(f);
+          reader.onload=()=>{
+            resolve(reader.result);
+          };
 
-       })
-     );
-   }
+          reader.readAsDataURL(file);
 
-   localStorage.pearPhotos=
-     JSON.stringify(
-       [...n,...a].slice(0,24)
-     );
+        })
+      );
+    }
 
-   photos();
- };
+    localStorage.pearPhotos=
+      JSON.stringify(
+        [...imported,...list].slice(0,24)
+      );
 
- document.getElementById(
-   'clearPhotos'
- ).onclick=()=>{
+    photos();
+  };
 
-   localStorage.removeItem(
-     'pearPhotos'
-   );
+  document.getElementById('clearPhotos').onclick=()=>{
 
-   photos();
- };
+    localStorage.removeItem(
+      'pearPhotos'
+    );
+
+    photos();
+  };
 }
 
 
@@ -499,127 +532,114 @@ function photos(){
 
 function notes(){
 
- let a=
-   JSON.parse(
-     localStorage.pearNotes||'[]'
-   );
+  let list=
+    JSON.parse(
+      localStorage.pearNotes || '[]'
+    );
 
- win('Notes',`
+  win('Notes',`
 
- <div id="notesList">
+    <div>
 
- ${
-   a.map((n,i)=>`
+      ${
+        list.map((note,index)=>`
 
-   <div
-     class="stock"
-     data-n="${i}">
+          <div
+            class="stock"
+            data-note="${index}">
 
-     <b>
-       ${esc(n.t)}
-     </b>
+            <b>
+              ${esc(note.t)}
+            </b>
 
-     <span>
-       ${esc(n.b.slice(0,35))}
-     </span>
+            <span>
+              ${esc(
+                note.b.slice(0,35)
+              )}
+            </span>
 
-   </div>
+          </div>
 
-   `).join('')
- }
+        `).join('')
+      }
 
- </div>
+    </div>
 
- <input
-   id="nt"
-   style="
-     width:100%;
-     margin-bottom:4px"
-   placeholder="Title">
+    <input
+      id="nt"
+      style="
+        width:100%;
+        margin-bottom:4px"
+      placeholder="Title">
 
- <textarea
-   id="nb"
-   placeholder="Write your note…">
- </textarea>
+    <textarea
+      id="nb"
+      placeholder="Write your note...">
+    </textarea>
 
- <div style="margin-top:4px">
+    <div style="margin-top:4px">
 
-   <button id="save">
-     Save Note
-   </button>
+      <button id="saveNote">
+        Save Note
+      </button>
 
-   <button id="newNote">
-     New
-   </button>
+      <button id="newNote">
+        New
+      </button>
 
- </div>
+    </div>
 
- `);
+  `);
 
- document
-   .querySelectorAll('[data-n]')
-   .forEach(x=>{
+  document
+    .querySelectorAll('[data-note]')
+    .forEach(item=>{
 
-     x.onclick=()=>{
+      item.onclick=()=>{
 
-       let n=a[x.dataset.n];
+        const note=
+          list[
+            item.dataset.note
+          ];
 
-       document.getElementById(
-         'nt'
-       ).value=n.t;
+        document.getElementById('nt').value=
+          note.t;
 
-       document.getElementById(
-         'nb'
-       ).value=n.b;
+        document.getElementById('nb').value=
+          note.b;
+      };
 
-     };
+    });
 
-   });
+  document.getElementById('saveNote').onclick=()=>{
 
- document.getElementById(
-   'save'
- ).onclick=()=>{
+    const title=
+      document.getElementById('nt').value.trim()
+      ||'Untitled';
 
-   let t=
-     document.getElementById(
-       'nt'
-     ).value||'Untitled';
+    const body=
+      document.getElementById('nb').value;
 
-   let b=
-     document.getElementById(
-       'nb'
-     ).value||'';
+    list.unshift({
+      t:title,
+      b:body
+    });
 
-   a.unshift({
-     t:t,
-     b:b
-   });
+    localStorage.pearNotes=
+      JSON.stringify(
+        list.slice(0,50)
+      );
 
-   localStorage.pearNotes=
-     JSON.stringify(
-       a.slice(0,50)
-     );
+    notes();
+  };
 
-   notes();
- };
+  document.getElementById('newNote').onclick=()=>{
 
- document.getElementById(
-   'newNote'
- ).onclick=()=>{
+    document.getElementById('nt').value='';
+    document.getElementById('nb').value='';
 
-   document.getElementById(
-     'nt'
-   ).value='';
-
-   document.getElementById(
-     'nb'
-   ).value='';
-
-   document.getElementById(
-     'nt'
-   ).focus();
-
- };
+    document.getElementById('nt').focus();
+  };
 }
 
 
@@ -629,119 +649,62 @@ function notes(){
 
 function stocks(){
 
- let d=[
+  const data=[
+    ['AAPL','Apple','$229.87','+1.8%'],
+    ['MSFT','Microsoft','$532.44','+0.9%'],
+    ['TSLA','Tesla','$318.26','-1.2%'],
+    ['PEAR','Pear Inc.','$99.99','+4.2%']
+  ];
 
-   [
-     'AAPL',
-     'Apple',
-     '$229.87',
-     '+1.8%'
-   ],
+  win('Stocks',`
 
-   [
-     'MSFT',
-     'Microsoft',
-     '$532.44',
-     '+0.9%'
-   ],
+    <p>
+      <b>Market Watch</b>
+    </p>
 
-   [
-     'TSLA',
-     'Tesla',
-     '$318.26',
-     '-1.2%'
-   ],
+    ${
+      data.map(stock=>`
 
-   [
-     'PEAR',
-     'Pear Inc.',
-     '$99.99',
-     '+4.2%'
-   ]
+        <div class="stock">
 
- ];
+          <span>
 
- win('Stocks',`
+            <b>${stock[0]}</b>
 
- <p>
-   <b>Market Watch</b>
- </p>
+            <br>
 
- ${d.map(x=>`
+            <small>
+              ${stock[1]}
+            </small>
 
- <div class="stock">
+          </span>
 
-   <span>
+          <span>
 
-     <b>
-       ${x[0]}
-     </b>
+            <b>${stock[2]}</b>
 
-     <br>
+            <br>
 
-     <small>
-       ${x[1]}
-     </small>
+            <small>
+              ${stock[3]}
+            </small>
 
-   </span>
+          </span>
 
-   <span>
+        </div>
 
-     <b>
-       ${x[2]}
-     </b>
+      `).join('')
+    }
 
-     <br>
+    <button id="refreshStocks">
+      Refresh Prices
+    </button>
 
-     <small>
-       ${x[3]}
-     </small>
+  `);
 
-   </span>
-
- </div>
-
- `).join('')}
-
- <button id="refreshStocks">
-   Refresh Prices
- </button>
-
- <p
-   style="
-     font-size:10px;
-     color:#777">
-   Market simulator
- </p>
-
- `);
-
- document.getElementById(
-   'refreshStocks'
- ).onclick=()=>{
-
-   d=d.map(x=>{
-
-     let change=
-       (Math.random()*6-3);
-
-     let price=
-       parseFloat(
-         x[2].replace('$','')
-       )+change;
-
-     return[
-       x[0],
-       x[1],
-       '$'+price.toFixed(2),
-       (change>=0?'+':'')+
-       change.toFixed(2)+'%'
-     ];
-
-   });
-
-   stocks();
- };
+  document.getElementById('refreshStocks').onclick=()=>{
+    stocks();
+  };
 }
 
 
@@ -751,70 +714,63 @@ function stocks(){
 
 function maps(){
 
- win('Maps',`
+  win('Maps',`
 
- <div class="map">
-   📍
- </div>
+    <div class="map">
+      📍
+    </div>
 
- <h3
-   style="margin:5px 0">
-   Pear Park
- </h3>
+    <h3>
+      Pear Park
+    </h3>
 
- <p>
-   12 Pear Street · 5 min away
- </p>
+    <p>
+      12 Pear Street · 5 min away
+    </p>
 
- <button id="route">
-   Start Route
- </button>
+    <button id="route">
+      Start Route
+    </button>
 
- <button id="locate">
-   Find Me
- </button>
+    <button id="locate">
+      Find Me
+    </button>
 
- <p
-   id="mapStatus"
-   style="
-     font-size:10px;
-     color:#777">
-   Ready
- </p>
+    <p
+      id="mapStatus"
+      style="
+        font-size:10px;
+        color:#777">
+      Ready
+    </p>
 
- `);
+  `);
 
- document.getElementById(
-   'route'
- ).onclick=e=>{
+  document.getElementById('route').onclick=e=>{
 
-   e.target.textContent=
-     'Routing…';
+    e.target.textContent=
+      'Routing…';
 
-   setTimeout(()=>{
+    setTimeout(()=>{
 
-     e.target.textContent=
-       'Arrived ✓';
+      e.target.textContent=
+        'Arrived ✓';
 
-     document.getElementById(
-       'mapStatus'
-     ).textContent=
-       'You reached Pear Park.';
+      document.getElementById(
+        'mapStatus'
+      ).textContent=
+        'You reached Pear Park.';
 
-   },1000);
+    },1000);
+  };
 
- };
+  document.getElementById('locate').onclick=()=>{
 
- document.getElementById(
-   'locate'
- ).onclick=()=>{
-
-   document.getElementById(
-     'mapStatus'
-   ).textContent=
-     'Current location found ✓';
-
- };
+    document.getElementById(
+      'mapStatus'
+    ).textContent=
+      'Current location found ✓';
+  };
 }
 
 
@@ -824,49 +780,44 @@ function maps(){
 
 function weather(){
 
- win('Weather',`
+  win('Weather',`
 
- <div class="big">
-   ☀️
- </div>
+    <div class="big">
+      ☀️
+    </div>
 
- <h2
-   style="text-align:center;margin:0">
-   24°
- </h2>
+    <h2 style="text-align:center;margin:0">
+      24°
+    </h2>
 
- <p style="text-align:center">
-   Sunny · Feels like 25°
- </p>
+    <p style="text-align:center">
+      Sunny · Feels like 25°
+    </p>
 
- <div class="stock">
-   <span>Today</span>
-   <b>24°</b>
- </div>
+    <div class="stock">
+      <span>Today</span>
+      <b>24°</b>
+    </div>
 
- <div class="stock">
-   <span>Tomorrow</span>
-   <b>22° 🌤️</b>
- </div>
+    <div class="stock">
+      <span>Tomorrow</span>
+      <b>22° 🌤️</b>
+    </div>
 
- <div class="stock">
-   <span>Saturday</span>
-   <b>19° ☁️</b>
- </div>
+    <div class="stock">
+      <span>Saturday</span>
+      <b>19° ☁️</b>
+    </div>
 
- <button id="weatherRefresh">
-   Refresh Weather
- </button>
+    <button id="refreshWeather">
+      Refresh Weather
+    </button>
 
- `);
+  `);
 
- document.getElementById(
-   'weatherRefresh'
- ).onclick=()=>{
-
-   weather();
-
- };
+  document.getElementById(
+    'refreshWeather'
+  ).onclick=weather;
 }
 
 
@@ -876,92 +827,81 @@ function weather(){
 
 function clock(){
 
- win('Clock',`
+  win('Clock',`
 
- <div
-   id="ct"
-   class="big">
-   --:--:--
- </div>
+    <div
+      id="ct"
+      class="big">
+      --:--:--
+    </div>
 
- <p
-   style="
-     text-align:center;
-     color:#777">
-   Local time
- </p>
+    <p style="
+      text-align:center;
+      color:#777">
+      Local time
+    </p>
 
- <button id="alarm">
-   Set 10 Second Alarm
- </button>
+    <button id="alarm">
+      Set 10 Second Alarm
+    </button>
 
- <p
-   id="alarmStatus"
-   style="text-align:center;font-size:10px">
- </p>
+    <p
+      id="alarmStatus"
+      style="text-align:center;font-size:10px">
+    </p>
 
- `);
+  `);
 
- let f=()=>{
+  const update=()=>{
 
-   let e=
-     document.getElementById(
-       'ct'
-     );
+    const element=
+      document.getElementById('ct');
 
-   if(e){
+    if(element){
 
-     e.textContent=
-       new Date().toLocaleTimeString(
-         [],
-         {
-           hour:'numeric',
-           minute:'2-digit',
-           second:'2-digit'
-         }
-       );
+      element.textContent=
+        new Date().toLocaleTimeString(
+          [],
+          {
+            hour:'numeric',
+            minute:'2-digit',
+            second:'2-digit'
+          }
+        );
+    }
+  };
 
-   }
+  update();
 
- };
+  timer=setInterval(
+    update,
+    1000
+  );
 
- f();
+  document.getElementById('alarm').onclick=()=>{
 
- timer=setInterval(
-   f,
-   1000
- );
+    const status=
+      document.getElementById(
+        'alarmStatus'
+      );
 
- document.getElementById(
-   'alarm'
- ).onclick=()=>{
+    status.textContent=
+      'Alarm set! ⏰';
 
-   let s=
-     document.getElementById(
-       'alarmStatus'
-     );
+    setTimeout(()=>{
 
-   s.textContent=
-     'Alarm set! ⏰';
+      const current=
+        document.getElementById(
+          'alarmStatus'
+        );
 
-   setTimeout(()=>{
+      if(current){
+        current.textContent=
+          '⏰ Alarm!';
+      }
 
-     if(
-       document.getElementById(
-         'alarmStatus'
-       )
-     ){
-
-       document.getElementById(
-         'alarmStatus'
-       ).textContent=
-         '⏰ Alarm!';
-
-     }
-
-   },10000);
-
- };
+    },10000);
+  };
 }
 
 
@@ -971,94 +911,71 @@ function clock(){
 
 function settings(){
 
- win('Settings',`
+  win('Settings',`
 
- <label
-   style="
-     display:flex;
-     justify-content:space-between;
-     padding:8px 2px">
+    <label style="
+      display:flex;
+      justify-content:space-between;
+      padding:8px">
 
-   Dark app
+      Dark app
 
-   <input
-     id="dark"
-     type="checkbox">
+      <input
+        id="dark"
+        type="checkbox">
 
- </label>
+    </label>
 
- <label
-   style="
-     display:flex;
-     justify-content:space-between;
-     padding:8px 2px">
+    <label style="
+      display:flex;
+      justify-content:space-between;
+      padding:8px">
 
-   Sounds
+      Sounds
 
-   <input
-     id="sounds"
-     type="checkbox">
+      <input
+        id="sounds"
+        type="checkbox">
 
- </label>
+    </label>
 
- <button id="reset">
-   Reset Saved Data
- </button>
+    <button id="reset">
+      Reset Saved Data
+    </button>
 
- <p
-   style="
-     font-size:10px;
-     color:#777">
-   Pear Phone OS v1.0
- </p>
+    <p style="
+      font-size:10px;
+      color:#777">
+      Pear Phone OS v1.0
+    </p>
 
- `);
+  `);
 
- document.getElementById(
-   'dark'
- ).checked=
-   localStorage.pearDark==='1';
+  document.getElementById('dark').checked=
+    localStorage.pearDark==='1';
 
- document.getElementById(
-   'sounds'
- ).checked=
-   localStorage.pearSounds!=='0';
+  document.getElementById('sounds').checked=
+    localStorage.pearSounds!=='0';
 
- document.getElementById(
-   'dark'
- ).onchange=e=>{
+  document.getElementById('dark').onchange=e=>{
+    localStorage.pearDark=
+      e.target.checked?'1':'0';
+  };
 
-   localStorage.pearDark=
-     e.target.checked?'1':'0';
+  document.getElementById('sounds').onchange=e=>{
+    localStorage.pearSounds=
+      e.target.checked?'1':'0';
+  };
 
- };
+  document.getElementById('reset').onclick=()=>{
 
- document.getElementById(
-   'sounds'
- ).onchange=e=>{
+    if(confirm('Reset Pear Phone data?')){
 
-   localStorage.pearSounds=
-     e.target.checked?'1':'0';
+      localStorage.clear();
 
- };
-
- document.getElementById(
-   'reset'
- ).onclick=()=>{
-
-   if(
-     confirm(
-       'Reset Pear Phone data?'
-     )
-   ){
-
-     localStorage.clear();
-
-     location.reload();
-
-   }
-
- };
+      location.reload();
+    }
+  };
 }
 
 
@@ -1068,77 +985,70 @@ function settings(){
 
 function music(){
 
- win('PearTunes',`
+  win('PearTunes',`
 
- <div class="big">
-   ♫
- </div>
+    <div class="big">
+      ♫
+    </div>
 
- <div class="stock">
+    <div class="stock">
 
-   <span>
-     Pearadise
-   </span>
+      <span>
+        Pearadise
+      </span>
 
-   <button
-     data-song="Pearadise">
-     ▶
-   </button>
+      <button data-song="Pearadise">
+        ▶
+      </button>
 
- </div>
+    </div>
 
- <div class="stock">
+    <div class="stock">
 
-   <span>
-     Sunset Drive
-   </span>
+      <span>
+        Sunset Drive
+      </span>
 
-   <button
-     data-song="Sunset Drive">
-     ▶
-   </button>
+      <button data-song="Sunset Drive">
+        ▶
+      </button>
 
- </div>
+    </div>
 
- <div class="stock">
+    <div class="stock">
 
-   <span>
-     Electric Orchard
-   </span>
+      <span>
+        Electric Orchard
+      </span>
 
-   <button
-     data-song="Electric Orchard">
-     ▶
-   </button>
+      <button data-song="Electric Orchard">
+        ▶
+      </button>
 
- </div>
+    </div>
 
- <p
-   id="musicStatus"
-   style="
-     text-align:center;
-     font-size:10px">
- </p>
+    <p
+      id="musicStatus"
+      style="
+        text-align:center;
+        font-size:10px">
+    </p>
 
- `);
+  `);
 
- document
-   .querySelectorAll(
-     '[data-song]'
-   )
-   .forEach(b=>{
+  document
+    .querySelectorAll('[data-song]')
+    .forEach(button=>{
 
-     b.onclick=()=>{
+      button.onclick=()=>{
 
-       document.getElementById(
-         'musicStatus'
-       ).textContent=
-         '▶ Playing '+
-         b.dataset.song;
-
-     };
-
-   });
+        document.getElementById(
+          'musicStatus'
+        ).textContent=
+          '▶ Playing '+
+          button.dataset.song;
+      };
+    });
 }
 
 
@@ -1148,92 +1058,87 @@ function music(){
 
 function phone(){
 
- win('Phone',`
+  win('Phone',`
 
- <div class="big">
-   ☎
- </div>
+    <div class="big">
+      ☎
+    </div>
 
- <input
-   id="number"
-   style="width:100%"
-   placeholder="Phone number">
+    <input
+      id="number"
+      style="width:100%"
+      placeholder="Phone number">
 
- <div
-   style="
-     display:grid;
-     grid-template-columns:repeat(3,1fr);
-     gap:4px;
-     margin-top:6px">
+    <div style="
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:4px;
+      margin-top:6px">
 
- ${
-   [
-     '1','2','3',
-     '4','5','6',
-     '7','8','9',
-     '*','0','#'
-   ]
-   .map(n=>`
-     <button class="dial">
-       ${n}
-     </button>
-   `)
-   .join('')
- }
+      ${
+        [
+          '1','2','3',
+          '4','5','6',
+          '7','8','9',
+          '*','0','#'
+        ].map(n=>`
 
- </div>
+          <button class="dial">
+            ${n}
+          </button>
 
- <button
-   id="call"
-   style="
-     width:100%;
-     margin-top:5px">
-   Call
- </button>
+        `).join('')
+      }
 
- <p
-   id="callStatus"
-   style="
-     text-align:center;
-     font-size:10px">
- </p>
+    </div>
 
- `);
+    <button
+      id="call"
+      style="
+        width:100%;
+        margin-top:5px">
+      Call
+    </button>
 
- document
-   .querySelectorAll('.dial')
-   .forEach(b=>{
+    <p
+      id="callStatus"
+      style="
+        text-align:center;
+        font-size:10px">
+    </p>
 
-     b.onclick=()=>{
+  `);
 
-       document.getElementById(
-         'number'
-       ).value+=
-         b.textContent.trim();
+  document
+    .querySelectorAll('.dial')
+    .forEach(button=>{
 
-     };
+      button.onclick=()=>{
 
-   });
+        document.getElementById(
+          'number'
+        ).value+=
+          button.textContent.trim();
 
- document.getElementById(
-   'call'
- ).onclick=()=>{
+      };
+    });
 
-   const n=
-     document.getElementById(
-       'number'
-     ).value;
+  document.getElementById('call').onclick=()=>{
 
-   document.getElementById(
-     'callStatus'
-   ).textContent=
-     n
-     ?
-     'Calling '+n+'…'
-     :
-     'Enter a number first.';
+    const number=
+      document.getElementById(
+        'number'
+      ).value;
 
- };
+    document.getElementById(
+      'callStatus'
+    ).textContent=
+      number
+      ?
+      'Calling '+number+'…'
+      :
+      'Enter a number first.';
+  };
 }
 
 
@@ -1243,109 +1148,101 @@ function phone(){
 
 function mail(){
 
- win('Mail',`
+  win('Mail',`
 
- <h3>
-   Inbox
- </h3>
+    <h3>
+      Inbox
+    </h3>
 
- <div class="stock">
+    <div class="stock">
 
-   <span>
+      <span>
 
-     <b>
-       Welcome to Pear OS
-     </b>
+        <b>
+          Welcome to Pear OS
+        </b>
 
-     <br>
+        <br>
 
-     <small>
-       Your phone is ready.
-     </small>
+        <small>
+          Your phone is ready.
+        </small>
 
-   </span>
+      </span>
 
-   <span>
-     9:41
-   </span>
+      <span>
+        9:41
+      </span>
 
- </div>
+    </div>
 
- <div class="stock">
+    <div class="stock">
 
-   <span>
+      <span>
 
-     <b>
-       PearTunes
-     </b>
+        <b>
+          PearTunes
+        </b>
 
-     <br>
+        <br>
 
-     <small>
-       New music available.
-     </small>
+        <small>
+          New music available.
+        </small>
 
-   </span>
+      </span>
 
-   <span>
-     8:32
-   </span>
+      <span>
+        8:32
+      </span>
 
- </div>
+    </div>
 
- <button id="compose">
-   Compose
- </button>
+    <button id="compose">
+      Compose
+    </button>
 
- <div id="mailBox"></div>
+    <div id="mailBox"></div>
 
- `);
+  `);
 
- document.getElementById(
-   'compose'
- ).onclick=()=>{
+  document.getElementById('compose').onclick=()=>{
 
-   document.getElementById(
-     'mailBox'
-   ).innerHTML=`
+    document.getElementById(
+      'mailBox'
+    ).innerHTML=`
 
-   <input
-     id="emailTo"
-     style="
-       width:100%;
-       margin-top:6px"
-     placeholder="To">
+      <input
+        id="emailTo"
+        style="
+          width:100%;
+          margin-top:5px"
+        placeholder="To">
 
-   <textarea
-     id="emailBody"
-     placeholder="Message">
-   </textarea>
+      <textarea
+        id="emailBody"
+        placeholder="Message">
+      </textarea>
 
-   <button id="sendMail">
-     Send Email
-   </button>
+      <button id="sendMail">
+        Send Email
+      </button>
 
-   `;
+    `;
 
-   wire();
- };
+    wire();
+  };
 
- document.getElementById(
-   'mailBox'
- ).onclick=e=>{
+  document.getElementById('mailBox').onclick=e=>{
 
-   if(
-     e.target.id==='sendMail'
-   ){
+    if(e.target.id==='sendMail'){
 
-     document.getElementById(
-       'mailBox'
-     ).innerHTML=
-       '<p>✓ Email sent.</p>';
-
-   }
-
- };
+      document.getElementById(
+        'mailBox'
+      ).innerHTML=
+        '<p>✓ Email sent.</p>';
+    }
+  };
 }
 
 
@@ -1355,67 +1252,62 @@ function mail(){
 
 function compass(){
 
- win('Compass',`
+  win('Compass',`
 
- <div
-   class="big"
-   id="compassFace">
-   🧭
- </div>
+    <div
+      class="big"
+      id="compassFace">
+      🧭
+    </div>
 
- <h2
-   id="degrees"
-   style="text-align:center">
-   0°
- </h2>
+    <h2
+      id="degrees"
+      style="text-align:center">
+      0°
+    </h2>
 
- <p
-   id="direction"
-   style="text-align:center">
-   North
- </p>
+    <p
+      id="direction"
+      style="text-align:center">
+      North
+    </p>
 
- <button id="rotateCompass">
-   Rotate Compass
- </button>
+    <button id="rotateCompass">
+      Rotate Compass
+    </button>
 
- `);
+  `);
 
- document.getElementById(
-   'rotateCompass'
- ).onclick=()=>{
+  document.getElementById(
+    'rotateCompass'
+  ).onclick=()=>{
 
-   let d=
-     Math.floor(
-       Math.random()*360
-     );
+    const degree=
+      Math.floor(
+        Math.random()*360
+      );
 
-   let dir=
-     d<45||d>=315
-     ?
-     'North'
-     :
-     d<135
-     ?
-     'East'
-     :
-     d<225
-     ?
-     'South'
-     :
-     'West';
+    let direction;
 
-   document.getElementById(
-     'degrees'
-   ).textContent=
-     d+'°';
+    if(degree<45 || degree>=315)
+      direction='North';
+    else if(degree<135)
+      direction='East';
+    else if(degree<225)
+      direction='South';
+    else
+      direction='West';
 
-   document.getElementById(
-     'direction'
-   ).textContent=
-     dir;
+    document.getElementById(
+      'degrees'
+    ).textContent=
+      degree+'°';
 
- };
+    document.getElementById(
+      'direction'
+    ).textContent=
+      direction;
+  };
 }
 
 
@@ -1425,63 +1317,62 @@ function compass(){
 
 function splashface(){
 
- win('SplashFace',`
+  win('SplashFace',`
 
- <div class="big">
-   Sf
- </div>
+    <div class="big">
+      Sf
+    </div>
 
- <h3
-   style="text-align:center">
-   SplashFace
- </h3>
+    <h3 style="text-align:center">
+      SplashFace
+    </h3>
 
- <p style="text-align:center">
-   What's happening?
- </p>
+    <p style="text-align:center">
+      What's happening?
+    </p>
 
- <textarea
-   id="postText"
-   placeholder="Write a post...">
- </textarea>
+    <textarea
+      id="postText"
+      placeholder="Write a post...">
+    </textarea>
 
- <button id="post">
-   Post
- </button>
+    <button id="post">
+      Post
+    </button>
 
- <div
-   id="feed"
-   style="margin-top:6px">
- </div>
+    <div
+      id="feed"
+      style="margin-top:6px">
+    </div>
 
- `);
+  `);
 
- document.getElementById(
-   'post'
- ).onclick=()=>{
+  document.getElementById('post').onclick=()=>{
 
-   const box=
-     document.getElementById(
-       'postText'
-     );
+    const text=
+      document.getElementById(
+        'postText'
+      );
 
-   const v=box.value.trim();
+    const value=text.value.trim();
 
-   if(!v)return;
+    if(!value)return;
 
-   document.getElementById(
-     'feed'
-   ).innerHTML=
-     `<div class="bubble me">
-       ${esc(v)}
-     </div>`+
-     document.getElementById(
-       'feed'
-     ).innerHTML;
+    document.getElementById(
+      'feed'
+    ).innerHTML=
+      `
+      <div class="bubble me">
+        ${esc(value)}
+      </div>
+      `
+      +
+      document.getElementById(
+        'feed'
+      ).innerHTML;
 
-   box.value='';
-
- };
+    text.value='';
+  };
 }
 
 
@@ -1491,84 +1382,78 @@ function splashface(){
 
 function videos(){
 
- win('Videos',`
+  win('Videos',`
 
- <div class="big">
-   ▶
- </div>
+    <div class="big">
+      ▶
+    </div>
 
- <div class="stock">
+    <div class="stock">
 
-   <span>
+      <span>
 
-     <b>
-       Pear Phone Tour
-     </b>
+        <b>
+          Pear Phone Tour
+        </b>
 
-     <br>
+        <br>
 
-     <small>
-       2:14
-     </small>
+        <small>
+          2:14
+        </small>
 
-   </span>
+      </span>
 
-   <button
-     data-video="Pear Phone Tour">
-     ▶
-   </button>
+      <button data-video="Pear Phone Tour">
+        ▶
+      </button>
 
- </div>
+    </div>
 
- <div class="stock">
+    <div class="stock">
 
-   <span>
+      <span>
 
-     <b>
-       Making Pear OS
-     </b>
+        <b>
+          Making Pear OS
+        </b>
 
-     <br>
+        <br>
 
-     <small>
-       4:21
-     </small>
+        <small>
+          4:21
+        </small>
 
-   </span>
+      </span>
 
-   <button
-     data-video="Making Pear OS">
-     ▶
-   </button>
+      <button data-video="Making Pear OS">
+        ▶
+      </button>
 
- </div>
+    </div>
 
- <p
-   id="videoStatus"
-   style="
-     text-align:center;
-     font-size:10px">
- </p>
+    <p
+      id="videoStatus"
+      style="
+        text-align:center;
+        font-size:10px">
+    </p>
 
- `);
+  `);
 
- document
-   .querySelectorAll(
-     '[data-video]'
-   )
-   .forEach(b=>{
+  document
+    .querySelectorAll('[data-video]')
+    .forEach(button=>{
 
-     b.onclick=()=>{
+      button.onclick=()=>{
 
-       document.getElementById(
-         'videoStatus'
-       ).textContent=
-         '▶ Playing '+
-         b.dataset.video;
-
-     };
-
-   });
+        document.getElementById(
+          'videoStatus'
+        ).textContent=
+          '▶ Playing '+
+          button.dataset.video;
+      };
+    });
 }
 
 
@@ -1578,151 +1463,178 @@ function videos(){
 
 function buildK(){
 
- K.innerHTML='';
+  K.innerHTML='';
 
- [
-   '1234567890',
-   'QWERTYUIOP',
-   'ASDFGHJKL⌫',
-   'ZXCVBNM,.↵'
- ].forEach(r=>{
+  [
+    '1234567890',
+    'QWERTYUIOP',
+    'ASDFGHJKL⌫',
+    'ZXCVBNM,.↵'
+  ].forEach(row=>{
 
-   [...r].forEach(k=>{
+    [...row].forEach(key=>{
 
-     let b=
-       document.createElement(
-         'button'
-       );
+      const button=
+        document.createElement(
+          'button'
+        );
 
-     b.textContent=k;
+      button.textContent=key;
 
-     b.onclick=()=>{
+      button.onclick=()=>{
 
-       if(!target)return;
+        if(!target)return;
 
-       if(k==='⌫'){
+        if(key==='⌫'){
 
-         target.value=
-           target.value.slice(0,-1);
+          target.value=
+            target.value.slice(0,-1);
 
-       }else if(k==='↵'){
+        }else if(key==='↵'){
 
-         target.dispatchEvent(
-           new KeyboardEvent(
-             'keydown',
-             {
-               key:'Enter'
-             }
-           )
-         );
+          target.dispatchEvent(
+            new KeyboardEvent(
+              'keydown',
+              {
+                key:'Enter'
+              }
+            )
+          );
 
-       }else{
+        }else{
 
-         target.value+=
-           k.toLowerCase();
+          target.value+=
+            key.toLowerCase();
+        }
+      };
 
-       }
+      K.appendChild(button);
+    });
+  });
 
-     };
+  const space=
+    document.createElement('button');
 
-     K.appendChild(b);
+  space.textContent='SPACE';
+  space.className='space';
 
-   });
+  space.onclick=()=>{
 
- });
+    if(target)
+      target.value+=' ';
+  };
 
- let sp=
-   document.createElement(
-     'button'
-   );
+  const done=
+    document.createElement('button');
 
- sp.textContent='SPACE';
+  done.textContent='DONE';
+  done.className='wide';
 
- sp.className='space';
+  done.onclick=()=>{
 
- sp.onclick=()=>{
+    K.classList.remove('show');
 
-   if(target)
-     target.value+=' ';
+    target=null;
+  };
 
- };
-
- let done=
-   document.createElement(
-     'button'
-   );
-
- done.textContent='DONE';
-
- done.className='wide';
-
- done.onclick=()=>{
-
-   K.classList.remove(
-     'show'
-   );
-
-   target=null;
-
- };
-
- K.append(
-   sp,
-   done
- );
+  K.append(
+    space,
+    done
+  );
 }
 
 
 /* =========================
-   INPUT WIRING
+   INPUTS
 ========================= */
 
 function wire(){
 
- A.querySelectorAll(
-   'input:not([type=file]),textarea'
- ).forEach(e=>{
+  A
+    .querySelectorAll(
+      'input:not([type=file]),textarea'
+    )
+    .forEach(input=>{
 
-   e.onfocus=()=>{
+      input.onfocus=()=>{
 
-     target=e;
+        target=input;
 
-     K.classList.add(
-       'show'
-     );
-
-   };
-
- });
+        K.classList.add('show');
+      };
+    });
 }
 
 buildK();
 
 
-/* =========================
-   APP CLICKING
-========================= */
+/* =====================================================
+   IMPORTANT APP CLICK FIX
+   ===================================================== */
+
+function handleAppClick(e){
+
+  const button=
+    e.target.closest(
+      '[data-app]'
+    );
+
+  if(!button)return;
+
+  e.preventDefault();
+  e.stopPropagation();
+
+  const app=
+    button.getAttribute(
+      'data-app'
+    );
+
+  if(app){
+    launch(app);
+  }
+}
+
+
+/*
+   Use pointerup AND click.
+
+   This makes the icons work with:
+   - Raspberry Pi touchscreen
+   - mouse
+   - trackpad
+   - normal browser clicks
+*/
 
 P.addEventListener(
- 'click',
- e=>{
+  'pointerup',
+  e=>{
 
-   const b=
-     e.target.closest(
-       '[data-app]'
-     );
+    if(
+      e.target.closest(
+        '[data-app]'
+      )
+    ){
 
-   if(!b)return;
+      handleAppClick(e);
+    }
+  },
+  true
+);
 
-   e.preventDefault();
+P.addEventListener(
+  'click',
+  e=>{
 
-   e.stopPropagation();
+    if(
+      e.target.closest(
+        '[data-app]'
+      )
+    ){
 
-   launch(
-     b.dataset.app
-   );
-
- }
+      handleAppClick(e);
+    }
+  },
+  true
 );
 
 
@@ -1730,33 +1642,29 @@ P.addEventListener(
    PAGE SWITCHING
 ========================= */
 
-function page(n){
+function page(number){
 
- currentPage=n;
+  currentPage=number;
 
- if(n===1){
+  if(number===1){
 
-   p1.style.display='block';
+    p1.style.display='block';
 
-   p2.style.display='none';
+    p2.style.display='none';
 
- }else{
+  }else{
 
-   p1.style.display='none';
+    p1.style.display='none';
 
-   p2.style.display='grid';
+    p2.style.display='grid';
+  }
 
- }
-
- F.classList.remove(
-   'go'
- );
-
- void F.offsetWidth;
-
- F.classList.add(
-   'go'
- );
+  /*
+     NO FLASH.
+     NO ZOOM.
+     NO WEIRD ANIMATION.
+     Page simply changes.
+  */
 }
 
 
@@ -1765,150 +1673,147 @@ function page(n){
 ========================= */
 
 document
- .getElementById('home')
- .addEventListener(
-   'click',
-   e=>{
+  .getElementById('home')
+  .addEventListener(
+    'click',
+    e=>{
 
-     e.preventDefault();
+      e.preventDefault();
+      e.stopPropagation();
 
-     e.stopPropagation();
+      close();
 
-     close();
-
-     page(1);
-
-   }
- );
+      page(1);
+    }
+  );
 
 
-/* =========================
-   RELIABLE TOUCH / MOUSE /
-   TRACKPAD PAGE SWITCHING
-========================= */
+/* =====================================================
+   PAGE SWIPING
+   ===================================================== */
 
 let startX=0;
 let startY=0;
-let dragging=false;
+let swiping=false;
 
 P.addEventListener(
- 'pointerdown',
- e=>{
+  'pointerdown',
+  e=>{
 
-   if(
-     O.classList.contains(
-       'open'
-     )
-   )return;
-
-   startX=e.clientX;
-
-   startY=e.clientY;
-
-   dragging=true;
-
-   try{
-
-     P.setPointerCapture(
-       e.pointerId
-     );
-
-   }catch(err){}
-
- }
-);
-
-
-P.addEventListener(
- 'pointerup',
- e=>{
-
-   if(!dragging)return;
-
-   dragging=false;
-
-   const dx=
-     e.clientX-startX;
-
-   const dy=
-     e.clientY-startY;
-
-   /*
-    * UP = PAGE 2
-    * DOWN = PAGE 1
+    /*
+       Don't start a page swipe while
+       an app is open.
     */
 
-   if(
-     Math.abs(dy)>30 &&
-     Math.abs(dy)>Math.abs(dx)
-   ){
+    if(O.classList.contains('open'))
+      return;
 
-     if(dy<0){
+    startX=e.clientX;
+    startY=e.clientY;
 
-       page(2);
-
-     }else{
-
-       page(1);
-
-     }
-
-   }
-
- }
+    swiping=true;
+  },
+  {passive:true}
 );
 
 
 P.addEventListener(
- 'pointercancel',
- ()=>{
-   dragging=false;
- }
+  'pointerup',
+  e=>{
+
+    if(!swiping)
+      return;
+
+    swiping=false;
+
+    const dx=
+      e.clientX-startX;
+
+    const dy=
+      e.clientY-startY;
+
+    /*
+       Normal physical swipe:
+
+       UP   = Page 2
+       DOWN = Page 1
+
+       We also accept horizontal movement
+       because the entire Pear Phone is
+       rotated 90 degrees.
+    */
+
+    if(
+      Math.abs(dy)>=35 &&
+      Math.abs(dy)>Math.abs(dx)
+    ){
+
+      if(dy<0)
+        page(2);
+      else
+        page(1);
+
+      return;
+    }
+
+    /*
+       Because the phone is rotated,
+       also allow horizontal swipes.
+    */
+
+    if(
+      Math.abs(dx)>=35 &&
+      Math.abs(dx)>Math.abs(dy)
+    ){
+
+      if(dx<0)
+        page(2);
+      else
+        page(1);
+    }
+  },
+  {passive:true}
 );
 
 
 /* =========================
-   KEYBOARD CONTROLS
+   KEYBOARD PAGE CONTROLS
 ========================= */
 
 window.addEventListener(
- 'keydown',
- e=>{
+  'keydown',
+  e=>{
 
-   if(
-     e.key==='ArrowUp'
-   ){
+    if(
+      e.key==='ArrowUp' ||
+      e.key==='ArrowRight'
+    ){
 
-     e.preventDefault();
+      e.preventDefault();
 
-     page(2);
+      page(2);
+    }
 
-   }
+    if(
+      e.key==='ArrowDown' ||
+      e.key==='ArrowLeft'
+    ){
 
-   if(
-     e.key==='ArrowDown'
-   ){
+      e.preventDefault();
 
-     e.preventDefault();
+      page(1);
+    }
 
-     page(1);
+    if(e.key==='Escape'){
 
-   }
-
-   if(
-     e.key==='Escape'
-   ){
-
-     close();
-
-   }
-
- }
+      close();
+    }
+  }
 );
 
 
 /* =========================
-   START
+   START PAGE 1
 ========================= */
 
 page(1);

@@ -2,1027 +2,838 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1, viewport-fit=cover"
+>
 
 <title>Pear Phone OS</title>
 
 <style>
-*{
-  box-sizing:border-box;
-  -webkit-tap-highlight-color:transparent;
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
 html,
-body{
-  width:100%;
-  height:100%;
-  margin:0;
-  overflow:hidden;
-  background:#fff;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
 }
 
-body{
-  display:flex;
-  align-items:center;
-  justify-content:center;
+body {
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Arial,
+    sans-serif;
 }
 
 /* =========================================================
    PHONE
    ========================================================= */
 
-#phone-container{
-  position:relative;
+#phone {
+  position: relative;
 
-  width:min(82vw,520px);
-  aspect-ratio:1212 / 1188;
+  width: min(86vw, 760px);
+  aspect-ratio: 1212 / 1188;
 
-  background-image:url("pear-phone.jpg");
-  background-position:center;
-  background-repeat:no-repeat;
-  background-size:contain;
+  background:
+    url("pear-phone.jpg") center / contain no-repeat;
 
-  transform:rotate(90deg) scale(.78);
-  transform-origin:center center;
+  transform: rotate(90deg) scale(.78);
+  transform-origin: center center;
 
-  user-select:none;
-  -webkit-user-select:none;
-
-  touch-action:none;
+  touch-action: none;
+  user-select: none;
 }
 
 /* =========================================================
-   INVISIBLE ICON HIT AREAS
-
-   These are intentionally smaller than the old hitboxes.
-   They do NOT overlap neighboring apps.
+   PAGE 1 HOTSPOTS
    ========================================================= */
 
-.hotspot{
-  position:absolute;
+.hotspot {
+  position: absolute;
 
-  width:8.0%;
-  aspect-ratio:1;
+  border: 0;
+  padding: 0;
+  margin: 0;
 
-  border:0;
-  padding:0;
-  margin:0;
+  background: transparent;
 
-  background:transparent;
+  border-radius: 50%;
 
-  border-radius:50%;
+  cursor: pointer;
 
-  cursor:pointer;
+  z-index: 20;
 
-  z-index:20;
+  touch-action: manipulation;
 
-  touch-action:manipulation;
-
-  -webkit-appearance:none;
-  appearance:none;
+  appearance: none;
+  -webkit-appearance: none;
 }
 
-.hotspot:active{
-  background:rgba(255,255,255,.08);
-  transform:scale(.92);
+.hotspot:active {
+  transform: scale(.92);
+  background: rgba(255,255,255,.1);
 }
 
-/* PAGE 1 */
+/*
+   These are deliberately smaller than the icons so
+   neighboring apps cannot accidentally be triggered.
+*/
 
-#messages{
-  left:43.9%;
-  top:26.5%;
+#page1 [data-app="messages"] {
+  left: 43.1%;
+  top: 25.7%;
+  width: 8.3%;
+  aspect-ratio: 1;
 }
 
-#camera{
-  left:53.2%;
-  top:26.5%;
+#page1 [data-app="camera"] {
+  left: 54%;
+  top: 25.7%;
+  width: 8.3%;
+  aspect-ratio: 1;
 }
 
-#splashface{
-  left:38.8%;
-  top:36.9%;
+#page1 [data-app="splashface"] {
+  left: 38%;
+  top: 36.1%;
+  width: 8.3%;
+  aspect-ratio: 1;
 }
 
-#stocks{
-  left:47.9%;
-  top:36.9%;
+#page1 [data-app="stocks"] {
+  left: 47.5%;
+  top: 36.1%;
+  width: 8.3%;
+  aspect-ratio: 1;
 }
 
-#maps{
-  left:57.0%;
-  top:36.9%;
+#page1 [data-app="maps"] {
+  left: 57%;
+  top: 36.1%;
+  width: 8.3%;
+  aspect-ratio: 1;
 }
 
-#photos{
-  left:38.8%;
-  top:47.7%;
+#page1 [data-app="photos"] {
+  left: 38%;
+  top: 46.9%;
+  width: 8.3%;
+  aspect-ratio: 1;
 }
 
-#weather{
-  left:47.9%;
-  top:47.7%;
+#page1 [data-app="weather"] {
+  left: 47.5%;
+  top: 46.9%;
+  width: 8.3%;
+  aspect-ratio: 1;
 }
 
-#notes{
-  left:57.0%;
-  top:47.7%;
+#page1 [data-app="notes"] {
+  left: 57%;
+  top: 46.9%;
+  width: 8.3%;
+  aspect-ratio: 1;
 }
 
-#peartunes{
-  left:32.8%;
-  top:56.7%;
+#page1 [data-app="peartunes"] {
+  left: 32%;
+  top: 55.9%;
+  width: 8.3%;
+  aspect-ratio: 1;
 }
 
-#settings{
-  left:42.8%;
-  top:56.7%;
+#page1 [data-app="settings"] {
+  left: 42%;
+  top: 55.9%;
+  width: 8.3%;
+  aspect-ratio: 1;
 }
 
-#clock{
-  left:52.8%;
-  top:56.7%;
+#page1 [data-app="clock"] {
+  left: 52%;
+  top: 55.9%;
+  width: 8.3%;
+  aspect-ratio: 1;
 }
 
-#videos{
-  left:62.0%;
-  top:56.7%;
+#page1 [data-app="videos"] {
+  left: 62%;
+  top: 55.9%;
+  width: 8.3%;
+  aspect-ratio: 1;
 }
 
-#phone{
-  left:32.8%;
-  top:66.7%;
+#page1 [data-app="phone"] {
+  left: 32%;
+  top: 65.9%;
+  width: 8.3%;
+  aspect-ratio: 1;
 }
 
-#mail{
-  left:42.8%;
-  top:66.7%;
+#page1 [data-app="mail"] {
+  left: 42%;
+  top: 65.9%;
+  width: 8.3%;
+  aspect-ratio: 1;
 }
 
-#compass{
-  left:52.8%;
-  top:66.7%;
+#page1 [data-app="compass"] {
+  left: 52%;
+  top: 65.9%;
+  width: 8.3%;
+  aspect-ratio: 1;
 }
 
-#music{
-  left:62.0%;
-  top:66.7%;
+#page1 [data-app="music"] {
+  left: 62%;
+  top: 65.9%;
+  width: 8.3%;
+  aspect-ratio: 1;
 }
 
-/* HOME BUTTON */
+/* =========================================================
+   PAGE 2
+   ========================================================= */
 
-#home{
-  position:absolute;
+#page2 {
+  display: none;
 
-  left:46%;
-  top:78.8%;
+  position: absolute;
 
-  width:8.2%;
-  aspect-ratio:1;
+  left: 30%;
+  right: 30%;
+  top: 22%;
+  bottom: 22%;
 
-  border:0;
-  background:transparent;
+  z-index: 21;
 
-  border-radius:50%;
+  grid-template-columns: repeat(3, 1fr);
 
-  cursor:pointer;
+  grid-auto-rows: 1fr;
 
-  z-index:30;
+  gap: 3%;
+}
 
-  touch-action:manipulation;
+#page2 button {
+  border: 0;
+
+  background: transparent;
+
+  border-radius: 50%;
+
+  cursor: pointer;
+
+  touch-action: manipulation;
+}
+
+#page2 button:active {
+  transform: scale(.92);
+
+  background: rgba(255,255,255,.1);
+}
+
+/* =========================================================
+   HOME BUTTON
+   ========================================================= */
+
+#home {
+  position: absolute;
+
+  left: 46%;
+  top: 78.8%;
+
+  width: 8.2%;
+  aspect-ratio: 1;
+
+  border: 0;
+
+  background: transparent;
+
+  border-radius: 50%;
+
+  cursor: pointer;
+
+  z-index: 30;
 }
 
 /* =========================================================
    APP WINDOW
    ========================================================= */
 
-#app-overlay{
-  position:absolute;
+#app-overlay {
+  position: absolute;
 
-  /*
-    This is INSIDE the phone image.
-    It is NOT fixed to the browser.
-  */
+  left: 20%;
+  top: 18%;
 
-  left:20%;
-  top:18%;
+  width: 60%;
+  height: 59%;
 
-  width:60%;
-  height:59%;
+  z-index: 100;
 
-  z-index:100;
+  display: none;
 
-  display:none;
+  align-items: center;
+  justify-content: center;
 
-  align-items:center;
-  justify-content:center;
+  background: rgba(0,0,0,.38);
 
-  pointer-events:none;
+  border-radius: 24px;
+
+  overflow: hidden;
 }
 
-#app-overlay.open{
-  display:flex;
-  pointer-events:auto;
+#app-overlay.open {
+  display: flex;
 }
 
-/* =========================================================
-   APP WINDOW
-   ========================================================= */
+#app-window {
+  width: 94%;
+  height: 94%;
 
-#app-window{
-  width:100%;
-  height:100%;
+  background: #f4f5f7;
 
-  overflow:hidden;
+  color: #111;
 
-  background:#f4f5f7;
+  border: 2px solid rgba(0,0,0,.55);
 
-  color:#111;
-
-  border:2px solid rgba(0,0,0,.55);
-
-  border-radius:22px;
+  border-radius: 18px;
 
   box-shadow:
-    0 10px 25px rgba(0,0,0,.55),
-    inset 0 1px 0 rgba(255,255,255,.9);
+    0 10px 30px rgba(0,0,0,.5);
 
-  display:flex;
-  flex-direction:column;
+  display: flex;
 
-  animation:appOpen .18s ease-out;
-}
+  flex-direction: column;
 
-@keyframes appOpen{
-  from{
-    opacity:0;
-    transform:scale(.88);
-  }
-
-  to{
-    opacity:1;
-    transform:scale(1);
-  }
+  overflow: hidden;
 }
 
 /* =========================================================
    APP HEADER
    ========================================================= */
 
-.app-header{
-  flex:0 0 auto;
+.app-header {
+  flex: 0 0 auto;
 
-  height:42px;
+  height: 43px;
 
-  display:flex;
-  align-items:center;
+  display: flex;
 
-  gap:8px;
+  align-items: center;
 
-  padding:5px 8px;
+  gap: 8px;
 
-  background:linear-gradient(#fff,#e3e5e8);
-
-  border-bottom:1px solid #bbb;
-
-  font-size:14px;
-  font-weight:900;
-}
-
-.back-button{
-  width:30px;
-  height:30px;
-
-  border-radius:50%;
-
-  border:1px solid #aaa;
-
-  background:linear-gradient(#fff,#ddd);
-
-  font-size:22px;
-
-  line-height:25px;
-
-  padding:0;
-
-  cursor:pointer;
-
-  flex:none;
-}
-
-.window-title{
-  overflow:hidden;
-  white-space:nowrap;
-  text-overflow:ellipsis;
-}
-
-/* =========================================================
-   APP CONTENT
-   ========================================================= */
-
-.app-content{
-  flex:1;
-
-  min-height:0;
-
-  overflow:auto;
-
-  -webkit-overflow-scrolling:touch;
-
-  padding:10px;
-
-  font-size:13px;
-}
-
-.app-content h2{
-  margin:0 0 8px;
-  font-size:19px;
-}
-
-.app-content h3{
-  margin:8px 0;
-}
-
-.app-content p{
-  margin:6px 0;
-}
-
-.app-content button{
-  font:inherit;
-}
-
-.button{
-  border:1px solid #aaa;
-
-  border-radius:10px;
-
-  padding:8px 11px;
-
-  background:linear-gradient(#fff,#ddd);
-
-  font-weight:700;
-
-  cursor:pointer;
-}
-
-.button:active{
-  transform:scale(.96);
-}
-
-/* =========================================================
-   MESSAGES
-   ========================================================= */
-
-.chat-list{
-  display:flex;
-  flex-direction:column;
-  gap:6px;
-
-  margin-bottom:8px;
-}
-
-.chat-bubble{
-  max-width:82%;
-
-  padding:8px 10px;
-
-  background:#dedfe3;
-
-  border-radius:16px;
-
-  width:max-content;
-}
-
-.chat-bubble.me{
-  margin-left:auto;
-
-  color:white;
-
-  background:linear-gradient(#54b9ff,#1488df);
-}
-
-.compose-row{
-  display:flex;
-  gap:5px;
-}
-
-.compose-row input{
-  min-width:0;
-  flex:1;
-
-  border:1px solid #aaa;
-
-  border-radius:14px;
-
-  padding:8px;
-}
-
-/* =========================================================
-   CAMERA
-   ========================================================= */
-
-.camera-container{
-  display:flex;
-  flex-direction:column;
-  gap:7px;
-}
-
-.camera-video{
-  width:100%;
-
-  aspect-ratio:4/3;
-
-  object-fit:cover;
-
-  display:block;
-
-  background:#050505;
-
-  border-radius:14px;
-
-  border:2px solid #222;
-}
-
-.camera-controls{
-  display:flex;
-
-  gap:5px;
-
-  flex-wrap:wrap;
-}
-
-.camera-status{
-  font-size:11px;
-
-  color:#666;
-
-  min-height:15px;
-}
-
-.camera-select{
-  width:100%;
-
-  padding:7px;
-
-  border-radius:9px;
-
-  border:1px solid #aaa;
-
-  background:white;
-}
-
-.captured-photo{
-  width:100%;
-
-  margin-top:4px;
-
-  border-radius:12px;
-
-  display:none;
-}
-
-/* =========================================================
-   PHOTOS
-   ========================================================= */
-
-.photo-grid{
-  display:grid;
-
-  grid-template-columns:repeat(3,1fr);
-
-  gap:5px;
-}
-
-.photo-grid img{
-  width:100%;
-
-  aspect-ratio:1;
-
-  object-fit:cover;
-
-  border-radius:8px;
-
-  background:#ddd;
-
-  cursor:pointer;
-}
-
-.empty{
-  text-align:center;
-
-  color:#777;
-
-  padding:25px 5px;
-}
-
-/* =========================================================
-   NOTES
-   ========================================================= */
-
-.note-title{
-  width:100%;
-
-  padding:8px;
-
-  border:1px solid #aaa;
-
-  border-radius:9px;
-
-  margin-bottom:5px;
-}
-
-.note-body{
-  width:100%;
-
-  min-height:110px;
-
-  resize:none;
-
-  padding:8px;
-
-  border:1px solid #aaa;
-
-  border-radius:9px;
-
-  font-family:inherit;
-}
-
-.note-list{
-  display:flex;
-
-  flex-direction:column;
-
-  gap:5px;
-
-  margin-bottom:8px;
-}
-
-.saved-note{
-  padding:8px;
-
-  border:1px solid #d0d0d0;
-
-  border-radius:9px;
-
-  background:#fff;
-
-  cursor:pointer;
-}
-
-/* =========================================================
-   STOCKS
-   ========================================================= */
-
-.stock-list{
-  display:flex;
-
-  flex-direction:column;
-
-  gap:5px;
-}
-
-.stock-row{
-  display:flex;
-
-  align-items:center;
-
-  justify-content:space-between;
-
-  padding:8px;
-
-  border:1px solid #ddd;
-
-  border-radius:9px;
-
-  background:#fff;
-}
-
-.positive{
-  color:#07952b;
-}
-
-.negative{
-  color:#d52525;
-}
-
-/* =========================================================
-   WEATHER
-   ========================================================= */
-
-.weather-card{
-  text-align:center;
-
-  padding:8px;
-}
-
-.weather-icon{
-  font-size:55px;
-}
-
-.temperature{
-  font-size:42px;
-
-  font-weight:900;
-}
-
-/* =========================================================
-   MAPS
-   ========================================================= */
-
-.map{
-  position:relative;
-
-  height:150px;
-
-  border-radius:12px;
-
-  overflow:hidden;
+  padding: 5px 8px;
 
   background:
-    linear-gradient(35deg,transparent 0 40%,#fff 40% 44%,transparent 44%),
-    linear-gradient(145deg,transparent 0 55%,#fff 55% 59%,transparent 59%),
-    #cfe3bb;
+    linear-gradient(#fff,#e5e7ea);
+
+  border-bottom: 1px solid #c7c9cc;
+
+  font-size: 14px;
+
+  font-weight: 900;
 }
 
-.map-pin{
-  position:absolute;
+.app-header button {
+  width: 30px;
+  height: 30px;
 
-  left:55%;
-  top:40%;
+  border-radius: 50%;
 
-  font-size:40px;
+  border: 1px solid #aaa;
 
-  transform:translate(-50%,-50%);
-}
+  background:
+    linear-gradient(#fff,#ddd);
 
-/* =========================================================
-   CLOCK
-   ========================================================= */
+  font-size: 20px;
 
-.big-clock{
-  text-align:center;
+  line-height: 1;
 
-  font-size:34px;
-
-  font-weight:900;
-
-  padding:25px 0 5px;
+  cursor: pointer;
 }
 
 /* =========================================================
-   SETTINGS
+   APP BODY
    ========================================================= */
 
-.settings-row{
-  display:flex;
+.app-body {
+  flex: 1;
 
-  justify-content:space-between;
+  min-height: 0;
 
-  align-items:center;
+  overflow-y: auto;
 
-  padding:9px 0;
+  padding: 10px;
 
-  border-bottom:1px solid #ddd;
+  -webkit-overflow-scrolling: touch;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+.app-body button {
+  border: 1px solid #aaa;
+
+  border-radius: 10px;
+
+  background:
+    linear-gradient(#fff,#ddd);
+
+  padding: 8px 10px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.app-body button:active {
+  transform: scale(.97);
+}
+
+.app-body input,
+.app-body textarea {
+  font-size: 16px;
+
+  border: 1px solid #aaa;
+
+  border-radius: 10px;
+
+  padding: 8px;
+
+  outline: none;
+}
+
+.app-body textarea {
+  width: 100%;
+
+  min-height: 120px;
 }
 
 /* =========================================================
-   CUSTOM KEYBOARD
+   COMMON APP ELEMENTS
    ========================================================= */
 
-#pear-keyboard{
-  position:absolute;
+.row {
+  display: flex;
 
-  left:20%;
-  bottom:18%;
+  gap: 6px;
+}
 
-  width:60%;
+.bubble {
+  padding: 8px 10px;
 
-  z-index:500;
+  background: #ddd;
 
-  display:none;
+  border-radius: 16px;
 
-  padding:5px;
+  width: max-content;
 
-  background:rgba(28,30,34,.96);
+  max-width: 85%;
 
-  border-radius:12px;
+  margin-bottom: 6px;
+}
+
+.bubble.me {
+  margin-left: auto;
+
+  background: #168ee8;
+
+  color: white;
+}
+
+.photos {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3,1fr);
+
+  gap: 5px;
+}
+
+.photos img {
+  width: 100%;
+
+  aspect-ratio: 1;
+
+  object-fit: cover;
+
+  border-radius: 8px;
+}
+
+.camera-video {
+  width: 100%;
+
+  background: black;
+
+  border-radius: 12px;
+}
+
+.stock {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  padding: 9px;
+
+  margin-bottom: 6px;
+
+  background: white;
+
+  border: 1px solid #ddd;
+
+  border-radius: 10px;
+}
+
+.big {
+  font-size: 38px;
+
+  font-weight: 900;
+
+  text-align: center;
+
+  padding: 22px 0;
+}
+
+.map {
+  height: 150px;
+
+  border-radius: 12px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #d7e7ca,
+      #e9dfb3
+    );
+
+  display: grid;
+
+  place-items: center;
+
+  font-size: 45px;
+}
+
+/* =========================================================
+   CUSTOM PEAR KEYBOARD
+   ========================================================= */
+
+#pear-keyboard {
+  position: absolute;
+
+  left: 22%;
+  right: 22%;
+
+  bottom: 19%;
+
+  z-index: 500;
+
+  padding: 6px;
+
+  border-radius: 14px;
+
+  background:
+    rgba(28,31,37,.97);
 
   box-shadow:
-    0 7px 20px rgba(0,0,0,.55);
+    0 8px 24px rgba(0,0,0,.5);
 
-  animation:keyboardIn .16s ease-out;
+  display: none;
+
+  grid-template-columns:
+    repeat(10,1fr);
+
+  gap: 3px;
+
+  transform:
+    translateY(120%);
+
+  transition:
+    transform .22s ease;
 }
 
-#pear-keyboard.show{
-  display:block;
+#pear-keyboard.show {
+  display: grid;
+
+  transform:
+    translateY(0);
 }
 
-@keyframes keyboardIn{
-  from{
-    opacity:0;
-    transform:translateY(15px);
-  }
+#pear-keyboard button {
+  min-width: 0;
 
-  to{
-    opacity:1;
-    transform:translateY(0);
-  }
+  height: 27px;
+
+  padding: 0;
+
+  border: 0;
+
+  border-radius: 5px;
+
+  background: #f0f0f0;
+
+  color: #111;
+
+  font-size: 10px;
+
+  font-weight: 800;
 }
 
-.keyboard-row{
-  display:flex;
-
-  gap:3px;
-
-  margin-bottom:3px;
+#pear-keyboard .wide {
+  grid-column: span 2;
 }
 
-.keyboard-key{
-  flex:1;
-
-  min-width:0;
-
-  height:25px;
-
-  border:0;
-
-  border-radius:5px;
-
-  background:#555;
-
-  color:white;
-
-  font-size:9px;
-
-  font-weight:700;
-
-  padding:0;
-
-  cursor:pointer;
-}
-
-.keyboard-key:active{
-  background:#888;
-}
-
-.keyboard-space{
-  flex:5;
-}
-
-.keyboard-wide{
-  flex:1.7;
+#pear-keyboard .space {
+  grid-column: span 5;
 }
 
 /* =========================================================
-   PAGE SWIPE ANIMATION
+   PAGE ANIMATION
    ========================================================= */
 
-#page-transition{
-  position:absolute;
+#page-transition {
+  position: absolute;
 
-  inset:0;
+  inset: 0;
 
-  z-index:80;
+  z-index: 600;
 
-  pointer-events:none;
+  pointer-events: none;
 
-  opacity:0;
+  display: none;
 
-  background:rgba(255,255,255,.08);
+  background:
+    radial-gradient(
+      circle,
+      rgba(255,255,255,.7),
+      rgba(30,100,220,.45),
+      transparent 70%
+    );
+
+  opacity: 0;
 }
 
-#page-transition.animate-up{
-  animation:pageUp .38s ease;
+#page-transition.go {
+  display: block;
+
+  animation:
+    pageZoom .42s ease;
 }
 
-#page-transition.animate-down{
-  animation:pageDown .38s ease;
-}
+@keyframes pageZoom {
 
-@keyframes pageUp{
-  0%{
-    opacity:0;
-    transform:translateY(100%);
+  0% {
+    opacity: 0;
+
+    transform: scale(.7);
   }
 
-  45%{
-    opacity:1;
+  35% {
+    opacity: .9;
   }
 
-  100%{
-    opacity:0;
-    transform:translateY(-100%);
-  }
-}
+  100% {
+    opacity: 0;
 
-@keyframes pageDown{
-  0%{
-    opacity:0;
-    transform:translateY(-100%);
-  }
-
-  45%{
-    opacity:1;
-  }
-
-  100%{
-    opacity:0;
-    transform:translateY(100%);
+    transform: scale(1.15);
   }
 }
 
-/* =========================================================
-   SMALL SCREENS
-   ========================================================= */
+@media(max-width:700px) {
 
-@media(max-width:700px){
-
-  #phone-container{
-    width:100vw;
-
-    transform:rotate(90deg) scale(.68);
+  #phone {
+    transform:
+      rotate(90deg)
+      scale(.67);
   }
 
-  #app-overlay{
-    left:20%;
-    top:18%;
-
-    width:60%;
-    height:59%;
-  }
-}
-
-@media(max-height:700px){
-
-  #phone-container{
-    width:100vw;
-
-    transform:rotate(90deg) scale(.68);
-  }
 }
 </style>
 </head>
 
 <body>
 
-<div id="phone-container">
+<div id="phone">
 
-  <!-- PAGE 1 -->
+  <!-- =====================================================
+       PAGE 1
+       ===================================================== -->
 
-  <button class="hotspot"
-          id="messages"
-          data-app="messages"
-          aria-label="Messages"></button>
+  <div id="page1">
 
-  <button class="hotspot"
-          id="camera"
-          data-app="camera"
-          aria-label="Camera"></button>
+    <button
+      class="hotspot"
+      data-app="messages"
+      aria-label="Messages">
+    </button>
 
-  <button class="hotspot"
-          id="splashface"
-          data-app="splashface"
-          aria-label="SplashFace"></button>
+    <button
+      class="hotspot"
+      data-app="camera"
+      aria-label="Camera">
+    </button>
 
-  <button class="hotspot"
-          id="stocks"
-          data-app="stocks"
-          aria-label="Stocks"></button>
+    <button
+      class="hotspot"
+      data-app="splashface"
+      aria-label="SplashFace">
+    </button>
 
-  <button class="hotspot"
-          id="maps"
-          data-app="maps"
-          aria-label="Maps"></button>
+    <button
+      class="hotspot"
+      data-app="stocks"
+      aria-label="Stocks">
+    </button>
 
-  <button class="hotspot"
-          id="photos"
-          data-app="photos"
-          aria-label="Photos"></button>
+    <button
+      class="hotspot"
+      data-app="maps"
+      aria-label="Maps">
+    </button>
 
-  <button class="hotspot"
-          id="weather"
-          data-app="weather"
-          aria-label="Weather"></button>
+    <button
+      class="hotspot"
+      data-app="photos"
+      aria-label="Photos">
+    </button>
 
-  <button class="hotspot"
-          id="notes"
-          data-app="notes"
-          aria-label="Notes"></button>
+    <button
+      class="hotspot"
+      data-app="weather"
+      aria-label="Weather">
+    </button>
 
-  <button class="hotspot"
-          id="peartunes"
-          data-app="peartunes"
-          aria-label="PearTunes"></button>
+    <button
+      class="hotspot"
+      data-app="notes"
+      aria-label="Notes">
+    </button>
 
-  <button class="hotspot"
-          id="settings"
-          data-app="settings"
-          aria-label="Settings"></button>
+    <button
+      class="hotspot"
+      data-app="peartunes"
+      aria-label="PearTunes">
+    </button>
 
-  <button class="hotspot"
-          id="clock"
-          data-app="clock"
-          aria-label="Clock"></button>
+    <button
+      class="hotspot"
+      data-app="settings"
+      aria-label="Settings">
+    </button>
 
-  <button class="hotspot"
-          id="videos"
-          data-app="videos"
-          aria-label="Videos"></button>
+    <button
+      class="hotspot"
+      data-app="clock"
+      aria-label="Clock">
+    </button>
 
-  <button class="hotspot"
-          id="phone"
-          data-app="phone"
-          aria-label="Phone"></button>
+    <button
+      class="hotspot"
+      data-app="videos"
+      aria-label="Videos">
+    </button>
 
-  <button class="hotspot"
-          id="mail"
-          data-app="mail"
-          aria-label="Mail"></button>
+    <button
+      class="hotspot"
+      data-app="phone"
+      aria-label="Phone">
+    </button>
 
-  <button class="hotspot"
-          id="compass"
-          data-app="compass"
-          aria-label="Compass"></button>
+    <button
+      class="hotspot"
+      data-app="mail"
+      aria-label="Mail">
+    </button>
 
-  <button class="hotspot"
-          id="music"
-          data-app="music"
-          aria-label="Music"></button>
+    <button
+      class="hotspot"
+      data-app="compass"
+      aria-label="Compass">
+    </button>
+
+    <button
+      class="hotspot"
+      data-app="music"
+      aria-label="Music">
+    </button>
+
+  </div>
+
+
+  <!-- =====================================================
+       PAGE 2
+       ===================================================== -->
+
+  <div id="page2">
+
+    <button data-app="messages"></button>
+    <button data-app="camera"></button>
+    <button data-app="photos"></button>
+
+    <button data-app="weather"></button>
+    <button data-app="maps"></button>
+    <button data-app="videos"></button>
+
+    <button data-app="music"></button>
+    <button data-app="notes"></button>
+    <button data-app="settings"></button>
+
+    <button data-app="clock"></button>
+    <button data-app="phone"></button>
+    <button data-app="mail"></button>
+
+  </div>
 
 
   <!-- HOME -->
 
-  <button id="home"
-          aria-label="Home"></button>
+  <button
+    id="home"
+    aria-label="Home">
+  </button>
 
 
   <!-- APP WINDOW -->
 
   <div id="app-overlay">
+
     <div id="app-window"></div>
+
   </div>
 
 
-  <!-- PAGE TRANSITION -->
+  <!-- KEYBOARD -->
+
+  <div id="pear-keyboard"></div>
+
+
+  <!-- PAGE ANIMATION -->
 
   <div id="page-transition"></div>
 
-
-  <!-- CUSTOM KEYBOARD -->
-
-  <div id="pear-keyboard">
-
-    <div class="keyboard-row">
-      <button class="keyboard-key">Q</button>
-      <button class="keyboard-key">W</button>
-      <button class="keyboard-key">E</button>
-      <button class="keyboard-key">R</button>
-      <button class="keyboard-key">T</button>
-      <button class="keyboard-key">Y</button>
-      <button class="keyboard-key">U</button>
-      <button class="keyboard-key">I</button>
-      <button class="keyboard-key">O</button>
-      <button class="keyboard-key">P</button>
-    </div>
-
-    <div class="keyboard-row">
-      <button class="keyboard-key">A</button>
-      <button class="keyboard-key">S</button>
-      <button class="keyboard-key">D</button>
-      <button class="keyboard-key">F</button>
-      <button class="keyboard-key">G</button>
-      <button class="keyboard-key">H</button>
-      <button class="keyboard-key">J</button>
-      <button class="keyboard-key">K</button>
-      <button class="keyboard-key">L</button>
-    </div>
-
-    <div class="keyboard-row">
-      <button class="keyboard-key">Z</button>
-      <button class="keyboard-key">X</button>
-      <button class="keyboard-key">C</button>
-      <button class="keyboard-key">V</button>
-      <button class="keyboard-key">B</button>
-      <button class="keyboard-key">N</button>
-      <button class="keyboard-key">M</button>
-      <button class="keyboard-key keyboard-wide">⌫</button>
-    </div>
-
-    <div class="keyboard-row">
-      <button class="keyboard-key keyboard-wide">123</button>
-      <button class="keyboard-key keyboard-space">SPACE</button>
-      <button class="keyboard-key keyboard-wide">↵</button>
-    </div>
-
-  </div>
-
 </div>
 
-<!-- IMPORTANT: cache-busting stops GitHub Pages from using the old app.js -->
-<script src="app.js?v=20260920-1"></script>
+
+<script src="app.js?v=20260920"></script>
 
 </body>
 </html>

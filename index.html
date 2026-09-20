@@ -6,7 +6,10 @@
 <title>Pear Phone OS</title>
 
 <style>
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent
+}
 
 html,body{
   margin:0;
@@ -23,15 +26,19 @@ body{
   font-family:Arial,sans-serif
 }
 
+/* PEAR PHONE */
+
 #phone{
   position:relative;
-  width:min(82vw,760px);
+  width:min(88vw,820px);
   aspect-ratio:1212/1188;
   background:url('pear-phone.jpg') center/contain no-repeat,radial-gradient(#20252b,#000);
-  transform:rotate(90deg) scale(.92);
+  transform:rotate(90deg) scale(.99);
   transform-origin:center center;
-  touch-action:none
+  touch-action:none;
 }
+
+/* PAGE 1 */
 
 .hotspot{
   position:absolute;
@@ -47,8 +54,6 @@ body{
   background:#ffffff18;
   transform:scale(.92)
 }
-
-/* PAGE 1 */
 
 #page1 button:nth-child(1){left:43.1%;top:25.7%;width:8.3%;aspect-ratio:1}
 #page1 button:nth-child(2){left:54%;top:25.7%;width:8.3%;aspect-ratio:1}
@@ -77,22 +82,31 @@ body{
   top:24%;
   bottom:24%;
   z-index:21;
+
   grid-template-columns:repeat(4,1fr);
   grid-template-rows:repeat(3,1fr);
-  column-gap:8%;
-  row-gap:8%;
+
+  column-gap:7%;
+  row-gap:7%;
+
   align-items:center;
-  justify-items:center
+  justify-items:center;
+
+  pointer-events:auto
 }
 
 #page2 button{
+  display:block;
   width:100%;
-  max-width:65px;
+  max-width:60px;
   aspect-ratio:1;
+
   border:0;
   background:transparent;
   border-radius:50%;
-  cursor:pointer
+
+  cursor:pointer;
+  pointer-events:auto
 }
 
 #page2 button:active{
@@ -108,13 +122,15 @@ body{
   top:78.8%;
   width:8.2%;
   aspect-ratio:1;
+
   border:0;
   background:transparent;
   border-radius:50%;
+
   z-index:30
 }
 
-/* SMALLER APP WINDOW */
+/* APP */
 
 #overlay{
   position:absolute;
@@ -122,10 +138,13 @@ body{
   top:24%;
   width:46%;
   height:47%;
+
   z-index:100;
+
   display:none;
   align-items:center;
   justify-content:center;
+
   background:#0006;
   border-radius:17px;
   overflow:hidden
@@ -141,6 +160,7 @@ body{
     opacity:0;
     transform:scale(.88)
   }
+
   to{
     opacity:1;
     transform:scale(1)
@@ -150,24 +170,32 @@ body{
 #app{
   width:94%;
   height:94%;
+
   background:#f4f5f7;
   color:#111;
+
   border:2px solid #333;
   border-radius:13px;
+
   display:flex;
   flex-direction:column;
+
   overflow:hidden
 }
 
 .head{
   height:34px;
   flex:none;
+
   display:flex;
   align-items:center;
   gap:6px;
+
   padding:4px 6px;
+
   background:linear-gradient(#fff,#e5e5e5);
   border-bottom:1px solid #bbb;
+
   font-weight:900;
   font-size:13px
 }
@@ -175,9 +203,11 @@ body{
 .head button{
   width:25px;
   height:25px;
+
   border-radius:50%;
   border:1px solid #aaa;
   background:#ddd;
+
   font-size:17px
 }
 
@@ -201,6 +231,7 @@ body{
 .body textarea{
   font-size:13px;
   padding:6px;
+
   border:1px solid #aaa;
   border-radius:7px
 }
@@ -218,8 +249,10 @@ body{
 .bubble{
   background:#ddd;
   border-radius:12px;
+
   padding:6px 8px;
   margin-bottom:5px;
+
   width:max-content;
   max-width:85%
 }
@@ -252,9 +285,11 @@ body{
 .stock{
   display:flex;
   justify-content:space-between;
+
   background:#fff;
   border:1px solid #ddd;
   border-radius:7px;
+
   padding:6px;
   margin-bottom:4px
 }
@@ -268,10 +303,14 @@ body{
 
 .map{
   height:105px;
+
   display:grid;
   place-items:center;
+
   border-radius:8px;
+
   background:linear-gradient(135deg,#d8e8ca,#e8dfb5);
+
   font-size:35px
 }
 
@@ -279,17 +318,27 @@ body{
 
 #keyboard{
   position:absolute;
+
   left:3%;
   right:3%;
   bottom:2%;
+
   z-index:500;
+
   display:none;
+
   grid-template-columns:repeat(10,1fr);
+
   gap:3px;
+
   padding:6px;
+
   background:#202329ee;
+
   border-radius:13px;
+
   transform:translateY(120%);
+
   transition:.2s
 }
 
@@ -300,24 +349,41 @@ body{
 
 #keyboard button{
   height:26px;
+
   border:0;
   border-radius:5px;
+
   font-size:9px;
   font-weight:800
 }
 
-.space{grid-column:span 5}
-.wide{grid-column:span 2}
+.space{
+  grid-column:span 5
+}
 
-/* PAGE EFFECT */
+.wide{
+  grid-column:span 2
+}
+
+/* PAGE FLASH */
 
 #flash{
   position:absolute;
   inset:0;
+
   z-index:600;
+
   pointer-events:none;
+
   opacity:0;
-  background:radial-gradient(circle,#fff8,#267dff4d,transparent 70%)
+
+  background:
+    radial-gradient(
+      circle,
+      #fff8,
+      #267dff4d,
+      transparent 70%
+    )
 }
 
 #flash.go{
@@ -325,15 +391,26 @@ body{
 }
 
 @keyframes f{
-  0%{opacity:0;transform:scale(.7)}
-  35%{opacity:1}
-  100%{opacity:0;transform:scale(1.15)}
+  0%{
+    opacity:0;
+    transform:scale(.7)
+  }
+
+  35%{
+    opacity:1
+  }
+
+  100%{
+    opacity:0;
+    transform:scale(1.15)
+  }
 }
 
 @media(max-width:700px){
+
   #phone{
-    width:min(90vw,760px);
-    transform:rotate(90deg) scale(.84)
+    width:min(96vw,820px);
+    transform:rotate(90deg) scale(.91)
   }
 
   #overlay{
@@ -348,12 +425,13 @@ body{
     right:29%;
     top:23%;
     bottom:23%;
+
     column-gap:6%;
     row-gap:6%
   }
 
   #page2 button{
-    max-width:58px
+    max-width:55px
   }
 }
 </style>
@@ -390,10 +468,12 @@ body{
 <button data-app="camera"></button>
 <button data-app="photos"></button>
 <button data-app="weather"></button>
+
 <button data-app="maps"></button>
 <button data-app="videos"></button>
 <button data-app="music"></button>
 <button data-app="notes"></button>
+
 <button data-app="settings"></button>
 <button data-app="clock"></button>
 <button data-app="phone"></button>
@@ -413,7 +493,7 @@ body{
 
 </div>
 
-<script src="app.js?v=fix20260920"></script>
+<script src="app.js?v=20260920-page2-fix"></script>
 
 </body>
 </html>

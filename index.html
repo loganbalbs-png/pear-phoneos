@@ -8,904 +8,1251 @@
 
 <style>
 
-* {
-    box-sizing: border-box;
+*{
+  box-sizing:border-box;
 }
 
-html,
-body {
-    margin: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    font-family: Arial, Helvetica, sans-serif;
-    background: #111;
+html,body{
+  margin:0;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:#111;
+  font-family:Arial,Helvetica,sans-serif;
 }
 
-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+body{
+  display:flex;
+  justify-content:center;
+  align-items:center;
 }
 
-/* =========================================================
-   PHONE
-   ========================================================= */
+/* =========================
+   PEAR PHONE
+========================= */
 
-#phone-container {
+#phone-container{
+  position:relative;
+  width:min(170vh,1500px);
+  aspect-ratio:1212/1188;
 
-    position: relative;
+  background:url("pear-phone.png") center/contain no-repeat;
 
-    width: min(170vh, 1500px);
+  transform:rotate(90deg);
 
-    height: auto;
-
-    aspect-ratio: 1212 / 1188;
-
-    background-image: url("pear-phone.png");
-
-    background-repeat: no-repeat;
-
-    background-position: center;
-
-    background-size: contain;
-
-    /* KEEP PHONE FACING THE SAME WAY */
-    transform: rotate(90deg);
-
-    touch-action: pan-y;
+  touch-action:none;
+  user-select:none;
 }
 
-/* =========================================================
-   PAGE 2 IMAGE
-   ========================================================= */
+/* =========================
+   PAGE 2
+========================= */
 
-#page2 {
+#page2{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
 
-    position: absolute;
+  background:url("page2.png") center/contain no-repeat;
 
-    inset: 0;
+  z-index:50;
+  pointer-events:none;
 
-    width: 100%;
-    height: 100%;
+  opacity:0;
 
-    background-image: url("page2.png");
+  transform:translateX(100%) scale(.96);
 
-    background-repeat: no-repeat;
-
-    background-position: center;
-
-    background-size: contain;
-
-    display: none;
-
-    z-index: 50;
-
-    pointer-events: none;
+  transition:
+    transform .42s cubic-bezier(.22,.8,.25,1),
+    opacity .30s ease;
 }
 
-#phone-container.page-two #page2 {
-    display: block;
+#phone-container.page-two #page2{
+  opacity:1;
+  transform:translateX(0) scale(1);
 }
 
-/* =========================================================
+/* =========================
    HOTSPOTS
-   ========================================================= */
+========================= */
 
-.hotspot {
+.hotspot{
+  position:absolute;
 
-    position: absolute;
+  border:0;
+  background:transparent;
 
-    display: block;
+  z-index:200;
 
-    border: none;
+  touch-action:manipulation;
 
-    outline: none;
-
-    background: transparent;
-
-    padding: 0;
-
-    margin: 0;
-
-    cursor: pointer;
-
-    z-index: 200;
-
-    -webkit-tap-highlight-color: transparent;
-
-    touch-action: manipulation;
+  cursor:pointer;
 }
 
-.hotspot::after {
+/* PAGE 1 */
 
-    content: "";
-
-    position: absolute;
-
-    left: -15%;
-
-    top: -15%;
-
-    width: 130%;
-
-    height: 130%;
-
-    background: transparent;
+#messages{
+  left:43.1%;
+  top:25.7%;
+  width:10%;
+  aspect-ratio:1;
 }
 
-.hotspot:active {
-
-    transform: scale(.90);
-
+#camera{
+  left:54%;
+  top:25.7%;
+  width:10%;
+  aspect-ratio:1;
 }
 
-/* =========================================================
-   PAGE 1 HOTSPOTS
-   ========================================================= */
-
-#messages {
-    left: 43.1%;
-    top: 25.7%;
-    width: 10%;
-    aspect-ratio: 1;
+#splashface{
+  left:38%;
+  top:36.1%;
+  width:10%;
+  aspect-ratio:1;
 }
 
-#camera {
-    left: 54%;
-    top: 25.7%;
-    width: 10%;
-    aspect-ratio: 1;
+#stocks{
+  left:47.5%;
+  top:36.1%;
+  width:10%;
+  aspect-ratio:1;
 }
 
-#splashface {
-    left: 38%;
-    top: 36.1%;
-    width: 10%;
-    aspect-ratio: 1;
+#maps{
+  left:57%;
+  top:36.1%;
+  width:10%;
+  aspect-ratio:1;
 }
 
-#stocks {
-    left: 47.5%;
-    top: 36.1%;
-    width: 10%;
-    aspect-ratio: 1;
+#photos{
+  left:38%;
+  top:46.9%;
+  width:10%;
+  aspect-ratio:1;
 }
 
-#maps {
-    left: 57%;
-    top: 36.1%;
-    width: 10%;
-    aspect-ratio: 1;
+#weather{
+  left:47.5%;
+  top:46.9%;
+  width:10%;
+  aspect-ratio:1;
 }
 
-#photos {
-    left: 38%;
-    top: 46.9%;
-    width: 10%;
-    aspect-ratio: 1;
+#notes{
+  left:57%;
+  top:46.9%;
+  width:10%;
+  aspect-ratio:1;
 }
 
-#weather {
-    left: 47.5%;
-    top: 46.9%;
-    width: 10%;
-    aspect-ratio: 1;
+#peartunes{
+  left:32%;
+  top:55.9%;
+  width:10%;
+  aspect-ratio:1;
 }
 
-#notes {
-    left: 57%;
-    top: 46.9%;
-    width: 10%;
-    aspect-ratio: 1;
+#settings{
+  left:42%;
+  top:55.9%;
+  width:10%;
+  aspect-ratio:1;
 }
 
-#peartunes {
-    left: 32%;
-    top: 55.9%;
-    width: 10%;
-    aspect-ratio: 1;
+#clock{
+  left:52%;
+  top:55.9%;
+  width:10%;
+  aspect-ratio:1;
 }
 
-#settings {
-    left: 42%;
-    top: 55.9%;
-    width: 10%;
-    aspect-ratio: 1;
+#videos{
+  left:62%;
+  top:55.9%;
+  width:10%;
+  aspect-ratio:1;
 }
 
-#clock {
-    left: 52%;
-    top: 55.9%;
-    width: 10%;
-    aspect-ratio: 1;
+#phone{
+  left:32%;
+  top:65.9%;
+  width:10%;
+  aspect-ratio:1;
 }
 
-#videos {
-    left: 62%;
-    top: 55.9%;
-    width: 10%;
-    aspect-ratio: 1;
+#mail{
+  left:42%;
+  top:65.9%;
+  width:10%;
+  aspect-ratio:1;
 }
 
-#phone {
-    left: 32%;
-    top: 65.9%;
-    width: 10%;
-    aspect-ratio: 1;
+#compass{
+  left:52%;
+  top:65.9%;
+  width:10%;
+  aspect-ratio:1;
 }
 
-#mail {
-    left: 42%;
-    top: 65.9%;
-    width: 10%;
-    aspect-ratio: 1;
+#music{
+  left:62%;
+  top:65.9%;
+  width:10%;
+  aspect-ratio:1;
 }
 
-#compass {
-    left: 52%;
-    top: 65.9%;
-    width: 10%;
-    aspect-ratio: 1;
+#home{
+  left:46%;
+  top:78.8%;
+  width:9%;
+  aspect-ratio:1;
 }
 
-#music {
-    left: 62%;
-    top: 65.9%;
-    width: 10%;
-    aspect-ratio: 1;
+/* PAGE 1 disappears on page 2 */
+
+#phone-container.page-two > .hotspot:not(.page2-hotspot){
+  pointer-events:none;
 }
 
-#home {
-    left: 46%;
-    top: 78.8%;
-    width: 9%;
-    aspect-ratio: 1;
-}
-
-/* =========================================================
+/* =========================
    PAGE 2 HOTSPOTS
-   ========================================================= */
+========================= */
 
-.page2-hotspot {
-
-    display: none;
-
-    z-index: 250;
+.page2-hotspot{
+  display:none;
+  z-index:300;
+  pointer-events:auto;
 }
 
-#phone-container.page-two .page2-hotspot {
-
-    display: block;
+#phone-container.page-two .page2-hotspot{
+  display:block;
 }
 
-/* Lingo */
-
-#p2-lingo {
-    left: 41%;
-    top: 24%;
-    width: 10%;
-    aspect-ratio: 1;
+#p2-lingo{
+  left:37%;
+  top:24%;
+  width:10%;
+  aspect-ratio:1;
 }
 
-/* SplashFace */
-
-#p2-splash {
-    left: 55%;
-    top: 24%;
-    width: 10%;
-    aspect-ratio: 1;
+#p2-splash{
+  left:51%;
+  top:24%;
+  width:10%;
+  aspect-ratio:1;
 }
 
-/* Thumb */
-
-#p2-thumb {
-    left: 33%;
-    top: 35%;
-    width: 10%;
-    aspect-ratio: 1;
+#p2-thumb{
+  left:65%;
+  top:24%;
+  width:10%;
+  aspect-ratio:1;
 }
 
-/* DanWarp */
-
-#p2-danwarp {
-    left: 47%;
-    top: 36%;
-    width: 10%;
-    aspect-ratio: 1;
+#p2-danwarp{
+  left:37%;
+  top:37%;
+  width:10%;
+  aspect-ratio:1;
 }
 
-/* Image */
-
-#p2-image {
-    left: 61%;
-    top: 35%;
-    width: 10%;
-    aspect-ratio: 1;
+#p2-image{
+  left:51%;
+  top:37%;
+  width:10%;
+  aspect-ratio:1;
 }
 
-/* Chrono */
-
-#p2-chrono {
-    left: 33%;
-    top: 47%;
-    width: 10%;
-    aspect-ratio: 1;
+#p2-chrono{
+  left:65%;
+  top:37%;
+  width:10%;
+  aspect-ratio:1;
 }
 
-/* ZapLook */
-
-#p2-zaplook {
-    left: 47%;
-    top: 48%;
-    width: 10%;
-    aspect-ratio: 1;
+#p2-zaplook{
+  left:37%;
+  top:50%;
+  width:10%;
+  aspect-ratio:1;
 }
 
-/* Weather */
-
-#p2-weather {
-    left: 62%;
-    top: 47%;
-    width: 10%;
-    aspect-ratio: 1;
+#p2-weather{
+  left:51%;
+  top:50%;
+  width:10%;
+  aspect-ratio:1;
 }
 
-/* Music */
-
-#p2-music {
-    left: 27%;
-    top: 59%;
-    width: 10%;
-    aspect-ratio: 1;
+#p2-music{
+  left:65%;
+  top:50%;
+  width:10%;
+  aspect-ratio:1;
 }
 
-/* Monkey */
-
-#p2-monkey {
-    left: 40%;
-    top: 62%;
-    width: 10%;
-    aspect-ratio: 1;
+#p2-monkey{
+  left:37%;
+  top:63%;
+  width:10%;
+  aspect-ratio:1;
 }
 
-/* Remark */
-
-#p2-remark {
-    left: 54%;
-    top: 62%;
-    width: 10%;
-    aspect-ratio: 1;
+#p2-remark{
+  left:51%;
+  top:63%;
+  width:10%;
+  aspect-ratio:1;
 }
 
-/* Settings */
-
-#p2-settings {
-    left: 68%;
-    top: 59%;
-    width: 10%;
-    aspect-ratio: 1;
+#p2-settings{
+  left:65%;
+  top:63%;
+  width:10%;
+  aspect-ratio:1;
 }
 
-/* Phone */
-
-#p2-phone {
-    left: 26%;
-    top: 72%;
-    width: 10%;
-    aspect-ratio: 1;
+#p2-phone{
+  left:37%;
+  top:75%;
+  width:10%;
+  aspect-ratio:1;
 }
 
-/* Mail */
-
-#p2-mail {
-    left: 40%;
-    top: 73%;
-    width: 10%;
-    aspect-ratio: 1;
+#p2-mail{
+  left:51%;
+  top:75%;
+  width:10%;
+  aspect-ratio:1;
 }
 
-/* Compass */
-
-#p2-compass {
-    left: 54%;
-    top: 73%;
-    width: 10%;
-    aspect-ratio: 1;
+#p2-compass{
+  left:65%;
+  top:75%;
+  width:10%;
+  aspect-ratio:1;
 }
 
-/* Bottom Music */
-
-#p2-music2 {
-    left: 68%;
-    top: 72%;
-    width: 10%;
-    aspect-ratio: 1;
+#p2-music2{
+  left:51%;
+  top:86%;
+  width:10%;
+  aspect-ratio:1;
 }
 
-/* =========================================================
+/* =========================
    APP WINDOW
-   ========================================================= */
+========================= */
 
-#overlay {
+#overlay{
+  position:absolute;
 
-    position: absolute;
+  left:31%;
+  top:22%;
 
-    left: 31%;
+  width:38%;
+  height:47%;
 
-    top: 22%;
+  background:#f2f2f7;
 
-    width: 38%;
+  z-index:500;
 
-    height: 47%;
+  display:none;
 
-    background: #f2f2f7;
+  overflow:hidden;
 
-    z-index: 500;
+  border-radius:9px;
 
-    display: none;
-
-    overflow: hidden;
-
-    border-radius: 9px;
-
-    box-shadow:
-        0 4px 18px rgba(0,0,0,.5);
+  box-shadow:
+    0 4px 18px rgba(0,0,0,.5);
 }
 
-#overlay.open {
-    display: block;
+#overlay.open{
+  display:block;
 }
 
-#app-window {
+#app-window{
+  width:100%;
+  height:100%;
 
-    width: 100%;
+  overflow:auto;
 
-    height: 100%;
+  background:#f2f2f7;
 
-    overflow: auto;
+  color:#111;
 
-    background: #f2f2f7;
+  -webkit-overflow-scrolling:touch;
 
-    color: #111;
+  padding-bottom:10px;
 }
+
+/* =========================
+   PAGE DOTS
+========================= */
+
+#page-dots{
+  position:absolute;
+
+  bottom:3%;
+  left:50%;
+
+  transform:translateX(-50%);
+
+  z-index:600;
+
+  color:white;
+
+  font-size:16px;
+
+  letter-spacing:5px;
+
+  pointer-events:none;
+}
+
 
 /* =========================================================
-   APP STYLES
+   NEW PEAR PHONE KEYBOARD
    ========================================================= */
 
-.header {
+#pear-keyboard{
 
-    height: 38px;
+  position:absolute;
 
-    min-height: 38px;
+  left:4%;
+  right:4%;
+  bottom:3%;
 
-    display: flex;
+  width:92%;
 
-    align-items: center;
+  padding:7px;
 
-    gap: 8px;
+  background:rgba(35,35,40,.98);
 
-    padding: 5px 8px;
+  border-radius:12px;
 
-    background: #eee;
+  z-index:1000;
 
-    border-bottom: 1px solid #ccc;
+  display:none;
 
-    font-weight: bold;
+  box-shadow:
+    0 5px 20px rgba(0,0,0,.55);
 
-    position: sticky;
+  transform:translateY(120%);
 
-    top: 0;
+  opacity:0;
 
-    z-index: 5;
+  transition:
+    transform .28s cubic-bezier(.22,.8,.25,1),
+    opacity .2s ease;
+
+  touch-action:manipulation;
 }
 
-.back {
 
-    border: none;
+/* keyboard appears */
 
-    background: #ddd;
+#pear-keyboard.keyboard-show{
 
-    border-radius: 6px;
+  transform:translateY(0);
 
-    width: 30px;
+  opacity:1;
 
-    height: 28px;
-
-    font-size: 20px;
-
-    line-height: 20px;
-
-    cursor: pointer;
 }
 
-.content {
 
-    padding: 10px;
+/* keyboard rows */
 
-    font-size: 13px;
+.pear-keyboard-row{
+
+  display:flex;
+
+  justify-content:center;
+
+  gap:4px;
+
+  margin-bottom:4px;
+
 }
 
-.button {
 
-    border: none;
+/* keyboard buttons */
 
-    background: #ddd;
+.pear-keyboard-row button{
 
-    color: #111;
+  flex:1;
 
-    border-radius: 7px;
+  min-width:0;
 
-    padding: 8px 11px;
+  height:32px;
 
-    margin: 3px;
+  border:0;
 
-    font-size: 12px;
+  border-radius:6px;
 
-    cursor: pointer;
+  background:#f5f5f7;
 
-    touch-action: manipulation;
+  color:#111;
+
+  font-size:12px;
+
+  font-weight:bold;
+
+  cursor:pointer;
+
+  touch-action:manipulation;
+
+  transition:
+    transform .08s ease,
+    background .08s ease;
 }
 
-.button:active {
-    transform: scale(.94);
+
+/* button press animation */
+
+.pear-keyboard-row button:active{
+
+  transform:scale(.88);
+
+  background:#cfcfd4;
+
 }
 
-input,
-textarea,
-select {
 
-    width: 100%;
+/* bottom row */
 
-    padding: 8px;
+.pear-keyboard-row.bottom button:first-child{
 
-    margin: 4px 0;
+  flex:1.3;
 
-    border: 1px solid #bbb;
-
-    border-radius: 6px;
-
-    font-family: inherit;
-
-    font-size: 13px;
 }
 
-textarea {
+.pear-keyboard-row.bottom button:nth-child(2){
 
-    min-height: 65px;
+  flex:5;
 
-    resize: vertical;
 }
 
-.card {
+.pear-keyboard-row.bottom button:last-child{
 
-    background: #fff;
+  flex:1.3;
 
-    border-radius: 9px;
-
-    padding: 10px;
-
-    margin-bottom: 8px;
-
-    box-shadow:
-        0 1px 4px rgba(0,0,0,.12);
-
-    cursor: pointer;
 }
 
-.card:active {
-    transform: scale(.98);
+
+/* make sure keyboard stays above app */
+
+#overlay #pear-keyboard{
+
+  z-index:1000;
+
 }
 
-.grid {
 
-    display: grid;
+/* give app content room for keyboard */
 
-    grid-template-columns:
-        repeat(2, 1fr);
+#overlay.keyboard-open #app-window{
 
-    gap: 7px;
+  padding-bottom:145px;
+
 }
 
-.big-icon {
 
-    font-size: 55px;
+/* keyboard labels */
 
-    text-align: center;
+.pear-keyboard-row button{
 
-    margin: 8px;
+  -webkit-tap-highlight-color:transparent;
+
+  user-select:none;
+
 }
 
-.message {
 
-    background: #e5e5ea;
+/* =========================
+   SMALL SCREEN SUPPORT
+========================= */
 
-    padding: 7px 10px;
+@media(max-width:700px){
 
-    border-radius: 12px;
+  #pear-keyboard{
 
-    margin: 5px 0;
+    padding:5px;
 
-    max-width: 85%;
-}
+    left:3%;
+    width:94%;
+  }
 
-.message.me {
+  .pear-keyboard-row{
 
-    margin-left: auto;
+    gap:3px;
 
-    background: #cfe8ff;
-}
+    margin-bottom:3px;
+  }
 
-.progress {
+  .pear-keyboard-row button{
 
-    height: 10px;
+    height:28px;
 
-    background: #ddd;
+    font-size:10px;
 
-    border-radius: 10px;
+    border-radius:5px;
+  }
 
-    overflow: hidden;
-}
-
-.progress div {
-
-    height: 100%;
-
-    background: #5cb85c;
-}
-
-/* =========================================================
-   PAGE INDICATOR
-   ========================================================= */
-
-#page-dots {
-
-    position: absolute;
-
-    bottom: 3%;
-
-    left: 50%;
-
-    transform: translateX(-50%);
-
-    z-index: 600;
-
-    color: white;
-
-    font-size: 16px;
-
-    pointer-events: none;
-
-    letter-spacing: 5px;
-}
-
-#phone-container.page-two #page-dots {
-    color: white;
-}
-
-/* =========================================================
-   RESPONSIVE
-   ========================================================= */
-
-@media (orientation: portrait) {
-
-    #phone-container {
-
-        width: min(170vh, 1500px);
-
-        transform: rotate(90deg);
-    }
-}
-
-@media (orientation: landscape) {
-
-    #phone-container {
-
-        width: min(170vh, 1500px);
-
-        transform: rotate(90deg);
-    }
 }
 
 </style>
 </head>
 
+
 <body>
 
 <div id="phone-container">
 
-    <!-- PAGE 2 EXACT IMAGE -->
-    <div id="page2"></div>
+  <!-- =========================
+       PAGE 2 IMAGE
+  ========================== -->
 
-    <!-- =====================================================
-         PAGE 1 APPS
-         ===================================================== -->
+  <div id="page2"></div>
 
-    <button class="hotspot" id="messages"></button>
-    <button class="hotspot" id="camera"></button>
-    <button class="hotspot" id="splashface"></button>
-    <button class="hotspot" id="stocks"></button>
-    <button class="hotspot" id="maps"></button>
-    <button class="hotspot" id="photos"></button>
-    <button class="hotspot" id="weather"></button>
-    <button class="hotspot" id="notes"></button>
-    <button class="hotspot" id="peartunes"></button>
-    <button class="hotspot" id="settings"></button>
-    <button class="hotspot" id="clock"></button>
-    <button class="hotspot" id="videos"></button>
-    <button class="hotspot" id="phone"></button>
-    <button class="hotspot" id="mail"></button>
-    <button class="hotspot" id="compass"></button>
-    <button class="hotspot" id="music"></button>
-    <button class="hotspot" id="home"></button>
 
-    <!-- =====================================================
-         PAGE 2 APPS
-         ===================================================== -->
+  <!-- =========================
+       PAGE 1 APPS
+  ========================== -->
 
-    <button class="hotspot page2-hotspot" id="p2-lingo"></button>
+  <button
+    class="hotspot"
+    id="messages"
+    onclick="openApp('messages')">
+  </button>
 
-    <button class="hotspot page2-hotspot" id="p2-splash"></button>
+  <button
+    class="hotspot"
+    id="camera"
+    onclick="openApp('camera')">
+  </button>
 
-    <button class="hotspot page2-hotspot" id="p2-thumb"></button>
+  <button
+    class="hotspot"
+    id="splashface"
+    onclick="openApp('splashface')">
+  </button>
 
-    <button class="hotspot page2-hotspot" id="p2-danwarp"></button>
+  <button
+    class="hotspot"
+    id="stocks"
+    onclick="openApp('stocks')">
+  </button>
 
-    <button class="hotspot page2-hotspot" id="p2-image"></button>
+  <button
+    class="hotspot"
+    id="maps"
+    onclick="openApp('maps')">
+  </button>
 
-    <button class="hotspot page2-hotspot" id="p2-chrono"></button>
+  <button
+    class="hotspot"
+    id="photos"
+    onclick="openApp('photos')">
+  </button>
 
-    <button class="hotspot page2-hotspot" id="p2-zaplook"></button>
+  <button
+    class="hotspot"
+    id="weather"
+    onclick="openApp('weather')">
+  </button>
 
-    <button class="hotspot page2-hotspot" id="p2-weather"></button>
+  <button
+    class="hotspot"
+    id="notes"
+    onclick="openApp('notes')">
+  </button>
 
-    <button class="hotspot page2-hotspot" id="p2-music"></button>
+  <button
+    class="hotspot"
+    id="peartunes"
+    onclick="openApp('peartunes')">
+  </button>
 
-    <button class="hotspot page2-hotspot" id="p2-monkey"></button>
+  <button
+    class="hotspot"
+    id="settings"
+    onclick="openApp('settings')">
+  </button>
 
-    <button class="hotspot page2-hotspot" id="p2-remark"></button>
+  <button
+    class="hotspot"
+    id="clock"
+    onclick="openApp('clock')">
+  </button>
 
-    <button class="hotspot page2-hotspot" id="p2-settings"></button>
+  <button
+    class="hotspot"
+    id="videos"
+    onclick="openApp('videos')">
+  </button>
 
-    <button class="hotspot page2-hotspot" id="p2-phone"></button>
+  <button
+    class="hotspot"
+    id="phone"
+    onclick="openApp('phone')">
+  </button>
 
-    <button class="hotspot page2-hotspot" id="p2-mail"></button>
+  <button
+    class="hotspot"
+    id="mail"
+    onclick="openApp('mail')">
+  </button>
 
-    <button class="hotspot page2-hotspot" id="p2-compass"></button>
+  <button
+    class="hotspot"
+    id="compass"
+    onclick="openApp('compass')">
+  </button>
 
-    <button class="hotspot page2-hotspot" id="p2-music2"></button>
+  <button
+    class="hotspot"
+    id="music"
+    onclick="openApp('peartunes')">
+  </button>
 
-    <!-- =====================================================
-         APP WINDOW
-         ===================================================== -->
+  <button
+    class="hotspot"
+    id="home"
+    onclick="closeApp()">
+  </button>
 
-    <div id="overlay">
 
-        <div id="app-window"></div>
+  <!-- =========================
+       PAGE 2 APPS
+  ========================== -->
 
-    </div>
+  <button
+    class="hotspot page2-hotspot"
+    id="p2-lingo"
+    onclick="openApp('lingo')">
+  </button>
 
-    <div id="page-dots">● ○</div>
+  <button
+    class="hotspot page2-hotspot"
+    id="p2-splash"
+    onclick="openApp('splashface')">
+  </button>
+
+  <button
+    class="hotspot page2-hotspot"
+    id="p2-thumb"
+    onclick="openApp('tums')">
+  </button>
+
+  <button
+    class="hotspot page2-hotspot"
+    id="p2-danwarp"
+    onclick="openApp('danwarp')">
+  </button>
+
+  <button
+    class="hotspot page2-hotspot"
+    id="p2-image"
+    onclick="openApp('image')">
+  </button>
+
+  <button
+    class="hotspot page2-hotspot"
+    id="p2-chrono"
+    onclick="openApp('chrono')">
+  </button>
+
+  <button
+    class="hotspot page2-hotspot"
+    id="p2-zaplook"
+    onclick="openApp('zaplook')">
+  </button>
+
+  <button
+    class="hotspot page2-hotspot"
+    id="p2-weather"
+    onclick="openApp('weather')">
+  </button>
+
+  <button
+    class="hotspot page2-hotspot"
+    id="p2-music"
+    onclick="openApp('peartunes')">
+  </button>
+
+  <button
+    class="hotspot page2-hotspot"
+    id="p2-monkey"
+    onclick="openApp('monkey')">
+  </button>
+
+  <button
+    class="hotspot page2-hotspot"
+    id="p2-remark"
+    onclick="openApp('remark')">
+  </button>
+
+  <button
+    class="hotspot page2-hotspot"
+    id="p2-settings"
+    onclick="openApp('settings')">
+  </button>
+
+  <button
+    class="hotspot page2-hotspot"
+    id="p2-phone"
+    onclick="openApp('phone')">
+  </button>
+
+  <button
+    class="hotspot page2-hotspot"
+    id="p2-mail"
+    onclick="openApp('mail')">
+  </button>
+
+  <button
+    class="hotspot page2-hotspot"
+    id="p2-compass"
+    onclick="openApp('compass')">
+  </button>
+
+  <button
+    class="hotspot page2-hotspot"
+    id="p2-music2"
+    onclick="openApp('peartunes')">
+  </button>
+
+
+  <!-- =========================
+       APP WINDOW
+  ========================== -->
+
+  <div id="overlay">
+
+    <div id="app-window"></div>
+
+  </div>
+
+
+  <!-- PAGE INDICATOR -->
+
+  <div id="page-dots">
+    ● ○
+  </div>
 
 </div>
 
+
 <script src="app.js"></script>
+
+
+<!-- =========================================================
+     KEYBOARD SUPPORT
+     ========================================================= -->
 
 <script>
 
+let pearKeyboardVisible = false;
+
+let pearKeyboardShift = false;
+
+let pearKeyboardNumbers = false;
+
+let activeKeyboardField = null;
+
+
 /* =========================================================
-   PAGE SWIPING
-   ========================================================= */
+   SHOW KEYBOARD
+========================================================= */
 
-let currentPage = 1;
+function showPearKeyboard(input){
 
-let swipeStartX = 0;
-let swipeStartY = 0;
+  if(!input) return;
 
-const phone = document.getElementById("phone-container");
-const overlay = document.getElementById("overlay");
-const dots = document.getElementById("page-dots");
+  activeKeyboardField = input;
 
-function showPage(page) {
+  pearKeyboardVisible = true;
 
-    currentPage = page;
+  let keyboard =
+    document.getElementById("pear-keyboard");
 
-    if (page === 2) {
 
-        phone.classList.add("page-two");
+  /* Create keyboard if it doesn't exist */
 
-        dots.textContent = "○ ●";
+  if(!keyboard){
 
-    } else {
+    keyboard =
+      document.createElement("div");
 
-        phone.classList.remove("page-two");
+    keyboard.id =
+      "pear-keyboard";
 
-        dots.textContent = "● ○";
-    }
 
-    if (overlay.classList.contains("open")) {
+    keyboard.innerHTML = `
 
-        if (typeof closeApp === "function") {
-            closeApp();
-        }
-    }
+      <div class="pear-keyboard-row">
+
+        <button onpointerdown="pearKey(event,'Q')">Q</button>
+        <button onpointerdown="pearKey(event,'W')">W</button>
+        <button onpointerdown="pearKey(event,'E')">E</button>
+        <button onpointerdown="pearKey(event,'R')">R</button>
+        <button onpointerdown="pearKey(event,'T')">T</button>
+        <button onpointerdown="pearKey(event,'Y')">Y</button>
+        <button onpointerdown="pearKey(event,'U')">U</button>
+        <button onpointerdown="pearKey(event,'I')">I</button>
+        <button onpointerdown="pearKey(event,'O')">O</button>
+        <button onpointerdown="pearKey(event,'P')">P</button>
+
+      </div>
+
+
+      <div class="pear-keyboard-row">
+
+        <button onpointerdown="pearKey(event,'A')">A</button>
+        <button onpointerdown="pearKey(event,'S')">S</button>
+        <button onpointerdown="pearKey(event,'D')">D</button>
+        <button onpointerdown="pearKey(event,'F')">F</button>
+        <button onpointerdown="pearKey(event,'G')">G</button>
+        <button onpointerdown="pearKey(event,'H')">H</button>
+        <button onpointerdown="pearKey(event,'J')">J</button>
+        <button onpointerdown="pearKey(event,'K')">K</button>
+        <button onpointerdown="pearKey(event,'L')">L</button>
+
+      </div>
+
+
+      <div class="pear-keyboard-row">
+
+        <button onpointerdown="pearKey(event,'Z')">Z</button>
+        <button onpointerdown="pearKey(event,'X')">X</button>
+        <button onpointerdown="pearKey(event,'C')">C</button>
+        <button onpointerdown="pearKey(event,'V')">V</button>
+        <button onpointerdown="pearKey(event,'B')">B</button>
+        <button onpointerdown="pearKey(event,'N')">N</button>
+        <button onpointerdown="pearKey(event,'M')">M</button>
+
+      </div>
+
+
+      <div class="pear-keyboard-row bottom">
+
+        <button
+          onpointerdown="pearShift(event)">
+          ⇧
+        </button>
+
+        <button
+          onpointerdown="pearSpace(event)">
+          SPACE
+        </button>
+
+        <button
+          onpointerdown="pearBackspace(event)">
+          ⌫
+        </button>
+
+      </div>
+
+    `;
+
+
+    document
+      .getElementById("overlay")
+      .appendChild(keyboard);
+
+  }
+
+
+  keyboard.style.display =
+    "block";
+
+
+  document
+    .getElementById("overlay")
+    .classList
+    .add("keyboard-open");
+
+
+  requestAnimationFrame(() => {
+
+    keyboard.classList.add(
+      "keyboard-show"
+    );
+
+  });
+
 }
 
-/* Touch */
 
-phone.addEventListener("touchstart", function(event) {
+/* =========================================================
+   KEYBOARD INPUT
+========================================================= */
 
-    if (overlay.classList.contains("open")) return;
+function pearKey(event,key){
 
-    const touch = event.touches[0];
+  event.preventDefault();
 
-    swipeStartX = touch.clientX;
-    swipeStartY = touch.clientY;
+  const input =
+    activeKeyboardField;
 
-}, { passive: true });
+  if(!input) return;
 
 
-phone.addEventListener("touchend", function(event) {
+  let character =
+    pearKeyboardShift
+      ? key.toUpperCase()
+      : key.toLowerCase();
 
-    if (overlay.classList.contains("open")) return;
 
-    const touch = event.changedTouches[0];
+  const start =
+    input.selectionStart ?? input.value.length;
 
-    const differenceX =
-        touch.clientX - swipeStartX;
+  const end =
+    input.selectionEnd ?? input.value.length;
 
-    const differenceY =
-        touch.clientY - swipeStartY;
 
-    if (Math.abs(differenceX) < 60) return;
+  input.value =
+    input.value.substring(0,start) +
+    character +
+    input.value.substring(end);
 
-    if (Math.abs(differenceX) <
-        Math.abs(differenceY)) return;
 
-    if (differenceX < 0) {
+  input.selectionStart =
+    input.selectionEnd =
+      start + character.length;
 
-        showPage(2);
 
-    } else {
+  input.dispatchEvent(
+    new Event("input",{bubbles:true})
+  );
 
-        showPage(1);
+
+  if(pearKeyboardShift){
+
+    pearKeyboardShift=false;
+
+  }
+
+}
+
+
+/* =========================================================
+   SPACE
+========================================================= */
+
+function pearSpace(event){
+
+  event.preventDefault();
+
+  const input =
+    activeKeyboardField;
+
+  if(!input) return;
+
+
+  const start =
+    input.selectionStart ?? input.value.length;
+
+  const end =
+    input.selectionEnd ?? input.value.length;
+
+
+  input.value =
+    input.value.substring(0,start) +
+    " " +
+    input.value.substring(end);
+
+
+  input.selectionStart =
+    input.selectionEnd =
+      start + 1;
+
+
+  input.dispatchEvent(
+    new Event("input",{bubbles:true})
+  );
+
+}
+
+
+/* =========================================================
+   BACKSPACE
+========================================================= */
+
+function pearBackspace(event){
+
+  event.preventDefault();
+
+  const input =
+    activeKeyboardField;
+
+  if(!input) return;
+
+
+  const start =
+    input.selectionStart ?? input.value.length;
+
+  const end =
+    input.selectionEnd ?? input.value.length;
+
+
+  if(start !== end){
+
+    input.value =
+      input.value.substring(0,start) +
+      input.value.substring(end);
+
+    input.selectionStart =
+      input.selectionEnd =
+        start;
+
+  }
+
+  else if(start > 0){
+
+    input.value =
+      input.value.substring(0,start-1) +
+      input.value.substring(end);
+
+    input.selectionStart =
+      input.selectionEnd =
+        start - 1;
+
+  }
+
+
+  input.dispatchEvent(
+    new Event("input",{bubbles:true})
+  );
+
+}
+
+
+/* =========================================================
+   SHIFT
+========================================================= */
+
+function pearShift(event){
+
+  event.preventDefault();
+
+  pearKeyboardShift =
+    !pearKeyboardShift;
+
+}
+
+
+/* =========================================================
+   HIDE KEYBOARD
+========================================================= */
+
+function hidePearKeyboard(){
+
+  pearKeyboardVisible=false;
+
+  activeKeyboardField=null;
+
+
+  const keyboard =
+    document.getElementById(
+      "pear-keyboard"
+    );
+
+
+  if(keyboard){
+
+    keyboard.classList.remove(
+      "keyboard-show"
+    );
+
+    setTimeout(() => {
+
+      if(!pearKeyboardVisible){
+
+        keyboard.style.display =
+          "none";
+
+      }
+
+    },300);
+
+  }
+
+
+  const overlay =
+    document.getElementById(
+      "overlay"
+    );
+
+
+  if(overlay){
+
+    overlay.classList.remove(
+      "keyboard-open"
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   AUTOMATICALLY SHOW KEYBOARD
+   WHEN TEXT FIELD IS SELECTED
+========================================================= */
+
+document.addEventListener(
+  "focusin",
+  function(event){
+
+    const element =
+      event.target;
+
+
+    if(
+      element &&
+      (
+        element.tagName === "INPUT" ||
+        element.tagName === "TEXTAREA"
+      )
+    ){
+
+      setTimeout(() => {
+
+        showPearKeyboard(element);
+
+      },50);
+
     }
 
-}, { passive: true });
+  }
+);
 
 
-/* Mouse drag support too */
+/* =========================================================
+   PREVENT KEYBOARD BUTTONS FROM STEALING FOCUS
+========================================================= */
 
-let mouseStartX = 0;
+document.addEventListener(
+  "pointerdown",
+  function(event){
 
-phone.addEventListener("mousedown", function(event) {
+    if(
+      event.target.closest(
+        "#pear-keyboard button"
+      )
+    ){
 
-    if (overlay.classList.contains("open")) return;
+      event.preventDefault();
 
-    mouseStartX = event.clientX;
-
-});
-
-phone.addEventListener("mouseup", function(event) {
-
-    if (overlay.classList.contains("open")) return;
-
-    const difference =
-        event.clientX - mouseStartX;
-
-    if (Math.abs(difference) < 70) return;
-
-    if (difference < 0) {
-
-        showPage(2);
-
-    } else {
-
-        showPage(1);
     }
 
-});
+  },
+  true
+);
 
 </script>
 

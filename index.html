@@ -1,86 +1,147 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Pear Phone OS</title>
 
 <style>
-*{
-  box-sizing:border-box;
-  -webkit-tap-highlight-color:transparent
-}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 
 html,body{
   margin:0;
   width:100%;
   height:100%;
-  overflow:hidden;
-  background:#fff
+  overflow:hidden
 }
 
 body{
   display:flex;
   align-items:center;
   justify-content:center;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif
+  background:#fff;
+  font-family:Arial,sans-serif
 }
 
 #phone{
   position:relative;
-  width:min(82vw,520px);
-  aspect-ratio:1212 / 1188;
-  background:url("pear-phone.jpg") center/contain no-repeat;
-  background-color:#fff;
+  width:min(86vw,760px);
+  aspect-ratio:1212/1188;
+  background:url('pear-phone.jpg') center/contain no-repeat,radial-gradient(#20252b,#000);
   transform:rotate(90deg) scale(.78);
-  transform-origin:center center;
+  transform-origin:center;
+  touch-action:none
 }
 
-[data-app]{
+.hotspot{
   position:absolute;
   border:0;
   background:transparent;
   padding:0;
-  margin:0;
   border-radius:50%;
-  cursor:pointer;
-  touch-action:manipulation;
-  -webkit-appearance:none;
-  appearance:none;
+  z-index:20;
+  cursor:pointer
 }
 
-[data-app]:active{
-  transform:scale(.93);
-  background:rgba(255,255,255,.08)
+.hotspot:active{
+  background:#ffffff18;
+  transform:scale(.92)
 }
 
 /* PAGE 1 */
-#page1{
-  position:absolute;
-  inset:0;
-  display:block;
+
+#page1 button:nth-child(1){
+  left:43.1%;top:25.7%;width:8.3%;aspect-ratio:1
 }
 
-#messages{left:43.1%;top:25.7%;width:9.6%;aspect-ratio:1}
-#camera{left:54%;top:25.7%;width:9.6%;aspect-ratio:1}
-#splashface{left:38%;top:36.1%;width:9.6%;aspect-ratio:1}
-#stocks{left:47.5%;top:36.1%;width:9.6%;aspect-ratio:1}
-#maps{left:57%;top:36.1%;width:9.6%;aspect-ratio:1}
-#photos{left:38%;top:46.9%;width:9.6%;aspect-ratio:1}
-#weather{left:47.5%;top:46.9%;width:9.6%;aspect-ratio:1}
-#notes{left:57%;top:46.9%;width:9.6%;aspect-ratio:1}
-#peartunes{left:32%;top:55.9%;width:9.6%;aspect-ratio:1}
-#settings{left:42%;top:55.9%;width:9.6%;aspect-ratio:1}
-#clock{left:52%;top:55.9%;width:9.6%;aspect-ratio:1}
-#videos{left:62%;top:55.9%;width:9.6%;aspect-ratio:1}
-#phone{left:32%;top:65.9%;width:9.6%;aspect-ratio:1}
-#mail{left:42%;top:65.9%;width:9.6%;aspect-ratio:1}
-#compass{left:52%;top:65.9%;width:9.6%;aspect-ratio:1}
-#music{left:62%;top:65.9%;width:9.6%;aspect-ratio:1}
+#page1 button:nth-child(2){
+  left:54%;top:25.7%;width:8.3%;aspect-ratio:1
+}
+
+#page1 button:nth-child(3){
+  left:38%;top:36.1%;width:8.3%;aspect-ratio:1
+}
+
+#page1 button:nth-child(4){
+  left:47.5%;top:36.1%;width:8.3%;aspect-ratio:1
+}
+
+#page1 button:nth-child(5){
+  left:57%;top:36.1%;width:8.3%;aspect-ratio:1
+}
+
+#page1 button:nth-child(6){
+  left:38%;top:46.9%;width:8.3%;aspect-ratio:1
+}
+
+#page1 button:nth-child(7){
+  left:47.5%;top:46.9%;width:8.3%;aspect-ratio:1
+}
+
+#page1 button:nth-child(8){
+  left:57%;top:46.9%;width:8.3%;aspect-ratio:1
+}
+
+#page1 button:nth-child(9){
+  left:32%;top:55.9%;width:8.3%;aspect-ratio:1
+}
+
+#page1 button:nth-child(10){
+  left:42%;top:55.9%;width:8.3%;aspect-ratio:1
+}
+
+#page1 button:nth-child(11){
+  left:52%;top:55.9%;width:8.3%;aspect-ratio:1
+}
+
+#page1 button:nth-child(12){
+  left:62%;top:55.9%;width:8.3%;aspect-ratio:1
+}
+
+#page1 button:nth-child(13){
+  left:32%;top:65.9%;width:8.3%;aspect-ratio:1
+}
+
+#page1 button:nth-child(14){
+  left:42%;top:65.9%;width:8.3%;aspect-ratio:1
+}
+
+#page1 button:nth-child(15){
+  left:52%;top:65.9%;width:8.3%;aspect-ratio:1
+}
+
+#page1 button:nth-child(16){
+  left:62%;top:65.9%;width:8.3%;aspect-ratio:1
+}
+
+/* PAGE 2 */
+
+#page2{
+  display:none;
+  position:absolute;
+  left:30%;
+  right:25%;
+  top:22%;
+  bottom:22%;
+  z-index:21;
+  grid-template-columns:repeat(3,1fr);
+  grid-auto-rows:1fr;
+  gap:5%
+}
+
+#page2 button{
+  border:0;
+  background:transparent;
+  border-radius:50%
+}
+
+#page2 button:active{
+  background:#fff2;
+  transform:scale(.92)
+}
 
 /* HOME */
+
 #home{
   position:absolute;
   left:46%;
@@ -90,73 +151,52 @@ body{
   border:0;
   background:transparent;
   border-radius:50%;
-  cursor:pointer;
-  z-index:20;
+  z-index:30
 }
 
-/* PAGE 2 */
-#page2{
-  position:absolute;
-  inset:0;
-  display:none;
-}
+/* APP */
 
-#page2 img{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  object-fit:contain;
-  pointer-events:none;
-}
-
-#page2 [data-app]{
-  z-index:5;
-}
-
-/* APP WINDOW */
 #overlay{
   position:absolute;
   left:20%;
   top:18%;
   width:60%;
   height:59%;
-  z-index:50;
+  z-index:100;
   display:none;
   align-items:center;
   justify-content:center;
-  pointer-events:none;
+  background:#0006;
+  border-radius:22px;
+  overflow:hidden
 }
 
 #overlay.open{
-  display:flex;
-  pointer-events:auto;
+  display:flex
 }
 
 #app{
   width:94%;
   height:94%;
-  overflow:hidden;
-  background:linear-gradient(#f7f8fa,#e7e9ec);
+  background:#f4f5f7;
   color:#111;
-  border:2px solid #222;
-  border-radius:18px;
-  box-shadow:
-    0 12px 30px rgba(0,0,0,.45),
-    inset 0 1px rgba(255,255,255,.8);
+  border:2px solid #333;
+  border-radius:17px;
   display:flex;
   flex-direction:column;
+  overflow:hidden
 }
 
 .head{
-  flex:0 0 auto;
+  height:42px;
+  flex:none;
   display:flex;
   align-items:center;
-  gap:10px;
-  padding:8px 10px;
-  background:linear-gradient(#fff,#dfe1e4);
-  border-bottom:1px solid #aaa;
-  font-weight:900;
+  gap:8px;
+  padding:5px 8px;
+  background:linear-gradient(#fff,#e5e5e5);
+  border-bottom:1px solid #bbb;
+  font-weight:900
 }
 
 .head button{
@@ -164,170 +204,175 @@ body{
   height:30px;
   border-radius:50%;
   border:1px solid #aaa;
-  background:linear-gradient(#fff,#ddd);
-  font-size:23px;
-  line-height:20px;
-  cursor:pointer;
+  background:#ddd;
+  font-size:20px
 }
 
 .body{
   flex:1;
   overflow:auto;
-  padding:10px;
+  padding:10px
 }
 
-.bubble{
-  padding:9px 12px;
-  width:max-content;
-  max-width:82%;
-  background:#dedfe3;
-  border-radius:18px;
-  margin-bottom:7px;
+.body button{
+  border:1px solid #aaa;
+  border-radius:9px;
+  background:linear-gradient(#fff,#ddd);
+  padding:8px;
+  font-weight:700
 }
 
-.bubble.me{
-  margin-left:auto;
-  background:linear-gradient(#58b9ff,#1389df);
-  color:#fff;
+.body input,
+.body textarea{
+  font-size:16px;
+  padding:8px;
+  border:1px solid #aaa;
+  border-radius:9px
+}
+
+.body textarea{
+  width:100%;
+  min-height:110px
 }
 
 .row{
   display:flex;
-  gap:8px;
+  gap:6px
 }
 
-button{
-  cursor:pointer;
+.bubble{
+  background:#ddd;
+  border-radius:15px;
+  padding:8px 10px;
+  margin-bottom:6px;
+  width:max-content;
+  max-width:85%
 }
 
-input,textarea{
-  font-size:16px;
-  padding:9px;
-  border:1px solid #aaa;
-  border-radius:10px;
-  outline:none;
-}
-
-textarea{
-  width:100%;
-  min-height:120px;
-  resize:none;
+.me{
+  margin-left:auto;
+  background:#168ee8;
+  color:#fff
 }
 
 .photos{
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:6px;
+  gap:5px
 }
 
 .photos img{
   width:100%;
   aspect-ratio:1;
   object-fit:cover;
-  border-radius:10px;
+  border-radius:7px
 }
 
 .video{
   width:100%;
-  max-height:70%;
-  border-radius:12px;
   background:#000;
+  border-radius:10px
 }
 
 .stock{
   display:flex;
   justify-content:space-between;
-  padding:10px;
-  margin-bottom:7px;
   background:#fff;
   border:1px solid #ddd;
-  border-radius:12px;
-}
-
-.map{
-  height:150px;
-  border-radius:14px;
-  background:linear-gradient(135deg,#d6e5c7,#e7dfb9);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:55px;
+  border-radius:9px;
+  padding:8px;
+  margin-bottom:5px
 }
 
 .big{
   text-align:center;
-  font-size:65px;
-  padding:15px 0;
+  font-size:42px;
+  font-weight:900;
+  padding:20px
+}
+
+.map{
+  height:150px;
+  display:grid;
+  place-items:center;
+  border-radius:10px;
+  background:linear-gradient(135deg,#d8e8ca,#e8dfb5);
+  font-size:45px
 }
 
 /* KEYBOARD */
+
 #keyboard{
   position:absolute;
-  left:22%;
-  top:76%;
-  width:56%;
-  height:20%;
-  z-index:100;
+  left:3%;
+  right:3%;
+  bottom:2%;
+  z-index:500;
   display:none;
   grid-template-columns:repeat(10,1fr);
   gap:3px;
-  padding:5px;
-  background:rgba(20,20,20,.94);
-  border-radius:12px;
-  box-shadow:0 8px 20px rgba(0,0,0,.45);
+  padding:6px;
+  background:#202329ee;
+  border-radius:13px;
+  transform:translateY(120%);
+  transition:.2s
 }
 
 #keyboard.show{
   display:grid;
+  transform:translateY(0)
 }
 
 #keyboard button{
-  border:1px solid #777;
+  height:26px;
+  border:0;
   border-radius:5px;
-  background:linear-gradient(#fff,#ccc);
-  font-weight:800;
-  font-size:10px;
-  padding:2px;
+  font-size:9px;
+  font-weight:800
 }
 
-#keyboard .space{
-  grid-column:span 7;
+.space{
+  grid-column:span 5
 }
 
-#keyboard .wide{
-  grid-column:span 2;
+.wide{
+  grid-column:span 2
 }
+
+/* PAGE ANIMATION */
 
 #flash{
   position:absolute;
   inset:0;
-  z-index:80;
+  z-index:600;
   pointer-events:none;
-  background:#fff;
   opacity:0;
+  background:radial-gradient(circle,#fff8,#267dff4d,transparent 70%)
 }
 
 #flash.go{
-  animation:pageFlash .42s ease;
+  animation:f .4s ease
 }
 
-@keyframes pageFlash{
-  0%{opacity:0;transform:scale(.96)}
-  35%{opacity:.55;transform:scale(1)}
-  100%{opacity:0;transform:scale(1.04)}
-}
+@keyframes f{
+  0%{
+    opacity:0;
+    transform:scale(.7)
+  }
 
-@media(max-width:600px){
-  #phone{
-    width:100vw;
-    transform:rotate(90deg) scale(.68);
+  35%{
+    opacity:1
+  }
+
+  100%{
+    opacity:0;
+    transform:scale(1.15)
   }
 }
 
-@media(max-height:700px){
+@media(max-width:700px){
   #phone{
-    width:100vw;
-    transform:rotate(90deg) scale(.68);
+    transform:rotate(90deg) scale(.66)
   }
 }
 </style>
@@ -339,33 +384,43 @@ textarea{
 
   <div id="page1">
 
-    <button data-app="messages" id="messages"></button>
-    <button data-app="camera" id="camera"></button>
-    <button data-app="splashface" id="splashface"></button>
-    <button data-app="stocks" id="stocks"></button>
-    <button data-app="maps" id="maps"></button>
-    <button data-app="photos" id="photos"></button>
-    <button data-app="weather" id="weather"></button>
-    <button data-app="notes" id="notes"></button>
-    <button data-app="peartunes" id="peartunes"></button>
-    <button data-app="settings" id="settings"></button>
-    <button data-app="clock" id="clock"></button>
-    <button data-app="videos" id="videos"></button>
-    <button data-app="phone" id="phone"></button>
-    <button data-app="mail" id="mail"></button>
-    <button data-app="compass" id="compass"></button>
-    <button data-app="music" id="music"></button>
+    <button class="hotspot" data-app="messages"></button>
+    <button class="hotspot" data-app="camera"></button>
+    <button class="hotspot" data-app="splashface"></button>
+    <button class="hotspot" data-app="stocks"></button>
+    <button class="hotspot" data-app="maps"></button>
+    <button class="hotspot" data-app="photos"></button>
+    <button class="hotspot" data-app="weather"></button>
+    <button class="hotspot" data-app="notes"></button>
+    <button class="hotspot" data-app="peartunes"></button>
+    <button class="hotspot" data-app="settings"></button>
+    <button class="hotspot" data-app="clock"></button>
+    <button class="hotspot" data-app="videos"></button>
+    <button class="hotspot" data-app="phone"></button>
+    <button class="hotspot" data-app="mail"></button>
+    <button class="hotspot" data-app="compass"></button>
+    <button class="hotspot" data-app="music"></button>
 
   </div>
 
   <div id="page2">
-    <img src="page2.png" alt="Pear Phone second page">
 
-    <!-- Put Page 2 hotspots here when needed -->
+    <button data-app="messages"></button>
+    <button data-app="camera"></button>
+    <button data-app="photos"></button>
+    <button data-app="weather"></button>
+    <button data-app="maps"></button>
+    <button data-app="videos"></button>
+    <button data-app="music"></button>
+    <button data-app="notes"></button>
+    <button data-app="settings"></button>
+    <button data-app="clock"></button>
+    <button data-app="phone"></button>
+    <button data-app="mail"></button>
 
   </div>
 
-  <button id="home" aria-label="Home"></button>
+  <button id="home"></button>
 
   <div id="overlay">
     <div id="app"></div>
@@ -377,7 +432,7 @@ textarea{
 
 </div>
 
-<script src="app.js"></script>
+<script src="app.js?v=fix20260920"></script>
 
 </body>
 </html>

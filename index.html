@@ -2,14 +2,14 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
 <title>Pear Phone OS</title>
 
 <style>
-
 *{
   box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
 }
 
 html,body{
@@ -18,13 +18,13 @@ html,body{
   height:100%;
   overflow:hidden;
   background:#111;
-  font-family:Arial,Helvetica,sans-serif;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
 }
 
 body{
   display:flex;
-  justify-content:center;
   align-items:center;
+  justify-content:center;
 }
 
 /* =========================
@@ -33,44 +33,51 @@ body{
 
 #phone-container{
   position:relative;
+
   width:min(170vh,1500px);
-  aspect-ratio:1212/1188;
+
+  aspect-ratio:1212 / 1188;
 
   background:url("pear-phone.png") center/contain no-repeat;
 
   transform:rotate(90deg);
+
+  transform-origin:center center;
 
   touch-action:none;
   user-select:none;
 }
 
 /* =========================
-   PAGE 2
+   PAGE 2 IMAGE
 ========================= */
 
 #page2{
   position:absolute;
   inset:0;
+
   width:100%;
   height:100%;
 
   background:url("page2.png") center/contain no-repeat;
 
   z-index:50;
+
   pointer-events:none;
 
   opacity:0;
 
-  transform:translateX(100%) scale(.96);
+  transform:translateY(100%) scale(.96);
 
   transition:
-    transform .42s cubic-bezier(.22,.8,.25,1),
-    opacity .30s ease;
+    transform .45s cubic-bezier(.22,.8,.25,1),
+    opacity .3s ease;
 }
 
 #phone-container.page-two #page2{
   opacity:1;
-  transform:translateX(0) scale(1);
+
+  transform:translateY(0) scale(1);
 }
 
 /* =========================
@@ -83,137 +90,163 @@ body{
   border:0;
   background:transparent;
 
-  z-index:200;
+  padding:0;
+  margin:0;
+
+  border-radius:50%;
+
+  cursor:pointer;
 
   touch-action:manipulation;
 
-  cursor:pointer;
+  -webkit-appearance:none;
+  appearance:none;
+
+  z-index:200;
 }
 
-/* PAGE 1 */
+.hotspot:active{
+  transform:scale(.93);
+}
+
+/* =========================
+   PAGE 1
+========================= */
 
 #messages{
   left:43.1%;
   top:25.7%;
-  width:10%;
+  width:9.6%;
   aspect-ratio:1;
 }
 
 #camera{
   left:54%;
   top:25.7%;
-  width:10%;
+  width:9.6%;
   aspect-ratio:1;
 }
 
 #splashface{
   left:38%;
   top:36.1%;
-  width:10%;
+  width:9.6%;
   aspect-ratio:1;
 }
 
 #stocks{
   left:47.5%;
   top:36.1%;
-  width:10%;
+  width:9.6%;
   aspect-ratio:1;
 }
 
 #maps{
   left:57%;
   top:36.1%;
-  width:10%;
+  width:9.6%;
   aspect-ratio:1;
 }
 
 #photos{
   left:38%;
   top:46.9%;
-  width:10%;
+  width:9.6%;
   aspect-ratio:1;
 }
 
 #weather{
   left:47.5%;
   top:46.9%;
-  width:10%;
+  width:9.6%;
   aspect-ratio:1;
 }
 
 #notes{
   left:57%;
   top:46.9%;
-  width:10%;
+  width:9.6%;
   aspect-ratio:1;
 }
 
 #peartunes{
   left:32%;
   top:55.9%;
-  width:10%;
+  width:9.6%;
   aspect-ratio:1;
 }
 
 #settings{
   left:42%;
   top:55.9%;
-  width:10%;
+  width:9.6%;
   aspect-ratio:1;
 }
 
 #clock{
   left:52%;
   top:55.9%;
-  width:10%;
+  width:9.6%;
   aspect-ratio:1;
 }
 
 #videos{
   left:62%;
   top:55.9%;
-  width:10%;
+  width:9.6%;
   aspect-ratio:1;
 }
 
 #phone{
   left:32%;
   top:65.9%;
-  width:10%;
+  width:9.6%;
   aspect-ratio:1;
 }
 
 #mail{
   left:42%;
   top:65.9%;
-  width:10%;
+  width:9.6%;
   aspect-ratio:1;
 }
 
 #compass{
   left:52%;
   top:65.9%;
-  width:10%;
+  width:9.6%;
   aspect-ratio:1;
 }
 
 #music{
   left:62%;
   top:65.9%;
-  width:10%;
+  width:9.6%;
   aspect-ratio:1;
 }
 
 #home{
+  position:absolute;
+
   left:46%;
   top:78.8%;
-  width:9%;
+
+  width:8.2%;
   aspect-ratio:1;
+
+  border:0;
+  background:transparent;
+
+  border-radius:50%;
+
+  cursor:pointer;
+
+  z-index:400;
 }
 
-/* PAGE 1 disappears on page 2 */
+/* Hide Page 1 hotspots on Page 2 */
 
-#phone-container.page-two > .hotspot:not(.page2-hotspot){
+#phone-container.page-two > .page1-hotspot{
   pointer-events:none;
 }
 
@@ -223,7 +256,9 @@ body{
 
 .page2-hotspot{
   display:none;
+
   z-index:300;
+
   pointer-events:auto;
 }
 
@@ -234,112 +269,112 @@ body{
 #p2-lingo{
   left:37%;
   top:24%;
-  width:10%;
+  width:9%;
   aspect-ratio:1;
 }
 
 #p2-splash{
   left:51%;
   top:24%;
-  width:10%;
+  width:9%;
   aspect-ratio:1;
 }
 
 #p2-thumb{
   left:65%;
   top:24%;
-  width:10%;
+  width:9%;
   aspect-ratio:1;
 }
 
 #p2-danwarp{
   left:37%;
   top:37%;
-  width:10%;
+  width:9%;
   aspect-ratio:1;
 }
 
 #p2-image{
   left:51%;
   top:37%;
-  width:10%;
+  width:9%;
   aspect-ratio:1;
 }
 
 #p2-chrono{
   left:65%;
   top:37%;
-  width:10%;
+  width:9%;
   aspect-ratio:1;
 }
 
 #p2-zaplook{
   left:37%;
   top:50%;
-  width:10%;
+  width:9%;
   aspect-ratio:1;
 }
 
 #p2-weather{
   left:51%;
   top:50%;
-  width:10%;
+  width:9%;
   aspect-ratio:1;
 }
 
 #p2-music{
   left:65%;
   top:50%;
-  width:10%;
+  width:9%;
   aspect-ratio:1;
 }
 
 #p2-monkey{
   left:37%;
   top:63%;
-  width:10%;
+  width:9%;
   aspect-ratio:1;
 }
 
 #p2-remark{
   left:51%;
   top:63%;
-  width:10%;
+  width:9%;
   aspect-ratio:1;
 }
 
 #p2-settings{
   left:65%;
   top:63%;
-  width:10%;
+  width:9%;
   aspect-ratio:1;
 }
 
 #p2-phone{
   left:37%;
   top:75%;
-  width:10%;
+  width:9%;
   aspect-ratio:1;
 }
 
 #p2-mail{
   left:51%;
   top:75%;
-  width:10%;
+  width:9%;
   aspect-ratio:1;
 }
 
 #p2-compass{
   left:65%;
   top:75%;
-  width:10%;
+  width:9%;
   aspect-ratio:1;
 }
 
 #p2-music2{
   left:51%;
   top:86%;
-  width:10%;
+  width:9%;
   aspect-ratio:1;
 }
 
@@ -356,18 +391,18 @@ body{
   width:38%;
   height:47%;
 
-  background:#f2f2f7;
-
   z-index:500;
 
   display:none;
 
   overflow:hidden;
 
-  border-radius:9px;
+  background:#f4f5f7;
+
+  border-radius:10px;
 
   box-shadow:
-    0 4px 18px rgba(0,0,0,.5);
+    0 5px 25px rgba(0,0,0,.55);
 }
 
 #overlay.open{
@@ -378,883 +413,376 @@ body{
   width:100%;
   height:100%;
 
-  overflow:auto;
+  display:flex;
+  flex-direction:column;
 
-  background:#f2f2f7;
+  overflow:hidden;
+
+  background:#f4f5f7;
 
   color:#111;
-
-  -webkit-overflow-scrolling:touch;
-
-  padding-bottom:10px;
 }
 
-/* =========================
-   PAGE DOTS
-========================= */
+#app-window .window-header{
+  flex:0 0 auto;
 
-#page-dots{
-  position:absolute;
+  display:flex;
+  align-items:center;
 
-  bottom:3%;
-  left:50%;
+  gap:8px;
 
-  transform:translateX(-50%);
+  padding:8px 10px;
 
-  z-index:600;
+  background:linear-gradient(#fff,#e7e8ea);
 
-  color:white;
+  border-bottom:1px solid #ccc;
+
+  font-weight:900;
+
+  font-size:15px;
+}
+
+.back{
+  width:30px;
+  height:30px;
+
+  border-radius:50%;
+
+  border:1px solid #bbb;
+
+  background:linear-gradient(#fff,#ddd);
+
+  font-size:23px;
+
+  cursor:pointer;
+}
+
+#app-window .window-body{
+  flex:1;
+
+  min-height:0;
+
+  overflow-y:auto;
+
+  padding:12px;
+
+  padding-bottom:15px;
+
+  -webkit-overflow-scrolling:touch;
+}
+
+.button{
+  padding:9px 13px;
+
+  border-radius:11px;
+
+  border:1px solid #bbb;
+
+  background:linear-gradient(#fff,#ddd);
+
+  font-weight:700;
+
+  cursor:pointer;
+}
+
+.row{
+  display:flex;
+  gap:7px;
+}
+
+input,
+textarea{
+  font-family:inherit;
 
   font-size:16px;
 
-  letter-spacing:5px;
+  padding:9px;
 
-  pointer-events:none;
+  border:1px solid #bbb;
+
+  border-radius:10px;
+
+  outline:none;
 }
 
+textarea{
+  width:100%;
+  min-height:130px;
+}
 
-/* =========================================================
-   NEW PEAR PHONE KEYBOARD
-   ========================================================= */
+.bubble{
+  padding:9px 12px;
+
+  width:max-content;
+
+  max-width:82%;
+
+  background:#dedfe3;
+
+  border-radius:17px;
+
+  margin-bottom:7px;
+}
+
+.bubble.me{
+  margin-left:auto;
+
+  background:linear-gradient(#58b9ff,#1389df);
+
+  color:#fff;
+}
+
+.stock{
+  display:flex;
+
+  justify-content:space-between;
+
+  align-items:center;
+
+  padding:10px;
+
+  margin-bottom:7px;
+
+  background:#fff;
+
+  border:1px solid #ddd;
+
+  border-radius:12px;
+}
+
+.photos{
+  display:grid;
+
+  grid-template-columns:repeat(3,1fr);
+
+  gap:6px;
+}
+
+.photos img{
+  width:100%;
+
+  aspect-ratio:1;
+
+  object-fit:cover;
+
+  border-radius:10px;
+}
+
+.camera-video{
+  width:100%;
+
+  border-radius:14px;
+
+  background:#000;
+}
+
+.map{
+  height:180px;
+
+  border-radius:15px;
+
+  background:linear-gradient(135deg,#d6e5c7,#e7dfb9);
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  font-size:55px;
+}
+
+/* =====================================================
+   CUSTOM KEYBOARD
+   IMPORTANT: HIDDEN BY DEFAULT
+===================================================== */
 
 #pear-keyboard{
-
   position:absolute;
 
-  left:4%;
-  right:4%;
+  left:3%;
+  right:3%;
   bottom:3%;
 
-  width:92%;
+  width:94%;
 
-  padding:7px;
+  padding:6px;
 
   background:rgba(35,35,40,.98);
 
-  border-radius:12px;
+  border-radius:11px;
 
-  z-index:1000;
+  z-index:9999;
 
   display:none;
 
-  box-shadow:
-    0 5px 20px rgba(0,0,0,.55);
+  opacity:0;
 
   transform:translateY(120%);
-
-  opacity:0;
 
   transition:
     transform .28s cubic-bezier(.22,.8,.25,1),
     opacity .2s ease;
 
+  box-shadow:
+    0 5px 18px rgba(0,0,0,.55);
+
   touch-action:manipulation;
 }
 
-
-/* keyboard appears */
-
 #pear-keyboard.keyboard-show{
-
-  transform:translateY(0);
-
   opacity:1;
 
+  transform:translateY(0);
 }
-
-
-/* keyboard rows */
 
 .pear-keyboard-row{
-
   display:flex;
 
-  justify-content:center;
+  gap:3px;
 
-  gap:4px;
-
-  margin-bottom:4px;
-
+  margin-bottom:3px;
 }
 
-
-/* keyboard buttons */
+.pear-keyboard-row:last-child{
+  margin-bottom:0;
+}
 
 .pear-keyboard-row button{
-
   flex:1;
 
   min-width:0;
 
-  height:32px;
+  height:29px;
 
   border:0;
 
-  border-radius:6px;
+  border-radius:5px;
 
   background:#f5f5f7;
 
   color:#111;
 
-  font-size:12px;
+  font-size:11px;
 
-  font-weight:bold;
+  font-weight:800;
 
-  cursor:pointer;
+  padding:0;
 
   touch-action:manipulation;
 
-  transition:
-    transform .08s ease,
-    background .08s ease;
+  user-select:none;
 }
-
-
-/* button press animation */
 
 .pear-keyboard-row button:active{
-
   transform:scale(.88);
 
-  background:#cfcfd4;
-
+  background:#cfd0d4;
 }
 
-
-/* bottom row */
-
 .pear-keyboard-row.bottom button:first-child{
-
-  flex:1.3;
-
+  flex:1.2;
 }
 
 .pear-keyboard-row.bottom button:nth-child(2){
-
   flex:5;
-
 }
 
 .pear-keyboard-row.bottom button:last-child{
-
-  flex:1.3;
-
+  flex:1.2;
 }
 
+/* Keyboard must NEVER appear over the physical top circles */
 
-/* make sure keyboard stays above app */
-
-#overlay #pear-keyboard{
-
-  z-index:1000;
-
+#pear-keyboard{
+  pointer-events:auto;
 }
-
-
-/* give app content room for keyboard */
-
-#overlay.keyboard-open #app-window{
-
-  padding-bottom:145px;
-
-}
-
-
-/* keyboard labels */
-
-.pear-keyboard-row button{
-
-  -webkit-tap-highlight-color:transparent;
-
-  user-select:none;
-
-}
-
-
-/* =========================
-   SMALL SCREEN SUPPORT
-========================= */
 
 @media(max-width:700px){
 
+  #phone-container{
+    width:100vw;
+  }
+
   #pear-keyboard{
-
-    padding:5px;
-
     left:3%;
     width:94%;
   }
 
-  .pear-keyboard-row{
-
-    gap:3px;
-
-    margin-bottom:3px;
-  }
-
   .pear-keyboard-row button{
-
-    height:28px;
-
+    height:27px;
     font-size:10px;
-
-    border-radius:5px;
   }
-
 }
-
 </style>
 </head>
-
 
 <body>
 
 <div id="phone-container">
 
-  <!-- =========================
-       PAGE 2 IMAGE
-  ========================== -->
-
+  <!-- PAGE 2 IMAGE -->
   <div id="page2"></div>
 
 
   <!-- =========================
-       PAGE 1 APPS
-  ========================== -->
+       PAGE 1
+  ========================= -->
 
-  <button
-    class="hotspot"
-    id="messages"
-    onclick="openApp('messages')">
-  </button>
-
-  <button
-    class="hotspot"
-    id="camera"
-    onclick="openApp('camera')">
-  </button>
-
-  <button
-    class="hotspot"
-    id="splashface"
-    onclick="openApp('splashface')">
-  </button>
-
-  <button
-    class="hotspot"
-    id="stocks"
-    onclick="openApp('stocks')">
-  </button>
-
-  <button
-    class="hotspot"
-    id="maps"
-    onclick="openApp('maps')">
-  </button>
-
-  <button
-    class="hotspot"
-    id="photos"
-    onclick="openApp('photos')">
-  </button>
-
-  <button
-    class="hotspot"
-    id="weather"
-    onclick="openApp('weather')">
-  </button>
-
-  <button
-    class="hotspot"
-    id="notes"
-    onclick="openApp('notes')">
-  </button>
-
-  <button
-    class="hotspot"
-    id="peartunes"
-    onclick="openApp('peartunes')">
-  </button>
-
-  <button
-    class="hotspot"
-    id="settings"
-    onclick="openApp('settings')">
-  </button>
-
-  <button
-    class="hotspot"
-    id="clock"
-    onclick="openApp('clock')">
-  </button>
-
-  <button
-    class="hotspot"
-    id="videos"
-    onclick="openApp('videos')">
-  </button>
-
-  <button
-    class="hotspot"
-    id="phone"
-    onclick="openApp('phone')">
-  </button>
-
-  <button
-    class="hotspot"
-    id="mail"
-    onclick="openApp('mail')">
-  </button>
-
-  <button
-    class="hotspot"
-    id="compass"
-    onclick="openApp('compass')">
-  </button>
-
-  <button
-    class="hotspot"
-    id="music"
-    onclick="openApp('peartunes')">
-  </button>
-
-  <button
-    class="hotspot"
-    id="home"
-    onclick="closeApp()">
-  </button>
+  <button class="hotspot page1-hotspot" id="messages"></button>
+  <button class="hotspot page1-hotspot" id="camera"></button>
+  <button class="hotspot page1-hotspot" id="splashface"></button>
+  <button class="hotspot page1-hotspot" id="stocks"></button>
+  <button class="hotspot page1-hotspot" id="maps"></button>
+  <button class="hotspot page1-hotspot" id="photos"></button>
+  <button class="hotspot page1-hotspot" id="weather"></button>
+  <button class="hotspot page1-hotspot" id="notes"></button>
+  <button class="hotspot page1-hotspot" id="peartunes"></button>
+  <button class="hotspot page1-hotspot" id="settings"></button>
+  <button class="hotspot page1-hotspot" id="clock"></button>
+  <button class="hotspot page1-hotspot" id="videos"></button>
+  <button class="hotspot page1-hotspot" id="phone"></button>
+  <button class="hotspot page1-hotspot" id="mail"></button>
+  <button class="hotspot page1-hotspot" id="compass"></button>
+  <button class="hotspot page1-hotspot" id="music"></button>
 
 
   <!-- =========================
-       PAGE 2 APPS
-  ========================== -->
+       PAGE 2
+       EACH BUTTON HAS ONE APP
+  ========================= -->
 
-  <button
-    class="hotspot page2-hotspot"
-    id="p2-lingo"
-    onclick="openApp('lingo')">
-  </button>
-
-  <button
-    class="hotspot page2-hotspot"
-    id="p2-splash"
-    onclick="openApp('splashface')">
-  </button>
-
-  <button
-    class="hotspot page2-hotspot"
-    id="p2-thumb"
-    onclick="openApp('tums')">
-  </button>
-
-  <button
-    class="hotspot page2-hotspot"
-    id="p2-danwarp"
-    onclick="openApp('danwarp')">
-  </button>
-
-  <button
-    class="hotspot page2-hotspot"
-    id="p2-image"
-    onclick="openApp('image')">
-  </button>
-
-  <button
-    class="hotspot page2-hotspot"
-    id="p2-chrono"
-    onclick="openApp('chrono')">
-  </button>
-
-  <button
-    class="hotspot page2-hotspot"
-    id="p2-zaplook"
-    onclick="openApp('zaplook')">
-  </button>
-
-  <button
-    class="hotspot page2-hotspot"
-    id="p2-weather"
-    onclick="openApp('weather')">
-  </button>
-
-  <button
-    class="hotspot page2-hotspot"
-    id="p2-music"
-    onclick="openApp('peartunes')">
-  </button>
-
-  <button
-    class="hotspot page2-hotspot"
-    id="p2-monkey"
-    onclick="openApp('monkey')">
-  </button>
-
-  <button
-    class="hotspot page2-hotspot"
-    id="p2-remark"
-    onclick="openApp('remark')">
-  </button>
-
-  <button
-    class="hotspot page2-hotspot"
-    id="p2-settings"
-    onclick="openApp('settings')">
-  </button>
-
-  <button
-    class="hotspot page2-hotspot"
-    id="p2-phone"
-    onclick="openApp('phone')">
-  </button>
-
-  <button
-    class="hotspot page2-hotspot"
-    id="p2-mail"
-    onclick="openApp('mail')">
-  </button>
-
-  <button
-    class="hotspot page2-hotspot"
-    id="p2-compass"
-    onclick="openApp('compass')">
-  </button>
-
-  <button
-    class="hotspot page2-hotspot"
-    id="p2-music2"
-    onclick="openApp('peartunes')">
-  </button>
+  <button class="hotspot page2-hotspot" id="p2-lingo"></button>
+  <button class="hotspot page2-hotspot" id="p2-splash"></button>
+  <button class="hotspot page2-hotspot" id="p2-thumb"></button>
+  <button class="hotspot page2-hotspot" id="p2-danwarp"></button>
+  <button class="hotspot page2-hotspot" id="p2-image"></button>
+  <button class="hotspot page2-hotspot" id="p2-chrono"></button>
+  <button class="hotspot page2-hotspot" id="p2-zaplook"></button>
+  <button class="hotspot page2-hotspot" id="p2-weather"></button>
+  <button class="hotspot page2-hotspot" id="p2-music"></button>
+  <button class="hotspot page2-hotspot" id="p2-monkey"></button>
+  <button class="hotspot page2-hotspot" id="p2-remark"></button>
+  <button class="hotspot page2-hotspot" id="p2-settings"></button>
+  <button class="hotspot page2-hotspot" id="p2-phone"></button>
+  <button class="hotspot page2-hotspot" id="p2-mail"></button>
+  <button class="hotspot page2-hotspot" id="p2-compass"></button>
+  <button class="hotspot page2-hotspot" id="p2-music2"></button>
 
 
-  <!-- =========================
-       APP WINDOW
-  ========================== -->
+  <!-- HOME BUTTON -->
+  <button id="home"></button>
 
+
+  <!-- APP WINDOW -->
   <div id="overlay">
-
     <div id="app-window"></div>
-
-  </div>
-
-
-  <!-- PAGE INDICATOR -->
-
-  <div id="page-dots">
-    ● ○
   </div>
 
 </div>
 
 
 <script src="app.js"></script>
-
-
-<!-- =========================================================
-     KEYBOARD SUPPORT
-     ========================================================= -->
-
-<script>
-
-let pearKeyboardVisible = false;
-
-let pearKeyboardShift = false;
-
-let pearKeyboardNumbers = false;
-
-let activeKeyboardField = null;
-
-
-/* =========================================================
-   SHOW KEYBOARD
-========================================================= */
-
-function showPearKeyboard(input){
-
-  if(!input) return;
-
-  activeKeyboardField = input;
-
-  pearKeyboardVisible = true;
-
-  let keyboard =
-    document.getElementById("pear-keyboard");
-
-
-  /* Create keyboard if it doesn't exist */
-
-  if(!keyboard){
-
-    keyboard =
-      document.createElement("div");
-
-    keyboard.id =
-      "pear-keyboard";
-
-
-    keyboard.innerHTML = `
-
-      <div class="pear-keyboard-row">
-
-        <button onpointerdown="pearKey(event,'Q')">Q</button>
-        <button onpointerdown="pearKey(event,'W')">W</button>
-        <button onpointerdown="pearKey(event,'E')">E</button>
-        <button onpointerdown="pearKey(event,'R')">R</button>
-        <button onpointerdown="pearKey(event,'T')">T</button>
-        <button onpointerdown="pearKey(event,'Y')">Y</button>
-        <button onpointerdown="pearKey(event,'U')">U</button>
-        <button onpointerdown="pearKey(event,'I')">I</button>
-        <button onpointerdown="pearKey(event,'O')">O</button>
-        <button onpointerdown="pearKey(event,'P')">P</button>
-
-      </div>
-
-
-      <div class="pear-keyboard-row">
-
-        <button onpointerdown="pearKey(event,'A')">A</button>
-        <button onpointerdown="pearKey(event,'S')">S</button>
-        <button onpointerdown="pearKey(event,'D')">D</button>
-        <button onpointerdown="pearKey(event,'F')">F</button>
-        <button onpointerdown="pearKey(event,'G')">G</button>
-        <button onpointerdown="pearKey(event,'H')">H</button>
-        <button onpointerdown="pearKey(event,'J')">J</button>
-        <button onpointerdown="pearKey(event,'K')">K</button>
-        <button onpointerdown="pearKey(event,'L')">L</button>
-
-      </div>
-
-
-      <div class="pear-keyboard-row">
-
-        <button onpointerdown="pearKey(event,'Z')">Z</button>
-        <button onpointerdown="pearKey(event,'X')">X</button>
-        <button onpointerdown="pearKey(event,'C')">C</button>
-        <button onpointerdown="pearKey(event,'V')">V</button>
-        <button onpointerdown="pearKey(event,'B')">B</button>
-        <button onpointerdown="pearKey(event,'N')">N</button>
-        <button onpointerdown="pearKey(event,'M')">M</button>
-
-      </div>
-
-
-      <div class="pear-keyboard-row bottom">
-
-        <button
-          onpointerdown="pearShift(event)">
-          ⇧
-        </button>
-
-        <button
-          onpointerdown="pearSpace(event)">
-          SPACE
-        </button>
-
-        <button
-          onpointerdown="pearBackspace(event)">
-          ⌫
-        </button>
-
-      </div>
-
-    `;
-
-
-    document
-      .getElementById("overlay")
-      .appendChild(keyboard);
-
-  }
-
-
-  keyboard.style.display =
-    "block";
-
-
-  document
-    .getElementById("overlay")
-    .classList
-    .add("keyboard-open");
-
-
-  requestAnimationFrame(() => {
-
-    keyboard.classList.add(
-      "keyboard-show"
-    );
-
-  });
-
-}
-
-
-/* =========================================================
-   KEYBOARD INPUT
-========================================================= */
-
-function pearKey(event,key){
-
-  event.preventDefault();
-
-  const input =
-    activeKeyboardField;
-
-  if(!input) return;
-
-
-  let character =
-    pearKeyboardShift
-      ? key.toUpperCase()
-      : key.toLowerCase();
-
-
-  const start =
-    input.selectionStart ?? input.value.length;
-
-  const end =
-    input.selectionEnd ?? input.value.length;
-
-
-  input.value =
-    input.value.substring(0,start) +
-    character +
-    input.value.substring(end);
-
-
-  input.selectionStart =
-    input.selectionEnd =
-      start + character.length;
-
-
-  input.dispatchEvent(
-    new Event("input",{bubbles:true})
-  );
-
-
-  if(pearKeyboardShift){
-
-    pearKeyboardShift=false;
-
-  }
-
-}
-
-
-/* =========================================================
-   SPACE
-========================================================= */
-
-function pearSpace(event){
-
-  event.preventDefault();
-
-  const input =
-    activeKeyboardField;
-
-  if(!input) return;
-
-
-  const start =
-    input.selectionStart ?? input.value.length;
-
-  const end =
-    input.selectionEnd ?? input.value.length;
-
-
-  input.value =
-    input.value.substring(0,start) +
-    " " +
-    input.value.substring(end);
-
-
-  input.selectionStart =
-    input.selectionEnd =
-      start + 1;
-
-
-  input.dispatchEvent(
-    new Event("input",{bubbles:true})
-  );
-
-}
-
-
-/* =========================================================
-   BACKSPACE
-========================================================= */
-
-function pearBackspace(event){
-
-  event.preventDefault();
-
-  const input =
-    activeKeyboardField;
-
-  if(!input) return;
-
-
-  const start =
-    input.selectionStart ?? input.value.length;
-
-  const end =
-    input.selectionEnd ?? input.value.length;
-
-
-  if(start !== end){
-
-    input.value =
-      input.value.substring(0,start) +
-      input.value.substring(end);
-
-    input.selectionStart =
-      input.selectionEnd =
-        start;
-
-  }
-
-  else if(start > 0){
-
-    input.value =
-      input.value.substring(0,start-1) +
-      input.value.substring(end);
-
-    input.selectionStart =
-      input.selectionEnd =
-        start - 1;
-
-  }
-
-
-  input.dispatchEvent(
-    new Event("input",{bubbles:true})
-  );
-
-}
-
-
-/* =========================================================
-   SHIFT
-========================================================= */
-
-function pearShift(event){
-
-  event.preventDefault();
-
-  pearKeyboardShift =
-    !pearKeyboardShift;
-
-}
-
-
-/* =========================================================
-   HIDE KEYBOARD
-========================================================= */
-
-function hidePearKeyboard(){
-
-  pearKeyboardVisible=false;
-
-  activeKeyboardField=null;
-
-
-  const keyboard =
-    document.getElementById(
-      "pear-keyboard"
-    );
-
-
-  if(keyboard){
-
-    keyboard.classList.remove(
-      "keyboard-show"
-    );
-
-    setTimeout(() => {
-
-      if(!pearKeyboardVisible){
-
-        keyboard.style.display =
-          "none";
-
-      }
-
-    },300);
-
-  }
-
-
-  const overlay =
-    document.getElementById(
-      "overlay"
-    );
-
-
-  if(overlay){
-
-    overlay.classList.remove(
-      "keyboard-open"
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   AUTOMATICALLY SHOW KEYBOARD
-   WHEN TEXT FIELD IS SELECTED
-========================================================= */
-
-document.addEventListener(
-  "focusin",
-  function(event){
-
-    const element =
-      event.target;
-
-
-    if(
-      element &&
-      (
-        element.tagName === "INPUT" ||
-        element.tagName === "TEXTAREA"
-      )
-    ){
-
-      setTimeout(() => {
-
-        showPearKeyboard(element);
-
-      },50);
-
-    }
-
-  }
-);
-
-
-/* =========================================================
-   PREVENT KEYBOARD BUTTONS FROM STEALING FOCUS
-========================================================= */
-
-document.addEventListener(
-  "pointerdown",
-  function(event){
-
-    if(
-      event.target.closest(
-        "#pear-keyboard button"
-      )
-    ){
-
-      event.preventDefault();
-
-    }
-
-  },
-  true
-);
-
-</script>
 
 </body>
 </html>

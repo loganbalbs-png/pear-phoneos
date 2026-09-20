@@ -56,7 +56,17 @@ const pageDots =
     document.getElementById("page-dots");
 
 
-function showPage(page) {
+function showPage(page) document.addEventListener("keydown", function(event) {
+
+    if (event.key === "ArrowRight") {
+        showPage(2);
+    }
+
+    if (event.key === "ArrowLeft") {
+        showPage(1);
+    }
+
+}); { 
 
     currentPage = page;
 

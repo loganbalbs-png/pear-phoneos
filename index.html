@@ -25,11 +25,11 @@ body{
 
 #phone{
   position:relative;
-  width:min(86vw,760px);
+  width:min(78vw,680px);
   aspect-ratio:1212/1188;
   background:url('pear-phone.jpg') center/contain no-repeat,radial-gradient(#20252b,#000);
-  transform:rotate(90deg) scale(.78);
-  transform-origin:center;
+  transform:rotate(90deg) scale(.82);
+  transform-origin:center center;
   touch-action:none
 }
 
@@ -370,9 +370,13 @@ body{
   }
 }
 
+/* MOBILE */
+
 @media(max-width:700px){
   #phone{
-    transform:rotate(90deg) scale(.66)
+    width:min(90vw,680px);
+    transform:rotate(90deg) scale(.74);
+    transform-origin:center center;
   }
 }
 </style>

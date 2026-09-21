@@ -1,41 +1,26 @@
 // ============================================================
-
 // PEAR PHONE OS — FULL APP.JS
-
 // ============================================================
 
 const phone = document.getElementById("phone-container");
-
 const overlay = document.getElementById("overlay");
-
 const appWindow = document.getElementById("app-window");
-
 const pageDots = document.getElementById("page-dots");
 
 let currentPage = 1;
 
 // ============================================================
-
 // PAGE SWITCHING
-
 // SWIPE UP = PAGE 2
-
 // SWIPE DOWN = PAGE 1
-
 // ============================================================
 
 let touchStartX = 0;
-
 let touchStartY = 0;
-
 let touchMoved = false;
-
 let mouseStartX = 0;
-
 let mouseStartY = 0;
-
 let mouseDragging = false;
-
 let swipeLocked = false;
 
 function showPage(page) {
@@ -84,173 +69,216 @@ function showPage(page) {
 
 document.addEventListener("keydown", e => {
 
-  if (e.target.matches("input, textarea, select")) return;
-
-  if (e.key === "ArrowUp" && currentPage === 1) {
-
-    e.preventDefault();
-
-    showPage(2);
-
-  }
-
-  if (e.key === "ArrowDown" && currentPage === 2) {
-
-    e.preventDefault();
-
-    showPage(1);
-
-  }
-
-});
-
-phone.addEventListener("touchstart", e => {
-
-  if (overlay.classList.contains("open")) return;
-
-  const t = e.touches[0];
-
-  touchStartX = t.clientX;
-
-  touchStartY = t.clientY;
-
-  touchMoved = false;
-
-}, { passive: true });
-
-phone.addEventListener("touchmove", e => {
-
-  if (overlay.classList.contains("open")) return;
-
-  const t = e.touches[0];
-
-  const dx = t.clientX - touchStartX;
-
-  const dy = t.clientY - touchStartY;
+  if (
+    e.target.matches(
+      "input, textarea, select"
+    )
+  ) return;
 
   if (
-
-    Math.abs(dy) > 30 &&
-
-    Math.abs(dy) > Math.abs(dx)
-
+    e.key === "ArrowUp" &&
+    currentPage === 1
   ) {
 
-    touchMoved = true;
-
-  }
-
-}, { passive: true });
-
-phone.addEventListener("touchend", e => {
-
-  if (
-
-    overlay.classList.contains("open") ||
-
-    !touchMoved ||
-
-    swipeLocked
-
-  ) return;
-
-  const t = e.changedTouches[0];
-
-  const dx = t.clientX - touchStartX;
-
-  const dy = t.clientY - touchStartY;
-
-  if (
-
-    Math.abs(dy) < 80 ||
-
-    Math.abs(dy) <= Math.abs(dx)
-
-  ) return;
-
-  swipeLocked = true;
-
-  if (dy < 0 && currentPage === 1) {
-
+    e.preventDefault();
     showPage(2);
 
   }
 
-  if (dy > 0 && currentPage === 2) {
-
-    showPage(1);
-
-  }
-
-  setTimeout(() => {
-
-    swipeLocked = false;
-
-  }, 700);
-
-}, { passive: true });
-
-phone.addEventListener("mousedown", e => {
-
-  if (overlay.classList.contains("open")) return;
-
-  mouseStartX = e.clientX;
-
-  mouseStartY = e.clientY;
-
-  mouseDragging = true;
-
-});
-
-phone.addEventListener("mouseup", e => {
-
-  if (!mouseDragging) return;
-
-  mouseDragging = false;
-
-  if (overlay.classList.contains("open")) return;
-
-  const dx = e.clientX - mouseStartX;
-
-  const dy = e.clientY - mouseStartY;
-
   if (
+    e.key === "ArrowDown" &&
+    currentPage === 2
+  ) {
 
-    Math.abs(dy) < 80 ||
-
-    Math.abs(dy) <= Math.abs(dx)
-
-  ) return;
-
-  if (dy < 0 && currentPage === 1) {
-
-    showPage(2);
-
-  }
-
-  if (dy > 0 && currentPage === 2) {
-
+    e.preventDefault();
     showPage(1);
 
   }
 
 });
+
+phone.addEventListener(
+  "touchstart",
+  e => {
+
+    if (
+      overlay.classList.contains("open")
+    ) return;
+
+    const t = e.touches[0];
+
+    touchStartX = t.clientX;
+    touchStartY = t.clientY;
+    touchMoved = false;
+
+  },
+  { passive: true }
+);
+
+phone.addEventListener(
+  "touchmove",
+  e => {
+
+    if (
+      overlay.classList.contains("open")
+    ) return;
+
+    const t = e.touches[0];
+
+    const dx =
+      t.clientX - touchStartX;
+
+    const dy =
+      t.clientY - touchStartY;
+
+    if (
+      Math.abs(dy) > 30 &&
+      Math.abs(dy) > Math.abs(dx)
+    ) {
+
+      touchMoved = true;
+
+    }
+
+  },
+  { passive: true }
+);
+
+phone.addEventListener(
+  "touchend",
+  e => {
+
+    if (
+      overlay.classList.contains("open") ||
+      !touchMoved ||
+      swipeLocked
+    ) return;
+
+    const t =
+      e.changedTouches[0];
+
+    const dx =
+      t.clientX - touchStartX;
+
+    const dy =
+      t.clientY - touchStartY;
+
+    if (
+      Math.abs(dy) < 80 ||
+      Math.abs(dy) <= Math.abs(dx)
+    ) return;
+
+    swipeLocked = true;
+
+    if (
+      dy < 0 &&
+      currentPage === 1
+    ) {
+
+      showPage(2);
+
+    }
+
+    if (
+      dy > 0 &&
+      currentPage === 2
+    ) {
+
+      showPage(1);
+
+    }
+
+    setTimeout(() => {
+
+      swipeLocked = false;
+
+    }, 700);
+
+  },
+  { passive: true }
+);
+
+phone.addEventListener(
+  "mousedown",
+  e => {
+
+    if (
+      overlay.classList.contains("open")
+    ) return;
+
+    mouseStartX = e.clientX;
+    mouseStartY = e.clientY;
+    mouseDragging = true;
+
+  }
+);
+
+phone.addEventListener(
+  "mouseup",
+  e => {
+
+    if (!mouseDragging) return;
+
+    mouseDragging = false;
+
+    if (
+      overlay.classList.contains("open")
+    ) return;
+
+    const dx =
+      e.clientX - mouseStartX;
+
+    const dy =
+      e.clientY - mouseStartY;
+
+    if (
+      Math.abs(dy) < 80 ||
+      Math.abs(dy) <= Math.abs(dx)
+    ) return;
+
+    if (
+      dy < 0 &&
+      currentPage === 1
+    ) {
+
+      showPage(2);
+
+    }
+
+    if (
+      dy > 0 &&
+      currentPage === 2
+    ) {
+
+      showPage(1);
+
+    }
+
+  }
+);
 
 // ============================================================
-
 // APP SYSTEM
-
 // ============================================================
 
 function openApp(title, content) {
+
+  hidePearKeyboard(true);
 
   appWindow.innerHTML = `
 
     <div class="app-header">
 
-      <button class="back-button" onclick="closeApp()">‹</button>
+      <button
+        class="back-button"
+        onclick="closeApp()"
+      >
+        ‹
+      </button>
 
-      <strong>${escapeHTML(title)}</strong>
+      <strong>
+        ${escapeHTML(title)}
+      </strong>
 
     </div>
 
@@ -274,6 +302,8 @@ function closeApp() {
 
   stopTypingGame();
 
+  hidePearKeyboard(true);
+
   overlay.classList.remove("open");
 
   appWindow.innerHTML = "";
@@ -281,34 +311,55 @@ function closeApp() {
 }
 
 // ============================================================
-
 // CUSTOM PEAR KEYBOARD
-
 // ============================================================
 
 let keyboardVisible = false;
-
 let keyboardShift = false;
+let activeKeyboardField = null;
 
 function addKeyboardSupport() {
 
   setTimeout(() => {
 
-    const fields = appWindow.querySelectorAll(
-
-      "input[type='text'], input:not([type]), textarea"
-
-    );
+    const fields =
+      appWindow.querySelectorAll(
+        "input[type='text'], input:not([type]), textarea"
+      );
 
     fields.forEach(field => {
 
-      field.addEventListener("click", () => {
+      field.addEventListener(
+        "pointerdown",
+        () => {
 
-        field.focus();
+          activeKeyboardField = field;
 
-        showPearKeyboard(field);
+        }
+      );
 
-      });
+      field.addEventListener(
+        "click",
+        () => {
+
+          activeKeyboardField = field;
+
+          try {
+
+            field.focus({
+              preventScroll: true
+            });
+
+          } catch (error) {
+
+            field.focus();
+
+          }
+
+          showPearKeyboard(field);
+
+        }
+      );
 
     });
 
@@ -320,63 +371,121 @@ function showPearKeyboard(input) {
 
   if (!input) return;
 
+  activeKeyboardField = input;
+
   keyboardVisible = true;
 
-  let keyboard = document.getElementById(
-
-    "pear-keyboard"
-
-  );
+  let keyboard =
+    document.getElementById(
+      "pear-keyboard"
+    );
 
   if (!keyboard) {
 
-    keyboard = document.createElement("div");
+    keyboard =
+      document.createElement("div");
 
-    keyboard.id = "pear-keyboard";
+    keyboard.id =
+      "pear-keyboard";
 
     keyboard.innerHTML = `
 
       <div class="pear-keyboard-row">
 
-        ${"QWERTYUIOP".split("").map(k =>
-
-          `<button type="button" onclick="keyboardKey('${k}')">${k}</button>`
-
-        ).join("")}
+        ${
+          "QWERTYUIOP"
+            .split("")
+            .map(k =>
+              `
+                <button
+                  type="button"
+                  onclick="keyboardKey('${k}')"
+                >
+                  ${k}
+                </button>
+              `
+            )
+            .join("")
+        }
 
       </div>
 
       <div class="pear-keyboard-row">
 
-        ${"ASDFGHJKL".split("").map(k =>
-
-          `<button type="button" onclick="keyboardKey('${k}')">${k}</button>`
-
-        ).join("")}
+        ${
+          "ASDFGHJKL"
+            .split("")
+            .map(k =>
+              `
+                <button
+                  type="button"
+                  onclick="keyboardKey('${k}')"
+                >
+                  ${k}
+                </button>
+              `
+            )
+            .join("")
+        }
 
       </div>
 
       <div class="pear-keyboard-row">
 
-        <button type="button" onclick="keyboardShiftKey()">⇧</button>
+        <button
+          type="button"
+          onclick="keyboardShiftKey()"
+        >
+          ⇧
+        </button>
 
-        ${"ZXCVBNM".split("").map(k =>
+        ${
+          "ZXCVBNM"
+            .split("")
+            .map(k =>
+              `
+                <button
+                  type="button"
+                  onclick="keyboardKey('${k}')"
+                >
+                  ${k}
+                </button>
+              `
+            )
+            .join("")
+        }
 
-          `<button type="button" onclick="keyboardKey('${k}')">${k}</button>`
-
-        ).join("")}
-
-        <button type="button" onclick="keyboardBackspace()">⌫</button>
+        <button
+          type="button"
+          onclick="keyboardBackspace()"
+        >
+          ⌫
+        </button>
 
       </div>
 
       <div class="pear-keyboard-row bottom">
 
-        <button type="button" onclick="keyboardNumber()">123</button>
+        <button
+          type="button"
+          onclick="keyboardNumber()"
+        >
+          123
+        </button>
 
-        <button type="button" onclick="keyboardSpace()">SPACE</button>
+        <button
+          type="button"
+          onclick="keyboardSpace()"
+        >
+          SPACE
+        </button>
 
-        <button type="button" onclick="keyboardEnter()">↵</button>
+        <button
+          type="button"
+          onclick="keyboardEnter()"
+        >
+          ↵
+        </button>
 
       </div>
 
@@ -384,55 +493,153 @@ function showPearKeyboard(input) {
 
     overlay.appendChild(keyboard);
 
+    keyboard.addEventListener(
+      "pointerdown",
+      e => {
+
+        e.preventDefault();
+
+        if (
+          activeKeyboardField &&
+          document.body.contains(
+            activeKeyboardField
+          )
+        ) {
+
+          try {
+
+            activeKeyboardField.focus({
+              preventScroll: true
+            });
+
+          } catch (error) {
+
+            activeKeyboardField.focus();
+
+          }
+
+        }
+
+      }
+    );
+
+    keyboard.addEventListener(
+      "mousedown",
+      e => {
+
+        e.preventDefault();
+
+      }
+    );
+
+    keyboard.addEventListener(
+      "touchstart",
+      e => {
+
+        e.preventDefault();
+
+      },
+      { passive: false }
+    );
+
   }
 
-  keyboard.style.display = "block";
+  keyboard.style.display = "grid";
 
   setTimeout(() => {
 
-    keyboard.classList.add("keyboard-show");
+    keyboard.classList.add(
+      "keyboard-show"
+    );
 
   }, 10);
 
 }
 
-function hidePearKeyboard() {
+function hidePearKeyboard(
+  immediate = false
+) {
+
+  activeKeyboardField = null;
 
   const keyboard =
+    document.getElementById(
+      "pear-keyboard"
+    );
 
-    document.getElementById("pear-keyboard");
+  if (!keyboard) {
 
-  if (!keyboard) return;
+    keyboardVisible = false;
+    return;
 
-  keyboard.classList.remove("keyboard-show");
+  }
+
+  keyboard.classList.remove(
+    "keyboard-show"
+  );
+
+  keyboardVisible = false;
+
+  if (immediate) {
+
+    keyboard.style.display = "none";
+    return;
+
+  }
 
   setTimeout(() => {
 
-    keyboard.style.display = "none";
+    if (!keyboardVisible) {
+
+      keyboard.style.display =
+        "none";
+
+    }
 
   }, 250);
-
-  keyboardVisible = false;
 
 }
 
 function getFocusedField() {
 
-  const active = document.activeElement;
+  if (
+
+    activeKeyboardField &&
+
+    document.body.contains(
+      activeKeyboardField
+    ) &&
+
+    (
+      activeKeyboardField.tagName ===
+        "INPUT" ||
+
+      activeKeyboardField.tagName ===
+        "TEXTAREA"
+    )
+
+  ) {
+
+    return activeKeyboardField;
+
+  }
+
+  const active =
+    document.activeElement;
 
   if (
 
     active &&
 
     (
-
       active.tagName === "INPUT" ||
 
       active.tagName === "TEXTAREA"
-
     )
 
   ) {
+
+    activeKeyboardField = active;
 
     return active;
 
@@ -442,71 +649,143 @@ function getFocusedField() {
 
 }
 
+function insertText(
+  field,
+  text
+) {
+
+  if (
+    !field ||
+    !document.body.contains(field)
+  ) return;
+
+  activeKeyboardField = field;
+
+  const start =
+    typeof field.selectionStart ===
+      "number"
+
+      ? field.selectionStart
+
+      : field.value.length;
+
+  const end =
+    typeof field.selectionEnd ===
+      "number"
+
+      ? field.selectionEnd
+
+      : field.value.length;
+
+  field.value =
+    field.value.substring(
+      0,
+      start
+    ) +
+
+    text +
+
+    field.value.substring(
+      end
+    );
+
+  const cursor =
+    start + text.length;
+
+  try {
+
+    field.setSelectionRange(
+      cursor,
+      cursor
+    );
+
+  } catch (error) {}
+
+  field.dispatchEvent(
+    new Event(
+      "input",
+      {
+        bubbles: true
+      }
+    )
+  );
+
+  field.dispatchEvent(
+    new Event(
+      "change",
+      {
+        bubbles: true
+      }
+    )
+  );
+
+}
+
 function keyboardKey(key) {
 
-  const field = getFocusedField();
+  const field =
+    getFocusedField();
 
   if (!field) return;
 
-  const character =
-
-    keyboardShift ? key : key.toLowerCase();
-
-  insertText(field, character);
+  insertText(
+    field,
+    keyboardShift
+      ? key.toUpperCase()
+      : key.toLowerCase()
+  );
 
   keyboardShift = false;
 
 }
 
-function insertText(field, text) {
-
-  const start = field.selectionStart;
-
-  const end = field.selectionEnd;
-
-  field.value =
-
-    field.value.substring(0, start) +
-
-    text +
-
-    field.value.substring(end);
-
-  field.selectionStart =
-
-    field.selectionEnd =
-
-    start + text.length;
-
-  field.dispatchEvent(
-
-    new Event("input", { bubbles: true })
-
-  );
-
-}
-
 function keyboardSpace() {
 
-  const field = getFocusedField();
+  const field =
+    getFocusedField();
 
-  if (field) insertText(field, " ");
+  if (field) {
+
+    insertText(
+      field,
+      " "
+    );
+
+  }
 
 }
 
 function keyboardEnter() {
 
-  const field = getFocusedField();
+  const field =
+    getFocusedField();
 
   if (!field) return;
 
-  if (field.tagName === "TEXTAREA") {
+  if (
+    field.tagName ===
+    "TEXTAREA"
+  ) {
 
-    insertText(field, "\n");
+    insertText(
+      field,
+      "\n"
+    );
 
   } else {
 
-    field.blur();
+    field.dispatchEvent(
+      new KeyboardEvent(
+        "keydown",
+        {
+          key: "Enter",
+          code: "Enter",
+          keyCode: 13,
+          which: 13,
+          bubbles: true
+        }
+      )
+    );
 
   }
 
@@ -514,74 +793,114 @@ function keyboardEnter() {
 
 function keyboardBackspace() {
 
-  const field = getFocusedField();
+  const field =
+    getFocusedField();
 
   if (!field) return;
 
-  const start = field.selectionStart;
+  const start =
+    typeof field.selectionStart ===
+      "number"
 
-  const end = field.selectionEnd;
+      ? field.selectionStart
+
+      : field.value.length;
+
+  const end =
+    typeof field.selectionEnd ===
+      "number"
+
+      ? field.selectionEnd
+
+      : field.value.length;
 
   if (start !== end) {
 
     field.value =
+      field.value.substring(
+        0,
+        start
+      ) +
 
-      field.value.substring(0, start) +
+      field.value.substring(
+        end
+      );
 
-      field.value.substring(end);
+    try {
 
-    field.selectionStart =
+      field.setSelectionRange(
+        start,
+        start
+      );
 
-      field.selectionEnd = start;
+    } catch (error) {}
 
   } else if (start > 0) {
 
     field.value =
+      field.value.substring(
+        0,
+        start - 1
+      ) +
 
-      field.value.substring(0, start - 1) +
+      field.value.substring(
+        end
+      );
 
-      field.value.substring(end);
+    try {
 
-    field.selectionStart =
+      field.setSelectionRange(
+        start - 1,
+        start - 1
+      );
 
-      field.selectionEnd = start - 1;
+    } catch (error) {}
 
   }
 
   field.dispatchEvent(
+    new Event(
+      "input",
+      {
+        bubbles: true
+      }
+    )
+  );
 
-    new Event("input", { bubbles: true })
-
+  field.dispatchEvent(
+    new Event(
+      "change",
+      {
+        bubbles: true
+      }
+    )
   );
 
 }
 
 function keyboardShiftKey() {
 
-  keyboardShift = !keyboardShift;
+  keyboardShift =
+    !keyboardShift;
 
 }
 
 function keyboardNumber() {
 
-  const field = getFocusedField();
+  const field =
+    getFocusedField();
 
   if (!field) return;
 
   insertText(
-
     field,
-
-    keyboardShift ? "1234567890" : "1234567890"
-
+    "1234567890"
   );
 
 }
 
 // ============================================================
-
 // MESSAGES
-
 // ============================================================
 
 const messageContacts = {
@@ -589,11 +908,8 @@ const messageContacts = {
   Chloe: [
 
     "Heyyy 👋",
-
     "What are you doing?",
-
     "HAHA wait 😭",
-
     "Okayyy sounds good"
 
   ],
@@ -601,11 +917,8 @@ const messageContacts = {
   Sam: [
 
     "Yo!",
-
     "Are you free later?",
-
     "That's actually crazy 😂",
-
     "See you soon"
 
   ],
@@ -613,11 +926,8 @@ const messageContacts = {
   Cat: [
 
     "meow",
-
     "feed me",
-
     "MEOWWW",
-
     "😼"
 
   ]
@@ -627,45 +937,50 @@ const messageContacts = {
 function messagesApp() {
 
   openApp(
-
     "Messages",
-
     `
 
       <div class="card">
 
-        <h2>💬 Messages</h2>
+        <h2>
+          💬 Messages
+        </h2>
 
         <div id="contact-list">
 
-          ${Object.keys(messageContacts).map(name => `
-
-            <button onclick="openChat('${name}')">
-
-              💬 ${name}
-
-            </button>
-
-          `).join("")}
+          ${
+            Object.keys(
+              messageContacts
+            )
+              .map(name =>
+                `
+                  <button
+                    onclick="openChat('${name}')"
+                  >
+                    💬 ${name}
+                  </button>
+                `
+              )
+              .join("")
+          }
 
         </div>
 
-        <button onclick="newMessage()">
-
+        <button
+          onclick="newMessage()"
+        >
           ✏️ New Message
-
         </button>
 
-        <button onclick="alert('3 unread messages')">
-
+        <button
+          onclick="alert('3 unread messages')"
+        >
           🔴 Unread Messages
-
         </button>
 
       </div>
 
     `
-
   );
 
 }
@@ -673,55 +988,53 @@ function messagesApp() {
 function openChat(name) {
 
   const messages =
-
     messageContacts[name] || [];
 
   openApp(
-
     name,
-
     `
 
       <div class="card">
 
         <div id="chat-box">
 
-          ${messages.slice(0, 2).map(msg => `
-
-            <div class="message received">
-
-              ${escapeHTML(msg)}
-
-            </div>
-
-          `).join("")}
+          ${
+            messages
+              .slice(0, 2)
+              .map(msg =>
+                `
+                  <div
+                    class="message received"
+                  >
+                    ${escapeHTML(msg)}
+                  </div>
+                `
+              )
+              .join("")
+          }
 
         </div>
 
         <input
-
           id="message-input"
-
           placeholder="Message..."
-
         >
 
-        <button onclick="sendMessage('${name}')">
-
+        <button
+          onclick="sendMessage('${name}')"
+        >
           Send
-
         </button>
 
-        <button onclick="randomReply('${name}')">
-
+        <button
+          onclick="randomReply('${name}')"
+        >
           🤖 Random Reply
-
         </button>
 
       </div>
 
     `
-
   );
 
 }
@@ -729,57 +1042,67 @@ function openChat(name) {
 function sendMessage(name) {
 
   const input =
-
-    document.getElementById("message-input");
+    document.getElementById(
+      "message-input"
+    );
 
   const chat =
+    document.getElementById(
+      "chat-box"
+    );
 
-    document.getElementById("chat-box");
-
-  if (!input || !chat || !input.value.trim()) {
-
-    return;
-
-  }
+  if (
+    !input ||
+    !chat ||
+    !input.value.trim()
+  ) return;
 
   chat.innerHTML += `
 
-    <div class="message sent">
-
+    <div
+      class="message sent"
+    >
       ${escapeHTML(input.value)}
-
     </div>
 
   `;
 
   input.value = "";
 
-  setTimeout(() => randomReply(name), 600);
+  setTimeout(
+    () => randomReply(name),
+    600
+  );
 
 }
 
 function randomReply(name) {
 
   const chat =
-
-    document.getElementById("chat-box");
+    document.getElementById(
+      "chat-box"
+    );
 
   if (!chat) return;
 
   const replies =
-
-    messageContacts[name] || ["Okay!"];
+    messageContacts[name] ||
+    ["Okay!"];
 
   const reply =
-
-    replies[Math.floor(Math.random() * replies.length)];
+    replies[
+      Math.floor(
+        Math.random() *
+        replies.length
+      )
+    ];
 
   chat.innerHTML += `
 
-    <div class="message received">
-
+    <div
+      class="message received"
+    >
       ${escapeHTML(reply)}
-
     </div>
 
   `;
@@ -789,93 +1112,86 @@ function randomReply(name) {
 function newMessage() {
 
   openApp(
-
     "New Message",
-
     `
 
       <div class="card">
 
-        <input id="new-contact" placeholder="Contact">
+        <input
+          id="new-contact"
+          placeholder="Contact"
+        >
 
         <textarea
-
           id="new-message"
-
           placeholder="Message..."
-
         ></textarea>
 
-        <button onclick="alert('Message sent! 📱')">
-
+        <button
+          onclick="alert('Message sent! 📱')"
+        >
           Send
-
         </button>
 
       </div>
 
     `
-
   );
 
 }
 
 // ============================================================
-
 // CAMERA
-
 // ============================================================
 
 let cameraStream = null;
-
 let cameraFacing = "user";
 
 function cameraApp() {
 
   openApp(
-
     "Camera",
-
     `
 
-      <div class="card camera-box">
+      <div
+        class="card camera-box"
+      >
 
         <video
-
           id="camera-video"
-
           autoplay
-
           playsinline
-
         ></video>
 
-        <button onclick="startCamera()">
-
+        <button
+          onclick="startCamera()"
+        >
           📷 Start Camera
-
         </button>
 
-        <button onclick="capturePhoto()">
-
+        <button
+          onclick="capturePhoto()"
+        >
           ⭕ Take Photo
-
         </button>
 
-        <button onclick="flipCamera()">
-
+        <button
+          onclick="flipCamera()"
+        >
           🔄 Flip Camera
-
         </button>
 
-        <div id="camera-photo"></div>
+        <div
+          id="camera-photo"
+        ></div>
 
-        <canvas id="camera-canvas"></canvas>
+        <canvas
+          id="camera-canvas"
+        ></canvas>
 
       </div>
 
     `
-
   );
 
   startCamera();
@@ -886,15 +1202,43 @@ async function startCamera() {
 
   try {
 
+    if (
+      !navigator.mediaDevices ||
+      !navigator.mediaDevices.getUserMedia
+    ) {
+
+      alert(
+        "Camera access requires a browser with camera support and HTTPS (or localhost)."
+      );
+
+      return;
+
+    }
+
     stopCamera();
 
-    cameraStream =
+    const video =
+      document.getElementById(
+        "camera-video"
+      );
 
+    if (!video) return;
+
+    cameraStream =
       await navigator.mediaDevices.getUserMedia({
 
         video: {
 
-          facingMode: cameraFacing
+          width: {
+            ideal: 1280
+          },
+
+          height: {
+            ideal: 720
+          },
+
+          facingMode:
+            cameraFacing
 
         },
 
@@ -902,19 +1246,111 @@ async function startCamera() {
 
       });
 
-    const video =
+    video.srcObject =
+      cameraStream;
 
-      document.getElementById("camera-video");
+    await video.play()
+      .catch(() => {});
 
-    if (video) {
+    try {
 
-      video.srcObject = cameraStream;
+      const devices =
+        await navigator.mediaDevices
+          .enumerateDevices();
+
+      const cameras =
+        devices.filter(
+          device =>
+            device.kind ===
+            "videoinput"
+        );
+
+      const currentTrack =
+        cameraStream
+          .getVideoTracks()[0];
+
+      const currentDeviceId =
+        currentTrack
+          ?.getSettings
+          ?.()
+          .deviceId || "";
+
+      const freenove =
+        cameras.find(
+          device =>
+            /freenove/i.test(
+              device.label
+            )
+        ) ||
+
+        cameras.find(
+          device =>
+            /usb|webcam|camera/i.test(
+              device.label
+            )
+        );
+
+      if (
+        freenove &&
+        freenove.deviceId &&
+        freenove.deviceId !==
+          currentDeviceId
+      ) {
+
+        currentTrack?.stop();
+
+        cameraStream =
+          await navigator.mediaDevices
+            .getUserMedia({
+
+              video: {
+
+                deviceId: {
+                  exact:
+                    freenove.deviceId
+                },
+
+                width: {
+                  ideal: 1280
+                },
+
+                height: {
+                  ideal: 720
+                }
+
+              },
+
+              audio: false
+
+            });
+
+        video.srcObject =
+          cameraStream;
+
+        await video.play()
+          .catch(() => {});
+
+      }
+
+    } catch (deviceError) {
+
+      console.warn(
+        "Could not select the named USB/Freenove camera; using the active camera instead.",
+        deviceError
+      );
 
     }
 
-  } catch {
+  } catch (error) {
 
-    alert("Camera access was not available.");
+    console.error(
+      "Pear Phone camera error:",
+      error
+    );
+
+    alert(
+      "Camera access was not available. Make sure the Freenove camera is connected, allowed in the browser, and the site is running over HTTPS or localhost."
+    );
 
   }
 
@@ -923,11 +1359,8 @@ async function startCamera() {
 function flipCamera() {
 
   cameraFacing =
-
     cameraFacing === "user"
-
       ? "environment"
-
       : "user";
 
   startCamera();
@@ -937,53 +1370,53 @@ function flipCamera() {
 function capturePhoto() {
 
   const video =
-
-    document.getElementById("camera-video");
+    document.getElementById(
+      "camera-video"
+    );
 
   const canvas =
-
-    document.getElementById("camera-canvas");
+    document.getElementById(
+      "camera-canvas"
+    );
 
   const preview =
+    document.getElementById(
+      "camera-photo"
+    );
 
-    document.getElementById("camera-photo");
-
-  if (!video || !canvas || !preview) return;
+  if (
+    !video ||
+    !canvas ||
+    !preview
+  ) return;
 
   canvas.width =
-
-    video.videoWidth || 640;
+    video.videoWidth ||
+    640;
 
   canvas.height =
-
-    video.videoHeight || 480;
+    video.videoHeight ||
+    480;
 
   const ctx =
-
     canvas.getContext("2d");
 
   ctx.drawImage(
-
     video,
-
     0,
-
     0,
-
     canvas.width,
-
     canvas.height
-
   );
 
   preview.innerHTML = `
 
     <img
-
       src="${canvas.toDataURL("image/png")}"
-
-      style="width:100%;border-radius:12px"
-
+      style="
+        width:100%;
+        border-radius:12px
+      "
     >
 
   `;
@@ -994,58 +1427,46 @@ function stopCamera() {
 
   if (!cameraStream) return;
 
-  cameraStream.getTracks().forEach(track => {
+  cameraStream
+    .getTracks()
+    .forEach(track => {
 
-    track.stop();
+      track.stop();
 
-  });
+    });
 
   cameraStream = null;
 
 }
 
 // ============================================================
-
 // SPLASHFACE
-
 // ============================================================
 
 let splashPosts = [
 
   {
-
     user: "loganbalbs",
-
-    text: "Living my best Pear Phone life 🍐📱",
-
+    text:
+      "Living my best Pear Phone life 🍐📱",
     likes: 24,
-
     comments: []
-
   },
 
   {
-
     user: "sam",
-
-    text: "This phone is actually insane 😂",
-
+    text:
+      "This phone is actually insane 😂",
     likes: 12,
-
     comments: []
-
   },
 
   {
-
     user: "chloe",
-
-    text: "New post!!! ✨",
-
+    text:
+      "New post!!! ✨",
     likes: 31,
-
     comments: []
-
   }
 
 ];
@@ -1059,87 +1480,104 @@ function splashfaceApp() {
 function renderSplashface() {
 
   openApp(
-
     "SplashFace",
-
     `
 
       <div class="card">
 
-        <h2>👤 SplashFace</h2>
+        <h2>
+          👤 SplashFace
+        </h2>
 
         <p>
-
           Followers: 248
-
         </p>
 
-        <button onclick="newPost()">
-
+        <button
+          onclick="newPost()"
+        >
           ➕ New Post
-
         </button>
 
-        <button onclick="shuffleSplash()">
-
+        <button
+          onclick="shuffleSplash()"
+        >
           🔀 Discover
-
         </button>
 
         <div id="splash-feed">
 
-          ${splashPosts.map((post, index) => `
+          ${
+            splashPosts
+              .map(
+                (post, index) => `
 
-            <div class="post">
+                  <div class="post">
 
-              <strong>@${escapeHTML(post.user)}</strong>
+                    <strong>
+                      @${escapeHTML(
+                        post.user
+                      )}
+                    </strong>
 
-              <p>${escapeHTML(post.text)}</p>
+                    <p>
+                      ${escapeHTML(
+                        post.text
+                      )}
+                    </p>
 
-              <button onclick="likeSplash(${index})">
+                    <button
+                      onclick="likeSplash(${index})"
+                    >
+                      ❤️ ${post.likes}
+                    </button>
 
-                ❤️ ${post.likes}
+                    <button
+                      onclick="commentSplash(${index})"
+                    >
+                      💬 ${
+                        post.comments.length
+                      }
+                    </button>
 
-              </button>
+                    ${
+                      post.comments.length
+                        ? `
 
-              <button onclick="commentSplash(${index})">
+                          <div>
 
-                💬 ${post.comments.length}
+                            ${
+                              post.comments
+                                .map(
+                                  c =>
+                                    `
+                                      <small>
+                                        💬 ${escapeHTML(c)}
+                                      </small>
+                                      <br>
+                                    `
+                                )
+                                .join("")
+                            }
 
-              </button>
+                          </div>
 
-              ${
+                        `
+                        : ""
+                    }
 
-                post.comments.length
+                  </div>
 
-                  ? `
-
-                    <div>
-
-                      ${post.comments.map(c =>
-
-                        `<small>💬 ${escapeHTML(c)}</small><br>`
-
-                      ).join("")}
-
-                    </div>
-
-                  `
-
-                  : ""
-
-              }
-
-            </div>
-
-          `).join("")}
+                `
+              )
+              .join("")
+          }
 
         </div>
 
       </div>
 
     `
-
   );
 
 }
@@ -1155,12 +1593,15 @@ function likeSplash(index) {
 function commentSplash(index) {
 
   const comment =
-
-    prompt("Write a comment:");
+    prompt(
+      "Write a comment:"
+    );
 
   if (!comment) return;
 
-  splashPosts[index].comments.push(comment);
+  splashPosts[
+    index
+  ].comments.push(comment);
 
   renderSplashface();
 
@@ -1169,19 +1610,17 @@ function commentSplash(index) {
 function newPost() {
 
   const text =
-
-    prompt("What's on your mind?");
+    prompt(
+      "What's on your mind?"
+    );
 
   if (!text) return;
 
   splashPosts.unshift({
 
     user: "loganbalbs",
-
     text,
-
     likes: 0,
-
     comments: []
 
   });
@@ -1193,11 +1632,9 @@ function newPost() {
 function shuffleSplash() {
 
   splashPosts =
-
     [...splashPosts].sort(
-
-      () => Math.random() - 0.5
-
+      () =>
+        Math.random() - 0.5
     );
 
   renderSplashface();
@@ -1205,23 +1642,16 @@ function shuffleSplash() {
 }
 
 // ============================================================
-
 // STOCKS
-
 // ============================================================
 
 let stockData = {
 
   AAPL: 227.40,
-
   TSLA: 355.20,
-
   GOOG: 255.10,
-
   AMZN: 232.80,
-
   NFLX: 112.30,
-
   NVDA: 182.60
 
 };
@@ -1229,7 +1659,6 @@ let stockData = {
 let portfolio = {
 
   cash: 10000,
-
   holdings: {}
 
 };
@@ -1237,84 +1666,90 @@ let portfolio = {
 function stocksApp() {
 
   const rows =
+    Object.keys(
+      stockData
+    )
+      .map(
+        symbol => `
 
-    Object.keys(stockData).map(symbol => `
+          <div class="stock-row">
 
-      <div class="stock-row">
+            <strong>
+              ${symbol}
+            </strong>
 
-        <strong>${symbol}</strong>
+            <span>
+              $${stockData[
+                symbol
+              ].toFixed(2)}
+            </span>
 
-        <span>
+            <button
+              onclick="stockDetails('${symbol}')"
+            >
+              View
+            </button>
 
-          $${stockData[symbol].toFixed(2)}
+          </div>
 
-        </span>
-
-        <button onclick="stockDetails('${symbol}')">
-
-          View
-
-        </button>
-
-      </div>
-
-    `).join("");
+        `
+      )
+      .join("");
 
   openApp(
-
     "Stocks",
-
     `
 
       <div class="card">
 
-        <h2>📈 Stocks</h2>
+        <h2>
+          📈 Stocks
+        </h2>
 
         <h3>
-
           Cash:
-
           $${portfolio.cash.toFixed(2)}
-
         </h3>
 
         ${rows}
 
-        <button onclick="refreshStocks()">
-
+        <button
+          onclick="refreshStocks()"
+        >
           🔄 Refresh Prices
-
         </button>
 
-        <button onclick="addStock()">
-
+        <button
+          onclick="addStock()"
+        >
           ➕ Add Stock
-
         </button>
 
-        <button onclick="showPortfolio()">
-
+        <button
+          onclick="showPortfolio()"
+        >
           💼 Portfolio
-
         </button>
 
       </div>
 
     `
-
   );
 
 }
 
 function refreshStocks() {
 
-  Object.keys(stockData).forEach(symbol => {
+  Object.keys(
+    stockData
+  ).forEach(symbol => {
 
     stockData[symbol] +=
-
       (Math.random() - 0.5) * 15;
 
-    if (stockData[symbol] < 1) {
+    if (
+      stockData[symbol] < 1
+    ) {
 
       stockData[symbol] = 1;
 
@@ -1329,54 +1764,59 @@ function refreshStocks() {
 function stockDetails(symbol) {
 
   openApp(
-
     symbol,
-
     `
 
       <div class="card">
 
-        <h2>${symbol}</h2>
+        <h2>
+          ${symbol}
+        </h2>
 
         <h1>
-
-          $${stockData[symbol].toFixed(2)}
-
+          $${stockData[
+            symbol
+          ].toFixed(2)}
         </h1>
 
-        <button onclick="buyStock('${symbol}')">
-
+        <button
+          onclick="buyStock('${symbol}')"
+        >
           Buy 1
-
         </button>
 
-        <button onclick="sellStock('${symbol}')">
-
+        <button
+          onclick="sellStock('${symbol}')"
+        >
           Sell 1
-
         </button>
 
-        <button onclick="stocksApp()">
-
+        <button
+          onclick="stocksApp()"
+        >
           ← Back
-
         </button>
 
       </div>
 
     `
-
   );
 
 }
 
 function buyStock(symbol) {
 
-  const price = stockData[symbol];
+  const price =
+    stockData[symbol];
 
-  if (portfolio.cash < price) {
+  if (
+    portfolio.cash <
+    price
+  ) {
 
-    alert("Not enough cash.");
+    alert(
+      "Not enough cash."
+    );
 
     return;
 
@@ -1385,10 +1825,15 @@ function buyStock(symbol) {
   portfolio.cash -= price;
 
   portfolio.holdings[symbol] =
+    (
+      portfolio.holdings[symbol] ||
+      0
+    ) + 1;
 
-    (portfolio.holdings[symbol] || 0) + 1;
-
-  alert("Bought 1 " + symbol);
+  alert(
+    "Bought 1 " +
+    symbol
+  );
 
   stocksApp();
 
@@ -1396,9 +1841,13 @@ function buyStock(symbol) {
 
 function sellStock(symbol) {
 
-  if (!portfolio.holdings[symbol]) {
+  if (
+    !portfolio.holdings[symbol]
+  ) {
 
-    alert("You don't own this stock.");
+    alert(
+      "You don't own this stock."
+    );
 
     return;
 
@@ -1406,9 +1855,13 @@ function sellStock(symbol) {
 
   portfolio.holdings[symbol]--;
 
-  portfolio.cash += stockData[symbol];
+  portfolio.cash +=
+    stockData[symbol];
 
-  alert("Sold 1 " + symbol);
+  alert(
+    "Sold 1 " +
+    symbol
+  );
 
   stocksApp();
 
@@ -1416,32 +1869,30 @@ function sellStock(symbol) {
 
 function showPortfolio() {
 
-  let text = "PORTFOLIO\n\n";
+  let text =
+    "PORTFOLIO\n\n";
 
-  Object.keys(portfolio.holdings)
+  Object.keys(
+    portfolio.holdings
+  ).forEach(symbol => {
 
-    .forEach(symbol => {
+    if (
+      portfolio.holdings[symbol] >
+      0
+    ) {
 
-      if (portfolio.holdings[symbol] > 0) {
+      text +=
+        symbol +
+        ": " +
+        portfolio.holdings[symbol] +
+        "\n";
 
-        text +=
+    }
 
-          symbol +
-
-          ": " +
-
-          portfolio.holdings[symbol] +
-
-          "\n";
-
-      }
-
-    });
+  });
 
   text +=
-
     "\nCash: $" +
-
     portfolio.cash.toFixed(2);
 
   alert(text);
@@ -1451,27 +1902,25 @@ function showPortfolio() {
 function addStock() {
 
   const symbol =
-
-    prompt("Enter stock symbol:");
+    prompt(
+      "Enter stock symbol:"
+    );
 
   if (!symbol) return;
 
   const upper =
-
     symbol.toUpperCase();
 
   stockData[upper] =
-
-    50 + Math.random() * 300;
+    50 +
+    Math.random() * 300;
 
   stocksApp();
 
 }
 
 // ============================================================
-
 // MAPS
-
 // ============================================================
 
 let savedPlaces = [];
@@ -1479,65 +1928,69 @@ let savedPlaces = [];
 function mapsApp() {
 
   openApp(
-
     "Maps",
-
     `
 
       <div class="card">
 
-        <h2>🗺️ Maps</h2>
+        <h2>
+          🗺️ Maps
+        </h2>
 
         <input
-
           id="map-search"
-
           placeholder="Search a place..."
-
         >
 
-        <button onclick="searchMap()">
-
+        <button
+          onclick="searchMap()"
+        >
           Search
-
         </button>
 
-        <button onclick="routeDemo()">
-
+        <button
+          onclick="routeDemo()"
+        >
           🚗 Directions
-
         </button>
 
-        <button onclick="locateMe()">
-
+        <button
+          onclick="locateMe()"
+        >
           📍 Find Me
-
         </button>
 
-        <button onclick="savedMapPlace()">
-
+        <button
+          onclick="savedMapPlace()"
+        >
           ⭐ Save Place
-
         </button>
 
-        <div id="map-result"></div>
+        <div
+          id="map-result"
+        ></div>
 
-        <h3>Saved Places</h3>
+        <h3>
+          Saved Places
+        </h3>
 
         <div>
 
           ${
-
             savedPlaces.length
-
-              ? savedPlaces.map(place =>
-
-                  `<p>📍 ${escapeHTML(place)}</p>`
-
-                ).join("")
-
+              ? savedPlaces
+                  .map(
+                    place =>
+                      `
+                        <p>
+                          📍 ${escapeHTML(
+                            place
+                          )}
+                        </p>
+                      `
+                  )
+                  .join("")
               : "No saved places"
-
           }
 
         </div>
@@ -1545,7 +1998,6 @@ function mapsApp() {
       </div>
 
     `
-
   );
 
 }
@@ -1553,40 +2005,42 @@ function mapsApp() {
 function searchMap() {
 
   const input =
-
-    document.getElementById("map-search");
+    document.getElementById(
+      "map-search"
+    );
 
   const result =
+    document.getElementById(
+      "map-result"
+    );
 
-    document.getElementById("map-result");
+  if (
+    !input ||
+    !result
+  ) return;
 
-  if (!input || !result) return;
+  const query =
+    input.value.trim();
+
+  if (!query) {
+
+    result.innerHTML =
+      "<p>Type a place first.</p>";
+
+    return;
+
+  }
 
   result.innerHTML = `
 
-    <div class="card">
+    <div class="post">
 
-      📍 Found:
+      📍
+      ${escapeHTML(query)}
 
-      <strong>
+      <br><br>
 
-        ${escapeHTML(input.value)}
-
-      </strong>
-
-      <p>
-
-        Distance: ${(Math.random() * 20 + 1).toFixed(1)} km
-
-      </p>
-
-      <p>
-
-        Estimated travel time:
-
-        ${Math.floor(Math.random() * 30 + 5)} min
-
-      </p>
+      Location found!
 
     </div>
 
@@ -1596,94 +2050,174 @@ function searchMap() {
 
 function routeDemo() {
 
-  alert(
+  const result =
+    document.getElementById(
+      "map-result"
+    );
 
-    "🚗 Route calculated!\n\n" +
+  if (!result) return;
 
-    "Distance: 8.4 km\n" +
+  result.innerHTML = `
 
-    "Time: 18 minutes"
+    <div class="post">
 
-  );
+      🚗 Route started!
+
+      <br><br>
+
+      Estimated arrival:
+      14 minutes
+
+    </div>
+
+  `;
+
+}
+
+function locateMe() {
+
+  const result =
+    document.getElementById(
+      "map-result"
+    );
+
+  if (!result) return;
+
+  if (
+    navigator.geolocation
+  ) {
+
+    navigator.geolocation.getCurrentPosition(
+
+      position => {
+
+        result.innerHTML = `
+
+          <div class="post">
+
+            📍 You are here!
+
+            <br>
+
+            Latitude:
+            ${position.coords.latitude.toFixed(4)}
+
+            <br>
+
+            Longitude:
+            ${position.coords.longitude.toFixed(4)}
+
+          </div>
+
+        `;
+
+      },
+
+      () => {
+
+        result.innerHTML =
+          "<p>Location unavailable.</p>";
+
+      }
+
+    );
+
+  }
 
 }
 
 function savedMapPlace() {
 
   const input =
+    document.getElementById(
+      "map-search"
+    );
 
-    document.getElementById("map-search");
+  if (
+    !input ||
+    !input.value.trim()
+  ) {
 
-  if (!input || !input.value.trim()) {
-
-    alert("Search for a place first.");
+    alert(
+      "Search for a place first."
+    );
 
     return;
 
   }
 
-  savedPlaces.push(input.value);
+  savedPlaces.push(
+    input.value.trim()
+  );
 
   mapsApp();
 
 }
 
-function locateMe() {
-
-  alert(
-
-    "📍 You are here!\n\n" +
-
-    "Location services connected."
-
-  );
-
-}
-
 // ============================================================
-
 // PHOTOS
-
 // ============================================================
 
-let favoritePhotos = [];
+let photoLibrary = [];
 
 function photosApp() {
 
   openApp(
-
     "Photos",
-
     `
 
       <div class="card">
 
-        <h2>🖼️ Photos</h2>
+        <h2>
+          🖼️ Photos
+        </h2>
 
         <input
-
           type="file"
-
           accept="image/png"
-
           multiple
-
           onchange="loadPhotos(event)"
-
         >
 
-        <button onclick="showFavoritePhotos()">
+        <div
+          id="photo-grid"
+          class="photo-grid"
+        >
 
-          ⭐ Favorites
+          ${
+            photoLibrary.length
+              ? photoLibrary
+                  .map(
+                    photo =>
+                      `
+                        <div
+                          class="photo-item"
+                        >
 
-        </button>
+                          <img
+                            src="${photo}"
+                            style="
+                              width:100%;
+                              border-radius:10px
+                            "
+                          >
 
-        <div id="photo-grid"></div>
+                        </div>
+                      `
+                  )
+                  .join("")
+              : `
+                  <p>
+                    No PNG photos yet.
+                  </p>
+                `
+          }
+
+        </div>
 
       </div>
 
     `
-
   );
 
 }
@@ -1691,366 +2225,275 @@ function photosApp() {
 function loadPhotos(event) {
 
   const grid =
-
-    document.getElementById("photo-grid");
+    document.getElementById(
+      "photo-grid"
+    );
 
   if (!grid) return;
 
-  grid.innerHTML = "";
+  const files =
+    Array.from(
+      event.target.files
+    ).filter(
+      file =>
+        file.type ===
+        "image/png"
+    );
 
-  Array.from(event.target.files)
+  files.forEach(file => {
 
-    .filter(file => file.type === "image/png")
+    const reader =
+      new FileReader();
 
-    .forEach((file, index) => {
+    reader.onload = e => {
 
-      const url =
+      photoLibrary.push(
+        e.target.result
+      );
 
-        URL.createObjectURL(file);
+      photosApp();
 
-      grid.innerHTML += `
+    };
 
-        <div class="photo-item">
+    reader.readAsDataURL(file);
 
-          <img
-
-            src="${url}"
-
-            style="width:100%;border-radius:12px"
-
-          >
-
-          <button onclick="favoritePhoto(${index})">
-
-            ⭐ Favorite
-
-          </button>
-
-        </div>
-
-      `;
-
-    });
-
-}
-
-function favoritePhoto(index) {
-
-  favoritePhotos.push(index);
-
-  alert("Added to favorites ⭐");
-
-}
-
-function showFavoritePhotos() {
-
-  alert(
-
-    favoritePhotos.length +
-
-    " favorite photo(s)"
-
-  );
+  });
 
 }
 
 // ============================================================
-
 // WEATHER
-
 // ============================================================
-
-let weatherCities = [
-
-  "Toronto",
-
-  "Vancouver",
-
-  "New York",
-
-  "Los Angeles",
-
-  "London"
-
-];
 
 function weatherApp() {
 
   openApp(
-
     "Weather",
-
     `
 
       <div class="card">
 
-        <h2>☀️ Weather</h2>
+        <h2>
+          ☀️ Weather
+        </h2>
 
-        <select id="weather-city">
-
-          ${weatherCities.map(city =>
-
-            `<option>${city}</option>`
-
-          ).join("")}
-
-        </select>
-
-        <div id="weather-main">
-
-          <h1>22°C</h1>
-
-          <p>Partly Cloudy ☁️</p>
-
+        <div
+          style="
+            font-size:52px;
+            text-align:center
+          "
+        >
+          ☀️
         </div>
 
-        <button onclick="refreshWeather()">
+        <h1
+          style="
+            text-align:center
+          "
+        >
+          24°
+        </h1>
 
+        <p
+          style="
+            text-align:center
+          "
+        >
+          Sunny
+        </p>
+
+        <p
+          style="
+            text-align:center
+          "
+        >
+          Feels like 25°
+        </p>
+
+        <button
+          onclick="refreshWeather()"
+        >
           🔄 Refresh
-
         </button>
-
-        <h3>Hourly</h3>
-
-        <p>10 AM ☀️ 21°</p>
-
-        <p>12 PM ☀️ 23°</p>
-
-        <p>2 PM 🌤️ 24°</p>
-
-        <p>4 PM 🌤️ 23°</p>
-
-        <h3>7 Day</h3>
-
-        <p>Mon ☀️ 24°</p>
-
-        <p>Tue 🌤️ 23°</p>
-
-        <p>Wed 🌧️ 19°</p>
-
-        <p>Thu ☀️ 25°</p>
 
       </div>
 
     `
-
   );
 
 }
 
 function refreshWeather() {
 
+  const temps = [
+    21,
+    22,
+    23,
+    24,
+    25,
+    26
+  ];
+
   const temp =
-
-    Math.floor(Math.random() * 20) + 10;
-
-  const main =
-
-    document.getElementById("weather-main");
-
-  if (main) {
-
-    main.innerHTML = `
-
-      <h1>${temp}°C</h1>
-
-      <p>
-
-        ${
-
-          temp > 20
-
-            ? "Sunny ☀️"
-
-            : "Cool 🌤️"
-
-        }
-
-      </p>
-
-    `;
-
-  }
-
-}
-
-// ============================================================
-
-// NOTES
-
-// ============================================================
-
-let notes = JSON.parse(
-
-  localStorage.getItem("pear-notes") || "[]"
-
-);
-
-function notesApp() {
-
-  renderNotes();
-
-}
-
-function renderNotes() {
+    temps[
+      Math.floor(
+        Math.random() *
+        temps.length
+      )
+    ];
 
   openApp(
-
-    "Notes",
-
+    "Weather",
     `
 
       <div class="card">
 
-        <h2>📝 Notes</h2>
+        <h2>
+          ☀️ Weather
+        </h2>
 
-        <button onclick="createNote()">
+        <div
+          style="
+            font-size:52px;
+            text-align:center
+          "
+        >
+          ☀️
+        </div>
 
-          ➕ New Note
+        <h1
+          style="
+            text-align:center
+          "
+        >
+          ${temp}°
+        </h1>
 
+        <p
+          style="
+            text-align:center
+          "
+        >
+          Sunny
+        </p>
+
+        <button
+          onclick="refreshWeather()"
+        >
+          🔄 Refresh
         </button>
 
-        <input
+      </div>
 
-          id="note-search"
+    `
+  );
 
-          placeholder="Search notes..."
+}
 
-          oninput="searchNotes()"
+// ============================================================
+// NOTES
+// ============================================================
 
+let notes =
+  JSON.parse(
+    localStorage.getItem(
+      "pear-notes"
+    ) || "[]"
+  );
+
+function notesApp() {
+
+  openApp(
+    "Notes",
+    `
+
+      <div class="card">
+
+        <h2>
+          📝 Notes
+        </h2>
+
+        <textarea
+          id="note-text"
+          placeholder="Write a note..."
+        ></textarea>
+
+        <button
+          onclick="saveNote()"
         >
+          💾 Save Note
+        </button>
 
-        <div id="notes-list">
+        <button
+          onclick="clearNotes()"
+        >
+          🗑️ Clear Notes
+        </button>
 
-          ${notes.map((note, index) => `
+        <div>
 
-            <button
+          ${
+            notes.length
+              ? notes
+                  .map(
+                    (note, index) =>
+                      `
+                        <div
+                          class="post"
+                        >
 
-              onclick="editNote(${index})"
+                          ${escapeHTML(
+                            note
+                          )}
 
-              style="text-align:left"
+                          <br><br>
 
-            >
+                          <button
+                            onclick="deleteNote(${index})"
+                          >
+                            Delete
+                          </button>
 
-              <strong>
-
-                ${escapeHTML(note.title)}
-
-              </strong>
-
-              <br>
-
-              ${escapeHTML(note.text).slice(0, 60)}
-
-            </button>
-
-          `).join("")}
+                        </div>
+                      `
+                  )
+                  .join("")
+              : `
+                  <p>
+                    No notes yet.
+                  </p>
+                `
+          }
 
         </div>
 
       </div>
 
     `
-
   );
 
 }
 
-function createNote() {
+function saveNote() {
 
-  const title =
+  const text =
+    document.getElementById(
+      "note-text"
+    );
 
-    prompt("Note title:");
+  if (
+    !text ||
+    !text.value.trim()
+  ) return;
 
-  if (!title) return;
-
-  notes.unshift({
-
-    title,
-
-    text: "",
-
-    date: new Date().toLocaleString()
-
-  });
-
-  saveNotes();
-
-  editNote(0);
-
-}
-
-function editNote(index) {
-
-  const note = notes[index];
-
-  openApp(
-
-    "Edit Note",
-
-    `
-
-      <div class="card">
-
-        <input
-
-          id="edit-note-title"
-
-          value="${escapeHTML(note.title)}"
-
-        >
-
-        <textarea
-
-          id="edit-note-text"
-
-          style="height:200px"
-
-        >${escapeHTML(note.text)}</textarea>
-
-        <button onclick="saveEditedNote(${index})">
-
-          💾 Save
-
-        </button>
-
-        <button onclick="deleteNote(${index})">
-
-          🗑️ Delete
-
-        </button>
-
-      </div>
-
-    `
-
+  notes.unshift(
+    text.value
   );
 
-}
-
-function saveEditedNote(index) {
-
-  notes[index].title =
-
-    document.getElementById(
-
-      "edit-note-title"
-
-    ).value;
-
-  notes[index].text =
-
-    document.getElementById(
-
-      "edit-note-text"
-
-    ).value;
-
-  notes[index].date =
-
-    new Date().toLocaleString();
-
-  saveNotes();
+  localStorage.setItem(
+    "pear-notes",
+    JSON.stringify(notes)
+  );
 
   notesApp();
 
@@ -2058,202 +2501,121 @@ function saveEditedNote(index) {
 
 function deleteNote(index) {
 
-  notes.splice(index, 1);
+  notes.splice(
+    index,
+    1
+  );
 
-  saveNotes();
+  localStorage.setItem(
+    "pear-notes",
+    JSON.stringify(notes)
+  );
 
   notesApp();
 
 }
 
-function saveNotes() {
+function clearNotes() {
 
-  localStorage.setItem(
+  notes = [];
 
-    "pear-notes",
-
-    JSON.stringify(notes)
-
+  localStorage.removeItem(
+    "pear-notes"
   );
 
-}
-
-function searchNotes() {
-
-  const search =
-
-    document.getElementById(
-
-      "note-search"
-
-    );
-
-  const list =
-
-    document.getElementById(
-
-      "notes-list"
-
-    );
-
-  if (!search || !list) return;
-
-  const query =
-
-    search.value.toLowerCase();
-
-  list.innerHTML =
-
-    notes
-
-      .map((note, index) => ({
-
-        note,
-
-        index
-
-      }))
-
-      .filter(item =>
-
-        (
-
-          item.note.title +
-
-          " " +
-
-          item.note.text
-
-        )
-
-          .toLowerCase()
-
-          .includes(query)
-
-      )
-
-      .map(item => `
-
-        <button
-
-          onclick="editNote(${item.index})"
-
-        >
-
-          ${escapeHTML(item.note.title)}
-
-        </button>
-
-      `)
-
-      .join("");
+  notesApp();
 
 }
 
 // ============================================================
-
 // PEARTUNES
-
 // ============================================================
 
 let musicIndex = 0;
 
 const demoSongs = [
 
+  "Pearadise",
+  "Sunset Drive",
+  "Electric Orchard",
   "Pear Dreams",
-
-  "Midnight Drive",
-
-  "Pixel Paradise",
-
-  "Fruit Juice",
-
-  "Neon Apples"
+  "Midnight Fruit"
 
 ];
 
 function pearTunesApp() {
 
   openApp(
-
     "PearTunes",
-
     `
 
       <div class="card">
 
-        <h2>🎵 PearTunes</h2>
+        <h2>
+          🎵 PearTunes
+        </h2>
 
-        <h3 id="song-title">
+        <div
+          style="
+            font-size:48px;
+            text-align:center
+          "
+        >
+          🎵
+        </div>
 
-          ${demoSongs[musicIndex]}
-
+        <h3
+          id="song-title"
+          style="
+            text-align:center
+          "
+        >
+          ${demoSongs[
+            musicIndex
+          ]}
         </h3>
 
-        <button onclick="previousSong()">
-
-          ⏮
-
-        </button>
-
-        <button onclick="playDemoTone()">
-
-          ▶
-
-        </button>
-
-        <button onclick="nextSong()">
-
-          ⏭
-
-        </button>
-
-        <button onclick="shuffleSongs()">
-
-          🔀
-
-        </button>
-
-        <input
-
-          type="range"
-
-          min="0"
-
-          max="100"
-
-          value="70"
-
-          style="width:100%"
-
+        <button
+          onclick="previousSong()"
         >
+          ⏮ Previous
+        </button>
+
+        <button
+          onclick="playDemoTone()"
+        >
+          ▶ Play
+        </button>
+
+        <button
+          onclick="nextSong()"
+        >
+          ⏭ Next
+        </button>
+
+        <button
+          onclick="shuffleSongs()"
+        >
+          🔀 Shuffle
+        </button>
 
         <hr>
 
         <input
-
           type="file"
-
           accept="audio/*"
-
           onchange="loadAudio(event)"
-
         >
 
         <audio
-
           id="audio-player"
-
           controls
-
           style="width:100%"
-
         ></audio>
 
       </div>
 
     `
-
   );
 
 }
@@ -2261,45 +2623,38 @@ function pearTunesApp() {
 function playDemoTone() {
 
   const AudioContext =
-
     window.AudioContext ||
-
     window.webkitAudioContext;
 
   if (!AudioContext) return;
 
   const context =
-
     new AudioContext();
 
   const oscillator =
-
     context.createOscillator();
 
   const gain =
-
     context.createGain();
 
-  oscillator.frequency.value = 440;
+  oscillator.frequency.value =
+    440;
 
   oscillator.connect(gain);
 
-  gain.connect(context.destination);
+  gain.connect(
+    context.destination
+  );
 
   oscillator.start();
 
   gain.gain.exponentialRampToValueAtTime(
-
     0.0001,
-
     context.currentTime + 1
-
   );
 
   oscillator.stop(
-
     context.currentTime + 1
-
   );
 
 }
@@ -2307,9 +2662,9 @@ function playDemoTone() {
 function nextSong() {
 
   musicIndex =
-
-    (musicIndex + 1) %
-
+    (
+      musicIndex + 1
+    ) %
     demoSongs.length;
 
   updateSongTitle();
@@ -2320,10 +2675,11 @@ function previousSong() {
 
   musicIndex--;
 
-  if (musicIndex < 0) {
+  if (
+    musicIndex < 0
+  ) {
 
     musicIndex =
-
       demoSongs.length - 1;
 
   }
@@ -2335,13 +2691,9 @@ function previousSong() {
 function shuffleSongs() {
 
   musicIndex =
-
     Math.floor(
-
       Math.random() *
-
       demoSongs.length
-
     );
 
   updateSongTitle();
@@ -2351,17 +2703,13 @@ function shuffleSongs() {
 function updateSongTitle() {
 
   const title =
-
     document.getElementById(
-
       "song-title"
-
     );
 
   if (title) {
 
     title.textContent =
-
       demoSongs[musicIndex];
 
   }
@@ -2371,49 +2719,46 @@ function updateSongTitle() {
 function loadAudio(event) {
 
   const file =
-
     event.target.files[0];
 
   if (!file) return;
 
   const player =
-
     document.getElementById(
-
       "audio-player"
-
     );
 
-  player.src =
+  if (!player) return;
 
+  player.src =
     URL.createObjectURL(file);
 
 }
 
 // ============================================================
-
 // SETTINGS
-
 // ============================================================
 
 function settingsApp() {
 
   openApp(
-
     "Settings",
-
     `
 
       <div class="card">
 
-        <h2>⚙️ Settings</h2>
+        <h2>
+          ⚙️ Settings
+        </h2>
 
-        <h3>Appearance</h3>
+        <h3>
+          Appearance
+        </h3>
 
-        <button onclick="toggleDarkMode()">
-
+        <button
+          onclick="toggleDarkMode()"
+        >
           🌙 Dark / Light Mode
-
         </button>
 
         <label>
@@ -2421,111 +2766,118 @@ function settingsApp() {
           Brightness
 
           <input
-
             type="range"
-
             min="50"
-
             max="100"
-
             value="100"
-
-            oninput="changeBrightness(this.value)"
-
+            oninput="
+              changeBrightness(this.value)
+            "
           >
 
         </label>
 
-        <h3>Sound</h3>
+        <h3>
+          Sound
+        </h3>
 
-        <button onclick="toggleSound()">
-
+        <button
+          onclick="toggleSound()"
+        >
           🔊 Sound On / Off
-
         </button>
 
-        <button onclick="testSound()">
-
+        <button
+          onclick="testSound()"
+        >
           🔔 Test Sound
-
         </button>
 
-        <h3>Animations</h3>
+        <h3>
+          Animations
+        </h3>
 
-        <button onclick="toggleAnimations()">
-
+        <button
+          onclick="toggleAnimations()"
+        >
           ✨ Toggle Animations
-
         </button>
 
-        <h3>Keyboard</h3>
+        <h3>
+          Keyboard
+        </h3>
 
-        <button onclick="keyboardDemo()">
-
+        <button
+          onclick="keyboardDemo()"
+        >
           ⌨️ Test Keyboard
-
         </button>
 
-        <h3>Phone</h3>
+        <h3>
+          Phone
+        </h3>
 
-        <button onclick="phoneInfo()">
-
+        <button
+          onclick="phoneInfo()"
+        >
           🍐 Pear Phone Info
-
         </button>
 
-        <button onclick="batteryInfo()">
-
+        <button
+          onclick="batteryInfo()"
+        >
           🔋 Battery
-
         </button>
 
-        <button onclick="storageInfo()">
-
+        <button
+          onclick="storageInfo()"
+        >
           💾 Storage
-
         </button>
 
-        <h3>Data</h3>
+        <h3>
+          Data
+        </h3>
 
-        <button onclick="resetNotes()">
-
+        <button
+          onclick="resetNotes()"
+        >
           📝 Clear Notes
-
         </button>
 
-        <button onclick="resetPhone()">
-
+        <button
+          onclick="resetPhone()"
+        >
           🔄 Reset Pear Phone
-
         </button>
 
       </div>
 
     `
-
   );
 
 }
 
 function toggleDarkMode() {
 
-  document.body.classList.toggle("dark-mode");
+  document.body.classList.toggle(
+    "dark-mode"
+  );
 
   localStorage.setItem(
-
     "pear-dark",
-
-    document.body.classList.contains("dark-mode")
-
+    document.body.classList.contains(
+      "dark-mode"
+    )
   );
 
 }
 
-function changeBrightness(value) {
+function changeBrightness(
+  value
+) {
 
   phone.style.filter =
-
     `brightness(${value}%)`;
 
 }
@@ -2533,25 +2885,19 @@ function changeBrightness(value) {
 function toggleSound() {
 
   const enabled =
-
-    localStorage.getItem("pear-sound") !== "false";
+    localStorage.getItem(
+      "pear-sound"
+    ) !== "false";
 
   localStorage.setItem(
-
     "pear-sound",
-
     String(!enabled)
-
   );
 
   alert(
-
     !enabled
-
       ? "Sound enabled 🔊"
-
       : "Sound disabled 🔇"
-
   );
 
 }
@@ -2565,21 +2911,14 @@ function testSound() {
 function toggleAnimations() {
 
   document.body.classList.toggle(
-
     "no-animations"
-
   );
 
   localStorage.setItem(
-
     "pear-animations",
-
     document.body.classList.contains(
-
       "no-animations"
-
     )
-
   );
 
 }
@@ -2587,48 +2926,44 @@ function toggleAnimations() {
 function keyboardDemo() {
 
   openApp(
-
     "Keyboard Test",
-
     `
 
       <div class="card">
 
-        <h2>⌨️ Pear Keyboard</h2>
+        <h2>
+          ⌨️ Pear Keyboard
+        </h2>
 
         <input
-
           id="keyboard-test"
-
           placeholder="Type here..."
-
         >
 
         <p>
-
-          Tap the keyboard below and try it!
-
+          Tap the keyboard below
+          and try it!
         </p>
 
       </div>
 
     `
-
   );
 
   setTimeout(() => {
 
     const input =
-
       document.getElementById(
-
         "keyboard-test"
-
       );
 
     if (input) {
 
       input.focus();
+
+      showPearKeyboard(
+        input
+      );
 
     }
 
@@ -2639,15 +2974,10 @@ function keyboardDemo() {
 function phoneInfo() {
 
   alert(
-
     "🍐 PEAR PHONE\n\n" +
-
     "Pear Phone OS\n" +
-
     "Version 2.0\n" +
-
     "Built for the Pear Phone"
-
   );
 
 }
@@ -2655,27 +2985,18 @@ function phoneInfo() {
 function batteryInfo() {
 
   if (
-
     navigator.getBattery
-
   ) {
 
     navigator.getBattery()
-
       .then(battery => {
 
         alert(
-
           "Battery: " +
-
           Math.round(
-
             battery.level * 100
-
           ) +
-
           "%"
-
         );
 
       });
@@ -2683,9 +3004,7 @@ function batteryInfo() {
   } else {
 
     alert(
-
       "Battery: 87%"
-
     );
 
   }
@@ -2695,15 +3014,10 @@ function batteryInfo() {
 function storageInfo() {
 
   alert(
-
     "Storage\n\n" +
-
     "Used: 3.2 GB\n" +
-
     "Free: 28.8 GB\n" +
-
     "Total: 32 GB"
-
   );
 
 }
@@ -2711,14 +3025,14 @@ function storageInfo() {
 function resetNotes() {
 
   localStorage.removeItem(
-
     "pear-notes"
-
   );
 
   notes = [];
 
-  alert("All notes deleted.");
+  alert(
+    "All notes deleted."
+  );
 
 }
 
@@ -2727,135 +3041,123 @@ function resetPhone() {
   localStorage.clear();
 
   document.body.classList.remove(
-
     "dark-mode",
-
     "no-animations"
-
   );
 
   alert(
-
     "Pear Phone has been reset!"
-
   );
 
 }
 
 // ============================================================
-
 // CLOCK
-
 // ============================================================
 
 let stopwatchInterval = null;
-
 let stopwatchSeconds = 0;
-
 let timerInterval = null;
-
 let timerSeconds = 60;
 
 function clockApp() {
 
   openApp(
-
     "Clock",
-
     `
 
       <div class="card">
 
-        <h2>🕐 Clock</h2>
+        <h2>
+          🕐 Clock
+        </h2>
 
-        <div id="live-clock"
-
-             style="font-size:32px">
-
+        <div
+          id="live-clock"
+          style="
+            font-size:32px
+          "
+        >
           ${new Date().toLocaleTimeString()}
-
         </div>
 
         <hr>
 
-        <h3>Stopwatch</h3>
+        <h3>
+          Stopwatch
+        </h3>
 
-        <div id="stopwatch">
-
+        <div
+          id="stopwatch"
+        >
           00:00
-
         </div>
 
-        <button onclick="startStopwatch()">
-
+        <button
+          onclick="startStopwatch()"
+        >
           Start
-
         </button>
 
-        <button onclick="stopStopwatch()">
-
+        <button
+          onclick="stopStopwatch()"
+        >
           Stop
-
         </button>
 
-        <button onclick="resetStopwatch()">
-
+        <button
+          onclick="resetStopwatch()"
+        >
           Reset
-
         </button>
 
-        <h3>Timer</h3>
+        <h3>
+          Timer
+        </h3>
 
         <input
-
           id="timer-input"
-
           type="number"
-
           value="60"
-
           min="1"
-
         >
 
-        <div id="timer">
-
+        <div
+          id="timer"
+        >
           01:00
-
         </div>
 
-        <button onclick="startTimer()">
-
+        <button
+          onclick="startTimer()"
+        >
           Start
-
         </button>
 
-        <button onclick="resetTimer()">
-
+        <button
+          onclick="resetTimer()"
+        >
           Reset
-
         </button>
 
-        <h3>Alarm</h3>
+        <h3>
+          Alarm
+        </h3>
 
         <input
-
           id="alarm-time"
-
           type="time"
-
         >
 
-        <button onclick="setAlarm()">
-
+        <button
+          onclick="setAlarm()"
+        >
           Set Alarm
-
         </button>
 
       </div>
 
     `
-
   );
 
   updateClock();
@@ -2865,44 +3167,45 @@ function clockApp() {
 function updateClock() {
 
   const clock =
-
-    document.getElementById("live-clock");
+    document.getElementById(
+      "live-clock"
+    );
 
   if (clock) {
 
     clock.textContent =
-
       new Date().toLocaleTimeString();
 
   }
 
 }
 
-setInterval(updateClock, 1000);
+setInterval(
+  updateClock,
+  1000
+);
 
 function startStopwatch() {
 
-  if (stopwatchInterval) return;
+  if (stopwatchInterval)
+    return;
 
   stopwatchInterval =
-
     setInterval(() => {
 
       stopwatchSeconds++;
 
       const el =
-
         document.getElementById(
-
           "stopwatch"
-
         );
 
       if (el) {
 
         el.textContent =
-
-          formatTime(stopwatchSeconds);
+          formatTime(
+            stopwatchSeconds
+          );
 
       }
 
@@ -2912,7 +3215,9 @@ function startStopwatch() {
 
 function stopStopwatch() {
 
-  clearInterval(stopwatchInterval);
+  clearInterval(
+    stopwatchInterval
+  );
 
   stopwatchInterval = null;
 
@@ -2925,16 +3230,14 @@ function resetStopwatch() {
   stopwatchSeconds = 0;
 
   const el =
-
     document.getElementById(
-
       "stopwatch"
-
     );
 
   if (el) {
 
-    el.textContent = "00:00";
+    el.textContent =
+      "00:00";
 
   }
 
@@ -2942,62 +3245,56 @@ function resetStopwatch() {
 
 function startTimer() {
 
-  if (timerInterval) return;
+  if (timerInterval)
+    return;
 
   const input =
-
     document.getElementById(
-
       "timer-input"
-
     );
 
   if (input) {
 
     timerSeconds =
-
       Math.max(
-
         1,
-
-        Number(input.value) || 60
-
+        Number(input.value) ||
+        60
       );
 
   }
 
   timerInterval =
-
     setInterval(() => {
 
       timerSeconds--;
 
       const el =
-
         document.getElementById(
-
           "timer"
-
         );
 
       if (el) {
 
         el.textContent =
-
-          formatTime(timerSeconds);
+          formatTime(
+            timerSeconds
+          );
 
       }
 
-      if (timerSeconds <= 0) {
+      if (
+        timerSeconds <= 0
+      ) {
 
-        clearInterval(timerInterval);
+        clearInterval(
+          timerInterval
+        );
 
         timerInterval = null;
 
         alert(
-
           "⏰ Timer finished!"
-
         );
 
       }
@@ -3008,19 +3305,23 @@ function startTimer() {
 
 function resetTimer() {
 
-  clearInterval(timerInterval);
+  clearInterval(
+    timerInterval
+  );
 
   timerInterval = null;
 
   timerSeconds = 60;
 
   const el =
-
-    document.getElementById("timer");
+    document.getElementById(
+      "timer"
+    );
 
   if (el) {
 
-    el.textContent = "01:00";
+    el.textContent =
+      "01:00";
 
   }
 
@@ -3029,107 +3330,99 @@ function resetTimer() {
 function setAlarm() {
 
   const time =
-
     document.getElementById(
-
       "alarm-time"
-
     );
 
-  if (!time || !time.value) {
+  if (
+    !time ||
+    !time.value
+  ) {
 
-    alert("Choose an alarm time.");
+    alert(
+      "Choose an alarm time."
+    );
 
     return;
 
   }
 
   alert(
-
     "⏰ Alarm set for " +
-
     time.value
-
   );
 
 }
 
-function formatTime(seconds) {
+function formatTime(
+  seconds
+) {
 
   const minutes =
-
-    Math.floor(seconds / 60);
+    Math.floor(
+      seconds / 60
+    );
 
   const secs =
-
     seconds % 60;
 
   return (
 
-    String(minutes).padStart(2, "0") +
+    String(minutes)
+      .padStart(2, "0") +
 
     ":" +
 
-    String(secs).padStart(2, "0")
+    String(secs)
+      .padStart(2, "0")
 
   );
 
 }
 
 // ============================================================
-
 // VIDEOS
-
 // ============================================================
 
 function videosApp() {
 
   openApp(
-
     "Videos",
-
     `
 
       <div class="card">
 
-        <h2>🎬 Videos</h2>
+        <h2>
+          🎬 Videos
+        </h2>
 
         <input
-
           type="file"
-
           accept="video/*"
-
           onchange="loadVideo(event)"
-
         >
 
         <video
-
           id="video-player"
-
           controls
-
           style="width:100%"
-
         ></video>
 
-        <button onclick="fullscreenVideo()">
-
+        <button
+          onclick="fullscreenVideo()"
+        >
           ⛶ Fullscreen
-
         </button>
 
-        <button onclick="restartVideo()">
-
+        <button
+          onclick="restartVideo()"
+        >
           🔄 Restart
-
         </button>
 
       </div>
 
     `
-
   );
 
 }
@@ -3137,21 +3430,18 @@ function videosApp() {
 function loadVideo(event) {
 
   const file =
-
     event.target.files[0];
 
   if (!file) return;
 
   const video =
-
     document.getElementById(
-
       "video-player"
-
     );
 
-  video.src =
+  if (!video) return;
 
+  video.src =
     URL.createObjectURL(file);
 
 }
@@ -3159,19 +3449,13 @@ function loadVideo(event) {
 function fullscreenVideo() {
 
   const video =
-
     document.getElementById(
-
       "video-player"
-
     );
 
   if (
-
     video &&
-
     video.requestFullscreen
-
   ) {
 
     video.requestFullscreen();
@@ -3183,11 +3467,8 @@ function fullscreenVideo() {
 function restartVideo() {
 
   const video =
-
     document.getElementById(
-
       "video-player"
-
     );
 
   if (video) {
@@ -3201,9 +3482,7 @@ function restartVideo() {
 }
 
 // ============================================================
-
 // PHONE
-
 // ============================================================
 
 let phoneNumber = "";
@@ -3211,109 +3490,94 @@ let phoneNumber = "";
 function phoneApp() {
 
   openApp(
-
     "Phone",
-
     `
 
       <div class="card">
 
-        <h2>📞 Phone</h2>
+        <h2>
+          📞 Phone
+        </h2>
 
         <div
-
           id="phone-number"
-
           style="
-
             font-size:26px;
-
             text-align:center;
-
           "
-
         >
-
           —
-
         </div>
 
         <div class="keypad">
 
-          ${[
-
-            "1","2","3",
-
-            "4","5","6",
-
-            "7","8","9",
-
-            "*","0","#"
-
-          ].map(n => `
-
-            <button
-
-              onclick="pressNumber('${n}')"
-
-            >
-
-              ${n}
-
-            </button>
-
-          `).join("")}
+          ${
+            [
+              "1","2","3",
+              "4","5","6",
+              "7","8","9",
+              "*","0","#"
+            ]
+              .map(
+                n => `
+                  <button
+                    onclick="pressNumber('${n}')"
+                  >
+                    ${n}
+                  </button>
+                `
+              )
+              .join("")
+          }
 
         </div>
 
-        <button onclick="makeCall()">
-
+        <button
+          onclick="makeCall()"
+        >
           📞 Call
-
         </button>
 
-        <button onclick="clearNumber()">
-
+        <button
+          onclick="clearNumber()"
+        >
           Clear
-
         </button>
 
-        <button onclick="fakeContacts()">
-
+        <button
+          onclick="fakeContacts()"
+        >
           👥 Contacts
-
         </button>
 
-        <button onclick="fakeRecents()">
-
+        <button
+          onclick="fakeRecents()"
+        >
           🕘 Recent Calls
-
         </button>
 
       </div>
 
     `
-
   );
 
 }
 
-function pressNumber(number) {
+function pressNumber(
+  number
+) {
 
-  phoneNumber += number;
+  phoneNumber +=
+    number;
 
   const display =
-
     document.getElementById(
-
       "phone-number"
-
     );
 
   if (display) {
 
     display.textContent =
-
       phoneNumber;
 
   }
@@ -3325,16 +3589,14 @@ function clearNumber() {
   phoneNumber = "";
 
   const display =
-
     document.getElementById(
-
       "phone-number"
-
     );
 
   if (display) {
 
-    display.textContent = "—";
+    display.textContent =
+      "—";
 
   }
 
@@ -3344,20 +3606,18 @@ function makeCall() {
 
   if (!phoneNumber) {
 
-    alert("Enter a number first.");
+    alert(
+      "Enter a number first."
+    );
 
     return;
 
   }
 
   alert(
-
     "📞 Calling " +
-
     phoneNumber +
-
     "..."
-
   );
 
 }
@@ -3365,17 +3625,11 @@ function makeCall() {
 function fakeContacts() {
 
   alert(
-
     "Contacts\n\n" +
-
     "Chloe\n" +
-
     "Sam\n" +
-
     "Cat\n" +
-
     "Pear Support"
-
   );
 
 }
@@ -3383,55 +3637,39 @@ function fakeContacts() {
 function fakeRecents() {
 
   alert(
-
     "Recent Calls\n\n" +
-
     "Chloe — 2 min\n" +
-
     "Sam — 14 min\n" +
-
     "Pear Support — Yesterday"
-
   );
 
 }
 
 // ============================================================
-
 // MAIL
-
 // ============================================================
 
 let emails = [
 
   {
-
     from: "Pear Team",
-
     subject: "Welcome!",
-
-    body: "Welcome to your Pear Phone!"
-
+    body:
+      "Welcome to your Pear Phone!"
   },
 
   {
-
     from: "Sam",
-
     subject: "What's up?",
-
-    body: "Are you free later?"
-
+    body:
+      "Are you free later?"
   },
 
   {
-
     from: "PearTunes",
-
     subject: "New music",
-
-    body: "Check out the latest tracks."
-
+    body:
+      "Check out the latest tracks."
   }
 
 ];
@@ -3439,1019 +3677,378 @@ let emails = [
 function mailApp() {
 
   openApp(
-
     "Mail",
-
-    `
-
-      <div class="card">
-
-        <h2>✉️ Mail</h2>
-
-        <button onclick="composeEmail()">
-
-          ✏️ Compose
-
-        </button>
-
-        ${emails.map((email, index) => `
-
-          <button
-
-            onclick="readEmail(${index})"
-
-            style="text-align:left"
-
-          >
-
-            <strong>
-
-              ${escapeHTML(email.from)}
-
-            </strong>
-
-            <br>
-
-            ${escapeHTML(email.subject)}
-
-          </button>
-
-        `).join("")}
-
-      </div>
-
-    `
-
-  );
-
-}
-
-function readEmail(index) {
-
-  const email = emails[index];
-
-  openApp(
-
-    "Mail",
-
     `
 
       <div class="card">
 
         <h2>
-
-          ${escapeHTML(email.subject)}
-
+          📧 Mail
         </h2>
 
-        <strong>
+        <div id="email-list">
 
-          From:
+          ${
+            emails
+              .map(
+                (email, index) => `
 
-          ${escapeHTML(email.from)}
+                  <div
+                    class="post"
+                    onclick="
+                      openEmail(${index})
+                    "
+                  >
 
-        </strong>
+                    <strong>
+                      ${escapeHTML(
+                        email.from
+                      )}
+                    </strong>
+
+                    <br>
+
+                    ${escapeHTML(
+                      email.subject
+                    )}
+
+                  </div>
+
+                `
+              )
+              .join("")
+          }
+
+        </div>
+
+        <button
+          onclick="composeEmail()"
+        >
+          ✉️ Compose
+        </button>
+
+      </div>
+
+    `
+  );
+
+}
+
+function openEmail(index) {
+
+  const email =
+    emails[index];
+
+  if (!email) return;
+
+  openApp(
+    email.subject,
+    `
+
+      <div class="card">
+
+        <h2>
+          ${escapeHTML(
+            email.subject
+          )}
+        </h2>
 
         <p>
-
-          ${escapeHTML(email.body)}
-
+          From:
+          ${escapeHTML(
+            email.from
+          )}
         </p>
 
-        <button onclick="replyEmail(${index})">
+        <hr>
 
-          ↩️ Reply
-
-        </button>
-
-        <button onclick="deleteEmail(${index})">
-
-          🗑️ Delete
-
-        </button>
-
-      </div>
-
-    `
-
-  );
-
-}
-
-function replyEmail(index) {
-
-  openApp(
-
-    "Reply",
-
-    `
-
-      <div class="card">
-
-        <h2>
-
-          Re: ${escapeHTML(
-
-            emails[index].subject
-
+        <p>
+          ${escapeHTML(
+            email.body
           )}
+        </p>
 
-        </h2>
-
-        <textarea
-
-          placeholder="Write reply..."
-
-        ></textarea>
-
-        <button onclick="alert('Reply sent! ✉️')">
-
-          Send
-
+        <button
+          onclick="mailApp()"
+        >
+          ← Back
         </button>
 
       </div>
 
     `
-
   );
-
-}
-
-function deleteEmail(index) {
-
-  emails.splice(index, 1);
-
-  mailApp();
 
 }
 
 function composeEmail() {
 
   openApp(
-
     "Compose",
-
     `
 
       <div class="card">
 
-        <input placeholder="To">
+        <input
+          id="email-to"
+          placeholder="To..."
+        >
 
-        <input placeholder="Subject">
+        <input
+          id="email-subject"
+          placeholder="Subject..."
+        >
 
         <textarea
-
-          placeholder="Write email..."
-
+          id="email-body"
+          placeholder="Write your email..."
         ></textarea>
 
-        <button onclick="alert('Email sent! ✉️')">
-
+        <button
+          onclick="sendEmail()"
+        >
           Send
-
-        </button>
-
-        <button onclick="alert('Saved to Drafts!')">
-
-          💾 Save Draft
-
         </button>
 
       </div>
 
     `
-
   );
 
 }
 
-// ============================================================
+function sendEmail() {
 
+  const to =
+    document.getElementById(
+      "email-to"
+    );
+
+  const subject =
+    document.getElementById(
+      "email-subject"
+    );
+
+  const body =
+    document.getElementById(
+      "email-body"
+    );
+
+  if (
+    !to ||
+    !to.value.trim()
+  ) {
+
+    alert(
+      "Enter a recipient."
+    );
+
+    return;
+
+  }
+
+  alert(
+    "Email sent! 📧"
+  );
+
+  mailApp();
+
+}
+
+// ============================================================
 // COMPASS
-
 // ============================================================
-
-let compassDegree = 0;
 
 function compassApp() {
 
   openApp(
-
     "Compass",
-
     `
 
-      <div
+      <div class="card">
 
-        class="card"
-
-        style="text-align:center"
-
-      >
-
-        <h2>🧭 Compass</h2>
+        <h2>
+          🧭 Compass
+        </h2>
 
         <div
-
-          id="compass-direction"
-
-          style="font-size:60px"
-
+          id="compass-face"
+          style="
+            width:180px;
+            height:180px;
+            margin:auto;
+            border:8px solid #333;
+            border-radius:50%;
+            display:grid;
+            place-items:center;
+            font-size:28px;
+          "
         >
-
           N
-
         </div>
 
-        <p id="compass-degree">
-
+        <h3
+          id="heading"
+          style="
+            text-align:center
+          "
+        >
           0°
+        </h3>
 
-        </p>
-
-        <button onclick="calibrateCompass()">
-
-          🧭 Calibrate
-
-        </button>
-
-        <button onclick="compassChallenge()">
-
-          🎯 Direction Challenge
-
+        <button
+          onclick="randomHeading()"
+        >
+          🔄 Calibrate
         </button>
 
       </div>
 
     `
-
   );
 
 }
 
-function calibrateCompass() {
+function randomHeading() {
 
-  compassDegree =
-
-    Math.floor(Math.random() * 360);
-
-  const directions = [
-
-    "N","NE","E","SE",
-
-    "S","SW","W","NW"
-
-  ];
-
-  const direction =
-
-    directions[
-
-      Math.round(
-
-        compassDegree / 45
-
-      ) % 8
-
-    ];
-
-  document.getElementById(
-
-    "compass-direction"
-
-  ).textContent = direction;
-
-  document.getElementById(
-
-    "compass-degree"
-
-  ).textContent =
-
-    compassDegree + "°";
-
-}
-
-function compassChallenge() {
-
-  const directions = [
-
-    "N","NE","E","SE",
-
-    "S","SW","W","NW"
-
-  ];
-
-  const answer =
-
-    directions[
-
-      Math.floor(
-
-        Math.random() *
-
-        directions.length
-
-      )
-
-    ];
-
-  const guess =
-
-    prompt(
-
-      "Which direction is " +
-
-      answer +
-
-      "?"
-
+  const heading =
+    Math.floor(
+      Math.random() * 360
     );
 
-  if (
-
-    guess &&
-
-    guess.toUpperCase() === answer
-
-  ) {
-
-    alert("Correct! 🧭");
-
-  } else {
-
-    alert(
-
-      "Not quite! The answer was " +
-
-      answer
-
+  const display =
+    document.getElementById(
+      "heading"
     );
+
+  if (display) {
+
+    display.textContent =
+      heading + "°";
 
   }
 
 }
 
 // ============================================================
-
-// TUMPS — TYPING GAME
-
+// THUMB
 // ============================================================
-
-let typingTimer = null;
-
-let typingStartTime = 0;
-
-let typingSentence = "";
-
-let typingFinished = false;
-
-const typingSentences = [
-
-  "The quick brown fox jumps over the lazy dog.",
-
-  "Pear Phone OS is ready for another adventure.",
-
-  "I can type really fast when I concentrate.",
-
-  "The best ideas sometimes start with a tiny screen.",
-
-  "Welcome to the coolest phone in the world.",
-
-  "Today is going to be a great day.",
-
-  "The Raspberry Pi is running Pear Phone OS.",
-
-  "Never underestimate a tiny touchscreen computer.",
-
-  "I wonder what secret apps are hiding here.",
-
-  "Everything is better with a little bit of fun."
-
-];
 
 function thumbApp() {
 
-  tumsApp();
+  openApp(
+    "Thumb",
+    `
+
+      <div class="card">
+
+        <h2>
+          👍 Thumb
+        </h2>
+
+        <div
+          style="
+            font-size:100px;
+            text-align:center
+          "
+        >
+          👍
+        </div>
+
+        <p
+          style="
+            text-align:center
+          "
+        >
+          Tap the button!
+        </p>
+
+        <button
+          onclick="thumbLike()"
+        >
+          👍 Like
+        </button>
+
+        <div
+          id="thumb-count"
+          style="
+            text-align:center;
+            font-size:24px;
+            margin-top:15px
+          "
+        >
+          0
+        </div>
+
+      </div>
+
+    `
+  );
 
 }
 
 function tumsApp() {
 
-  typingSentence =
-
-    typingSentences[
-
-      Math.floor(
-
-        Math.random() *
-
-        typingSentences.length
-
-      )
-
-    ];
-
-  typingFinished = false;
-
-  openApp(
-
-    "Tumps",
-
-    `
-
-      <div class="card typing-game">
-
-        <h2>⌨️ Tumps</h2>
-
-        <p>
-
-          Type the sentence as fast and accurately
-
-          as possible.
-
-        </p>
-
-        <div
-
-          id="typing-sentence"
-
-          class="typing-sentence"
-
-        >
-
-          ${escapeHTML(typingSentence)}
-
-        </div>
-
-        <input
-
-          id="typing-input"
-
-          placeholder="Tap START first..."
-
-          disabled
-
-          autocomplete="off"
-
-          autocorrect="off"
-
-          autocapitalize="off"
-
-          spellcheck="false"
-
-          oninput="typingInputChanged()"
-
-        >
-
-        <div class="typing-stats">
-
-          <div>
-
-            ⏱️
-
-            <strong id="typing-time">
-
-              0.0
-
-            </strong>s
-
-          </div>
-
-          <div>
-
-            ⚡
-
-            <strong id="typing-wpm">
-
-              0
-
-            </strong>
-
-            WPM
-
-          </div>
-
-          <div>
-
-            🎯
-
-            <strong id="typing-accuracy">
-
-              100
-
-            </strong>%
-
-          </div>
-
-        </div>
-
-        <button onclick="startTypingGame()">
-
-          ▶ START
-
-        </button>
-
-        <button onclick="newTypingSentence()">
-
-          🔄 NEW SENTENCE
-
-        </button>
-
-        <div id="typing-result"></div>
-
-      </div>
-
-    `
-
-  );
+  thumbApp();
 
 }
 
-function startTypingGame() {
+function thumbLike() {
 
-  stopTypingGame();
-
-  const input =
-
+  const count =
     document.getElementById(
-
-      "typing-input"
-
+      "thumb-count"
     );
 
-  const result =
-
-    document.getElementById(
-
-      "typing-result"
-
-    );
-
-  if (!input) return;
-
-  input.disabled = false;
-
-  input.value = "";
-
-  input.placeholder = "Start typing...";
-
-  if (result) {
-
-    result.innerHTML = "";
-
-  }
-
-  typingFinished = false;
-
-  typingStartTime = Date.now();
-
-  typingTimer =
-
-    setInterval(updateTypingStats, 100);
-
-  input.focus();
-
-}
-
-function stopTypingGame() {
-
-  if (typingTimer) {
-
-    clearInterval(typingTimer);
-
-    typingTimer = null;
-
-  }
-
-}
-
-function updateTypingStats() {
-
-  if (!typingStartTime) return;
-
-  const elapsed =
-
-    (Date.now() - typingStartTime) / 1000;
-
-  const time =
-
-    document.getElementById(
-
-      "typing-time"
-
-    );
-
-  if (time) {
-
-    time.textContent =
-
-      elapsed.toFixed(1);
-
-  }
-
-  updateTypingCalculations(elapsed);
-
-}
-
-function typingInputChanged() {
-
-  if (typingFinished) return;
-
-  const input =
-
-    document.getElementById(
-
-      "typing-input"
-
-    );
-
-  if (!input) return;
-
-  const typed = input.value;
-
-  updateTypingCalculations(
-
-    (Date.now() - typingStartTime) / 1000
-
-  );
-
-  if (
-
-    typed === typingSentence
-
-  ) {
-
-    finishTypingGame();
-
-  }
-
-}
-
-function updateTypingCalculations(elapsed) {
-
-  const input =
-
-    document.getElementById(
-
-      "typing-input"
-
-    );
-
-  if (!input) return;
-
-  const typed =
-
-    input.value;
-
-  let correct = 0;
-
-  for (
-
-    let i = 0;
-
-    i < typed.length &&
-
-    i < typingSentence.length;
-
-    i++
-
-  ) {
-
-    if (
-
-      typed[i] ===
-
-      typingSentence[i]
-
-    ) {
-
-      correct++;
-
-    }
-
-  }
-
-  const accuracy =
-
-    typed.length === 0
-
-      ? 100
-
-      : Math.round(
-
-          (correct /
-
-            typed.length) *
-
-          100
-
-        );
-
-  const words =
-
-    correct / 5;
-
-  const minutes =
-
-    elapsed / 60;
-
-  const wpm =
-
-    minutes > 0
-
-      ? Math.round(
-
-          words / minutes
-
-        )
-
-      : 0;
-
-  const accuracyEl =
-
-    document.getElementById(
-
-      "typing-accuracy"
-
-    );
-
-  const wpmEl =
-
-    document.getElementById(
-
-      "typing-wpm"
-
-    );
-
-  if (accuracyEl) {
-
-    accuracyEl.textContent =
-
-      Math.max(
-
-        0,
-
-        Math.min(
-
-          100,
-
-          accuracy
-
-        )
-
-      );
-
-  }
-
-  if (wpmEl) {
-
-    wpmEl.textContent =
-
-      wpm;
-
-  }
-
-  highlightTyping();
-
-}
-
-function highlightTyping() {
-
-  const sentence =
-
-    document.getElementById(
-
-      "typing-sentence"
-
-    );
-
-  const input =
-
-    document.getElementById(
-
-      "typing-input"
-
-    );
-
-  if (!sentence || !input) return;
-
-  const typed = input.value;
-
-  sentence.innerHTML =
-
-    typingSentence
-
-      .split("")
-
-      .map((char, index) => {
-
-        if (index >= typed.length) {
-
-          return `
-
-            <span>
-
-              ${escapeHTML(char)}
-
-            </span>
-
-          `;
-
-        }
-
-        if (
-
-          typed[index] === char
-
-        ) {
-
-          return `
-
-            <span style="color:green">
-
-              ${escapeHTML(char)}
-
-            </span>
-
-          `;
-
-        }
-
-        return `
-
-          <span style="color:red">
-
-            ${escapeHTML(char)}
-
-          </span>
-
-        `;
-
-      })
-
-      .join("");
-
-}
-
-function finishTypingGame() {
-
-  if (typingFinished) return;
-
-  typingFinished = true;
-
-  const elapsed =
-
-    (Date.now() - typingStartTime) / 1000;
-
-  stopTypingGame();
-
-  const input =
-
-    document.getElementById(
-
-      "typing-input"
-
-    );
-
-  if (input) {
-
-    input.disabled = true;
-
-  }
-
-  const wpm =
-
-    Math.round(
-
-      (typingSentence.length / 5) /
-
-      (elapsed / 60)
-
-    );
-
-  const result =
-
-    document.getElementById(
-
-      "typing-result"
-
-    );
-
-  if (result) {
-
-    result.innerHTML = `
-
-      <div class="card">
-
-        <h2>🎉 Finished!</h2>
-
-        <p>
-
-          ⏱️ Time:
-
-          ${elapsed.toFixed(2)} seconds
-
-        </p>
-
-        <p>
-
-          ⚡ Speed:
-
-          ${wpm} WPM
-
-        </p>
-
-        <p>
-
-          🎯 Accuracy:
-
-          100%
-
-        </p>
-
-        <button onclick="newTypingSentence()">
-
-          Play Again
-
-        </button>
-
-      </div>
-
-    `;
-
-  }
-
-  hidePearKeyboard();
-
-}
-
-function newTypingSentence() {
-
-  stopTypingGame();
-
-  typingSentence =
-
-    typingSentences[
-
-      Math.floor(
-
-        Math.random() *
-
-        typingSentences.length
-
-      )
-
-    ];
-
-  tumsApp();
+  if (!count) return;
+
+  count.textContent =
+    Number(
+      count.textContent
+    ) + 1;
 
 }
 
 // ============================================================
-
-// PAGE 2 APPS
-
+// LINGO
 // ============================================================
 
 function lingoApp() {
 
   openApp(
-
     "Lingo",
-
     `
 
       <div class="card">
 
-        <h2>🗣️ Lingo</h2>
+        <h2>
+          🗣️ Lingo
+        </h2>
 
         <input
-
           id="lingo-input"
-
           placeholder="Type a word..."
-
         >
 
-        <button onclick="translateLingo()">
-
+        <button
+          onclick="translateLingo()"
+        >
           Translate
-
         </button>
 
-        <button onclick="lingoQuiz()">
-
+        <button
+          onclick="lingoQuiz()"
+        >
           🎯 Word Quiz
-
         </button>
 
-        <div id="lingo-result"></div>
+        <div
+          id="lingo-result"
+        ></div>
 
       </div>
 
     `
-
   );
 
 }
@@ -4459,60 +4056,48 @@ function lingoApp() {
 function translateLingo() {
 
   const input =
-
     document.getElementById(
-
       "lingo-input"
-
     );
 
   const result =
-
     document.getElementById(
-
       "lingo-result"
-
     );
 
-  if (!input || !result) return;
+  if (
+    !input ||
+    !result
+  ) return;
 
   const dictionary = {
 
     hello: "hola",
-
     goodbye: "adios",
-
     apple: "manzana",
-
     friend: "amigo",
-
     house: "casa",
-
     water: "agua",
-
     music: "musica",
-
     phone: "telefono"
 
   };
 
   const word =
-
     input.value
-
       .trim()
-
       .toLowerCase();
 
   result.innerHTML = `
 
     <h3>
 
-      ${escapeHTML(
-
-        dictionary[word] || "No translation found"
-
-      )}
+      ${
+        escapeHTML(
+          dictionary[word] ||
+          "No translation found"
+        )
+      }
 
     </h3>
 
@@ -4525,61 +4110,44 @@ function lingoQuiz() {
   const words = [
 
     ["hello", "hola"],
-
     ["apple", "manzana"],
-
     ["friend", "amigo"],
-
     ["house", "casa"],
-
     ["water", "agua"]
 
   ];
 
   const item =
-
     words[
-
       Math.floor(
-
         Math.random() *
-
         words.length
-
       )
-
     ];
 
   const answer =
-
     prompt(
-
       "Translate: " +
-
       item[0]
-
     );
 
   if (
-
     answer &&
-
-    answer.toLowerCase().trim() ===
-
-    item[1]
-
+    answer
+      .toLowerCase()
+      .trim() ===
+      item[1]
   ) {
 
-    alert("Correct! 🎉");
+    alert(
+      "Correct! 🎉"
+    );
 
   } else {
 
     alert(
-
       "The answer was: " +
-
       item[1]
-
     );
 
   }
@@ -4587,31 +4155,20 @@ function lingoQuiz() {
 }
 
 // ============================================================
-
 // DANWARP
-
 // ============================================================
 
 const warpLocations = [
 
   "Toronto",
-
   "New York",
-
   "Tokyo",
-
   "London",
-
   "Paris",
-
   "Los Angeles",
-
   "Vancouver",
-
   "Mars 🚀",
-
   "The Moon 🌙",
-
   "Pear Headquarters 🍐"
 
 ];
@@ -4619,163 +4176,153 @@ const warpLocations = [
 function danwarpApp() {
 
   openApp(
-
     "DanWarp",
-
     `
 
       <div class="card">
 
-        <h2>🌀 DanWarp</h2>
+        <h2>
+          🌀 DanWarp
+        </h2>
 
         <div
-
           id="warp-location"
-
-          style="font-size:24px"
-
+          style="
+            font-size:24px
+          "
         >
-
           Ready...
-
         </div>
 
-        <button onclick="warp()">
-
-          ⚡ WARP
-
-        </button>
-
-        <button onclick="randomWarp()">
-
-          🎲 Random Destination
-
-        </button>
-
-        <h3>Warp Energy</h3>
-
-        <input
-
-          type="range"
-
-          min="0"
-
-          max="100"
-
-          value="100"
-
-          id="warp-energy"
-
+        <button
+          onclick="warp()"
         >
+          ⚡ WARP
+        </button>
+
+        <button
+          onclick="randomWarp()"
+        >
+          🎲 Random Destination
+        </button>
+
+        <h3>
+          Warp Energy
+        </h3>
+
+        <div
+          id="warp-energy"
+        >
+          ██████████ 100%
+        </div>
 
       </div>
 
     `
-
   );
 
 }
 
 function warp() {
 
-  const destination =
-
-    warpLocations[
-
-      Math.floor(
-
-        Math.random() *
-
-        warpLocations.length
-
-      )
-
-    ];
-
-  const result =
-
+  const location =
     document.getElementById(
-
       "warp-location"
-
     );
 
-  if (result) {
+  const energy =
+    document.getElementById(
+      "warp-energy"
+    );
 
-    result.innerHTML =
+  if (location) {
 
-      "⚡ " +
-
-      destination;
+    location.textContent =
+      "Warping... ⚡";
 
   }
+
+  if (energy) {
+
+    energy.textContent =
+      "██████░░░░ 60%";
+
+  }
+
+  setTimeout(() => {
+
+    if (location) {
+
+      location.textContent =
+        "Warp complete! 🚀";
+
+    }
+
+    if (energy) {
+
+      energy.textContent =
+        "██████████ 100%";
+
+    }
+
+  }, 1000);
 
 }
 
 function randomWarp() {
 
-  warp();
+  const location =
+    document.getElementById(
+      "warp-location"
+    );
+
+  if (!location) return;
+
+  location.textContent =
+    warpLocations[
+      Math.floor(
+        Math.random() *
+        warpLocations.length
+      )
+    ];
 
 }
 
 // ============================================================
-
 // IMAGE
-
 // ============================================================
 
 function imageApp() {
 
   openApp(
-
     "Image",
-
     `
 
       <div class="card">
 
-        <h2>🖼️ Image Studio</h2>
+        <h2>
+          🖼️ Image Studio
+        </h2>
 
         <input
-
           type="file"
-
           accept="image/png"
-
           onchange="loadSingleImage(event)"
-
         >
 
-        <div id="single-image"></div>
+        <div
+          id="single-image"
+        >
 
-        <button onclick="rotateImage()">
+          <p>
+            Choose a PNG image.
+          </p>
 
-          🔄 Rotate
-
-        </button>
-
-        <button onclick="imageZoom(1.2)">
-
-          🔍 Zoom In
-
-        </button>
-
-        <button onclick="imageZoom(.8)">
-
-          🔎 Zoom Out
-
-        </button>
-
-        <button onclick="imageFilter()">
-
-          ✨ Filter
-
-        </button>
+        </div>
 
       </div>
 
     `
-
   );
 
 }
@@ -4783,226 +4330,139 @@ function imageApp() {
 function loadSingleImage(event) {
 
   const file =
-
     event.target.files[0];
 
-  if (!file || file.type !== "image/png") {
+  if (!file) return;
 
-    if (file) alert("Please choose a PNG image.");
+  if (
+    file.type !==
+    "image/png"
+  ) {
+
+    alert(
+      "Please choose a PNG image."
+    );
 
     return;
 
   }
 
   const image =
-
     document.getElementById(
-
       "single-image"
-
     );
+
+  if (!image) return;
 
   image.innerHTML = `
 
     <img
-
       id="studio-image"
-
       src="${URL.createObjectURL(file)}"
-
       style="
-
         width:100%;
-
-        transition:.3s;
-
+        border-radius:12px;
       "
-
     >
 
   `;
 
 }
 
-let imageRotation = 0;
-
-let imageScale = 1;
-
-function rotateImage() {
-
-  const image =
-
-    document.getElementById(
-
-      "studio-image"
-
-    );
-
-  if (!image) return;
-
-  imageRotation += 90;
-
-  image.style.transform =
-
-    `rotate(${imageRotation}deg)
-
-     scale(${imageScale})`;
-
-}
-
-function imageZoom(amount) {
-
-  const image =
-
-    document.getElementById(
-
-      "studio-image"
-
-    );
-
-  if (!image) return;
-
-  imageScale *= amount;
-
-  imageScale =
-
-    Math.max(
-
-      .5,
-
-      Math.min(
-
-        3,
-
-        imageScale
-
-      )
-
-    );
-
-  image.style.transform =
-
-    `rotate(${imageRotation}deg)
-
-     scale(${imageScale})`;
-
-}
-
-function imageFilter() {
-
-  const image =
-
-    document.getElementById(
-
-      "studio-image"
-
-    );
-
-  if (!image) return;
-
-  image.style.filter =
-
-    image.style.filter
-
-      ? ""
-
-      : "grayscale(100%) contrast(1.2)";
-
-}
-
 // ============================================================
-
 // CHRONO
-
 // ============================================================
 
 function chronoApp() {
 
   openApp(
-
     "Chrono",
-
     `
 
       <div class="card">
 
-        <h2>⏱️ Chrono</h2>
+        <h2>
+          ⏱️ Chrono
+        </h2>
 
         <div
-
-          id="chrono-time"
-
-          style="font-size:45px"
-
+          id="chrono-display"
+          style="
+            font-size:44px;
+            text-align:center
+          "
         >
-
-          00:00
-
+          00:00:00
         </div>
 
-        <button onclick="chronoStart()">
-
+        <button
+          onclick="startChrono()"
+        >
           Start
-
         </button>
 
-        <button onclick="chronoStop()">
-
+        <button
+          onclick="stopChrono()"
+        >
           Stop
-
         </button>
 
-        <button onclick="chronoReset()">
-
+        <button
+          onclick="resetChrono()"
+        >
           Reset
-
-        </button>
-
-        <button onclick="chronoChallenge()">
-
-          🎯 Challenge
-
         </button>
 
       </div>
 
     `
-
   );
 
 }
 
+let chronoInterval = null;
 let chronoSeconds = 0;
 
-let chronoInterval = null;
+function startChrono() {
 
-function chronoStart() {
-
-  if (chronoInterval) return;
+  if (chronoInterval)
+    return;
 
   chronoInterval =
-
     setInterval(() => {
 
       chronoSeconds++;
 
       const el =
-
         document.getElementById(
-
-          "chrono-time"
-
+          "chrono-display"
         );
 
       if (el) {
 
-        el.textContent =
-
-          formatTime(
-
-            chronoSeconds
-
+        const hours =
+          Math.floor(
+            chronoSeconds / 3600
           );
+
+        const minutes =
+          Math.floor(
+            (chronoSeconds % 3600) /
+            60
+          );
+
+        const seconds =
+          chronoSeconds % 60;
+
+        el.textContent =
+          String(hours)
+            .padStart(2, "0") +
+          ":" +
+          String(minutes)
+            .padStart(2, "0") +
+          ":" +
+          String(seconds)
+            .padStart(2, "0");
 
       }
 
@@ -5010,440 +4470,323 @@ function chronoStart() {
 
 }
 
-function chronoStop() {
+function stopChrono() {
 
-  clearInterval(chronoInterval);
+  clearInterval(
+    chronoInterval
+  );
 
   chronoInterval = null;
 
 }
 
-function chronoReset() {
+function resetChrono() {
 
-  chronoStop();
+  stopChrono();
 
   chronoSeconds = 0;
 
   const el =
-
     document.getElementById(
-
-      "chrono-time"
-
+      "chrono-display"
     );
 
   if (el) {
 
-    el.textContent = "00:00";
+    el.textContent =
+      "00:00:00";
 
   }
 
 }
 
-function chronoChallenge() {
-
-  const target =
-
-    Math.floor(
-
-      Math.random() * 10
-
-    ) + 5;
-
-  alert(
-
-    "Start the stopwatch and try to stop it at exactly " +
-
-    target +
-
-    " seconds!"
-
-  );
-
-}
-
 // ============================================================
-
 // ZAPLOOK
-
 // ============================================================
-
-const zapCategories = [
-
-  "Technology",
-
-  "Music",
-
-  "Games",
-
-  "Movies",
-
-  "Sports",
-
-  "Travel",
-
-  "Food",
-
-  "Random"
-
-];
 
 function zaplookApp() {
 
   openApp(
-
     "ZapLook",
-
     `
 
       <div class="card">
 
-        <h2>⚡ ZapLook</h2>
+        <h2>
+          😎 ZapLook
+        </h2>
 
-        <input
-
-          id="zap-input"
-
-          placeholder="Search..."
-
+        <div
+          id="zap-face"
+          style="
+            font-size:100px;
+            text-align:center
+          "
         >
+          😎
+        </div>
 
-        <button onclick="zapSearch()">
-
-          🔎 Search
-
+        <button
+          onclick="randomLook()"
+        >
+          ✨ Random Look
         </button>
 
-        <h3>Categories</h3>
-
-        ${zapCategories.map(category => `
-
-          <button onclick="zapCategory('${category}')">
-
-            ${category}
-
-          </button>
-
-        `).join("")}
-
-        <div id="zap-result"></div>
+        <button
+          onclick="zapLookGlow()"
+        >
+          ⚡ Zap
+        </button>
 
       </div>
 
     `
-
   );
 
 }
 
-function zapSearch() {
+function randomLook() {
 
-  const input =
+  const faces = [
+    "😎",
+    "😃",
+    "🤓",
+    "🥳",
+    "😈",
+    "🤩",
+    "🧐"
+  ];
 
+  const face =
     document.getElementById(
-
-      "zap-input"
-
+      "zap-face"
     );
 
-  if (!input) return;
+  if (face) {
 
-  const result =
+    face.textContent =
+      faces[
+        Math.floor(
+          Math.random() *
+          faces.length
+        )
+      ];
 
-    document.getElementById(
-
-      "zap-result"
-
-    );
-
-  result.innerHTML = `
-
-    <div class="card">
-
-      <h3>
-
-        Results for
-
-        "${escapeHTML(input.value)}"
-
-      </h3>
-
-      <p>⚡ Result #1</p>
-
-      <p>⚡ Result #2</p>
-
-      <p>⚡ Result #3</p>
-
-    </div>
-
-  `;
+  }
 
 }
 
-function zapCategory(category) {
+function zapLookGlow() {
 
-  const result =
-
+  const face =
     document.getElementById(
-
-      "zap-result"
-
+      "zap-face"
     );
 
-  if (result) {
+  if (!face) return;
 
-    result.innerHTML = `
+  face.textContent =
+    "⚡😎⚡";
+
+  setTimeout(() => {
+
+    if (face) {
+
+      face.textContent =
+        "😎";
+
+    }
+
+  }, 1000);
+
+}
+
+// ============================================================
+// MONKEY
+// ============================================================
+
+function monkeyApp() {
+
+  openApp(
+    "Monkey",
+    `
 
       <div class="card">
 
-        <h3>${category}</h3>
+        <h2>
+          🐒 Monkey
+        </h2>
 
-        <p>
+        <div
+          id="monkey-face"
+          style="
+            font-size:100px;
+            text-align:center
+          "
+        >
+          🐒
+        </div>
 
-          Discover something interesting!
+        <button
+          onclick="monkeyDance()"
+        >
+          💃 Monkey Dance
+        </button>
 
+        <button
+          onclick="monkeySpeak()"
+        >
+          🗣️ Monkey Speak
+        </button>
+
+        <p
+          id="monkey-text"
+          style="
+            text-align:center
+          "
+        >
+          Hello!
         </p>
 
       </div>
 
-    `;
-
-  }
-
-}
-
-// ============================================================
-
-// MONKEY MINI GAME
-
-// ============================================================
-
-let monkeyScore = 0;
-
-function monkeyApp() {
-
-  monkeyScore = 0;
-
-  openApp(
-
-    "Monkey",
-
     `
-
-      <div
-
-        class="card"
-
-        style="text-align:center"
-
-      >
-
-        <h2>🐒 Monkey Game</h2>
-
-        <div
-
-          id="monkey"
-
-          style="
-
-            font-size:90px;
-
-            transition:.25s;
-
-          "
-
-        >
-
-          🐒
-
-        </div>
-
-        <h3>
-
-          Bananas:
-
-          <span id="banana-score">
-
-            0
-
-          </span>
-
-        </h3>
-
-        <button onclick="monkeyJump()">
-
-          🍌 Catch Banana
-
-        </button>
-
-        <button onclick="monkeyRandom()">
-
-          🎲 Random Event
-
-        </button>
-
-      </div>
-
-    `
-
   );
 
 }
 
-function monkeyJump() {
+function monkeyDance() {
 
-  monkeyScore++;
-
-  const monkey =
-
+  const face =
     document.getElementById(
-
-      "monkey"
-
+      "monkey-face"
     );
 
-  const score =
+  if (!face) return;
 
-    document.getElementById(
+  face.textContent =
+    "🕺🐒💃";
 
-      "banana-score"
+  setTimeout(() => {
 
-    );
+    if (face) {
 
-  if (monkey) {
+      face.textContent =
+        "🐒";
 
-    monkey.style.transform =
+    }
 
-      "translateY(-60px) rotate(-8deg)";
-
-    setTimeout(() => {
-
-      monkey.style.transform =
-
-        "translateY(0) rotate(0)";
-
-    }, 300);
-
-  }
-
-  if (score) {
-
-    score.textContent =
-
-      monkeyScore;
-
-  }
+  }, 1000);
 
 }
 
-function monkeyRandom() {
+function monkeySpeak() {
 
-  const events = [
+  const phrases = [
 
-    "🐒 Monkey found a banana!",
-
-    "🍌 Banana rain!",
-
-    "🌴 Monkey climbed a tree!",
-
-    "😂 Monkey slipped!",
-
-    "🏆 MONKEY POWER!"
+    "Ooh ooh ah ah! 🐒",
+    "Banana time! 🍌",
+    "Who touched my banana?!",
+    "🐒🐒🐒"
 
   ];
 
-  alert(
+  const text =
+    document.getElementById(
+      "monkey-text"
+    );
 
-    events[
+  if (text) {
 
-      Math.floor(
+    text.textContent =
+      phrases[
+        Math.floor(
+          Math.random() *
+          phrases.length
+        )
+      ];
 
-        Math.random() *
-
-        events.length
-
-      )
-
-    ]
-
-  );
+  }
 
 }
 
 // ============================================================
-
 // REMARK
-
 // ============================================================
 
-let remarks = JSON.parse(
-
-  localStorage.getItem(
-
-    "pear-remarks"
-
-  ) || "[]"
-
-);
+let remarks =
+  JSON.parse(
+    localStorage.getItem(
+      "pear-remarks"
+    ) || "[]"
+  );
 
 function remarkApp() {
 
   openApp(
-
     "Remark",
-
     `
 
       <div class="card">
 
-        <h2>💭 Remark</h2>
+        <h2>
+          💭 Remark
+        </h2>
 
         <textarea
-
           id="remark-text"
-
           placeholder="Write something..."
-
         ></textarea>
 
-        <button onclick="saveRemark()">
-
+        <button
+          onclick="saveRemark()"
+        >
           💾 Save
-
         </button>
 
-        <button onclick="clearRemarks()">
-
+        <button
+          onclick="clearRemarks()"
+        >
           🗑️ Clear All
-
         </button>
 
         <div>
 
-          ${remarks.map((remark, index) => `
+          ${
+            remarks
+              .map(
+                (remark, index) => `
 
-            <div class="post">
+                  <div
+                    class="post"
+                  >
 
-              ${escapeHTML(remark)}
+                    ${escapeHTML(
+                      remark
+                    )}
 
-              <br>
+                    <br>
 
-              <button onclick="deleteRemark(${index})">
+                    <button
+                      onclick="
+                        deleteRemark(${index})
+                      "
+                    >
+                      Delete
+                    </button>
 
-                Delete
+                  </div>
 
-              </button>
-
-            </div>
-
-          `).join("")}
+                `
+              )
+              .join("")
+          }
 
         </div>
 
       </div>
 
     `
-
   );
 
 }
@@ -5451,27 +4794,28 @@ function remarkApp() {
 function saveRemark() {
 
   const text =
-
     document.getElementById(
-
       "remark-text"
-
     );
 
-  if (!text || !text.value.trim()) {
+  if (
+    !text ||
+    !text.value.trim()
+  ) {
 
     return;
 
   }
 
-  remarks.unshift(text.value);
+  remarks.unshift(
+    text.value
+  );
 
   localStorage.setItem(
-
     "pear-remarks",
-
-    JSON.stringify(remarks)
-
+    JSON.stringify(
+      remarks
+    )
   );
 
   remarkApp();
@@ -5480,14 +4824,16 @@ function saveRemark() {
 
 function deleteRemark(index) {
 
-  remarks.splice(index, 1);
+  remarks.splice(
+    index,
+    1
+  );
 
   localStorage.setItem(
-
     "pear-remarks",
-
-    JSON.stringify(remarks)
-
+    JSON.stringify(
+      remarks
+    )
   );
 
   remarkApp();
@@ -5499,9 +4845,7 @@ function clearRemarks() {
   remarks = [];
 
   localStorage.removeItem(
-
     "pear-remarks"
-
   );
 
   remarkApp();
@@ -5509,61 +4853,76 @@ function clearRemarks() {
 }
 
 // ============================================================
-
 // PAGE 1 CONNECTIONS
-
 // ============================================================
 
 function connectPage1Apps() {
 
   const connections = {
 
-    messages: messagesApp,
+    messages:
+      messagesApp,
 
-    camera: cameraApp,
+    camera:
+      cameraApp,
 
-    splashface: splashfaceApp,
+    splashface:
+      splashfaceApp,
 
-    stocks: stocksApp,
+    stocks:
+      stocksApp,
 
-    maps: mapsApp,
+    maps:
+      mapsApp,
 
-    photos: photosApp,
+    photos:
+      photosApp,
 
-    weather: weatherApp,
+    weather:
+      weatherApp,
 
-    notes: notesApp,
+    notes:
+      notesApp,
 
-    peartunes: pearTunesApp,
+    peartunes:
+      pearTunesApp,
 
-    settings: settingsApp,
+    settings:
+      settingsApp,
 
-    clock: clockApp,
+    clock:
+      clockApp,
 
-    videos: videosApp,
+    videos:
+      videosApp,
 
-    phone: phoneApp,
+    phone:
+      phoneApp,
 
-    mail: mailApp,
+    mail:
+      mailApp,
 
-    compass: compassApp,
+    compass:
+      compassApp,
 
-    music: pearTunesApp
+    music:
+      pearTunesApp
 
   };
 
-  Object.keys(connections).forEach(id => {
+  Object.keys(
+    connections
+  ).forEach(id => {
 
     const button =
-
-      document.getElementById(id);
+      document.getElementById(
+        id
+      );
 
     if (!button) return;
 
     button.addEventListener(
-
       "click",
-
       e => {
 
         e.stopPropagation();
@@ -5571,7 +4930,6 @@ function connectPage1Apps() {
         connections[id]();
 
       }
-
     );
 
   });
@@ -5579,69 +4937,104 @@ function connectPage1Apps() {
 }
 
 // ============================================================
-
 // PAGE 2 CONNECTIONS
-
 // ============================================================
 
 function connectPage2Apps() {
 
   const connections = {
 
-    "p2-lingo": lingoApp,
+    "p2-lingo":
+      lingoApp,
 
-    "p2-splash": splashfaceApp,
+    "p2-splash":
+      splashfaceApp,
 
-    "p2-thumb": tumsApp,
+    "p2-thumb":
+      tumsApp,
 
-    "p2-danwarp": danwarpApp,
+    "p2-danwarp":
+      danwarpApp,
 
-    "p2-image": imageApp,
+    "p2-image":
+      imageApp,
 
-    "p2-chrono": chronoApp,
+    "p2-chrono":
+      chronoApp,
 
-    "p2-zaplook": zaplookApp,
+    "p2-zaplook":
+      zaplookApp,
 
-    "p2-weather": weatherApp,
+    "p2-weather":
+      weatherApp,
 
-    "p2-music": pearTunesApp,
+    "p2-music":
+      typeof musicApp ===
+      "function"
+        ? musicApp
+        : pearTunesApp,
 
-    "p2-monkey": monkeyApp,
+    "p2-monkey":
+      monkeyApp,
 
-    "p2-remark": remarkApp,
+    "p2-remark":
+      remarkApp,
 
-    "p2-settings": settingsApp,
+    "p2-settings":
+      settingsApp,
 
-    "p2-phone": phoneApp,
+    "p2-phone":
+      phoneApp,
 
-    "p2-mail": mailApp,
+    "p2-mail":
+      mailApp,
 
-    "p2-compass": compassApp,
+    "p2-compass":
+      compassApp,
 
-    "p2-music2": pearTunesApp
+    "p2-music2":
+      pearTunesApp
 
   };
 
-  Object.keys(connections).forEach(id => {
+  Object.keys(
+    connections
+  ).forEach(id => {
 
     const button =
-
-      document.getElementById(id);
+      document.getElementById(
+        id
+      );
 
     if (!button) return;
 
     button.addEventListener(
-
-      "click",
-
+      "pointerdown",
       e => {
 
+        e.preventDefault();
         e.stopPropagation();
+
+      },
+      {
+        capture: true
+      }
+    );
+
+    button.addEventListener(
+      "pointerup",
+      e => {
+
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
 
         connections[id]();
 
+      },
+      {
+        capture: true
       }
-
     );
 
   });
@@ -5649,21 +5042,18 @@ function connectPage2Apps() {
 }
 
 // ============================================================
-
 // HOME BUTTON
-
 // ============================================================
 
 const homeButton =
-
-  document.getElementById("home");
+  document.getElementById(
+    "home"
+  );
 
 if (homeButton) {
 
   homeButton.addEventListener(
-
     "click",
-
     e => {
 
       e.stopPropagation();
@@ -5671,37 +5061,47 @@ if (homeButton) {
       closeApp();
 
     }
-
   );
 
 }
 
 // ============================================================
-
 // UTILITY
-
 // ============================================================
 
 function escapeHTML(value) {
 
   return String(value)
 
-    .replace(/&/g, "&amp;")
+    .replace(
+      /&/g,
+      "&amp;"
+    )
 
-    .replace(/</g, "&lt;")
+    .replace(
+      /</g,
+      "&lt;"
+    )
 
-    .replace(/>/g, "&gt;")
+    .replace(
+      />/g,
+      "&gt;"
+    )
 
-    .replace(/"/g, "&quot;")
+    .replace(
+      /"/g,
+      "&quot;"
+    )
 
-    .replace(/'/g, "&#039;");
+    .replace(
+      /'/g,
+      "&#039;"
+    );
 
 }
 
 // ============================================================
-
 // STARTUP
-
 // ============================================================
 
 connectPage1Apps();
@@ -5709,37 +5109,25 @@ connectPage1Apps();
 connectPage2Apps();
 
 if (
-
   localStorage.getItem(
-
     "pear-dark"
-
   ) === "true"
-
 ) {
 
   document.body.classList.add(
-
     "dark-mode"
-
   );
 
 }
 
 if (
-
   localStorage.getItem(
-
     "pear-animations"
-
   ) === "true"
-
 ) {
 
   document.body.classList.add(
-
     "no-animations"
-
   );
 
 }
@@ -5747,7 +5135,53 @@ if (
 currentPage = 1;
 
 phone.classList.remove(
-
   "page-two"
-
 );
+
+if (pageDots) {
+
+  pageDots.textContent =
+    "● ○";
+
+}
+  }
+
+  if (
+
+    localStorage.getItem(
+
+      "pear-sound"
+
+    ) === "true"
+
+  ) {
+
+    document.body.classList.add(
+
+      "sound-enabled"
+
+    );
+
+  }
+
+  window.addEventListener(
+
+    "beforeunload",
+
+    () => {
+
+      stopCamera();
+
+      stopTypingGame();
+
+      clearInterval(stopwatchInterval);
+
+      clearInterval(timerInterval);
+
+      clearInterval(chronoInterval);
+
+    }
+
+  );
+
+})();

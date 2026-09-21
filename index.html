@@ -1,12 +1,17 @@
 <!DOCTYPE html>
+
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
 <title>Pear Phone OS</title>
 
 <style>
+
 *{
   box-sizing:border-box;
   -webkit-tap-highlight-color:transparent;
@@ -33,17 +38,11 @@ body{
 
 #phone-container{
   position:relative;
-
   width:min(170vh,1500px);
-
   aspect-ratio:1212 / 1188;
-
   background:url("pear-phone.png") center/contain no-repeat;
-
   transform:rotate(90deg);
-
   transform-origin:center center;
-
   touch-action:none;
   user-select:none;
 }
@@ -55,20 +54,13 @@ body{
 #page2{
   position:absolute;
   inset:0;
-
   width:100%;
   height:100%;
-
   background:url("page2.png") center/contain no-repeat;
-
   z-index:50;
-
   pointer-events:none;
-
   opacity:0;
-
   transform:translateY(100%) scale(.96);
-
   transition:
     transform .45s cubic-bezier(.22,.8,.25,1),
     opacity .3s ease;
@@ -76,7 +68,6 @@ body{
 
 #phone-container.page-two #page2{
   opacity:1;
-
   transform:translateY(0) scale(1);
 }
 
@@ -86,23 +77,27 @@ body{
 
 .hotspot{
   position:absolute;
-
-  border:0;
-  background:transparent;
-
+  border:0 !important;
+  outline:none !important;
+  background:transparent !important;
   padding:0;
   margin:0;
-
   border-radius:50%;
-
   cursor:pointer;
-
   touch-action:manipulation;
-
   -webkit-appearance:none;
   appearance:none;
+  box-shadow:none !important;
+  z-index:300;
+}
 
-  z-index:200;
+.hotspot:hover,
+.hotspot:focus,
+.hotspot:focus-visible{
+  background:transparent !important;
+  border:0 !important;
+  outline:none !important;
+  box-shadow:none !important;
 }
 
 .hotspot:active{
@@ -225,44 +220,45 @@ body{
   aspect-ratio:1;
 }
 
+/* =========================
+   HOME
+========================= */
+
 #home{
   position:absolute;
-
   left:46%;
   top:78.8%;
-
   width:8.2%;
   aspect-ratio:1;
-
-  border:0;
-  background:transparent;
-
+  border:0 !important;
+  background:transparent !important;
   border-radius:50%;
-
   cursor:pointer;
-
   z-index:400;
-}
-
-#phone-container.page-two > .page1-hotspot{
-  pointer-events:none;
+  outline:none !important;
+  box-shadow:none !important;
 }
 
 /* =========================
-   PAGE 2 HOTSPOTS
+   PAGE 2
 ========================= */
 
-.page2-hotspot{
-  display:none;
+#phone-container:not(.page-two) .page2-hotspot{
+  display:none !important;
+  pointer-events:none !important;
+}
 
-  z-index:300;
-
-  pointer-events:auto;
+#phone-container.page-two .page1-hotspot{
+  display:block;
+  pointer-events:none !important;
 }
 
 #phone-container.page-two .page2-hotspot{
-  display:block;
+  display:block !important;
+  pointer-events:auto !important;
 }
+
+/* PAGE 2 POSITIONS */
 
 #p2-lingo{
   left:37%;
@@ -382,25 +378,16 @@ body{
 
 #overlay{
   position:absolute;
-
   left:31%;
   top:22%;
-
   width:38%;
   height:47%;
-
   z-index:500;
-
   display:none;
-
   overflow:hidden;
-
   background:#f4f5f7;
-
   border-radius:10px;
-
-  box-shadow:
-    0 5px 25px rgba(0,0,0,.55);
+  box-shadow:0 5px 25px rgba(0,0,0,.55);
 }
 
 #overlay.open{
@@ -410,237 +397,287 @@ body{
 #app-window{
   width:100%;
   height:100%;
-
   display:flex;
   flex-direction:column;
-
   overflow:hidden;
-
   background:#f4f5f7;
-
   color:#111;
 }
 
-#app-window .window-header{
+.app-header{
   flex:0 0 auto;
-
   display:flex;
   align-items:center;
-
   gap:8px;
-
   padding:8px 10px;
-
   background:linear-gradient(#fff,#e7e8ea);
-
   border-bottom:1px solid #ccc;
-
   font-weight:900;
-
   font-size:15px;
 }
 
-.back{
+.back-button{
   width:30px;
   height:30px;
-
+  flex:0 0 30px;
   border-radius:50%;
-
   border:1px solid #bbb;
-
   background:linear-gradient(#fff,#ddd);
-
   font-size:23px;
-
+  line-height:25px;
   cursor:pointer;
+  padding:0;
 }
 
-#app-window .window-body{
+.app-content{
   flex:1;
-
   min-height:0;
-
   overflow-y:auto;
-
   padding:12px;
-
   padding-bottom:15px;
-
   -webkit-overflow-scrolling:touch;
 }
 
-.button{
+.app-content h2{
+  margin:0 0 10px;
+}
+
+.app-content h3{
+  margin:14px 0 7px;
+}
+
+.app-content p{
+  line-height:1.4;
+}
+
+.card{
+  background:#fff;
+  border:1px solid #ddd;
+  border-radius:13px;
+  padding:11px;
+  margin-bottom:9px;
+}
+
+.app-button{
   padding:9px 13px;
-
   border-radius:11px;
-
   border:1px solid #bbb;
-
   background:linear-gradient(#fff,#ddd);
-
+  color:#111;
   font-weight:700;
-
   cursor:pointer;
+  margin:3px;
+  font-family:inherit;
+}
+
+.app-button:active{
+  transform:scale(.96);
 }
 
 .row{
   display:flex;
   gap:7px;
+  flex-wrap:wrap;
 }
 
 input,
-textarea{
+textarea,
+select{
+  width:100%;
   font-family:inherit;
-
   font-size:16px;
-
   padding:9px;
-
   border:1px solid #bbb;
-
   border-radius:10px;
-
   outline:none;
+  background:#fff;
+  color:#111;
 }
 
 textarea{
-  width:100%;
   min-height:130px;
 }
 
 .bubble{
   padding:9px 12px;
-
   width:max-content;
-
   max-width:82%;
-
   background:#dedfe3;
-
   border-radius:17px;
-
   margin-bottom:7px;
 }
 
 .bubble.me{
   margin-left:auto;
-
   background:linear-gradient(#58b9ff,#1389df);
-
   color:#fff;
 }
 
 .stock{
   display:flex;
-
   justify-content:space-between;
-
   align-items:center;
-
   padding:10px;
-
   margin-bottom:7px;
-
   background:#fff;
-
   border:1px solid #ddd;
-
   border-radius:12px;
 }
 
 .photos{
   display:grid;
-
   grid-template-columns:repeat(3,1fr);
-
   gap:6px;
 }
 
 .photos img{
   width:100%;
-
   aspect-ratio:1;
-
   object-fit:cover;
-
   border-radius:10px;
 }
 
 .camera-video{
   width:100%;
-
   border-radius:14px;
-
   background:#000;
 }
 
 .map{
   height:180px;
-
   border-radius:15px;
-
   background:linear-gradient(135deg,#d6e5c7,#e7dfb9);
-
   display:flex;
-
   align-items:center;
-
   justify-content:center;
-
   font-size:55px;
 }
 
+.big-display{
+  text-align:center;
+  font-size:38px;
+  font-weight:900;
+  padding:20px 5px;
+}
+
+.result{
+  padding:10px;
+  border-radius:10px;
+  background:#eef0f2;
+  margin-top:8px;
+}
+
+.game{
+  text-align:center;
+  padding:8px;
+}
+
+.game-button{
+  width:110px;
+  height:110px;
+  border-radius:50%;
+  border:0;
+  background:linear-gradient(145deg,#ffdb6b,#ff9f43);
+  font-size:35px;
+  cursor:pointer;
+}
+
 /* =========================
-   CUSTOM KEYBOARD
+   DARK MODE
+========================= */
+
+body.dark-mode #app-window{
+  background:#18191c;
+  color:#f4f4f4;
+}
+
+body.dark-mode .app-header{
+  background:linear-gradient(#292b30,#1d1f23);
+  color:#fff;
+  border-bottom-color:#444;
+}
+
+body.dark-mode .back-button{
+  background:linear-gradient(#444,#252525);
+  color:#fff;
+  border-color:#555;
+}
+
+body.dark-mode .card,
+body.dark-mode .stock{
+  background:#24262a;
+  border-color:#3d3f44;
+  color:#f4f4f4;
+}
+
+body.dark-mode .app-button{
+  background:linear-gradient(#444,#292929);
+  color:#fff;
+  border-color:#555;
+}
+
+body.dark-mode input,
+body.dark-mode textarea,
+body.dark-mode select{
+  background:#24262a;
+  color:#fff;
+  border-color:#555;
+}
+
+body.dark-mode .result{
+  background:#292c31;
+}
+
+body.dark-mode .bubble{
+  background:#363940;
+  color:#fff;
+}
+
+/* IMPORTANT: INVISIBLE HOTSPOTS STAY INVISIBLE */
+
+body.dark-mode .hotspot,
+body.dark-mode .hotspot:hover,
+body.dark-mode .hotspot:focus,
+body.dark-mode .hotspot:focus-visible,
+body.dark-mode #home{
+  background:transparent !important;
+  border:0 !important;
+  outline:none !important;
+  box-shadow:none !important;
+}
+
+/* =========================
+   KEYBOARD
 ========================= */
 
 #pear-keyboard{
   position:absolute;
-
   left:3%;
   right:3%;
   bottom:3%;
-
   width:94%;
-
   padding:6px;
-
   background:rgba(35,35,40,.98);
-
   border-radius:11px;
-
   z-index:9999;
-
   display:none;
-
   opacity:0;
-
   transform:translateY(120%);
-
   transition:
     transform .28s cubic-bezier(.22,.8,.25,1),
     opacity .2s ease;
-
-  box-shadow:
-    0 5px 18px rgba(0,0,0,.55);
-
+  box-shadow:0 5px 18px rgba(0,0,0,.55);
   touch-action:manipulation;
 }
 
-#pear-keyboard.keyboard-show,
-#pear-keyboard.visible{
-  display:block;
-
+#pear-keyboard.keyboard-show{
   opacity:1;
-
   transform:translateY(0);
 }
 
 .pear-keyboard-row{
   display:flex;
-
   gap:3px;
-
   margin-bottom:3px;
 }
 
@@ -650,34 +687,34 @@ textarea{
 
 .pear-keyboard-row button{
   flex:1;
-
   min-width:0;
-
   height:29px;
-
   border:0;
-
   border-radius:5px;
-
   background:#f5f5f7;
-
   color:#111;
-
   font-size:11px;
-
   font-weight:800;
-
   padding:0;
-
   touch-action:manipulation;
-
   user-select:none;
 }
 
 .pear-keyboard-row button:active{
   transform:scale(.88);
-
   background:#cfd0d4;
+}
+
+.pear-keyboard-row.bottom button:first-child{
+  flex:1.2;
+}
+
+.pear-keyboard-row.bottom button:nth-child(2){
+  flex:5;
+}
+
+.pear-keyboard-row.bottom button:last-child{
+  flex:1.2;
 }
 
 @media(max-width:700px){
@@ -695,496 +732,981 @@ textarea{
     height:27px;
     font-size:10px;
   }
+
 }
+
 </style>
+
 </head>
 
 <body>
 
 <div id="phone-container">
 
-  <!-- PAGE 2 IMAGE -->
-  <div id="page2"></div>
+<div id="page2"></div>
 
+<!-- PAGE 1 -->
 
-  <!-- =========================
-       PAGE 1
-  ========================= -->
+<button class="hotspot page1-hotspot" id="messages"></button>
+<button class="hotspot page1-hotspot" id="camera"></button>
+<button class="hotspot page1-hotspot" id="splashface"></button>
+<button class="hotspot page1-hotspot" id="stocks"></button>
+<button class="hotspot page1-hotspot" id="maps"></button>
+<button class="hotspot page1-hotspot" id="photos"></button>
+<button class="hotspot page1-hotspot" id="weather"></button>
+<button class="hotspot page1-hotspot" id="notes"></button>
+<button class="hotspot page1-hotspot" id="peartunes"></button>
+<button class="hotspot page1-hotspot" id="settings"></button>
+<button class="hotspot page1-hotspot" id="clock"></button>
+<button class="hotspot page1-hotspot" id="videos"></button>
+<button class="hotspot page1-hotspot" id="phone"></button>
+<button class="hotspot page1-hotspot" id="mail"></button>
+<button class="hotspot page1-hotspot" id="compass"></button>
+<button class="hotspot page1-hotspot" id="music"></button>
 
-  <button class="hotspot page1-hotspot" id="messages"></button>
-  <button class="hotspot page1-hotspot" id="camera"></button>
-  <button class="hotspot page1-hotspot" id="splashface"></button>
-  <button class="hotspot page1-hotspot" id="stocks"></button>
-  <button class="hotspot page1-hotspot" id="maps"></button>
-  <button class="hotspot page1-hotspot" id="photos"></button>
-  <button class="hotspot page1-hotspot" id="weather"></button>
-  <button class="hotspot page1-hotspot" id="notes"></button>
-  <button class="hotspot page1-hotspot" id="peartunes"></button>
-  <button class="hotspot page1-hotspot" id="settings"></button>
-  <button class="hotspot page1-hotspot" id="clock"></button>
-  <button class="hotspot page1-hotspot" id="videos"></button>
-  <button class="hotspot page1-hotspot" id="phone"></button>
-  <button class="hotspot page1-hotspot" id="mail"></button>
-  <button class="hotspot page1-hotspot" id="compass"></button>
-  <button class="hotspot page1-hotspot" id="music"></button>
+<!-- PAGE 2 -->
 
+<button class="hotspot page2-hotspot" id="p2-lingo"></button>
+<button class="hotspot page2-hotspot" id="p2-splash"></button>
+<button class="hotspot page2-hotspot" id="p2-thumb"></button>
+<button class="hotspot page2-hotspot" id="p2-danwarp"></button>
+<button class="hotspot page2-hotspot" id="p2-image"></button>
+<button class="hotspot page2-hotspot" id="p2-chrono"></button>
+<button class="hotspot page2-hotspot" id="p2-zaplook"></button>
+<button class="hotspot page2-hotspot" id="p2-weather"></button>
+<button class="hotspot page2-hotspot" id="p2-music"></button>
+<button class="hotspot page2-hotspot" id="p2-monkey"></button>
+<button class="hotspot page2-hotspot" id="p2-remark"></button>
+<button class="hotspot page2-hotspot" id="p2-settings"></button>
+<button class="hotspot page2-hotspot" id="p2-phone"></button>
+<button class="hotspot page2-hotspot" id="p2-mail"></button>
+<button class="hotspot page2-hotspot" id="p2-compass"></button>
+<button class="hotspot page2-hotspot" id="p2-music2"></button>
 
-  <!-- =========================
-       PAGE 2
-  ========================= -->
+<button id="home"></button>
 
-  <button class="hotspot page2-hotspot" id="p2-lingo"></button>
-  <button class="hotspot page2-hotspot" id="p2-splash"></button>
-  <button class="hotspot page2-hotspot" id="p2-thumb"></button>
-  <button class="hotspot page2-hotspot" id="p2-danwarp"></button>
-  <button class="hotspot page2-hotspot" id="p2-image"></button>
-  <button class="hotspot page2-hotspot" id="p2-chrono"></button>
-  <button class="hotspot page2-hotspot" id="p2-zaplook"></button>
-  <button class="hotspot page2-hotspot" id="p2-weather"></button>
-  <button class="hotspot page2-hotspot" id="p2-music"></button>
-  <button class="hotspot page2-hotspot" id="p2-monkey"></button>
-  <button class="hotspot page2-hotspot" id="p2-remark"></button>
-  <button class="hotspot page2-hotspot" id="p2-settings"></button>
-  <button class="hotspot page2-hotspot" id="p2-phone"></button>
-  <button class="hotspot page2-hotspot" id="p2-mail"></button>
-  <button class="hotspot page2-hotspot" id="p2-compass"></button>
-  <button class="hotspot page2-hotspot" id="p2-music2"></button>
-
-
-  <!-- HOME BUTTON -->
-  <button id="home"></button>
-
-
-  <!-- APP WINDOW -->
-  <div id="overlay">
-    <div id="app-window"></div>
-  </div>
+<div id="overlay">
+  <div id="app-window"></div>
+</div>
 
 </div>
 
-
-<!-- YOUR ORIGINAL APP FILE -->
-<script src="app.js"></script>
-
-
-<!-- =========================================================
-     PEAR PHONE FIXES
-     These are intentionally AFTER app.js so they can override
-     the broken Page 2 click behavior.
-========================================================= -->
-
 <script>
 
-(function(){
+/* ============================================================
+   CORE
+============================================================ */
 
-  const phone =
-    document.getElementById("phone-container");
+const phone =
+  document.getElementById("phone-container");
 
-  const overlay =
-    document.getElementById("overlay");
+const overlay =
+  document.getElementById("overlay");
 
-  if(!phone)return;
+const appWindow =
+  document.getElementById("app-window");
 
+let currentPage = 1;
+let cameraStream = null;
+let keyboardTarget = null;
+let keyboardShift = false;
+let audioContext = null;
 
-  /*
-    ============================================================
-    PAGE 2 APP CONNECTIONS
-    ============================================================
+/* ============================================================
+   HTML ESCAPE
+============================================================ */
 
-    These are the exact intended connections.
-  */
+function escapeHTML(value){
 
-  const page2Apps = {
+  return String(value)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
 
-    "p2-lingo":"lingoApp",
+}
 
-    "p2-splash":"splashfaceApp",
+/* ============================================================
+   PAGE SWITCHING
 
-    "p2-thumb":"tumsApp",
+   SWIPE UP = PAGE 2
+   SWIPE DOWN = PAGE 1
 
-    "p2-danwarp":"danwarpApp",
+   APP TAPS NEVER COUNT AS SWIPES
+============================================================ */
 
-    "p2-image":"imageApp",
+function showPage(page){
 
-    "p2-chrono":"chronoApp",
+  if(page !== 1 && page !== 2) return;
 
-    "p2-zaplook":"zaplookApp",
+  if(page === currentPage) return;
 
-    "p2-weather":"weatherApp",
+  currentPage = page;
 
-    "p2-music":"pearTunesApp",
+  closeApp();
 
-    "p2-monkey":"monkeyApp",
+  phone.classList.toggle(
+    "page-two",
+    page === 2
+  );
 
-    "p2-remark":"remarkApp",
+}
 
-    "p2-settings":"settingsApp",
+let swipeStartX = 0;
+let swipeStartY = 0;
+let swipeTracking = false;
+let swipeTarget = null;
 
-    "p2-phone":"phoneApp",
-
-    "p2-mail":"mailApp",
-
-    "p2-compass":"compassApp",
-
-    "p2-music2":"pearTunesApp"
-
-  };
-
-
-  /*
-    PAGE 1 connections.
-  */
-
-  const page1Apps = {
-
-    "messages":"messagesApp",
-
-    "camera":"pearFixedCameraApp",
-
-    "splashface":"splashfaceApp",
-
-    "stocks":"stocksApp",
-
-    "maps":"mapsApp",
-
-    "photos":"photosApp",
-
-    "weather":"weatherApp",
-
-    "notes":"notesApp",
-
-    "peartunes":"pearTunesApp",
-
-    "settings":"settingsApp",
-
-    "clock":"clockApp",
-
-    "videos":"videosApp",
-
-    "phone":"phoneApp",
-
-    "mail":"mailApp",
-
-    "compass":"compassApp",
-
-    "music":"pearTunesApp"
-
-  };
-
-
-  /*
-    ============================================================
-    FIXED CAMERA
-    ============================================================
-
-    The original camera app was starting the camera immediately.
-    This version ONLY requests camera permission after the user
-    presses "Start Camera".
-  */
-
-  let pearCameraStream=null;
-
-  let pearCameraFacing="user";
-
-
-  window.pearFixedCameraApp=function(){
-
-    if(typeof window.openApp!=="function"){
-      return;
-    }
-
-    window.openApp(
-      "Camera",
-      `
-      <div class="card">
-
-        <h2>📷 Camera</h2>
-
-        <video
-          id="camera-video"
-          class="camera-video"
-          autoplay
-          playsinline
-          muted
-        ></video>
-
-        <div
-          style="
-            display:flex;
-            gap:7px;
-            flex-wrap:wrap;
-            margin-top:8px;
-          "
-        >
-
-          <button
-            class="button"
-            onclick="pearStartCamera()"
-          >
-            📷 Start Camera
-          </button>
-
-          <button
-            class="button"
-            onclick="pearCapturePhoto()"
-          >
-            ⭕ Take Photo
-          </button>
-
-          <button
-            class="button"
-            onclick="pearFlipCamera()"
-          >
-            🔄 Flip Camera
-          </button>
-
-        </div>
-
-        <canvas
-          id="camera-canvas"
-          style="display:none"
-        ></canvas>
-
-        <div
-          id="camera-photo"
-          style="margin-top:10px"
-        ></div>
-
-      </div>
-      `
-    );
-
-    /*
-      IMPORTANT:
-      There is intentionally NO pearStartCamera() here.
-    */
-  };
-
-
-  window.pearStartCamera=async function(){
-
-    const video=
-      document.getElementById("camera-video");
-
-    if(!video)return;
-
+phone.addEventListener(
+  "pointerdown",
+  function(e){
 
     if(
-      !navigator.mediaDevices ||
-      !navigator.mediaDevices.getUserMedia
+      e.pointerType === "mouse" &&
+      e.button !== 0
+    ) return;
+
+    swipeStartX = e.clientX;
+    swipeStartY = e.clientY;
+    swipeTarget = e.target;
+    swipeTracking = true;
+
+  },
+  {passive:true}
+);
+
+phone.addEventListener(
+  "pointerup",
+  function(e){
+
+    if(!swipeTracking) return;
+
+    swipeTracking = false;
+
+    const target = swipeTarget;
+
+    swipeTarget = null;
+
+    if(
+      target &&
+      target.closest &&
+      (
+        target.closest(".hotspot") ||
+        target.closest("#overlay") ||
+        target.closest("#home")
+      )
     ){
-
-      alert(
-        "Camera access is not available in this browser."
-      );
-
       return;
     }
 
+    if(
+      overlay.classList.contains("open")
+    ){
+      return;
+    }
 
-    /*
-      Stop an existing stream first.
-    */
+    const dx =
+      e.clientX - swipeStartX;
 
-    pearStopCamera();
+    const dy =
+      e.clientY - swipeStartY;
 
+    if(
+      Math.abs(dy) < 70 ||
+      Math.abs(dy) <= Math.abs(dx)
+    ){
+      return;
+    }
 
-    try{
+    if(dy < 0){
 
-      pearCameraStream=
-        await navigator.mediaDevices.getUserMedia({
+      showPage(2);
 
-          video:{
-            width:{ideal:1280},
-            height:{ideal:720},
-            facingMode:pearCameraFacing
-          },
+    }else{
 
-          audio:false
+      showPage(1);
 
-        });
+    }
 
+  },
+  {passive:true}
+);
 
-      video.srcObject=
-        pearCameraStream;
+phone.addEventListener(
+  "pointercancel",
+  function(){
 
-      await video.play().catch(()=>{});
+    swipeTracking = false;
+    swipeTarget = null;
 
+  },
+  {passive:true}
+);
 
-      /*
-        After permission is granted, look for a connected
-        Freenove / USB camera if one exists.
-      */
+function goHome(){
 
-      if(navigator.mediaDevices.enumerateDevices){
+  closeApp();
+  showPage(1);
 
-        try{
+}
 
-          const devices=
-            await navigator.mediaDevices.enumerateDevices();
+/* ============================================================
+   APP OPEN / CLOSE
+============================================================ */
 
-          const cameras=
-            devices.filter(
-              device=>device.kind==="videoinput"
-            );
+function openApp(title,content){
 
+  stopCamera();
 
-          const preferred=
-            cameras.find(device=>{
+  appWindow.innerHTML = `
 
-              const label=
-                (device.label||"").toLowerCase();
+    <div class="app-header">
 
-              return(
-                label.includes("freenove") ||
-                label.includes("usb") ||
-                label.includes("webcam") ||
-                label.includes("camera")
-              );
+      <button
+        class="back-button"
+        id="app-back"
+        type="button"
+      >
 
-            });
+        ‹
 
+      </button>
 
-          if(preferred){
+      <strong>
 
-            const currentTrack=
-              pearCameraStream.getVideoTracks()[0];
+        ${escapeHTML(title)}
 
-            const currentSettings=
-              currentTrack
-                ? currentTrack.getSettings()
-                : {};
+      </strong>
 
-            /*
-              If the browser already selected the preferred
-              camera, leave it alone.
-            */
+    </div>
 
-            if(
-              currentSettings.deviceId !==
-              preferred.deviceId
-            ){
+    <div class="app-content">
 
-              pearStopCamera();
+      ${content}
 
-              pearCameraStream=
-                await navigator.mediaDevices
-                  .getUserMedia({
+    </div>
 
-                    video:{
-                      deviceId:{
-                        exact:preferred.deviceId
-                      },
+  `;
 
-                      width:{ideal:1280},
-                      height:{ideal:720}
-                    },
+  overlay.classList.add("open");
 
-                    audio:false
+  document.getElementById(
+    "app-back"
+  ).onclick = closeApp;
 
-                  });
+  setupKeyboardFields();
 
-              video.srcObject=
-                pearCameraStream;
+}
 
-              await video.play().catch(()=>{});
+function closeApp(){
 
-            }
+  stopCamera();
 
-          }
+  overlay.classList.remove("open");
 
-        }catch(error){
+  appWindow.innerHTML = "";
 
-          /*
-            The first stream is still usable even if
-            device enumeration fails.
-          */
+  hidePearKeyboard();
 
-          console.warn(
-            "Camera selection:",
-            error
-          );
+}
+
+/* ============================================================
+   CUSTOM KEYBOARD
+============================================================ */
+
+function setupKeyboardFields(){
+
+  document
+    .querySelectorAll(
+      "#app-window input, #app-window textarea"
+    )
+    .forEach(field => {
+
+      field.addEventListener(
+        "focus",
+        function(){
+
+          keyboardTarget = this;
+
+          showPearKeyboard(this);
 
         }
+      );
+
+      field.addEventListener(
+        "click",
+        function(){
+
+          keyboardTarget = this;
+
+          showPearKeyboard(this);
+
+        }
+      );
+
+    });
+
+}
+
+function showPearKeyboard(field){
+
+  keyboardTarget = field;
+
+  let keyboard =
+    document.getElementById(
+      "pear-keyboard"
+    );
+
+  if(!keyboard){
+
+    keyboard =
+      document.createElement("div");
+
+    keyboard.id =
+      "pear-keyboard";
+
+    keyboard.innerHTML = `
+
+      <div class="pear-keyboard-row">
+
+        ${"QWERTYUIOP".split("").map(
+
+          x =>
+
+          `<button
+             type="button"
+             data-key="${x}"
+           >${x}</button>`
+
+        ).join("")}
+
+      </div>
+
+      <div class="pear-keyboard-row">
+
+        ${"ASDFGHJKL".split("").map(
+
+          x =>
+
+          `<button
+             type="button"
+             data-key="${x}"
+           >${x}</button>`
+
+        ).join("")}
+
+      </div>
+
+      <div class="pear-keyboard-row">
+
+        <button
+          type="button"
+          id="pear-shift"
+        >
+
+          ⇧
+
+        </button>
+
+        ${"ZXCVBNM".split("").map(
+
+          x =>
+
+          `<button
+             type="button"
+             data-key="${x}"
+           >${x}</button>`
+
+        ).join("")}
+
+        <button
+          type="button"
+          id="pear-backspace"
+        >
+
+          ⌫
+
+        </button>
+
+      </div>
+
+      <div class="pear-keyboard-row bottom">
+
+        <button
+          type="button"
+          id="pear-number"
+        >
+
+          123
+
+        </button>
+
+        <button
+          type="button"
+          id="pear-space"
+        >
+
+          SPACE
+
+        </button>
+
+        <button
+          type="button"
+          id="pear-enter"
+        >
+
+          ↵
+
+        </button>
+
+      </div>
+
+    `;
+
+    overlay.appendChild(keyboard);
+
+    keyboard
+      .querySelectorAll("[data-key]")
+      .forEach(button => {
+
+        button.addEventListener(
+          "pointerdown",
+          function(e){
+
+            e.preventDefault();
+            e.stopPropagation();
+
+            if(!keyboardTarget) return;
+
+            insertText(
+              keyboardTarget,
+              keyboardShift
+                ? this.dataset.key
+                : this.dataset.key.toLowerCase()
+            );
+
+          }
+        );
+
+      });
+
+    document
+      .getElementById("pear-shift")
+      .addEventListener(
+        "pointerdown",
+        function(e){
+
+          e.preventDefault();
+          e.stopPropagation();
+
+          keyboardShift =
+            !keyboardShift;
+
+          this.style.background =
+            keyboardShift
+              ? "#9fd3ff"
+              : "#f5f5f7";
+
+        }
+      );
+
+    const backspaceButton =
+      document.getElementById(
+        "pear-backspace"
+      );
+
+    const spaceButton =
+      document.getElementById(
+        "pear-space"
+      );
+
+    const enterButton =
+      document.getElementById(
+        "pear-enter"
+      );
+
+    const numberButton =
+      document.getElementById(
+        "pear-number"
+      );
+
+    backspaceButton.addEventListener(
+      "pointerdown",
+      function(e){
+
+        e.preventDefault();
+        e.stopPropagation();
+
+        keyboardBackspace();
 
       }
+    );
 
-    }catch(error){
+    spaceButton.addEventListener(
+      "pointerdown",
+      function(e){
 
-      console.error(error);
+        e.preventDefault();
+        e.stopPropagation();
 
-      alert(
-        "Could not access the camera.\n\n" +
-        "Make sure your camera is connected and " +
-        "allow camera permission in the browser."
-      );
+        keyboardSpace();
 
-    }
+      }
+    );
 
-  };
+    enterButton.addEventListener(
+      "pointerdown",
+      function(e){
 
+        e.preventDefault();
+        e.stopPropagation();
 
-  window.pearStopCamera=function(){
+        keyboardEnter();
 
-    if(pearCameraStream){
+      }
+    );
 
-      pearCameraStream
-        .getTracks()
-        .forEach(track=>track.stop());
+    numberButton.addEventListener(
+      "pointerdown",
+      function(e){
 
-      pearCameraStream=null;
+        e.preventDefault();
+        e.stopPropagation();
 
-    }
+        keyboardNumber();
 
-  };
+      }
+    );
 
+  }
 
-  window.pearCapturePhoto=function(){
+  keyboard.style.display =
+    "block";
 
-    const video=
-      document.getElementById("camera-video");
+  requestAnimationFrame(() => {
 
-    const canvas=
-      document.getElementById("camera-canvas");
+    keyboard.classList.add(
+      "keyboard-show"
+    );
 
-    const output=
-      document.getElementById("camera-photo");
+  });
 
-    if(!video || !canvas || !output)return;
+}
 
+function hidePearKeyboard(){
 
-    if(!video.srcObject){
+  const keyboard =
+    document.getElementById(
+      "pear-keyboard"
+    );
 
-      alert("Start the camera first.");
+  if(!keyboard) return;
 
-      return;
-    }
+  keyboard.classList.remove(
+    "keyboard-show"
+  );
 
+  setTimeout(() => {
 
     if(
-      !video.videoWidth ||
-      !video.videoHeight
+      !keyboard.classList.contains(
+        "keyboard-show"
+      )
     ){
 
-      alert(
-        "The camera is still starting. Try again in a moment."
-      );
+      keyboard.style.display =
+        "none";
 
-      return;
     }
 
+  },280);
 
-    canvas.width=
-      video.videoWidth;
+  keyboardTarget = null;
 
-    canvas.height=
-      video.videoHeight;
+}
 
+function insertText(field,text){
 
-    const ctx=
-      canvas.getContext("2d");
+  if(!field) return;
 
-    ctx.drawImage(
+  const start =
+    field.selectionStart ??
+    field.value.length;
+
+  const end =
+    field.selectionEnd ??
+    field.value.length;
+
+  field.value =
+    field.value.substring(0,start) +
+    text +
+    field.value.substring(end);
+
+  field.selectionStart =
+    field.selectionEnd =
+      start + text.length;
+
+  field.dispatchEvent(
+    new Event(
+      "input",
+      {bubbles:true}
+    )
+  );
+
+}
+
+function keyboardSpace(){
+
+  if(keyboardTarget){
+
+    insertText(
+      keyboardTarget,
+      " "
+    );
+
+  }
+
+}
+
+function keyboardEnter(){
+
+  if(keyboardTarget){
+
+    keyboardTarget.blur();
+
+  }
+
+  hidePearKeyboard();
+
+}
+
+function keyboardBackspace(){
+
+  const field =
+    keyboardTarget;
+
+  if(!field) return;
+
+  const start =
+    field.selectionStart;
+
+  const end =
+    field.selectionEnd;
+
+  if(start !== end){
+
+    field.value =
+      field.value.substring(0,start) +
+      field.value.substring(end);
+
+    field.selectionStart =
+      field.selectionEnd =
+        start;
+
+  }else if(start > 0){
+
+    field.value =
+      field.value.substring(0,start-1) +
+      field.value.substring(end);
+
+    field.selectionStart =
+      field.selectionEnd =
+        start-1;
+
+  }
+
+}
+
+function keyboardNumber(){
+
+  if(keyboardTarget){
+
+    insertText(
+      keyboardTarget,
+      "1234567890"
+    );
+
+  }
+
+}
+
+/* ============================================================
+   SOUND
+============================================================ */
+
+function playTone(
+  frequency=440,
+  duration=.1
+){
+
+  try{
+
+    if(
+      localStorage.getItem(
+        "pear-sound"
+      ) === "false"
+    ){
+
+      return;
+
+    }
+
+    audioContext =
+      audioContext ||
+      new (
+        window.AudioContext ||
+        window.webkitAudioContext
+      )();
+
+    const oscillator =
+      audioContext.createOscillator();
+
+    const gain =
+      audioContext.createGain();
+
+    oscillator.frequency.value =
+      frequency;
+
+    gain.gain.setValueAtTime(
+      .08,
+      audioContext.currentTime
+    );
+
+    gain.gain.exponentialRampToValueAtTime(
+      .001,
+      audioContext.currentTime +
+      duration
+    );
+
+    oscillator.connect(gain);
+
+    gain.connect(
+      audioContext.destination
+    );
+
+    oscillator.start();
+
+    oscillator.stop(
+      audioContext.currentTime +
+      duration
+    );
+
+  }catch(e){}
+
+}
+
+/* ============================================================
+   PAGE 1 APPS
+============================================================ */
+
+function messagesApp(){
+
+  openApp(
+    "Messages",
+    `
+
+      <div id="messages-list">
+
+        <div class="bubble">
+          Hey! 👋
+        </div>
+
+        <div class="bubble">
+          Welcome to Pear Phone.
+        </div>
+
+        <div class="bubble me">
+          This actually works 😂
+        </div>
+
+      </div>
+
+      <div class="row">
+
+        <input
+          id="message-input"
+          placeholder="iMessage"
+        >
+
+        <button
+          class="app-button"
+          id="send-message"
+        >
+          Send
+        </button>
+
+      </div>
+
+    `
+  );
+
+  document.getElementById(
+    "send-message"
+  ).onclick = function(){
+
+    const input =
+      document.getElementById(
+        "message-input"
+      );
+
+    const value =
+      input.value.trim();
+
+    if(!value) return;
+
+    const bubble =
+      document.createElement("div");
+
+    bubble.className =
+      "bubble me";
+
+    bubble.textContent =
+      value;
+
+    document.getElementById(
+      "messages-list"
+    ).appendChild(bubble);
+
+    input.value = "";
+
+    playTone(700,.08);
+
+  };
+
+  setupKeyboardFields();
+
+}
+
+async function cameraApp(){
+
+  openApp(
+    "Camera",
+    `
+
+      <video
+        id="camera-preview"
+        class="camera-video"
+        autoplay
+        playsinline
+      ></video>
+
+      <div class="row">
+
+        <button
+          class="app-button"
+          id="camera-start"
+        >
+          📷 Start Camera
+        </button>
+
+        <button
+          class="app-button"
+          id="camera-capture"
+        >
+          ⭕ Capture
+        </button>
+
+      </div>
+
+      <canvas
+        id="camera-canvas"
+        style="display:none"
+      ></canvas>
+
+      <div id="camera-result"></div>
+
+    `
+  );
+
+  document.getElementById(
+    "camera-start"
+  ).onclick = startCamera;
+
+  document.getElementById(
+    "camera-capture"
+  ).onclick = captureCamera;
+
+}
+
+async function startCamera(){
+
+  const video =
+    document.getElementById(
+      "camera-preview"
+    );
+
+  if(!video) return;
+
+  try{
+
+    stopCamera();
+
+    cameraStream =
+      await navigator.mediaDevices.getUserMedia({
+
+        video:{
+          facingMode:"environment"
+        },
+
+        audio:false
+
+      });
+
+    video.srcObject =
+      cameraStream;
+
+  }catch(error){
+
+    const result =
+      document.getElementById(
+        "camera-result"
+      );
+
+    if(result){
+
+      result.innerHTML =
+        `<div class="result">
+          Camera permission unavailable.
+        </div>`;
+
+    }
+
+  }
+
+}
+
+function captureCamera(){
+
+  const video =
+    document.getElementById(
+      "camera-preview"
+    );
+
+  const canvas =
+    document.getElementById(
+      "camera-canvas"
+    );
+
+  if(
+    !video ||
+    !canvas ||
+    !video.videoWidth
+  ){
+
+    return;
+
+  }
+
+  canvas.width =
+    video.videoWidth;
+
+  canvas.height =
+    video.videoHeight;
+
+  canvas
+    .getContext("2d")
+    .drawImage(
       video,
       0,
       0,
@@ -1192,535 +1714,1555 @@ textarea{
       canvas.height
     );
 
+  const image =
+    document.createElement("img");
 
-    const image=
-      canvas.toDataURL("image/png");
+  image.src =
+    canvas.toDataURL(
+      "image/jpeg",
+      .9
+    );
 
+  image.style.width =
+    "100%";
 
-    output.innerHTML=`
+  image.style.borderRadius =
+    "12px";
 
-      <div
-        style="
-          margin-top:8px;
-          font-weight:800;
-        "
-      >
-        📸 Captured Photo
+  document.getElementById(
+    "camera-result"
+  ).innerHTML =
+    "<p>📸 Captured!</p>";
+
+  document.getElementById(
+    "camera-result"
+  ).appendChild(image);
+
+}
+
+function stopCamera(){
+
+  if(cameraStream){
+
+    cameraStream
+      .getTracks()
+      .forEach(track =>
+        track.stop()
+      );
+
+    cameraStream = null;
+
+  }
+
+}
+
+function splashfaceApp(){
+
+  openApp(
+    "SplashFace",
+    `
+
+      <div class="card">
+
+        <h2>😎 SplashFace</h2>
+
+        <input
+          id="status-input"
+          placeholder="What's happening?"
+        >
+
+        <button
+          class="app-button"
+          id="post-status"
+        >
+          Post
+        </button>
+
       </div>
 
-      <img
-        src="${image}"
-        style="
-          width:100%;
-          border-radius:12px;
-          margin-top:6px;
-        "
+      <div id="status-feed"></div>
+
+    `
+  );
+
+  document.getElementById(
+    "post-status"
+  ).onclick = function(){
+
+    const input =
+      document.getElementById(
+        "status-input"
+      );
+
+    const value =
+      input.value.trim();
+
+    if(!value) return;
+
+    const card =
+      document.createElement("div");
+
+    card.className =
+      "card";
+
+    card.innerHTML = `
+      <strong>You</strong>
+      <p>${escapeHTML(value)}</p>
+      <small>Just now · 🍐</small>
+    `;
+
+    document.getElementById(
+      "status-feed"
+    ).prepend(card);
+
+    input.value = "";
+
+  };
+
+  setupKeyboardFields();
+
+}
+
+function stocksApp(){
+
+  openApp(
+    "Stocks",
+    `
+
+      <div class="card">
+
+        <h2>📈 Market</h2>
+
+        <div class="stock">
+          <strong>PEAR</strong>
+          <span>$184.22</span>
+          <b>+2.81%</b>
+        </div>
+
+        <div class="stock">
+          <strong>AAPL</strong>
+          <span>$247.10</span>
+          <b>+1.24%</b>
+        </div>
+
+        <div class="stock">
+          <strong>NVDA</strong>
+          <span>$181.47</span>
+          <b>+3.09%</b>
+        </div>
+
+        <div class="stock">
+          <strong>TSLA</strong>
+          <span>$421.08</span>
+          <b>-0.74%</b>
+        </div>
+
+      </div>
+
+    `
+  );
+
+}
+
+function mapsApp(){
+
+  openApp(
+    "Maps",
+    `
+
+      <div class="map">
+        🗺️
+      </div>
+
+      <input
+        id="map-search"
+        placeholder="Search a place"
       >
 
+      <button
+        class="app-button"
+        id="map-open"
+      >
+        🔎 Search
+      </button>
+
+      <div id="map-result"></div>
+
+    `
+  );
+
+  document.getElementById(
+    "map-open"
+  ).onclick = function(){
+
+    const query =
+      document.getElementById(
+        "map-search"
+      ).value.trim();
+
+    if(!query) return;
+
+    document.getElementById(
+      "map-result"
+    ).innerHTML = `
+      <div class="result">
+        📍 ${escapeHTML(query)}
+      </div>
     `;
 
   };
 
+  setupKeyboardFields();
 
-  window.pearFlipCamera=async function(){
+}
 
-    pearCameraFacing=
-      pearCameraFacing==="user"
-        ? "environment"
-        : "user";
+function photosApp(){
 
+  openApp(
+    "Photos",
+    `
 
-    /*
-      If camera isn't running yet, don't start it.
-    */
+      <input
+        id="photo-picker"
+        type="file"
+        accept="image/*"
+        multiple
+      >
 
-    if(!pearCameraStream)return;
+      <div
+        class="photos"
+        id="photo-grid"
+      ></div>
 
+    `
+  );
 
-    await pearStartCamera();
+  document.getElementById(
+    "photo-picker"
+  ).onchange = function(){
+
+    const grid =
+      document.getElementById(
+        "photo-grid"
+      );
+
+    [...this.files].forEach(file => {
+
+      const image =
+        document.createElement("img");
+
+      image.src =
+        URL.createObjectURL(file);
+
+      grid.appendChild(image);
+
+    });
 
   };
 
+}
 
-  /*
-    ============================================================
-    INTERCEPT HOTSPOT CLICKS
-    ============================================================
+function weatherApp(){
 
-    This is the important fix for:
-      Thumb -> DanWarp
-      Image -> nothing
-      other Page 2 apps -> wrong app
-  */
+  openApp(
+    "Weather",
+    `
 
-  function launchFromMap(
-    button,
-    appName
-  ){
+      <div class="card">
 
-    if(!button)return;
+        <h2>☀️ Weather</h2>
 
-    button.style.pointerEvents="auto";
-    button.style.touchAction="manipulation";
+        <div class="big-display">
+          22°
+        </div>
 
+        <p style="text-align:center">
+          Partly Cloudy
+        </p>
+
+      </div>
+
+      <button
+        class="app-button"
+        onclick="weatherForecast('Today')"
+      >
+        Today
+      </button>
+
+      <button
+        class="app-button"
+        onclick="weatherForecast('Tomorrow')"
+      >
+        Tomorrow
+      </button>
+
+      <div
+        id="weather-result"
+        class="result"
+      >
+        Choose a forecast.
+      </div>
+
+    `
+  );
+
+}
+
+function weatherForecast(day){
+
+  document.getElementById(
+    "weather-result"
+  ).textContent =
+    day +
+    ": ⛅ Partly cloudy — 22°C";
+
+}
+
+function notesApp(){
+
+  openApp(
+    "Notes",
+    `
+
+      <textarea
+        id="notes-area"
+        placeholder="Write something..."
+      ></textarea>
+
+      <button
+        class="app-button"
+        id="save-note"
+      >
+        💾 Save
+      </button>
+
+      <button
+        class="app-button"
+        id="clear-note"
+      >
+        🗑️ Clear
+      </button>
+
+      <div id="note-status"></div>
+
+    `
+  );
+
+  const area =
+    document.getElementById(
+      "notes-area"
+    );
+
+  const saved =
+    localStorage.getItem(
+      "pear-notes"
+    );
+
+  if(saved){
+    area.value = saved;
+  }
+
+  document.getElementById(
+    "save-note"
+  ).onclick = function(){
+
+    localStorage.setItem(
+      "pear-notes",
+      area.value
+    );
+
+    document.getElementById(
+      "note-status"
+    ).innerHTML =
+      `<div class="result">Saved ✓</div>`;
+
+  };
+
+  document.getElementById(
+    "clear-note"
+  ).onclick = function(){
+
+    area.value = "";
+
+    localStorage.removeItem(
+      "pear-notes"
+    );
+
+  };
+
+  setupKeyboardFields();
+
+}
+
+function pearTunesApp(){
+
+  openApp(
+    "PearTunes",
+    `
+
+      <div class="card">
+
+        <h2>🎵 PearTunes</h2>
+
+        <div
+          class="big-display"
+          id="music-title"
+        >
+          Choose a track
+        </div>
+
+        <button
+          class="app-button"
+          onclick="playTrack('Pear Dreams')"
+        >
+          ▶ Pear Dreams
+        </button>
+
+        <button
+          class="app-button"
+          onclick="playTrack('Midnight Pear')"
+        >
+          ▶ Midnight Pear
+        </button>
+
+        <button
+          class="app-button"
+          onclick="playTrack('Pearwave')"
+        >
+          ▶ Pearwave
+        </button>
+
+      </div>
+
+    `
+  );
+
+}
+
+function playTrack(title){
+
+  document.getElementById(
+    "music-title"
+  ).textContent =
+    title;
+
+  playTone(600,.2);
+
+}
+
+function settingsApp(){
+
+  openApp(
+    "Settings",
+    `
+
+      <div class="card">
+
+        <h2>⚙️ Settings</h2>
+
+        <button
+          class="app-button"
+          id="dark-toggle"
+        >
+          🌙 Dark / Light Mode
+        </button>
+
+        <button
+          class="app-button"
+          id="sound-toggle"
+        >
+          🔊 Sound On / Off
+        </button>
+
+        <button
+          class="app-button"
+          onclick="showPhoneInfo()"
+        >
+          🍐 Pear Phone Info
+        </button>
+
+        <button
+          class="app-button"
+          onclick="showBattery()"
+        >
+          🔋 Battery
+        </button>
+
+      </div>
+
+    `
+  );
+
+  document.getElementById(
+    "dark-toggle"
+  ).onclick =
+    toggleDarkMode;
+
+  document.getElementById(
+    "sound-toggle"
+  ).onclick =
+    toggleSound;
+
+}
+
+function toggleDarkMode(){
+
+  document.body.classList.toggle(
+    "dark-mode"
+  );
+
+  localStorage.setItem(
+    "pear-dark",
+    document.body.classList.contains(
+      "dark-mode"
+    )
+  );
+
+}
+
+function toggleSound(){
+
+  const enabled =
+    localStorage.getItem(
+      "pear-sound"
+    ) !== "false";
+
+  localStorage.setItem(
+    "pear-sound",
+    String(!enabled)
+  );
+
+}
+
+function showPhoneInfo(){
+
+  alert(
+    "🍐 PEAR PHONE\n\n" +
+    "Pear Phone OS\n" +
+    "Version 2.0"
+  );
+
+}
+
+async function showBattery(){
+
+  if(navigator.getBattery){
+
+    const battery =
+      await navigator.getBattery();
+
+    alert(
+      "Battery: " +
+      Math.round(
+        battery.level*100
+      ) +
+      "%"
+    );
+
+  }
+
+}
+
+function clockApp(){
+
+  openApp(
+    "Clock",
+    `
+
+      <div class="card">
+
+        <div
+          class="big-display"
+          id="clock-display"
+        >
+          --:--:--
+        </div>
+
+      </div>
+
+    `
+  );
+
+  function updateClock(){
+
+    const now =
+      new Date();
+
+    const display =
+      document.getElementById(
+        "clock-display"
+      );
+
+    if(display){
+
+      display.textContent =
+        now.toLocaleTimeString();
+
+    }
+
+  }
+
+  updateClock();
+
+  window.pearClock =
+    setInterval(
+      updateClock,
+      1000
+    );
+
+}
+
+function videosApp(){
+
+  openApp(
+    "Videos",
+    `
+
+      <div class="card">
+
+        <h2>🎬 Videos</h2>
+
+        <input
+          type="file"
+          id="video-file"
+          accept="video/*"
+        >
+
+      </div>
+
+      <video
+        id="video-player"
+        controls
+        style="
+          display:none;
+          width:100%;
+          border-radius:12px;
+        "
+      ></video>
+
+    `
+  );
+
+  document.getElementById(
+    "video-file"
+  ).onchange = function(){
+
+    const file =
+      this.files[0];
+
+    if(!file) return;
+
+    const video =
+      document.getElementById(
+        "video-player"
+      );
+
+    video.src =
+      URL.createObjectURL(file);
+
+    video.style.display =
+      "block";
+
+  };
+
+}
+
+let dialValue = "";
+
+function phoneApp(){
+
+  openApp(
+    "Phone",
+    `
+
+      <div class="card">
+
+        <h2>📞 Phone</h2>
+
+        <div
+          class="big-display"
+          id="dial-display"
+        >
+          _
+        </div>
+
+        <div
+          style="
+            display:grid;
+            grid-template-columns:repeat(3,1fr);
+            gap:5px;
+          "
+        >
+
+          ${[
+            "1","2","3",
+            "4","5","6",
+            "7","8","9",
+            "*","0","#"
+          ].map(number => `
+
+            <button
+              class="app-button"
+              onclick="dialNumber('${number}')"
+            >
+              ${number}
+            </button>
+
+          `).join("")}
+
+        </div>
+
+        <button
+          class="app-button"
+          onclick="clearDial()"
+        >
+          Clear
+        </button>
+
+      </div>
+
+    `
+  );
+
+}
+
+function dialNumber(number){
+
+  dialValue += number;
+
+  const display =
+    document.getElementById(
+      "dial-display"
+    );
+
+  if(display){
+
+    display.textContent =
+      dialValue;
+
+  }
+
+}
+
+function clearDial(){
+
+  dialValue = "";
+
+  const display =
+    document.getElementById(
+      "dial-display"
+    );
+
+  if(display){
+
+    display.textContent =
+      "_";
+
+  }
+
+}
+
+function mailApp(){
+
+  openApp(
+    "Mail",
+    `
+
+      <input
+        id="mail-to"
+        placeholder="To"
+      >
+
+      <input
+        id="mail-subject"
+        placeholder="Subject"
+      >
+
+      <textarea
+        id="mail-body"
+        placeholder="Message"
+      ></textarea>
+
+      <button
+        class="app-button"
+        id="mail-send"
+      >
+        ✉️ Send
+      </button>
+
+    `
+  );
+
+  document.getElementById(
+    "mail-send"
+  ).onclick = function(){
+
+    const to =
+      document.getElementById(
+        "mail-to"
+      ).value;
+
+    const subject =
+      document.getElementById(
+        "mail-subject"
+      ).value;
+
+    const body =
+      document.getElementById(
+        "mail-body"
+      ).value;
+
+    window.location.href =
+      "mailto:" +
+      encodeURIComponent(to) +
+      "?subject=" +
+      encodeURIComponent(subject) +
+      "&body=" +
+      encodeURIComponent(body);
+
+  };
+
+  setupKeyboardFields();
+
+}
+
+function compassApp(){
+
+  openApp(
+    "Compass",
+    `
+
+      <div class="card">
+
+        <h2>🧭 Compass</h2>
+
+        <div
+          class="big-display"
+          id="compass-display"
+        >
+          N
+        </div>
+
+        <button
+          class="app-button"
+          onclick="randomCompass()"
+        >
+          Rotate
+        </button>
+
+      </div>
+
+    `
+  );
+
+}
+
+function randomCompass(){
+
+  const directions = [
+    "N","NE","E","SE",
+    "S","SW","W","NW"
+  ];
+
+  const direction =
+    directions[
+      Math.floor(
+        Math.random() *
+        directions.length
+      )
+    ];
+
+  const display =
+    document.getElementById(
+      "compass-display"
+    );
+
+  if(display){
+
+    display.textContent =
+      direction;
+
+  }
+
+}
+
+/* ============================================================
+   PAGE 2 APPS
+============================================================ */
+
+function lingoApp(){
+
+  openApp(
+    "Lingo",
+    `
+
+      <div class="card">
+
+        <h2>🔤 Lingo</h2>
+
+        <input
+          id="lingo-input"
+          placeholder="Type a word"
+        >
+
+        <button
+          class="app-button"
+          id="lingo-check"
+        >
+          Check
+        </button>
+
+        <div
+          id="lingo-result"
+          class="result"
+        ></div>
+
+      </div>
+
+    `
+  );
+
+  document.getElementById(
+    "lingo-check"
+  ).onclick = function(){
+
+    const word =
+      document.getElementById(
+        "lingo-input"
+      ).value.trim();
+
+    document.getElementById(
+      "lingo-result"
+    ).textContent =
+      word
+        ? `🍐 "${word}" sounds Pear-approved!`
+        : "Type something first.";
+
+  };
+
+  setupKeyboardFields();
+
+}
+
+function tumsApp(){
+
+  openApp(
+    "Tums",
+    `
+
+      <div class="game">
+
+        <h2>💊 Tums</h2>
+
+        <p>
+          Tap the button to dispense a virtual Tums.
+        </p>
+
+        <button
+          class="game-button"
+          id="tums-button"
+        >
+          💊
+        </button>
+
+        <div
+          id="tums-result"
+          class="result"
+        >
+          Ready.
+        </div>
+
+      </div>
+
+    `
+  );
+
+  let count = 0;
+
+  document.getElementById(
+    "tums-button"
+  ).onclick = function(){
+
+    count++;
+
+    document.getElementById(
+      "tums-result"
+    ).textContent =
+      `Tums dispensed: ${count}`;
+
+    playTone(500,.08);
+
+  };
+
+}
+
+function danwarpApp(){
+
+  openApp(
+    "DanWarp",
+    `
+
+      <div class="card">
+
+        <h2>🌀 DanWarp</h2>
+
+        <p>
+          Warp through random Pear Phone locations.
+        </p>
+
+        <button
+          class="app-button"
+          id="warp-button"
+        >
+          Warp!
+        </button>
+
+        <div
+          id="warp-result"
+          class="result"
+        >
+          Destination unknown.
+        </div>
+
+      </div>
+
+    `
+  );
+
+  const locations = [
+    "Pear HQ",
+    "Downtown",
+    "The Beach",
+    "Mars",
+    "School",
+    "Home",
+    "The Pear Store"
+  ];
+
+  document.getElementById(
+    "warp-button"
+  ).onclick = function(){
+
+    const destination =
+      locations[
+        Math.floor(
+          Math.random() *
+          locations.length
+        )
+      ];
+
+    document.getElementById(
+      "warp-result"
+    ).textContent =
+      "Warped to " +
+      destination +
+      " 🚀";
+
+  };
+
+}
+
+function imageApp(){
+
+  openApp(
+    "Image",
+    `
+
+      <div class="card">
+
+        <h2>🖼️ Image</h2>
+
+        <input
+          type="file"
+          id="image-file"
+          accept="image/*"
+        >
+
+      </div>
+
+      <img
+        id="image-preview"
+        style="
+          display:none;
+          width:100%;
+          border-radius:12px;
+        "
+      >
+
+    `
+  );
+
+  document.getElementById(
+    "image-file"
+  ).onchange = function(){
+
+    const file =
+      this.files[0];
+
+    if(!file) return;
+
+    const image =
+      document.getElementById(
+        "image-preview"
+      );
+
+    image.src =
+      URL.createObjectURL(file);
+
+    image.style.display =
+      "block";
+
+  };
+
+}
+
+function chronoApp(){
+
+  openApp(
+    "Chrono",
+    `
+
+      <div class="card">
+
+        <h2>⏱️ Chrono</h2>
+
+        <div
+          class="big-display"
+          id="chrono-display"
+        >
+          0
+        </div>
+
+        <button
+          class="app-button"
+          id="chrono-start"
+        >
+          Start
+        </button>
+
+        <button
+          class="app-button"
+          id="chrono-stop"
+        >
+          Stop
+        </button>
+
+        <button
+          class="app-button"
+          id="chrono-reset"
+        >
+          Reset
+        </button>
+
+      </div>
+
+    `
+  );
+
+  let seconds = 0;
+  let timer = null;
+
+  const display =
+    document.getElementById(
+      "chrono-display"
+    );
+
+  document.getElementById(
+    "chrono-start"
+  ).onclick = function(){
+
+    if(timer) return;
+
+    timer =
+      setInterval(() => {
+
+        seconds++;
+
+        display.textContent =
+          seconds;
+
+      },1000);
+
+  };
+
+  document.getElementById(
+    "chrono-stop"
+  ).onclick = function(){
+
+    clearInterval(timer);
+    timer = null;
+
+  };
+
+  document.getElementById(
+    "chrono-reset"
+  ).onclick = function(){
+
+    clearInterval(timer);
+    timer = null;
+
+    seconds = 0;
+
+    display.textContent =
+      "0";
+
+  };
+
+}
+
+function zaplookApp(){
+
+  openApp(
+    "ZapLook",
+    `
+
+      <div class="card">
+
+        <h2>⚡ ZapLook</h2>
+
+        <p>
+          Tap to generate a random look.
+        </p>
+
+        <button
+          class="app-button"
+          id="zap-button"
+        >
+          ⚡ Zap
+        </button>
+
+        <div
+          id="zap-result"
+          class="result"
+        >
+          Ready.
+        </div>
+
+      </div>
+
+    `
+  );
+
+  const looks = [
+    "Retro Pear",
+    "Space Explorer",
+    "Beach Mode",
+    "Classic Black",
+    "Future Green",
+    "Pixel Style"
+  ];
+
+  document.getElementById(
+    "zap-button"
+  ).onclick = function(){
+
+    document.getElementById(
+      "zap-result"
+    ).textContent =
+      looks[
+        Math.floor(
+          Math.random()*looks.length
+        )
+      ];
+
+  };
+
+}
+
+function monkeyApp(){
+
+  openApp(
+    "Monkey",
+    `
+
+      <div class="game">
+
+        <h2>🐒 Monkey</h2>
+
+        <p>
+          Tap the monkey!
+        </p>
+
+        <button
+          class="game-button"
+          id="monkey-button"
+        >
+          🐒
+        </button>
+
+        <div
+          class="result"
+          id="monkey-score"
+        >
+          Score: 0
+        </div>
+
+      </div>
+
+    `
+  );
+
+  let score = 0;
+
+  document.getElementById(
+    "monkey-button"
+  ).onclick = function(){
+
+    score++;
+
+    document.getElementById(
+      "monkey-score"
+    ).textContent =
+      "Score: " + score;
+
+    playTone(
+      350 + score*15,
+      .06
+    );
+
+  };
+
+}
+
+function remarkApp(){
+
+  openApp(
+    "Remark",
+    `
+
+      <div class="card">
+
+        <h2>💬 Remark</h2>
+
+        <button
+          class="app-button"
+          id="remark-button"
+        >
+          Give Me A Remark
+        </button>
+
+        <div
+          id="remark-result"
+          class="result"
+        >
+          Press the button.
+        </div>
+
+      </div>
+
+    `
+  );
+
+  document.getElementById(
+    "remark-button"
+  ).onclick = function(){
+
+    const remarks = [
+
+      "Honestly? Iconic.",
+
+      "The Pear Phone approves.",
+
+      "Absolutely remarkable.",
+
+      "I have no notes. 😂",
+
+      "That was unexpected."
+
+    ];
+
+    document.getElementById(
+      "remark-result"
+    ).textContent =
+      remarks[
+        Math.floor(
+          Math.random()*remarks.length
+        )
+      ];
+
+  };
+
+}
+
+/* ============================================================
+   APP MAPPINGS
+============================================================ */
+
+const page1Apps = {
+
+  messages: messagesApp,
+
+  camera: cameraApp,
+
+  splashface: splashfaceApp,
+
+  stocks: stocksApp,
+
+  maps: mapsApp,
+
+  photos: photosApp,
+
+  weather: weatherApp,
+
+  notes: notesApp,
+
+  peartunes: pearTunesApp,
+
+  settings: settingsApp,
+
+  clock: clockApp,
+
+  videos: videosApp,
+
+  phone: phoneApp,
+
+  mail: mailApp,
+
+  compass: compassApp,
+
+  music: pearTunesApp
+
+};
+
+const page2Apps = {
+
+  "p2-lingo": lingoApp,
+
+  "p2-splash": splashfaceApp,
+
+  "p2-thumb": tumsApp,
+
+  "p2-danwarp": danwarpApp,
+
+  "p2-image": imageApp,
+
+  "p2-chrono": chronoApp,
+
+  "p2-zaplook": zaplookApp,
+
+  "p2-weather": weatherApp,
+
+  "p2-music": pearTunesApp,
+
+  "p2-monkey": monkeyApp,
+
+  "p2-remark": remarkApp,
+
+  "p2-settings": settingsApp,
+
+  "p2-phone": phoneApp,
+
+  "p2-mail": mailApp,
+
+  "p2-compass": compassApp,
+
+  "p2-music2": pearTunesApp
+
+};
+
+/* ============================================================
+   APP HOTSPOTS
+
+   EACH ICON OPENS ONLY ITS OWN APP
+============================================================ */
+
+Object.entries(page1Apps).forEach(
+  ([id, app]) => {
+
+    const button =
+      document.getElementById(id);
+
+    if(!button) return;
 
     button.addEventListener(
-      "pointerup",
-      function(event){
+      "click",
+      function(e){
 
-        /*
-          Only handle the button on the correct page.
-        */
+        e.preventDefault();
+        e.stopPropagation();
 
-        const isPage2=
-          button.classList.contains(
-            "page2-hotspot"
-          );
-
-        if(isPage2){
-
-          if(!phone.classList.contains("page-two")){
-            return;
-          }
-
-        }else{
-
-          if(phone.classList.contains("page-two")){
-            return;
-          }
-
-        }
-
-
-        event.preventDefault();
-        event.stopPropagation();
-        event.stopImmediatePropagation();
-
-
-        if(
-          overlay &&
-          overlay.classList.contains("open")
-        ){
-
+        if(currentPage !== 1)
           return;
-        }
 
-
-        const app=
-          window[appName];
-
-        if(typeof app==="function"){
-
+        if(typeof app === "function")
           app();
 
-        }else{
-
-          console.error(
-            "Pear Phone app not found:",
-            appName
-          );
-
-        }
-
-      },
-      {
-        capture:true,
-        passive:false
-      }
-    );
-
-
-    /*
-      Stop touch events from reaching the swipe system.
-    */
-
-    button.addEventListener(
-      "touchstart",
-      event=>{
-        event.stopPropagation();
-      },
-      {
-        capture:true,
-        passive:true
-      }
-    );
-
-
-    button.addEventListener(
-      "touchmove",
-      event=>{
-        event.stopPropagation();
-      },
-      {
-        capture:true,
-        passive:true
-      }
-    );
-
-
-    button.addEventListener(
-      "touchend",
-      event=>{
-        event.stopPropagation();
-      },
-      {
-        capture:true,
-        passive:true
       }
     );
 
   }
+);
 
+Object.entries(page2Apps).forEach(
+  ([id, app]) => {
 
-  /*
-    Connect Page 1.
-  */
+    const button =
+      document.getElementById(id);
 
-  Object.entries(page1Apps).forEach(
-    ([id,app])=>{
+    if(!button) return;
 
-      launchFromMap(
-        document.getElementById(id),
-        app
-      );
+    button.addEventListener(
+      "click",
+      function(e){
 
-    }
-  );
+        e.preventDefault();
+        e.stopPropagation();
 
+        if(currentPage !== 2)
+          return;
 
-  /*
-    Connect Page 2.
-  */
+        if(typeof app === "function")
+          app();
 
-  Object.entries(page2Apps).forEach(
-    ([id,app])=>{
-
-      launchFromMap(
-        document.getElementById(id),
-        app
-      );
-
-    }
-  );
-
-
-  /*
-    ============================================================
-    HOME BUTTON
-    ============================================================
-  */
-
-  const home=
-    document.getElementById("home");
-
-  if(home){
-
-    home.addEventListener(
-      "pointerup",
-      event=>{
-
-        event.preventDefault();
-        event.stopPropagation();
-        event.stopImmediatePropagation();
-
-
-        if(
-          typeof window.closeApp==="function"
-        ){
-
-          window.closeApp();
-
-        }
-
-        pearStopCamera();
-
-      },
-      {
-        capture:true,
-        passive:false
       }
     );
 
   }
+);
 
+/* ============================================================
+   HOME
+============================================================ */
 
-  /*
-    ============================================================
-    SWIPE BETWEEN PAGES
-    ============================================================
-  */
+document.getElementById(
+  "home"
+).addEventListener(
+  "click",
+  function(e){
 
-  let swipeStartX=null;
-  let swipeStartY=null;
-  let swipeActive=false;
+    e.preventDefault();
+    e.stopImmediatePropagation();
 
+    goHome();
 
-  phone.addEventListener(
-    "pointerdown",
-    event=>{
+  },
+  true
+);
 
-      /*
-        Don't swipe while inside an app.
-      */
+/* ============================================================
+   DARK MODE RESTORE
+============================================================ */
 
-      if(
-        overlay &&
-        overlay.classList.contains("open")
-      ){
+if(
+  localStorage.getItem(
+    "pear-dark"
+  ) === "true"
+){
 
-        return;
-      }
-
-
-      /*
-        Don't start a swipe from an icon.
-      */
-
-      if(
-        event.target.closest(".hotspot") ||
-        event.target.closest("#home")
-      ){
-
-        return;
-      }
-
-
-      swipeStartX=
-        event.clientX;
-
-      swipeStartY=
-        event.clientY;
-
-      swipeActive=true;
-
-    },
-    {
-      passive:true
-    }
+  document.body.classList.add(
+    "dark-mode"
   );
 
+}
 
-  phone.addEventListener(
-    "pointerup",
-    event=>{
+/* ============================================================
+   START
+============================================================ */
 
-      if(!swipeActive)return;
-
-      swipeActive=false;
-
-
-      if(
-        swipeStartX===null ||
-        swipeStartY===null
-      ){
-
-        return;
-      }
-
-
-      const dx=
-        event.clientX-swipeStartX;
-
-      const dy=
-        event.clientY-swipeStartY;
-
-
-      swipeStartX=null;
-      swipeStartY=null;
-
-
-      /*
-        Require a meaningful vertical movement.
-      */
-
-      if(Math.abs(dy)<55)return;
-
-
-      /*
-        Swipe UP -> Page 2
-        Swipe DOWN -> Page 1
-      */
-
-      if(
-        dy<0 &&
-        typeof window.showPage==="function"
-      ){
-
-        window.showPage(2);
-
-      }else if(
-        dy>0 &&
-        typeof window.showPage==="function"
-      ){
-
-        window.showPage(1);
-
-      }
-
-    },
-    {
-      passive:true
-    }
-  );
-
-
-  /*
-    ============================================================
-    KEYBOARD PAGE SWITCHING
-    ============================================================
-  */
-
-  document.addEventListener(
-    "keydown",
-    event=>{
-
-      const active=
-        document.activeElement;
-
-      if(
-        active &&
-        (
-          active.tagName==="INPUT" ||
-          active.tagName==="TEXTAREA" ||
-          active.tagName==="SELECT"
-        )
-      ){
-
-        return;
-      }
-
-
-      if(
-        event.key==="ArrowUp" &&
-        typeof window.showPage==="function"
-      ){
-
-        event.preventDefault();
-
-        window.showPage(2);
-
-      }
-
-
-      if(
-        event.key==="ArrowDown" &&
-        typeof window.showPage==="function"
-      ){
-
-        event.preventDefault();
-
-        window.showPage(1);
-
-      }
-
-    }
-  );
-
-
-  /*
-    ============================================================
-    KEYBOARD FIX
-    ============================================================
-
-    Your original app.js already has the keyboard system.
-    This makes sure its keyboard is visible inside the app
-    instead of interfering with the physical Pear Phone shell.
-  */
-
-  document.addEventListener(
-    "focusin",
-    event=>{
-
-      const target=
-        event.target;
-
-      if(
-        !target ||
-        (
-          target.tagName!=="INPUT" &&
-          target.tagName!=="TEXTAREA"
-        )
-      ){
-
-        return;
-      }
-
-
-      setTimeout(()=>{
-
-        if(
-          typeof window.showPearKeyboard==="function"
-        ){
-
-          window.showPearKeyboard(target);
-
-        }
-
-      },50);
-
-    }
-  );
-
-
-  /*
-    Make sure the keyboard is hidden whenever the app closes.
-  */
-
-  document.addEventListener(
-    "pointerup",
-    event=>{
-
-      if(
-        event.target.closest("#home")
-      ){
-
-        const keyboard=
-          document.getElementById(
-            "pear-keyboard"
-          );
-
-        if(keyboard){
-
-          keyboard.classList.remove(
-            "keyboard-show"
-          );
-
-          keyboard.classList.remove(
-            "visible"
-          );
-
-        }
-
-      }
-
-    },
-    true
-  );
-
-
-  /*
-    ============================================================
-    CAMERA CLEANUP
-    ============================================================
-  */
-
-  window.addEventListener(
-    "beforeunload",
-    ()=>{
-      pearStopCamera();
-    }
-  );
-
-
-  /*
-    If the original camera app starts a stream when the
-    camera hotspot is clicked, stop that stream immediately.
-    Our capture handler above launches the fixed camera first.
-  */
-
-})();
+showPage(1);
 
 </script>
 
 </body>
+
 </html>

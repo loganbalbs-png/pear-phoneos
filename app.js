@@ -6583,3 +6583,629 @@ function clearRemarks() {
 // ============================================================
 // PART 3 ENDS HERE
 // ============================================================
+// ============================================================
+// PAGE 1 APP CONNECTIONS
+// ============================================================
+
+function connectPage1Apps() {
+
+  const connections = {
+
+    messages:
+      messagesApp,
+
+    camera:
+      cameraApp,
+
+    splashface:
+      splashfaceApp,
+
+    stocks:
+      stocksApp,
+
+    maps:
+      mapsApp,
+
+    photos:
+      photosApp,
+
+    weather:
+      weatherApp,
+
+    notes:
+      notesApp,
+
+    peartunes:
+      pearTunesApp,
+
+    settings:
+      settingsApp,
+
+    clock:
+      clockApp,
+
+    videos:
+      videosApp,
+
+    phone:
+      phoneApp,
+
+    mail:
+      mailApp,
+
+    compass:
+      compassApp,
+
+    music:
+      pearTunesApp
+
+  };
+
+
+  Object.keys(
+    connections
+  ).forEach(
+    id => {
+
+      const button =
+        document.getElementById(
+          id
+        );
+
+
+      if (!button) {
+        return;
+      }
+
+
+      button.addEventListener(
+        "click",
+        event => {
+
+          event.preventDefault();
+
+          event.stopPropagation();
+
+          connections[id]();
+
+        }
+      );
+
+    }
+  );
+
+}
+
+
+// ============================================================
+// PAGE 2 APP CONNECTIONS
+// ============================================================
+
+function connectPage2Apps() {
+
+  const connections = {
+
+    "p2-lingo":
+      lingoApp,
+
+    "p2-splash":
+      splashfaceApp,
+
+    "p2-thumb":
+      tumsApp,
+
+    "p2-danwarp":
+      danwarpApp,
+
+    "p2-image":
+      imageApp,
+
+    "p2-chrono":
+      chronoApp,
+
+    "p2-zaplook":
+      zaplookApp,
+
+    "p2-weather":
+      weatherApp,
+
+    "p2-music":
+      pearTunesApp,
+
+    "p2-monkey":
+      monkeyApp,
+
+    "p2-remark":
+      remarkApp,
+
+    "p2-settings":
+      settingsApp,
+
+    "p2-phone":
+      phoneApp,
+
+    "p2-mail":
+      mailApp,
+
+    "p2-compass":
+      compassApp,
+
+    "p2-music2":
+      pearTunesApp
+
+  };
+
+
+  Object.keys(
+    connections
+  ).forEach(
+    id => {
+
+      const button =
+        document.getElementById(
+          id
+        );
+
+
+      if (!button) {
+        return;
+      }
+
+
+      button.addEventListener(
+        "click",
+        event => {
+
+          event.preventDefault();
+
+          event.stopPropagation();
+
+          connections[id]();
+
+        }
+      );
+
+    }
+  );
+
+}
+
+
+// ============================================================
+// SUPPORT DATA-APP BUTTONS
+// ============================================================
+
+function connectDataAppButtons() {
+
+  const connections = {
+
+    messages:
+      messagesApp,
+
+    camera:
+      cameraApp,
+
+    splashface:
+      splashfaceApp,
+
+    stocks:
+      stocksApp,
+
+    maps:
+      mapsApp,
+
+    photos:
+      photosApp,
+
+    weather:
+      weatherApp,
+
+    notes:
+      notesApp,
+
+    peartunes:
+      pearTunesApp,
+
+    settings:
+      settingsApp,
+
+    clock:
+      clockApp,
+
+    videos:
+      videosApp,
+
+    phone:
+      phoneApp,
+
+    mail:
+      mailApp,
+
+    compass:
+      compassApp,
+
+    music:
+      pearTunesApp,
+
+    lingo:
+      lingoApp,
+
+    tums:
+      tumsApp,
+
+    danwarp:
+      danwarpApp,
+
+    image:
+      imageApp,
+
+    chrono:
+      chronoApp,
+
+    zaplook:
+      zaplookApp,
+
+    monkey:
+      monkeyApp,
+
+    remark:
+      remarkApp
+
+  };
+
+
+  document
+    .querySelectorAll(
+      "[data-app]"
+    )
+    .forEach(
+      button => {
+
+        const appName =
+          button.dataset.app;
+
+
+        if (
+          !connections[appName]
+        ) {
+          return;
+        }
+
+
+        button.addEventListener(
+          "click",
+          event => {
+
+            event.preventDefault();
+
+            event.stopPropagation();
+
+            connections[
+              appName
+            ]();
+
+          }
+        );
+
+      }
+    );
+
+}
+
+
+// ============================================================
+// HOME BUTTON
+// ============================================================
+
+const homeButton =
+  document.getElementById(
+    "home"
+  );
+
+
+if (homeButton) {
+
+  homeButton.addEventListener(
+    "click",
+    event => {
+
+      event.preventDefault();
+
+      event.stopPropagation();
+
+      closeApp();
+
+    }
+  );
+
+}
+
+
+// ============================================================
+// BACK / EXIT BUTTON SUPPORT
+// ============================================================
+
+document.addEventListener(
+  "click",
+  event => {
+
+    const backButton =
+      event.target.closest(
+        ".back-button"
+      );
+
+
+    if (!backButton) {
+      return;
+    }
+
+
+    event.preventDefault();
+
+    event.stopPropagation();
+
+    closeApp();
+
+  }
+);
+
+
+// ============================================================
+// TOUCH SUPPORT FOR BACK BUTTON
+// ============================================================
+
+document.addEventListener(
+  "touchend",
+  event => {
+
+    const backButton =
+      event.target.closest(
+        ".back-button"
+      );
+
+
+    if (!backButton) {
+      return;
+    }
+
+
+    event.preventDefault();
+
+    event.stopPropagation();
+
+    closeApp();
+
+  },
+  {
+    passive: false
+  }
+);
+
+
+// ============================================================
+// STOP CAMERA WHEN LEAVING PAGE
+// ============================================================
+
+document.addEventListener(
+  "visibilitychange",
+  () => {
+
+    if (
+      document.hidden
+    ) {
+
+      stopCamera();
+
+    }
+
+  }
+);
+
+
+// ============================================================
+// STOP CLOCK WHEN APP CLOSES
+// ============================================================
+
+const originalCloseApp =
+  closeApp;
+
+
+// ============================================================
+// ESCAPE HTML
+// ============================================================
+
+function escapeHTML(
+  value
+) {
+
+  return String(
+    value
+  )
+
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+
+    .replace(
+      /</g,
+      "&lt;"
+    )
+
+    .replace(
+      />/g,
+      "&gt;"
+    )
+
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
+}
+
+
+// ============================================================
+// INITIALIZE PAGE 1
+// ============================================================
+
+function initializePearPhone() {
+
+  currentPage =
+    1;
+
+
+  if (phone) {
+
+    phone.classList.remove(
+      "page-two"
+    );
+
+    phone.classList.remove(
+      "page-switch-up",
+      "page-switch-down"
+    );
+
+  }
+
+
+  const pageOne =
+    document.getElementById(
+      "page1"
+    );
+
+
+  const pageTwo =
+    document.getElementById(
+      "page2"
+    );
+
+
+  if (pageOne) {
+
+    pageOne.style.display =
+      "block";
+
+  }
+
+
+  if (pageTwo) {
+
+    pageTwo.style.display =
+      "none";
+
+  }
+
+
+  if (pageDots) {
+
+    pageDots.textContent =
+      "● ○";
+
+  }
+
+}
+
+
+// ============================================================
+// CONNECT EVERYTHING
+// ============================================================
+
+connectPage1Apps();
+
+connectPage2Apps();
+
+connectDataAppButtons();
+
+initializePearPhone();
+
+
+// ============================================================
+// RESTORE SAVED DARK MODE
+// ============================================================
+
+if (
+  localStorage.getItem(
+    "pear-dark"
+  ) === "true"
+) {
+
+  document.body.classList.add(
+    "dark-mode"
+  );
+
+}
+
+
+// ============================================================
+// RESTORE ANIMATION SETTING
+// ============================================================
+
+if (
+  localStorage.getItem(
+    "pear-animations"
+  ) === "true"
+) {
+
+  document.body.classList.add(
+    "no-animations"
+  );
+
+}
+
+
+// ============================================================
+// CLEAN UP CLOCK WHEN PAGE CLOSES
+// ============================================================
+
+window.addEventListener(
+  "beforeunload",
+  () => {
+
+    clearInterval(
+      clockInterval
+    );
+
+    chronoStop();
+
+    stopTumsGame();
+
+    stopCamera();
+
+  }
+);
+
+
+// ============================================================
+// PEAR PHONE READY
+// ============================================================
+
+console.log(
+  "🍐 Pear Phone OS loaded successfully."
+);
+
+console.log(
+  "Page 1 apps connected."
+);
+
+console.log(
+  "Page 2 apps connected."
+);
+
+console.log(
+  "Camera system ready."
+);
+
+console.log(
+  "Pear keyboard ready."
+);
+
+
+// ============================================================
+// END OF APP.JS
+// ============================================================

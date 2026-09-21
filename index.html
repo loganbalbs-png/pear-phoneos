@@ -7,6 +7,7 @@
 <title>Pear Phone OS</title>
 
 <style>
+
 *{
   box-sizing:border-box;
   -webkit-tap-highlight-color:transparent;
@@ -26,6 +27,7 @@ body{
   align-items:center;
   justify-content:center;
 }
+
 
 /* =========================
    PEAR PHONE
@@ -48,6 +50,7 @@ body{
   user-select:none;
 }
 
+
 /* =========================
    PAGE 2 IMAGE
 ========================= */
@@ -67,18 +70,15 @@ body{
 
   opacity:0;
 
-  transform:translateY(100%) scale(.96);
+  transform:none;
 
-  transition:
-    transform .45s cubic-bezier(.22,.8,.25,1),
-    opacity .3s ease;
+  transition:none;
 }
 
 #phone-container.page-two #page2{
   opacity:1;
-
-  transform:translateY(0) scale(1);
 }
+
 
 /* =========================
    HOTSPOTS
@@ -108,6 +108,7 @@ body{
 .hotspot:active{
   transform:scale(.93);
 }
+
 
 /* =========================
    PAGE 1
@@ -225,6 +226,11 @@ body{
   aspect-ratio:1;
 }
 
+
+/* =========================
+   HOME
+========================= */
+
 #home{
   position:absolute;
 
@@ -244,15 +250,14 @@ body{
   z-index:400;
 }
 
-/* Hide Page 1 hotspots on Page 2 */
+
+/* =========================
+   PAGE 1 / PAGE 2
+========================= */
 
 #phone-container.page-two > .page1-hotspot{
   pointer-events:none;
 }
-
-/* =========================
-   PAGE 2 HOTSPOTS
-========================= */
 
 .page2-hotspot{
   display:none;
@@ -265,6 +270,11 @@ body{
 #phone-container.page-two .page2-hotspot{
   display:block;
 }
+
+
+/* =========================
+   PAGE 2 HOTSPOTS
+========================= */
 
 #p2-lingo{
   left:37%;
@@ -378,6 +388,7 @@ body{
   aspect-ratio:1;
 }
 
+
 /* =========================
    APP WINDOW
 ========================= */
@@ -423,7 +434,12 @@ body{
   color:#111;
 }
 
-#app-window .window-header{
+
+/* =========================
+   APP HEADER
+========================= */
+
+#app-window .app-header{
   flex:0 0 auto;
 
   display:flex;
@@ -442,7 +458,7 @@ body{
   font-size:15px;
 }
 
-.back{
+#app-window .back-button{
   width:30px;
   height:30px;
 
@@ -457,7 +473,7 @@ body{
   cursor:pointer;
 }
 
-#app-window .window-body{
+#app-window .app-content{
   flex:1;
 
   min-height:0;
@@ -470,6 +486,11 @@ body{
 
   -webkit-overflow-scrolling:touch;
 }
+
+
+/* =========================
+   GENERAL APP ELEMENTS
+========================= */
 
 .button{
   padding:9px 13px;
@@ -592,154 +613,124 @@ textarea{
   font-size:55px;
 }
 
+
 /* =====================================================
-   CUSTOM KEYBOARD
-   IMPORTANT: HIDDEN BY DEFAULT
+   CUSTOM PEAR KEYBOARD
+   INSIDE THE APP WINDOW
 ===================================================== */
 
-#pear-keyboard#pear-keyboard{
+#pear-keyboard{
+
   position:absolute;
+
+  /*
+     IMPORTANT:
+     The keyboard is positioned relative to #overlay,
+     NOT the whole screen.
+  */
+
   left:12%;
-  right:auto;
-  bottom:6%;
+
+  bottom:5%;
+
   width:76%;
+
   max-width:330px;
+
   padding:5px;
 
   background:rgba(35,35,40,.98);
-  border-radius:10px;
+
+  border-radius:9px;
 
   z-index:9999;
+
   display:none;
 
   opacity:0;
-  transform:translateY(25px) scale(.96);
+
+  transform:translateY(20px) scale(.96);
 
   transition:
     transform .22s cubic-bezier(.22,.8,.25,1),
     opacity .18s ease;
 
-  box-shadow:0 4px 15px rgba(0,0,0,.5);
+  box-shadow:
+    0 4px 14px rgba(0,0,0,.55);
+
   touch-action:manipulation;
 }
 
 #pear-keyboard.keyboard-show{
+
   opacity:1;
+
   transform:translateY(0) scale(1);
 }
 
 .pear-keyboard-row{
+
   display:flex;
+
   gap:3px;
+
   margin-bottom:3px;
 }
 
 .pear-keyboard-row:last-child{
+
   margin-bottom:0;
 }
 
 .pear-keyboard-row button{
+
   flex:1;
+
   min-width:0;
+
   height:25px;
 
   border:0;
+
   border-radius:5px;
 
   background:#f5f5f7;
+
   color:#111;
 
   font-size:10px;
+
   font-weight:800;
+
   padding:0;
 
   touch-action:manipulation;
+
   user-select:none;
 }
 
 .pear-keyboard-row button:active{
+
   transform:scale(.88);
+
   background:#cfd0d4;
 }
 
 .pear-keyboard-row.bottom button:first-child{
-  flex:1.15;
+
+  flex:1.2;
 }
 
 .pear-keyboard-row.bottom button:nth-child(2){
+
   flex:4;
 }
 
 .pear-keyboard-row.bottom button:last-child{
-  flex:1.15;
-}
-#pear-keyboard.keyboard-show{
-  opacity:1;
 
-  transform:translateY(0);
-}
-
-.pear-keyboard-row{
-  display:flex;
-
-  gap:3px;
-
-  margin-bottom:3px;
-}
-
-.pear-keyboard-row:last-child{
-  margin-bottom:0;
-}
-
-.pear-keyboard-row button{
-  flex:1;
-
-  min-width:0;
-
-  height:29px;
-
-  border:0;
-
-  border-radius:5px;
-
-  background:#f5f5f7;
-
-  color:#111;
-
-  font-size:11px;
-
-  font-weight:800;
-
-  padding:0;
-
-  touch-action:manipulation;
-
-  user-select:none;
-}
-
-.pear-keyboard-row button:active{
-  transform:scale(.88);
-
-  background:#cfd0d4;
-}
-
-.pear-keyboard-row.bottom button:first-child{
   flex:1.2;
 }
 
-.pear-keyboard-row.bottom button:nth-child(2){
-  flex:5;
-}
-
-.pear-keyboard-row.bottom button:last-child{
-  flex:1.2;
-}
-
-/* Keyboard must NEVER appear over the physical top circles */
-
-#pear-keyboard{
-  pointer-events:auto;
-}
 
 @media(max-width:700px){
 
@@ -748,23 +739,35 @@ textarea{
   }
 
   #pear-keyboard{
-    left:3%;
-    width:94%;
+
+    left:12%;
+
+    width:76%;
+
+    bottom:5%;
   }
 
   .pear-keyboard-row button{
-    height:27px;
-    font-size:10px;
+
+    height:24px;
+
+    font-size:9px;
   }
 }
+
 </style>
 </head>
 
+
 <body>
+
 
 <div id="phone-container">
 
-  <!-- PAGE 2 IMAGE -->
+  <!-- =========================
+       PAGE 2 IMAGE
+  ========================= -->
+
   <div id="page2"></div>
 
 
@@ -772,60 +775,196 @@ textarea{
        PAGE 1
   ========================= -->
 
-  <button class="hotspot page1-hotspot" id="messages"></button>
-  <button class="hotspot page1-hotspot" id="camera"></button>
-  <button class="hotspot page1-hotspot" id="splashface"></button>
-  <button class="hotspot page1-hotspot" id="stocks"></button>
-  <button class="hotspot page1-hotspot" id="maps"></button>
-  <button class="hotspot page1-hotspot" id="photos"></button>
-  <button class="hotspot page1-hotspot" id="weather"></button>
-  <button class="hotspot page1-hotspot" id="notes"></button>
-  <button class="hotspot page1-hotspot" id="peartunes"></button>
-  <button class="hotspot page1-hotspot" id="settings"></button>
-  <button class="hotspot page1-hotspot" id="clock"></button>
-  <button class="hotspot page1-hotspot" id="videos"></button>
-  <button class="hotspot page1-hotspot" id="phone"></button>
-  <button class="hotspot page1-hotspot" id="mail"></button>
-  <button class="hotspot page1-hotspot" id="compass"></button>
-  <button class="hotspot page1-hotspot" id="music"></button>
+  <button
+    class="hotspot page1-hotspot"
+    id="messages">
+  </button>
+
+  <button
+    class="hotspot page1-hotspot"
+    id="camera">
+  </button>
+
+  <button
+    class="hotspot page1-hotspot"
+    id="splashface">
+  </button>
+
+  <button
+    class="hotspot page1-hotspot"
+    id="stocks">
+  </button>
+
+  <button
+    class="hotspot page1-hotspot"
+    id="maps">
+  </button>
+
+  <button
+    class="hotspot page1-hotspot"
+    id="photos">
+  </button>
+
+  <button
+    class="hotspot page1-hotspot"
+    id="weather">
+  </button>
+
+  <button
+    class="hotspot page1-hotspot"
+    id="notes">
+  </button>
+
+  <button
+    class="hotspot page1-hotspot"
+    id="peartunes">
+  </button>
+
+  <button
+    class="hotspot page1-hotspot"
+    id="settings">
+  </button>
+
+  <button
+    class="hotspot page1-hotspot"
+    id="clock">
+  </button>
+
+  <button
+    class="hotspot page1-hotspot"
+    id="videos">
+  </button>
+
+  <button
+    class="hotspot page1-hotspot"
+    id="phone">
+  </button>
+
+  <button
+    class="hotspot page1-hotspot"
+    id="mail">
+  </button>
+
+  <button
+    class="hotspot page1-hotspot"
+    id="compass">
+  </button>
+
+  <button
+    class="hotspot page1-hotspot"
+    id="music">
+  </button>
 
 
   <!-- =========================
        PAGE 2
-       EACH BUTTON HAS ONE APP
   ========================= -->
 
-  <button class="hotspot page2-hotspot" id="p2-lingo"></button>
-  <button class="hotspot page2-hotspot" id="p2-splash"></button>
-  <button class="hotspot page2-hotspot" id="p2-thumb"></button>
-  <button class="hotspot page2-hotspot" id="p2-danwarp"></button>
-  <button class="hotspot page2-hotspot" id="p2-image"></button>
-  <button class="hotspot page2-hotspot" id="p2-chrono"></button>
-  <button class="hotspot page2-hotspot" id="p2-zaplook"></button>
-  <button class="hotspot page2-hotspot" id="p2-weather"></button>
-  <button class="hotspot page2-hotspot" id="p2-music"></button>
-  <button class="hotspot page2-hotspot" id="p2-monkey"></button>
-  <button class="hotspot page2-hotspot" id="p2-remark"></button>
-  <button class="hotspot page2-hotspot" id="p2-settings"></button>
-  <button class="hotspot page2-hotspot" id="p2-phone"></button>
-  <button class="hotspot page2-hotspot" id="p2-mail"></button>
-  <button class="hotspot page2-hotspot" id="p2-compass"></button>
-  <button class="hotspot page2-hotspot" id="p2-music2"></button>
+  <button
+    class="hotspot page2-hotspot"
+    id="p2-lingo">
+  </button>
+
+  <button
+    class="hotspot page2-hotspot"
+    id="p2-splash">
+  </button>
+
+  <button
+    class="hotspot page2-hotspot"
+    id="p2-thumb">
+  </button>
+
+  <button
+    class="hotspot page2-hotspot"
+    id="p2-danwarp">
+  </button>
+
+  <button
+    class="hotspot page2-hotspot"
+    id="p2-image">
+  </button>
+
+  <button
+    class="hotspot page2-hotspot"
+    id="p2-chrono">
+  </button>
+
+  <button
+    class="hotspot page2-hotspot"
+    id="p2-zaplook">
+  </button>
+
+  <button
+    class="hotspot page2-hotspot"
+    id="p2-weather">
+  </button>
+
+  <button
+    class="hotspot page2-hotspot"
+    id="p2-music">
+  </button>
+
+  <button
+    class="hotspot page2-hotspot"
+    id="p2-monkey">
+  </button>
+
+  <button
+    class="hotspot page2-hotspot"
+    id="p2-remark">
+  </button>
+
+  <button
+    class="hotspot page2-hotspot"
+    id="p2-settings">
+  </button>
+
+  <button
+    class="hotspot page2-hotspot"
+    id="p2-phone">
+  </button>
+
+  <button
+    class="hotspot page2-hotspot"
+    id="p2-mail">
+  </button>
+
+  <button
+    class="hotspot page2-hotspot"
+    id="p2-compass">
+  </button>
+
+  <button
+    class="hotspot page2-hotspot"
+    id="p2-music2">
+  </button>
 
 
-  <!-- HOME BUTTON -->
+  <!-- =========================
+       HOME BUTTON
+  ========================= -->
+
   <button id="home"></button>
 
 
-  <!-- APP WINDOW -->
+  <!-- =========================
+       APP WINDOW
+  ========================= -->
+
   <div id="overlay">
+
     <div id="app-window"></div>
+
   </div>
+
 
 </div>
 
 
+<!-- YOUR EXISTING APP.JS -->
 <script src="app.js"></script>
+
 
 </body>
 </html>

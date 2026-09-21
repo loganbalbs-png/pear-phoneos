@@ -8235,7 +8235,71 @@ console.log(
 console.log(
   "🏠 Home closes the current app."
 );
+// ============================================================
+// UTILITY
+// ============================================================
 
+function escapeHTML(value) {
+
+  return String(value)
+
+    .replace(/&/g, "&amp;")
+
+    .replace(/</g, "&lt;")
+
+    .replace(/>/g, "&gt;")
+
+    .replace(/"/g, "&quot;")
+
+    .replace(/'/g, "&#039;");
+
+}
+
+
+// ============================================================
+// STARTUP
+// ============================================================
+
+connectPage1Apps();
+
+connectPage2Apps();
+
+if (
+  localStorage.getItem(
+    "pear-dark"
+  ) === "true"
+) {
+
+  document.body.classList.add(
+    "dark-mode"
+  );
+
+}
+
+if (
+  localStorage.getItem(
+    "pear-animations"
+  ) === "true"
+) {
+
+  document.body.classList.add(
+    "no-animations"
+  );
+
+}
+
+currentPage = 1;
+
+phone.classList.remove(
+  "page-two"
+);
+
+if (pageDots) {
+
+  pageDots.textContent =
+    "● ○";
+
+}
 // ============================================================
 // END OF PEAR PHONE OS
 // ============================================================

@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-
 <title>Pear Phone OS</title>
 
 <style>
@@ -27,10 +26,6 @@ body{
   justify-content:center;
 }
 
-/* =========================================================
-   PEAR PHONE
-========================================================= */
-
 #phone-container{
   position:relative;
   width:min(170vh,1500px);
@@ -42,9 +37,7 @@ body{
   user-select:none;
 }
 
-/* =========================================================
-   PAGE 2 IMAGE
-========================================================= */
+/* PAGE 2 IMAGE */
 
 #page2{
   position:absolute;
@@ -66,9 +59,7 @@ body{
   transform:translateY(0) scale(1);
 }
 
-/* =========================================================
-   HOTSPOTS
-========================================================= */
+/* HOTSPOTS */
 
 .hotspot{
   position:absolute;
@@ -88,9 +79,7 @@ body{
   transform:scale(.93);
 }
 
-/* =========================================================
-   PAGE 1
-========================================================= */
+/* PAGE 1 */
 
 #messages{
   left:43.1%;
@@ -204,9 +193,7 @@ body{
   aspect-ratio:1;
 }
 
-/* =========================================================
-   HOME
-========================================================= */
+/* HOME */
 
 #home{
   position:absolute;
@@ -221,10 +208,7 @@ body{
   z-index:1000;
 }
 
-/* =========================================================
-   PAGE 2
-   THESE HAVE BEEN MOVED DOWN TO MATCH page2.png
-========================================================= */
+/* PAGE 2 */
 
 .page2-hotspot{
   display:none;
@@ -240,7 +224,10 @@ body{
   pointer-events:none;
 }
 
-/* ROW 1 */
+/*
+   PAGE 2 ICON POSITIONS
+   Each button is independent.
+*/
 
 #p2-lingo{
   left:37%;
@@ -263,8 +250,6 @@ body{
   aspect-ratio:1;
 }
 
-/* ROW 2 */
-
 #p2-danwarp{
   left:37%;
   top:50%;
@@ -285,8 +270,6 @@ body{
   width:9%;
   aspect-ratio:1;
 }
-
-/* ROW 3 */
 
 #p2-zaplook{
   left:37%;
@@ -309,8 +292,6 @@ body{
   aspect-ratio:1;
 }
 
-/* ROW 4 */
-
 #p2-monkey{
   left:37%;
   top:75%;
@@ -331,8 +312,6 @@ body{
   width:9%;
   aspect-ratio:1;
 }
-
-/* ROW 5 */
 
 #p2-phone{
   left:37%;
@@ -355,9 +334,7 @@ body{
   aspect-ratio:1;
 }
 
-/* =========================================================
-   APP WINDOW
-========================================================= */
+/* APP WINDOW */
 
 #overlay{
   position:absolute;
@@ -426,7 +403,6 @@ body{
   margin-bottom:10px;
 }
 
-.button,
 button:not(.hotspot):not(#home){
   padding:8px 12px;
   border-radius:10px;
@@ -520,9 +496,7 @@ textarea{
   background:#ddd;
 }
 
-/* =========================================================
-   CAMERA
-========================================================= */
+/* CAMERA */
 
 #camera-video{
   width:100%;
@@ -538,9 +512,7 @@ textarea{
   margin-top:8px;
 }
 
-/* =========================================================
-   PEAR KEYBOARD
-========================================================= */
+/* KEYBOARD */
 
 #pear-keyboard{
   position:absolute;
@@ -608,9 +580,7 @@ textarea{
   flex:1.3;
 }
 
-/* =========================================================
-   ZAPLOOK BROWSER
-========================================================= */
+/* ZAPLOOK */
 
 .zap-browser{
   margin:-12px;
@@ -703,7 +673,6 @@ textarea{
 }
 
 @media(max-width:700px){
-
   #phone-container{
     width:100vw;
   }
@@ -722,9 +691,7 @@ textarea{
 
   <div id="page2"></div>
 
-  <!-- =====================================================
-       PAGE 1
-  ====================================================== -->
+  <!-- PAGE 1 -->
 
   <button class="hotspot page1-hotspot" id="messages"></button>
   <button class="hotspot page1-hotspot" id="camera"></button>
@@ -743,9 +710,7 @@ textarea{
   <button class="hotspot page1-hotspot" id="compass"></button>
   <button class="hotspot page1-hotspot" id="music"></button>
 
-  <!-- =====================================================
-       PAGE 2
-  ====================================================== -->
+  <!-- PAGE 2 -->
 
   <button class="hotspot page2-hotspot" id="p2-lingo"></button>
   <button class="hotspot page2-hotspot" id="p2-splash"></button>
@@ -778,19 +743,25 @@ textarea{
 <script>
 
 /* =========================================================
-   BASIC VARIABLES
+   VARIABLES
 ========================================================= */
 
-const phone = document.getElementById("phone-container");
-const overlay = document.getElementById("overlay");
-const appWindow = document.getElementById("app-window");
+const phone =
+  document.getElementById("phone-container");
+
+const overlay =
+  document.getElementById("overlay");
+
+const appWindow =
+  document.getElementById("app-window");
 
 let currentPage = 1;
+
 let cameraStream = null;
 let cameraFacing = "user";
 
 /* =========================================================
-   HELPERS
+   HELPER
 ========================================================= */
 
 function escapeHTML(value){
@@ -810,8 +781,6 @@ function escapeHTML(value){
 
 function showPage(page){
 
-  if(page === currentPage) return;
-
   currentPage = page;
 
   phone.classList.toggle(
@@ -823,35 +792,38 @@ function showPage(page){
 
 }
 
-document.addEventListener("keydown",function(e){
+document.addEventListener(
+  "keydown",
+  function(e){
 
-  if(
-    e.target.matches(
-      "input,textarea,select"
-    )
-  ) return;
+    if(
+      e.target.matches(
+        "input,textarea,select"
+      )
+    ) return;
 
-  if(
-    e.key === "ArrowUp" &&
-    currentPage === 1
-  ){
+    if(
+      e.key === "ArrowUp" &&
+      currentPage === 1
+    ){
 
-    e.preventDefault();
-    showPage(2);
+      e.preventDefault();
+      showPage(2);
+
+    }
+
+    if(
+      e.key === "ArrowDown" &&
+      currentPage === 2
+    ){
+
+      e.preventDefault();
+      showPage(1);
+
+    }
 
   }
-
-  if(
-    e.key === "ArrowDown" &&
-    currentPage === 2
-  ){
-
-    e.preventDefault();
-    showPage(1);
-
-  }
-
-});
+);
 
 /* =========================================================
    TOUCH SWIPE
@@ -926,7 +898,7 @@ phone.addEventListener(
 );
 
 /* =========================================================
-   MOUSE / TRACKPAD
+   MOUSE DRAG
 ========================================================= */
 
 let mouseStartY = 0;
@@ -1012,9 +984,7 @@ function openApp(title,content){
     </div>
 
     <div class="window-body">
-
       ${content}
-
     </div>
 
   `;
@@ -1044,87 +1014,76 @@ function closeApp(){
 }
 
 /* =========================================================
-   PAGE 1 — MESSAGES
+   PAGE 1 APPS
 ========================================================= */
-
-const chats = {
-
-  Chloe:[
-    "Heyyy 👋",
-    "What are you doing?",
-    "HAHA wait 😭",
-    "Okayyy sounds good"
-  ],
-
-  Sam:[
-    "Yo!",
-    "Are you free later?",
-    "That's actually crazy 😂",
-    "See you soon"
-  ],
-
-  Cat:[
-    "meow",
-    "feed me",
-    "MEOWWW",
-    "😼"
-  ]
-
-};
 
 function messagesApp(){
 
   openApp(
     "Messages",
     `
-
       <div class="card">
-
         <h2>💬 Messages</h2>
 
-        ${Object.keys(chats).map(name=>`
-
-          <button
-            onclick="openChat('${name}')"
-          >
-            💬 ${name}
-          </button>
-
-        `).join("")}
-
-        <button
-          onclick="newMessage()"
-        >
-          ✏️ New Message
+        <button onclick="openChat('Chloe')">
+          💬 Chloe
         </button>
 
-      </div>
+        <button onclick="openChat('Sam')">
+          💬 Sam
+        </button>
 
+        <button onclick="openChat('Cat')">
+          💬 Cat
+        </button>
+
+        <button onclick="newMessage()">
+          ✏️ New Message
+        </button>
+      </div>
     `
   );
 
 }
+
+const chats = {
+
+  Chloe:[
+    "Heyyy 👋",
+    "What are you doing?",
+    "HAHA wait 😭"
+  ],
+
+  Sam:[
+    "Yo!",
+    "Are you free later?",
+    "That's actually crazy 😂"
+  ],
+
+  Cat:[
+    "meow",
+    "feed me",
+    "MEOWWW"
+  ]
+
+};
 
 function openChat(name){
 
   openApp(
     name,
     `
-
       <div class="card">
 
         <div id="chat-box">
 
-          ${chats[name]
-            .slice(0,2)
-            .map(msg=>`
-
+          ${chats[name].map(
+            msg => `
               <div class="message received">
                 ${escapeHTML(msg)}
               </div>
-
-            `)
-            .join("")}
+            `
+          ).join("")}
 
         </div>
 
@@ -1139,14 +1098,7 @@ function openChat(name){
           Send
         </button>
 
-        <button
-          onclick="randomReply('${name}')"
-        >
-          🤖 Random Reply
-        </button>
-
       </div>
-
     `
   );
 
@@ -1180,39 +1132,6 @@ function sendMessage(name){
 
   input.value = "";
 
-  setTimeout(
-    ()=>randomReply(name),
-    500
-  );
-
-}
-
-function randomReply(name){
-
-  const chat =
-    document.getElementById(
-      "chat-box"
-    );
-
-  if(!chat) return;
-
-  const list = chats[name];
-
-  const reply =
-    list[
-      Math.floor(
-        Math.random()*list.length
-      )
-    ];
-
-  chat.innerHTML += `
-
-    <div class="message received">
-      ${escapeHTML(reply)}
-    </div>
-
-  `;
-
 }
 
 function newMessage(){
@@ -1220,12 +1139,9 @@ function newMessage(){
   openApp(
     "New Message",
     `
-
       <div class="card">
 
-        <input
-          placeholder="Contact"
-        >
+        <input placeholder="Contact">
 
         <textarea
           placeholder="Message..."
@@ -1240,22 +1156,18 @@ function newMessage(){
         </button>
 
       </div>
-
     `
   );
 
 }
 
-/* =========================================================
-   CAMERA
-========================================================= */
+/* CAMERA */
 
 function cameraApp(){
 
   openApp(
     "Camera",
     `
-
       <div class="card">
 
         <video
@@ -1267,24 +1179,15 @@ function cameraApp(){
 
         <div class="row">
 
-          <button
-            class="button"
-            onclick="startCamera()"
-          >
+          <button onclick="startCamera()">
             📷 Start Camera
           </button>
 
-          <button
-            class="button"
-            onclick="capturePhoto()"
-          >
+          <button onclick="capturePhoto()">
             ⭕ Take Photo
           </button>
 
-          <button
-            class="button"
-            onclick="flipCamera()"
-          >
+          <button onclick="flipCamera()">
             🔄 Flip Camera
           </button>
 
@@ -1298,7 +1201,6 @@ function cameraApp(){
         ></canvas>
 
       </div>
-
     `
   );
 
@@ -1328,8 +1230,6 @@ async function startCamera(){
         "camera-video"
       );
 
-    if(!video) return;
-
     cameraStream =
       await navigator.mediaDevices
         .getUserMedia({
@@ -1347,9 +1247,7 @@ async function startCamera(){
     video.srcObject =
       cameraStream;
 
-    await video
-      .play()
-      .catch(()=>{});
+    await video.play().catch(()=>{});
 
     try{
 
@@ -1362,7 +1260,7 @@ async function startCamera(){
           d => d.kind === "videoinput"
         );
 
-      const usbCamera =
+      const freenove =
         cameras.find(
           d => /freenove/i.test(d.label)
         ) ||
@@ -1374,15 +1272,15 @@ async function startCamera(){
         cameraStream
           .getVideoTracks()[0];
 
-      const currentId =
+      const currentDeviceId =
         currentTrack
           ?.getSettings?.()
           ?.deviceId || "";
 
       if(
-        usbCamera &&
-        usbCamera.deviceId &&
-        usbCamera.deviceId !== currentId
+        freenove &&
+        freenove.deviceId &&
+        freenove.deviceId !== currentDeviceId
       ){
 
         currentTrack.stop();
@@ -1393,8 +1291,7 @@ async function startCamera(){
 
               video:{
                 deviceId:{
-                  exact:
-                    usbCamera.deviceId
+                  exact:freenove.deviceId
                 },
 
                 width:{ideal:1280},
@@ -1408,16 +1305,14 @@ async function startCamera(){
         video.srcObject =
           cameraStream;
 
-        await video
-          .play()
-          .catch(()=>{});
+        await video.play().catch(()=>{});
 
       }
 
     }catch(error){
 
       console.log(
-        "Using current camera."
+        "Using active camera."
       );
 
     }
@@ -1427,8 +1322,7 @@ async function startCamera(){
     console.error(error);
 
     alert(
-      "Camera access was not available. " +
-      "Check your camera connection and browser permission."
+      "Camera access was not available. Check the camera and browser permission."
     );
 
   }
@@ -1441,7 +1335,9 @@ function stopCamera(){
 
   cameraStream
     .getTracks()
-    .forEach(track=>track.stop());
+    .forEach(
+      track => track.stop()
+    );
 
   cameraStream = null;
 
@@ -1494,16 +1390,15 @@ function capturePhoto(){
   canvas.height =
     video.videoHeight;
 
-  const ctx =
-    canvas.getContext("2d");
-
-  ctx.drawImage(
-    video,
-    0,
-    0,
-    canvas.width,
-    canvas.height
-  );
+  canvas
+    .getContext("2d")
+    .drawImage(
+      video,
+      0,
+      0,
+      canvas.width,
+      canvas.height
+    );
 
   photo.innerHTML = `
 
@@ -1515,16 +1410,13 @@ function capturePhoto(){
 
 }
 
-/* =========================================================
-   SPLASHFACE
-========================================================= */
+/* SPLASH FACE */
 
 function splashfaceApp(){
 
   openApp(
     "SplashFace",
     `
-
       <div class="card">
 
         <div
@@ -1535,7 +1427,7 @@ function splashfaceApp(){
         </div>
 
         <h2>
-          Welcome to SplashFace
+          SplashFace
         </h2>
 
         <button
@@ -1550,7 +1442,7 @@ function splashfaceApp(){
 
             document
               .getElementById('splash-face')
-              .textContent =
+              .textContent=
               faces[
                 Math.floor(
                   Math.random()*faces.length
@@ -1562,52 +1454,36 @@ function splashfaceApp(){
         </button>
 
       </div>
-
     `
   );
 
 }
 
-/* =========================================================
-   STOCKS
-========================================================= */
+/* STOCKS */
 
 function stocksApp(){
-
-  const stocks = [
-
-    ["PEAR","$184.32","+2.4%"],
-    ["AAPL","$245.17","+1.8%"],
-    ["GOOG","$241.82","-0.6%"],
-    ["NOVA","$82.44","+4.1%"]
-
-  ];
 
   openApp(
     "Stocks",
     `
-
       <div class="card">
 
         <h2>📈 Stocks</h2>
 
-        ${stocks.map(s=>`
+        <div class="stock">
+          <strong>PEAR</strong>
+          <span>$184.32 +2.4%</span>
+        </div>
 
-          <div class="stock">
+        <div class="stock">
+          <strong>AAPL</strong>
+          <span>$245.17 +1.8%</span>
+        </div>
 
-            <strong>
-              ${s[0]}
-            </strong>
-
-            <span>
-              ${s[1]}
-              &nbsp;
-              ${s[2]}
-            </span>
-
-          </div>
-
-        `).join("")}
+        <div class="stock">
+          <strong>GOOG</strong>
+          <span>$241.82 -0.6%</span>
+        </div>
 
         <button
           onclick="
@@ -1618,22 +1494,18 @@ function stocksApp(){
         </button>
 
       </div>
-
     `
   );
 
 }
 
-/* =========================================================
-   MAPS
-========================================================= */
+/* MAPS */
 
 function mapsApp(){
 
   openApp(
     "Maps",
     `
-
       <div class="card">
 
         <div class="map">
@@ -1662,66 +1534,39 @@ function mapsApp(){
           Search
         </button>
 
-        <button
-          onclick="
-            alert(
-              'Current location found! 📍'
-            )
-          "
-        >
-          📍 My Location
-        </button>
-
       </div>
-
     `
   );
 
 }
 
-/* =========================================================
-   PHOTOS
-========================================================= */
+/* PHOTOS */
 
 function photosApp(){
 
   openApp(
     "Photos",
     `
-
       <div class="card">
 
         <h2>📸 Photos</h2>
 
         <div class="photos">
-
           <div>🌴</div>
           <div>🏒</div>
           <div>🌅</div>
           <div>🐶</div>
           <div>🏖️</div>
           <div>🚗</div>
-
         </div>
 
-        <button
-          onclick="
-            alert('Photo selected!')
-          "
-        >
-          Open Photo
-        </button>
-
       </div>
-
     `
   );
 
 }
 
-/* =========================================================
-   WEATHER
-========================================================= */
+/* WEATHER */
 
 function weatherApp(){
 
@@ -1730,7 +1575,6 @@ function weatherApp(){
   openApp(
     "Weather",
     `
-
       <div class="card">
 
         <div
@@ -1742,17 +1586,15 @@ function weatherApp(){
 
         <h2>Sunny</h2>
 
-        <p>
-          Feels like 24°C
-        </p>
-
         <button
           onclick="
             temp++;
 
             document
-              .getElementById('temperature')
-              .textContent =
+              .getElementById(
+                'temperature'
+              )
+              .textContent=
               '☀️ '+temp+'°C';
           "
         >
@@ -1764,8 +1606,10 @@ function weatherApp(){
             temp--;
 
             document
-              .getElementById('temperature')
-              .textContent =
+              .getElementById(
+                'temperature'
+              )
+              .textContent=
               '☀️ '+temp+'°C';
           "
         >
@@ -1773,22 +1617,18 @@ function weatherApp(){
         </button>
 
       </div>
-
     `
   );
 
 }
 
-/* =========================================================
-   NOTES
-========================================================= */
+/* NOTES */
 
 function notesApp(){
 
   openApp(
     "Notes",
     `
-
       <div class="card">
 
         <textarea
@@ -1815,7 +1655,7 @@ function notesApp(){
           onclick="
             document
               .getElementById('note-text')
-              .value =
+              .value=
               localStorage.getItem(
                 'pear-note'
               ) || '';
@@ -1825,22 +1665,18 @@ function notesApp(){
         </button>
 
       </div>
-
     `
   );
 
 }
 
-/* =========================================================
-   MUSIC
-========================================================= */
+/* PEARTUNES */
 
 function pearTunesApp(){
 
   openApp(
     "PearTunes",
     `
-
       <div class="card">
 
         <div
@@ -1865,8 +1701,8 @@ function pearTunesApp(){
                 'music-icon'
               );
 
-            icon.textContent =
-              icon.textContent === '🔊'
+            icon.textContent=
+              icon.textContent==='🔊'
                 ? '🎵'
                 : '🔊';
           "
@@ -1874,34 +1710,19 @@ function pearTunesApp(){
           ▶️ / ⏸️
         </button>
 
-        <button
-          onclick="
-            document
-              .getElementById('song-name')
-              .textContent =
-              'Next Pear Song 🎶';
-          "
-        >
-          ⏭️ Next
-        </button>
-
       </div>
-
     `
   );
 
 }
 
-/* =========================================================
-   SETTINGS
-========================================================= */
+/* SETTINGS */
 
 function settingsApp(){
 
   openApp(
     "Settings",
     `
-
       <div class="card">
 
         <h2>⚙️ Settings</h2>
@@ -1924,43 +1745,25 @@ function settingsApp(){
 
         <button
           onclick="
-            alert(
-              'Pear Phone OS is up to date!'
-            )
+            alert('Pear Phone is up to date!')
           "
         >
           🔄 Software Update
         </button>
 
-        <button
-          onclick="
-            document.body.style.background =
-              document.body.style.background ===
-              'white'
-                ? '#111'
-                : 'white';
-          "
-        >
-          🌙 Appearance
-        </button>
-
       </div>
-
     `
   );
 
 }
 
-/* =========================================================
-   CLOCK
-========================================================= */
+/* CLOCK */
 
 function clockApp(){
 
   openApp(
     "Clock",
     `
-
       <div class="card">
 
         <div
@@ -1977,7 +1780,6 @@ function clockApp(){
         </button>
 
       </div>
-
     `
   );
 
@@ -1999,16 +1801,13 @@ function updateClock(){
 
 }
 
-/* =========================================================
-   VIDEOS
-========================================================= */
+/* VIDEOS */
 
 function videosApp(){
 
   openApp(
     "Videos",
     `
-
       <div class="card">
 
         <div class="big">
@@ -2021,41 +1820,25 @@ function videosApp(){
 
         <button
           onclick="
-            alert(
-              'Playing Pear Phone video!'
-            )
+            alert('Playing video ▶️')
           "
         >
           ▶️ Play
         </button>
 
-        <button
-          onclick="
-            alert(
-              'Added to favourites! ⭐'
-            )
-          "
-        >
-          ⭐ Favourite
-        </button>
-
       </div>
-
     `
   );
 
 }
 
-/* =========================================================
-   PHONE
-========================================================= */
+/* PHONE */
 
 function phoneApp(){
 
   openApp(
-    "Phone",
+    "Pear Phone",
     `
-
       <div class="card">
 
         <div class="big">
@@ -2088,22 +1871,18 @@ function phoneApp(){
         </button>
 
       </div>
-
     `
   );
 
 }
 
-/* =========================================================
-   MAIL
-========================================================= */
+/* MAIL */
 
 function mailApp(){
 
   openApp(
     "Mail",
     `
-
       <div class="card">
 
         <h2>✉️ Mail</h2>
@@ -2122,11 +1901,11 @@ function mailApp(){
           onclick="
             openApp(
               'Compose',
-              '<div class=\\'card\\'>' +
-              '<input placeholder=\\'To\\'>' +
-              '<input placeholder=\\'Subject\\'>' +
-              '<textarea placeholder=\\'Message\\'></textarea>' +
-              '<button onclick=\\'alert(\\'Email sent! ✉️\\')\\'>Send</button>' +
+              '<div class=&quot;card&quot;>' +
+              '<input placeholder=&quot;To&quot;>' +
+              '<input placeholder=&quot;Subject&quot;>' +
+              '<textarea placeholder=&quot;Message&quot;></textarea>' +
+              '<button onclick=&quot;alert(\\'Email sent! ✉️\\')&quot;>Send</button>' +
               '</div>'
             )
           "
@@ -2135,24 +1914,18 @@ function mailApp(){
         </button>
 
       </div>
-
     `
   );
 
 }
 
-/* =========================================================
-   COMPASS
-========================================================= */
+/* COMPASS */
 
 function compassApp(){
-
-  let degree = 0;
 
   openApp(
     "Compass",
     `
-
       <div class="card">
 
         <div
@@ -2168,63 +1941,63 @@ function compassApp(){
 
         <button
           onclick="
-            degree =
-              (degree + 45) % 360;
+            const dirs=[
+              'North',
+              'NE',
+              'East',
+              'SE',
+              'South',
+              'SW',
+              'West',
+              'NW'
+            ];
 
-            document
-              .getElementById(
-                'compass-display'
-              )
-              .textContent =
-              degree + '°';
+            const n=
+              Math.floor(
+                Math.random()*dirs.length
+              );
 
             document
               .getElementById(
                 'direction'
               )
-              .textContent =
-              [
-                'North',
-                'NE',
-                'East',
-                'SE',
-                'South',
-                'SW',
-                'West',
-                'NW'
-              ][
-                Math.round(
-                  degree / 45
-                ) % 8
-              ];
+              .textContent=
+              dirs[n];
+
+            document
+              .getElementById(
+                'compass-display'
+              )
+              .textContent=
+              '🧭 '+dirs[n];
           "
         >
           🔄 Rotate
         </button>
 
       </div>
-
     `
   );
 
 }
 
 /* =========================================================
-   PAGE 2 — LINGO
+   PAGE 2 APPS
 ========================================================= */
+
+/* LINGO */
 
 function lingoApp(){
 
   openApp(
     "Lingo",
     `
-
       <div class="card">
 
         <h2>🌎 Lingo</h2>
 
         <p>
-          Translate a word into Pear Language.
+          Translate a word.
         </p>
 
         <input
@@ -2234,7 +2007,7 @@ function lingoApp(){
 
         <button
           onclick="
-            const v =
+            const v=
               document
                 .getElementById(
                   'lingo-input'
@@ -2245,11 +2018,11 @@ function lingoApp(){
               .getElementById(
                 'lingo-result'
               )
-              .textContent =
+              .textContent=
               v
                 ? v.split('')
                     .reverse()
-                    .join('') + ' 🍐'
+                    .join('')+' 🍐'
                 : 'Type something!';
           "
         >
@@ -2259,15 +2032,12 @@ function lingoApp(){
         <h2 id="lingo-result"></h2>
 
       </div>
-
     `
   );
 
 }
 
-/* =========================================================
-   PAGE 2 — THUMBS UP
-========================================================= */
+/* THUMBS */
 
 let thumbs = 0;
 
@@ -2276,9 +2046,8 @@ function tumsApp(){
   thumbs = 0;
 
   openApp(
-    "Thumbs Up",
+    "Thumbs",
     `
-
       <div class="card">
 
         <div
@@ -2296,8 +2065,8 @@ function tumsApp(){
               .getElementById(
                 'thumb-count'
               )
-              .textContent =
-              '👍 ' + thumbs;
+              .textContent=
+              '👍 '+thumbs;
           "
         >
           👍 Give Thumbs Up
@@ -2311,7 +2080,7 @@ function tumsApp(){
               .getElementById(
                 'thumb-count'
               )
-              .textContent =
+              .textContent=
               '👍 0';
           "
         >
@@ -2319,24 +2088,18 @@ function tumsApp(){
         </button>
 
       </div>
-
     `
   );
 
 }
 
-/* =========================================================
-   PAGE 2 — DANWARP
-========================================================= */
+/* DANWARP */
 
 function danwarpApp(){
-
-  let warped = false;
 
   openApp(
     "DanWarp",
     `
-
       <div class="card">
 
         <div
@@ -2348,38 +2111,33 @@ function danwarpApp(){
 
         <button
           onclick="
-            warped=!warped;
-
-            document
-              .getElementById(
+            const box=
+              document.getElementById(
                 'warp-box'
-              )
-              .style.transform =
-              warped
-                ? 'rotate(180deg) scale(1.4)'
-                : '';
+              );
+
+            box.style.transform=
+              box.style.transform
+                ? ''
+                : 'rotate(180deg) scale(1.4)';
           "
         >
           🌀 Warp
         </button>
 
       </div>
-
     `
   );
 
 }
 
-/* =========================================================
-   PAGE 2 — IMAGE
-========================================================= */
+/* IMAGE */
 
 function imageApp(){
 
   openApp(
     "Image",
     `
-
       <div class="card">
 
         <div class="big">
@@ -2394,24 +2152,21 @@ function imageApp(){
 
             if(!file)return;
 
-            const img =
-              document.createElement(
-                'img'
-              );
+            const img=
+              document.createElement('img');
 
-            img.src =
+            img.src=
               URL.createObjectURL(file);
 
             img.style.width='100%';
             img.style.borderRadius='12px';
 
-            const preview =
+            const preview=
               document.getElementById(
                 'image-preview'
               );
 
             preview.innerHTML='';
-
             preview.appendChild(img);
           "
         >
@@ -2419,20 +2174,19 @@ function imageApp(){
         <div id="image-preview"></div>
 
       </div>
-
     `
   );
 
 }
 
-/* =========================================================
-   PAGE 2 — CHRONO
-========================================================= */
+/* CHRONO */
 
 let chronoSeconds = 0;
 let chronoTimer = null;
 
 function chronoApp(){
+
+  clearInterval(chronoTimer);
 
   chronoSeconds = 0;
   chronoTimer = null;
@@ -2440,7 +2194,6 @@ function chronoApp(){
   openApp(
     "Chrono",
     `
-
       <div class="card">
 
         <div
@@ -2454,31 +2207,31 @@ function chronoApp(){
           onclick="
             if(chronoTimer)return;
 
-            chronoTimer =
+            chronoTimer=
               setInterval(()=>{
 
                 chronoSeconds++;
 
-                const m =
+                const m=
                   String(
                     Math.floor(
-                      chronoSeconds / 60
+                      chronoSeconds/60
                     )
                   ).padStart(2,'0');
 
-                const s =
+                const s=
                   String(
-                    chronoSeconds % 60
+                    chronoSeconds%60
                   ).padStart(2,'0');
 
-                const el =
+                const el=
                   document.getElementById(
                     'chrono-time'
                   );
 
                 if(el)
-                  el.textContent =
-                    m + ':' + s;
+                  el.textContent=
+                    m+':'+s;
 
               },1000);
           "
@@ -2488,10 +2241,7 @@ function chronoApp(){
 
         <button
           onclick="
-            clearInterval(
-              chronoTimer
-            );
-
+            clearInterval(chronoTimer);
             chronoTimer=null;
           "
         >
@@ -2500,12 +2250,8 @@ function chronoApp(){
 
         <button
           onclick="
-            clearInterval(
-              chronoTimer
-            );
-
+            clearInterval(chronoTimer);
             chronoTimer=null;
-
             chronoSeconds=0;
 
             document
@@ -2519,54 +2265,39 @@ function chronoApp(){
         </button>
 
       </div>
-
     `
   );
 
 }
 
-/* =========================================================
-   PAGE 2 — ZAPLOOK
-========================================================= */
+/* ZAPLOOK */
 
 let zapHistory = [];
 let zapHistoryIndex = -1;
 
 function zaplookApp(){
 
-  zapHistory = [];
-  zapHistoryIndex = -1;
+  zapHistory=[];
+  zapHistoryIndex=-1;
 
   openApp(
     "ZapLook",
     `
-
       <div class="zap-browser">
-
-        <!-- BROWSER TOOLBAR -->
 
         <div class="zap-toolbar">
 
           <div class="zap-toolbar-row">
 
-            <button
-              class="button"
-              onclick="zapBack()"
-            >
+            <button onclick="zapBack()">
               ◀
             </button>
 
-            <button
-              class="button"
-              onclick="zapForward()"
-            >
+            <button onclick="zapForward()">
               ▶
             </button>
 
-            <button
-              class="button"
-              onclick="zapRefresh()"
-            >
+            <button onclick="zapRefresh()">
               ↻
             </button>
 
@@ -2577,7 +2308,6 @@ function zaplookApp(){
             <input
               id="zap-url"
               class="zap-address"
-              type="text"
               placeholder="Search or enter website"
               onkeydown="
                 if(event.key==='Enter'){
@@ -2587,7 +2317,7 @@ function zaplookApp(){
             >
 
             <button
-              class="button zap-search-button"
+              class="zap-search-button"
               onclick="zapSearch()"
             >
               🔍
@@ -2597,8 +2327,6 @@ function zaplookApp(){
 
         </div>
 
-        <!-- INTERNET PAGE -->
-
         <div id="zap-page">
 
           <div class="zap-logo">
@@ -2607,9 +2335,7 @@ function zaplookApp(){
               ⚡
             </div>
 
-            <h1>
-              ZapLook
-            </h1>
+            <h1>ZapLook</h1>
 
             <p class="zap-muted">
               The Pear Phone Internet
@@ -2633,9 +2359,7 @@ function zaplookApp(){
           <button
             class="zap-link"
             onclick="
-              zapOpenSite(
-                'Pear Search'
-              )
+              zapOpenSite('Pear Search')
             "
           >
             🔎 Pear Search
@@ -2644,9 +2368,7 @@ function zaplookApp(){
           <button
             class="zap-link"
             onclick="
-              zapOpenSite(
-                'Pear News'
-              )
+              zapOpenSite('Pear News')
             "
           >
             📰 Pear News
@@ -2655,9 +2377,7 @@ function zaplookApp(){
           <button
             class="zap-link"
             onclick="
-              zapOpenSite(
-                'PearTube'
-              )
+              zapOpenSite('PearTube')
             "
           >
             ▶️ PearTube
@@ -2666,61 +2386,32 @@ function zaplookApp(){
         </div>
 
       </div>
-
     `
   );
 
 }
 
-/* =========================================================
-   ZAPLOOK SEARCH
-========================================================= */
-
 function zapSearch(){
 
-  const input =
+  const input=
     document.getElementById(
       "zap-url"
     );
 
-  if(!input) return;
+  if(!input)return;
 
-  const query =
+  const query=
     input.value.trim();
 
-  if(!query) return;
+  if(!query)return;
 
   if(
-    query === "Pear Search"
+    query==="Pear Search" ||
+    query==="Pear News" ||
+    query==="PearTube"
   ){
 
-    zapOpenSite(
-      "Pear Search"
-    );
-
-    return;
-
-  }
-
-  if(
-    query === "Pear News"
-  ){
-
-    zapOpenSite(
-      "Pear News"
-    );
-
-    return;
-
-  }
-
-  if(
-    query === "PearTube"
-  ){
-
-    zapOpenSite(
-      "PearTube"
-    );
+    zapOpenSite(query);
 
     return;
 
@@ -2732,107 +2423,102 @@ function zapSearch(){
 
 function zapPerformSearch(query){
 
-  zapHistory =
+  zapHistory=
     zapHistory.slice(
       0,
-      zapHistoryIndex + 1
+      zapHistoryIndex+1
     );
 
   zapHistory.push(
-    "search:" + query
+    "search:"+query
   );
 
-  zapHistoryIndex =
-    zapHistory.length - 1;
+  zapHistoryIndex=
+    zapHistory.length-1;
 
-  const page =
+  zapPerformSearchWithoutHistory(
+    query
+  );
+
+}
+
+function zapPerformSearchWithoutHistory(query){
+
+  const page=
     document.getElementById(
       "zap-page"
     );
 
-  if(!page) return;
+  if(!page)return;
 
-  page.innerHTML = `
+  page.innerHTML=`
 
-    <div>
+    <button onclick="zapHome()">
+      🏠 Home
+    </button>
 
-      <button
-        class="button"
-        onclick="zapHome()"
-      >
-        🏠 Home
-      </button>
+    <h2>
+      Search Results
+    </h2>
 
-      <h2>
-        Search Results
-      </h2>
+    <p>
+      Results for:
+      <strong>
+        ${escapeHTML(query)}
+      </strong>
+    </p>
+
+    <div
+      class="card zap-result"
+      onclick="
+        zapOpenResult('Pear Wikipedia')
+      "
+    >
+
+      <strong>
+        📖 Pear Wikipedia
+      </strong>
 
       <p>
-        Results for:
-        <strong>
-          ${escapeHTML(query)}
-        </strong>
+        Learn more about
+        ${escapeHTML(query)}.
       </p>
 
-      <div
-        class="card zap-result"
-        onclick="
-          zapOpenResult(
-            'Pear Wikipedia'
-          )
-        "
-      >
+    </div>
 
-        <strong>
-          📖 Pear Wikipedia
-        </strong>
+    <div
+      class="card zap-result"
+      onclick="
+        zapOpenResult('PearTube')
+      "
+    >
 
-        <p>
-          Learn more about
-          ${escapeHTML(query)}.
-        </p>
+      <strong>
+        ▶️ PearTube
+      </strong>
 
-      </div>
+      <p>
+        Videos about
+        ${escapeHTML(query)}.
+      </p>
 
-      <div
-        class="card zap-result"
-        onclick="
-          zapOpenResult(
-            'PearTube'
-          )
-        "
-      >
+    </div>
 
-        <strong>
-          ▶️ PearTube
-        </strong>
+    <div
+      class="card zap-result"
+      onclick="
+        zapOpenResult('Pear News')
+      "
+    >
 
-        <p>
-          Videos about
-          ${escapeHTML(query)}.
-        </p>
+      <strong>
+        📰 Pear News
+      </strong>
 
-      </div>
-
-      <div
-        class="card zap-result"
-        onclick="
-          zapOpenResult(
-            'Pear News'
-          )
-        "
-      >
-
-        <strong>
-          📰 Pear News
-        </strong>
-
-        <p>
-          News about
-          ${escapeHTML(query)}.
-        </p>
-
-      </div>
+      <p>
+        News about
+        ${escapeHTML(query)}.
+      </p>
 
     </div>
 
@@ -2840,30 +2526,26 @@ function zapPerformSearch(query){
 
 }
 
-/* =========================================================
-   ZAPLOOK SITES
-========================================================= */
-
 function zapOpenSite(site){
 
-  zapHistory =
+  zapHistory=
     zapHistory.slice(
       0,
-      zapHistoryIndex + 1
+      zapHistoryIndex+1
     );
 
   zapHistory.push(site);
 
-  zapHistoryIndex =
-    zapHistory.length - 1;
+  zapHistoryIndex=
+    zapHistory.length-1;
 
-  const url =
+  const url=
     document.getElementById(
       "zap-url"
     );
 
   if(url){
-    url.value = site;
+    url.value=site;
   }
 
   zapRenderSite(site);
@@ -2872,24 +2554,18 @@ function zapOpenSite(site){
 
 function zapOpenResult(result){
 
-  zapHistory =
-    zapHistory.slice(
-      0,
-      zapHistoryIndex + 1
-    );
-
   zapHistory.push(result);
 
-  zapHistoryIndex =
-    zapHistory.length - 1;
+  zapHistoryIndex=
+    zapHistory.length-1;
 
-  const url =
+  const url=
     document.getElementById(
       "zap-url"
     );
 
   if(url){
-    url.value = result;
+    url.value=result;
   }
 
   zapRenderSite(result);
@@ -2898,228 +2574,173 @@ function zapOpenResult(result){
 
 function zapRenderSite(site){
 
-  const page =
+  const page=
     document.getElementById(
       "zap-page"
     );
 
-  if(!page) return;
+  if(!page)return;
 
-  if(
-    site === "Pear Search"
-  ){
+  if(site==="Pear Search"){
 
-    page.innerHTML = `
+    page.innerHTML=`
 
-      <div>
+      <button onclick="zapHome()">
+        🏠 Home
+      </button>
 
-        <button
-          class="button"
-          onclick="zapHome()"
-        >
-          🏠 Home
-        </button>
+      <h2>
+        🔎 Pear Search
+      </h2>
 
-        <h2>
-          🔎 Pear Search
-        </h2>
+      <input
+        id="zap-search-box"
+        placeholder="Search the Internet..."
+        onkeydown="
+          if(event.key==='Enter'){
+            zapSearchBox();
+          }
+        "
+      >
 
-        <input
-          id="zap-search-box"
-          placeholder="Search the Internet..."
-          onkeydown="
-            if(event.key==='Enter'){
-              zapSearchBox();
-            }
+      <button onclick="zapSearchBox()">
+        🔍 Search
+      </button>
+
+      <div id="zap-results"></div>
+
+    `;
+
+    return;
+  }
+
+  if(site==="Pear News"){
+
+    page.innerHTML=`
+
+      <button onclick="zapHome()">
+        🏠 Home
+      </button>
+
+      <h2>
+        📰 Pear News
+      </h2>
+
+      <div class="card">
+
+        <h3>
+          🌎 World News
+        </h3>
+
+        <p>
+          Pear Phone announces a brand
+          new software update.
+        </p>
+
+      </div>
+
+      <div class="card">
+
+        <h3>
+          🏒 Hockey
+        </h3>
+
+        <p>
+          Hockey fans celebrate another
+          huge game.
+        </p>
+
+      </div>
+
+      <div class="card">
+
+        <h3>
+          💻 Technology
+        </h3>
+
+        <p>
+          New technology is changing
+          the way people use phones.
+        </p>
+
+      </div>
+
+    `;
+
+    return;
+  }
+
+  if(site==="PearTube"){
+
+    page.innerHTML=`
+
+      <button onclick="zapHome()">
+        🏠 Home
+      </button>
+
+      <h2>
+        ▶️ PearTube
+      </h2>
+
+      <div class="card">
+
+        <div
+          style="
+            background:#111;
+            color:#fff;
+            height:130px;
+            border-radius:10px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:50px;
           "
         >
+          ▶️
+        </div>
+
+        <h3>
+          Popular PearTube Video
+        </h3>
 
         <button
-          class="button"
-          onclick="zapSearchBox()"
+          onclick="
+            alert('Playing video ▶️')
+          "
         >
-          🔍 Search
+          ▶️ Play
         </button>
-
-        <div id="zap-results"></div>
-
-      </div>
-
-    `;
-
-    setTimeout(()=>{
-      const input =
-        document.getElementById(
-          "zap-search-box"
-        );
-
-      if(input){
-        input.focus();
-      }
-    },100);
-
-    return;
-
-  }
-
-  if(
-    site === "Pear News"
-  ){
-
-    page.innerHTML = `
-
-      <div>
-
-        <button
-          class="button"
-          onclick="zapHome()"
-        >
-          🏠 Home
-        </button>
-
-        <h2>
-          📰 Pear News
-        </h2>
-
-        <div class="card">
-
-          <h3>
-            🌎 World News
-          </h3>
-
-          <p>
-            Pear Phone announces a
-            brand new software update.
-          </p>
-
-        </div>
-
-        <div class="card">
-
-          <h3>
-            🏒 Hockey
-          </h3>
-
-          <p>
-            Hockey fans celebrate
-            another huge game.
-          </p>
-
-        </div>
-
-        <div class="card">
-
-          <h3>
-            💻 Technology
-          </h3>
-
-          <p>
-            New technology is changing
-            the way people use phones.
-          </p>
-
-        </div>
 
       </div>
 
     `;
 
     return;
-
   }
 
-  if(
-    site === "PearTube"
-  ){
+  if(site==="Pear Wikipedia"){
 
-    page.innerHTML = `
+    page.innerHTML=`
 
-      <div>
+      <button onclick="zapHome()">
+        🏠 Home
+      </button>
 
-        <button
-          class="button"
-          onclick="zapHome()"
-        >
-          🏠 Home
-        </button>
+      <h2>
+        📖 Pear Wikipedia
+      </h2>
 
-        <h2>
-          ▶️ PearTube
-        </h2>
+      <div class="card">
 
-        <div class="card">
+        <h3>
+          Pear Phone
+        </h3>
 
-          <div
-            style="
-              background:#111;
-              color:#fff;
-              height:130px;
-              border-radius:10px;
-              display:flex;
-              align-items:center;
-              justify-content:center;
-              font-size:50px;
-            "
-          >
-            ▶️
-          </div>
-
-          <h3>
-            Popular PearTube Video
-          </h3>
-
-          <button
-            onclick="
-              alert(
-                'Playing video ▶️'
-              )
-            "
-          >
-            ▶️ Play
-          </button>
-
-        </div>
-
-      </div>
-
-    `;
-
-    return;
-
-  }
-
-  if(
-    site === "Pear Wikipedia"
-  ){
-
-    page.innerHTML = `
-
-      <div>
-
-        <button
-          class="button"
-          onclick="zapHome()"
-        >
-          🏠 Home
-        </button>
-
-        <h2>
-          📖 Pear Wikipedia
-        </h2>
-
-        <div class="card">
-
-          <h3>
-            Pear Phone
-          </h3>
-
-          <p>
-            The Pear Phone is a fictional
-            smartphone with a collection
-            of unusual applications.
-          </p>
-
-        </div>
+        <p>
+          The Pear Phone is a fictional
+          smartphone with a collection
+          of unusual applications.
+        </p>
 
       </div>
 
@@ -3131,65 +2752,34 @@ function zapRenderSite(site){
 
 function zapSearchBox(){
 
-  const input =
+  const input=
     document.getElementById(
       "zap-search-box"
     );
 
-  const results =
-    document.getElementById(
-      "zap-results"
-    );
+  if(!input)return;
 
-  if(!input || !results)
-    return;
-
-  const query =
+  const query=
     input.value.trim();
 
-  if(!query){
-
-    results.innerHTML =
-      "<p>Type something to search.</p>";
-
-    return;
-
-  }
+  if(!query)return;
 
   zapPerformSearch(query);
 
 }
 
-/* =========================================================
-   ZAPLOOK BACK / FORWARD
-========================================================= */
-
 function zapBack(){
 
   if(
-    zapHistoryIndex <= 0
+    zapHistoryIndex<=0
   ) return;
 
   zapHistoryIndex--;
 
-  const site =
+  const site=
     zapHistory[
       zapHistoryIndex
     ];
-
-  const url =
-    document.getElementById(
-      "zap-url"
-    );
-
-  if(url){
-
-    url.value =
-      site.startsWith("search:")
-        ? site.substring(7)
-        : site;
-
-  }
 
   if(
     site.startsWith("search:")
@@ -3210,30 +2800,16 @@ function zapBack(){
 function zapForward(){
 
   if(
-    zapHistoryIndex >=
-    zapHistory.length - 1
+    zapHistoryIndex>=
+    zapHistory.length-1
   ) return;
 
   zapHistoryIndex++;
 
-  const site =
+  const site=
     zapHistory[
       zapHistoryIndex
     ];
-
-  const url =
-    document.getElementById(
-      "zap-url"
-    );
-
-  if(url){
-
-    url.value =
-      site.startsWith("search:")
-        ? site.substring(7)
-        : site;
-
-  }
 
   if(
     site.startsWith("search:")
@@ -3251,87 +2827,10 @@ function zapForward(){
 
 }
 
-function zapPerformSearchWithoutHistory(query){
-
-  const page =
-    document.getElementById(
-      "zap-page"
-    );
-
-  if(!page) return;
-
-  page.innerHTML = `
-
-    <div>
-
-      <button
-        class="button"
-        onclick="zapHome()"
-      >
-        🏠 Home
-      </button>
-
-      <h2>
-        Search Results
-      </h2>
-
-      <p>
-        Results for:
-        <strong>
-          ${escapeHTML(query)}
-        </strong>
-      </p>
-
-      <div
-        class="card zap-result"
-        onclick="
-          zapOpenResult(
-            'Pear Wikipedia'
-          )
-        "
-      >
-
-        <strong>
-          📖 Pear Wikipedia
-        </strong>
-
-        <p>
-          Learn more about
-          ${escapeHTML(query)}.
-        </p>
-
-      </div>
-
-      <div
-        class="card zap-result"
-        onclick="
-          zapOpenResult(
-            'PearTube'
-          )
-        "
-      >
-
-        <strong>
-          ▶️ PearTube
-        </strong>
-
-        <p>
-          Videos about
-          ${escapeHTML(query)}.
-        </p>
-
-      </div>
-
-    </div>
-
-  `;
-
-}
-
 function zapRefresh(){
 
   if(
-    zapHistoryIndex < 0
+    zapHistoryIndex<0
   ){
 
     zapHome();
@@ -3339,7 +2838,7 @@ function zapRefresh(){
 
   }
 
-  const site =
+  const site=
     zapHistory[
       zapHistoryIndex
     ];
@@ -3362,26 +2861,24 @@ function zapRefresh(){
 
 function zapHome(){
 
-  zapHistory = [];
-  zapHistoryIndex = -1;
+  zapHistory=[];
+  zapHistoryIndex=-1;
 
-  const url =
+  const url=
     document.getElementById(
       "zap-url"
     );
 
-  if(url){
-    url.value = "";
-  }
+  if(url)url.value="";
 
-  const page =
+  const page=
     document.getElementById(
       "zap-page"
     );
 
-  if(!page) return;
+  if(!page)return;
 
-  page.innerHTML = `
+  page.innerHTML=`
 
     <div class="zap-logo">
 
@@ -3415,9 +2912,7 @@ function zapHome(){
     <button
       class="zap-link"
       onclick="
-        zapOpenSite(
-          'Pear Search'
-        )
+        zapOpenSite('Pear Search')
       "
     >
       🔎 Pear Search
@@ -3426,9 +2921,7 @@ function zapHome(){
     <button
       class="zap-link"
       onclick="
-        zapOpenSite(
-          'Pear News'
-        )
+        zapOpenSite('Pear News')
       "
     >
       📰 Pear News
@@ -3437,9 +2930,7 @@ function zapHome(){
     <button
       class="zap-link"
       onclick="
-        zapOpenSite(
-          'PearTube'
-        )
+        zapOpenSite('PearTube')
       "
     >
       ▶️ PearTube
@@ -3449,16 +2940,13 @@ function zapHome(){
 
 }
 
-/* =========================================================
-   MONKEY
-========================================================= */
+/* MONKEY */
 
 function monkeyApp(){
 
   openApp(
     "Monkey",
     `
-
       <div class="card">
 
         <div
@@ -3478,10 +2966,8 @@ function monkeyApp(){
             ];
 
             document
-              .getElementById(
-                'monkey'
-              )
-              .textContent =
+              .getElementById('monkey')
+              .textContent=
               x[
                 Math.floor(
                   Math.random()*x.length
@@ -3493,22 +2979,18 @@ function monkeyApp(){
         </button>
 
       </div>
-
     `
   );
 
 }
 
-/* =========================================================
-   REMARK
-========================================================= */
+/* REMARK */
 
 function remarkApp(){
 
   openApp(
     "Remark",
     `
-
       <div class="card">
 
         <h2>
@@ -3522,53 +3004,27 @@ function remarkApp(){
 
         <button
           onclick="
-            const value =
+            localStorage.setItem(
+              'pear-remark',
               document
-                .getElementById(
-                  'remark'
-                )
-                .value;
+                .getElementById('remark')
+                .value
+            );
 
-            if(value.trim()){
-              localStorage.setItem(
-                'pear-remark',
-                value
-              );
-
-              alert(
-                'Remark saved! 💭'
-              );
-            }
+            alert('Remark saved!');
           "
         >
           💾 Save Remark
         </button>
 
-        <button
-          onclick="
-            document
-              .getElementById(
-                'remark'
-              )
-              .value =
-              localStorage.getItem(
-                'pear-remark'
-              ) || '';
-          "
-        >
-          📖 Load Remark
-        </button>
-
       </div>
-
     `
   );
 
 }
 
 /* =========================================================
-   PAGE 2 ROUTING
-   EACH ID CAN ONLY OPEN ITS OWN APP
+   PAGE 1 ROUTING
 ========================================================= */
 
 const page1Apps = {
@@ -3592,29 +3048,50 @@ const page1Apps = {
 
 };
 
+/* =========================================================
+   PAGE 2 ROUTING
+   THIS IS THE IMPORTANT PART
+========================================================= */
+
 const page2Apps = {
 
-  "p2-lingo":lingoApp,
-  "p2-splash":splashfaceApp,
-  "p2-thumb":tumsApp,
-  "p2-danwarp":danwarpApp,
-  "p2-image":imageApp,
-  "p2-chrono":chronoApp,
-  "p2-zaplook":zaplookApp,
-  "p2-weather":weatherApp,
-  "p2-music":pearTunesApp,
-  "p2-monkey":monkeyApp,
-  "p2-remark":remarkApp,
-  "p2-settings":settingsApp,
-  "p2-phone":phoneApp,
-  "p2-mail":mailApp,
-  "p2-compass":compassApp
+  "p2-lingo": lingoApp,
+
+  "p2-splash": splashfaceApp,
+
+  "p2-thumb": tumsApp,
+
+  "p2-danwarp": danwarpApp,
+
+  "p2-image": imageApp,
+
+  "p2-chrono": chronoApp,
+
+  "p2-zaplook": zaplookApp,
+
+  "p2-weather": weatherApp,
+
+  "p2-music": pearTunesApp,
+
+  "p2-monkey": monkeyApp,
+
+  "p2-remark": remarkApp,
+
+  "p2-settings": settingsApp,
+
+  "p2-phone": phoneApp,
+
+  "p2-mail": mailApp,
+
+  "p2-compass": compassApp
 
 };
 
-/* =========================================================
-   SINGLE HOTSPOT ROUTER
-========================================================= */
+/*
+   IMPORTANT:
+   The clicked button's EXACT ID is used.
+   No neighboring app is guessed.
+*/
 
 document.addEventListener(
   "pointerup",
@@ -3633,11 +3110,10 @@ document.addEventListener(
 
     e.preventDefault();
     e.stopPropagation();
+    e.stopImmediatePropagation();
 
     if(
-      overlay.classList.contains(
-        "open"
-      )
+      overlay.classList.contains("open")
     ) return;
 
     let app = null;
@@ -3656,17 +3132,83 @@ document.addEventListener(
 
     }
 
-    if(
+    else if(
       currentPage === 2 &&
       button.classList.contains(
         "page2-hotspot"
       )
     ){
 
-      app =
-        page2Apps[
-          button.id
-        ];
+      /*
+         EXACT ID → EXACT APP
+      */
+
+      switch(button.id){
+
+        case "p2-lingo":
+          app = lingoApp;
+          break;
+
+        case "p2-splash":
+          app = splashfaceApp;
+          break;
+
+        case "p2-thumb":
+          app = tumsApp;
+          break;
+
+        case "p2-danwarp":
+          app = danwarpApp;
+          break;
+
+        case "p2-image":
+          app = imageApp;
+          break;
+
+        case "p2-chrono":
+          app = chronoApp;
+          break;
+
+        case "p2-zaplook":
+          app = zaplookApp;
+          break;
+
+        case "p2-weather":
+          app = weatherApp;
+          break;
+
+        case "p2-music":
+          app = pearTunesApp;
+          break;
+
+        case "p2-monkey":
+          app = monkeyApp;
+          break;
+
+        case "p2-remark":
+          app = remarkApp;
+          break;
+
+        case "p2-settings":
+          app = settingsApp;
+          break;
+
+        case "p2-phone":
+          app = phoneApp;
+          break;
+
+        case "p2-mail":
+          app = mailApp;
+          break;
+
+        case "p2-compass":
+          app = compassApp;
+          break;
+
+        default:
+          app = null;
+
+      }
 
     }
 
@@ -3683,7 +3225,7 @@ document.addEventListener(
 );
 
 /* =========================================================
-   HOME
+   HOME BUTTON
 ========================================================= */
 
 document
@@ -3733,24 +3275,24 @@ function setupKeyboard(){
 
 function showKeyboard(field){
 
-  keyboardTarget = field;
+  keyboardTarget=field;
 
-  let keyboard =
+  let keyboard=
     document.getElementById(
       "pear-keyboard"
     );
 
   if(!keyboard){
 
-    keyboard =
+    keyboard=
       document.createElement(
         "div"
       );
 
-    keyboard.id =
+    keyboard.id=
       "pear-keyboard";
 
-    keyboard.innerHTML = `
+    keyboard.innerHTML=`
 
       <div
         class="keyboard-row"
@@ -3782,29 +3324,29 @@ function showKeyboard(field){
 
   renderKeyboard();
 
-  keyboard.style.display =
+  keyboard.style.display=
     "block";
 
-  requestAnimationFrame(()=>{
-    keyboard.classList.add(
-      "keyboard-show"
-    );
-  });
+  requestAnimationFrame(
+    ()=>{
+      keyboard.classList.add(
+        "keyboard-show"
+      );
+    }
+  );
 
 }
 
-function hideKeyboard(
-  immediate=false
-){
+function hideKeyboard(immediate=false){
 
-  const keyboard =
+  const keyboard=
     document.getElementById(
       "pear-keyboard"
     );
 
-  keyboardTarget = null;
+  keyboardTarget=null;
 
-  if(!keyboard) return;
+  if(!keyboard)return;
 
   keyboard.classList.remove(
     "keyboard-show"
@@ -3812,15 +3354,18 @@ function hideKeyboard(
 
   if(immediate){
 
-    keyboard.style.display =
+    keyboard.style.display=
       "none";
 
   }else{
 
-    setTimeout(()=>{
-      keyboard.style.display =
-        "none";
-    },250);
+    setTimeout(
+      ()=>{
+        keyboard.style.display=
+          "none";
+      },
+      250
+    );
 
   }
 
@@ -3828,14 +3373,14 @@ function hideKeyboard(
 
 function renderKeyboard(){
 
-  const keyboard =
+  const keyboard=
     document.getElementById(
       "pear-keyboard"
     );
 
-  if(!keyboard) return;
+  if(!keyboard)return;
 
-  const rows = [
+  const rows=[
 
     document.getElementById(
       "key-row1"
@@ -3856,7 +3401,7 @@ function renderKeyboard(){
   ];
 
   rows.forEach(
-    r=>r.innerHTML=""
+    row=>row.innerHTML=""
   );
 
   function key(
@@ -3866,18 +3411,17 @@ function renderKeyboard(){
     extra=""
   ){
 
-    const b =
+    const b=
       document.createElement(
         "button"
       );
 
     b.type="button";
 
-    b.className =
-      "pear-key " + extra;
+    b.className=
+      "pear-key "+extra;
 
-    b.textContent =
-      text;
+    b.textContent=text;
 
     b.addEventListener(
       "pointerdown",
@@ -3904,18 +3448,18 @@ function renderKeyboard(){
 
     "1234567890"
       .split("")
-      .forEach(x=>
-        key(
+      .forEach(
+        x=>key(
           rows[0],
           x,
           ()=>typeKey(x)
         )
       );
 
-    "-/:;()$&@\""
+    "-/:;()$&@"
       .split("")
-      .forEach(x=>
-        key(
+      .forEach(
+        x=>key(
           rows[1],
           x,
           ()=>typeKey(x)
@@ -3924,8 +3468,8 @@ function renderKeyboard(){
 
     ".,?!'+=%*#"
       .split("")
-      .forEach(x=>
-        key(
+      .forEach(
+        x=>key(
           rows[2],
           x,
           ()=>typeKey(x)
@@ -3934,44 +3478,42 @@ function renderKeyboard(){
 
   }else{
 
-    const row1 =
+    const row1=
       keyboardShift
         ? "QWERTYUIOP"
         : "qwertyuiop";
 
-    const row2 =
+    const row2=
       keyboardShift
         ? "ASDFGHJKL"
         : "asdfghjkl";
 
-    const row3 =
+    const row3=
       keyboardShift
         ? "ZXCVBNM"
         : "zxcvbnm";
 
-    row1.split("")
-      .forEach(x=>
-        key(
-          rows[0],
-          x.toUpperCase(),
-          ()=>typeKey(x)
-        )
-      );
+    row1.split("").forEach(
+      x=>key(
+        rows[0],
+        x.toUpperCase(),
+        ()=>typeKey(x)
+      )
+    );
 
-    row2.split("")
-      .forEach(x=>
-        key(
-          rows[1],
-          x.toUpperCase(),
-          ()=>typeKey(x)
-        )
-      );
+    row2.split("").forEach(
+      x=>key(
+        rows[1],
+        x.toUpperCase(),
+        ()=>typeKey(x)
+      )
+    );
 
     key(
       rows[2],
       "⇧",
       ()=>{
-        keyboardShift =
+        keyboardShift=
           !keyboardShift;
 
         renderKeyboard();
@@ -3979,14 +3521,13 @@ function renderKeyboard(){
       "wide"
     );
 
-    row3.split("")
-      .forEach(x=>
-        key(
-          rows[2],
-          x.toUpperCase(),
-          ()=>typeKey(x)
-        )
-      );
+    row3.split("").forEach(
+      x=>key(
+        rows[2],
+        x.toUpperCase(),
+        ()=>typeKey(x)
+      )
+    );
 
     key(
       rows[2],
@@ -4003,7 +3544,7 @@ function renderKeyboard(){
       ? "ABC"
       : "123",
     ()=>{
-      keyboardNumbers =
+      keyboardNumbers=
         !keyboardNumbers;
 
       keyboardShift=false;
@@ -4036,40 +3577,39 @@ function renderKeyboard(){
 
 function typeKey(char){
 
-  if(!keyboardTarget)
-    return;
+  if(!keyboardTarget)return;
 
-  const field =
+  const field=
     keyboardTarget;
 
-  const start =
+  const start=
     field.selectionStart ??
     field.value.length;
 
-  const end =
+  const end=
     field.selectionEnd ??
     start;
 
-  const value =
+  const value=
     keyboardNumbers
       ? char
       : keyboardShift
         ? char.toUpperCase()
         : char.toLowerCase();
 
-  field.value =
+  field.value=
     field.value.substring(
       0,
       start
-    ) +
-    value +
+    )+
+    value+
     field.value.substring(
       end
     );
 
   field.setSelectionRange(
-    start + value.length,
-    start + value.length
+    start+value.length,
+    start+value.length
   );
 
   field.dispatchEvent(
@@ -4094,30 +3634,29 @@ function typeKey(char){
 
 function backspace(){
 
-  if(!keyboardTarget)
-    return;
+  if(!keyboardTarget)return;
 
-  const field =
+  const field=
     keyboardTarget;
 
-  const start =
+  const start=
     field.selectionStart ??
     field.value.length;
 
-  const end =
+  const end=
     field.selectionEnd ??
     start;
 
   if(
-    start === end &&
-    start > 0
+    start===end &&
+    start>0
   ){
 
-    field.value =
+    field.value=
       field.value.substring(
         0,
         start-1
-      ) +
+      )+
       field.value.substring(
         end
       );
@@ -4129,11 +3668,11 @@ function backspace(){
 
   }else{
 
-    field.value =
+    field.value=
       field.value.substring(
         0,
         start
-      ) +
+      )+
       field.value.substring(
         end
       );
@@ -4155,7 +3694,7 @@ function backspace(){
 }
 
 /* =========================================================
-   PREVENT APP FROM TRIGGERING PHONE SWIPES
+   STOP APP TOUCH FROM BECOMING PHONE SWIPE
 ========================================================= */
 
 overlay.addEventListener(

@@ -6,7 +6,6 @@
 <title>Pear Phone OS</title>
 
 <style>
-
 *{
   box-sizing:border-box;
   -webkit-tap-highlight-color:transparent;
@@ -27,9 +26,9 @@ body{
   justify-content:center;
 }
 
-/* =========================
+/* =========================================================
    PEAR PHONE
-========================= */
+========================================================= */
 
 #phone-container{
   position:relative;
@@ -42,9 +41,9 @@ body{
   user-select:none;
 }
 
-/* =========================
-   PAGE 2 IMAGE
-========================= */
+/* =========================================================
+   PAGE 2
+========================================================= */
 
 #page2{
   position:absolute;
@@ -66,15 +65,14 @@ body{
   transform:translateY(0) scale(1);
 }
 
-/* =========================
+/* =========================================================
    HOTSPOTS
-========================= */
+========================================================= */
 
 .hotspot{
   position:absolute;
-  border:0 !important;
-  outline:none !important;
-  background:transparent !important;
+  border:0;
+  background:transparent;
   padding:0;
   margin:0;
   border-radius:50%;
@@ -82,26 +80,16 @@ body{
   touch-action:manipulation;
   -webkit-appearance:none;
   appearance:none;
-  box-shadow:none !important;
-  z-index:300;
-}
-
-.hotspot:hover,
-.hotspot:focus,
-.hotspot:focus-visible{
-  background:transparent !important;
-  border:0 !important;
-  outline:none !important;
-  box-shadow:none !important;
+  z-index:200;
 }
 
 .hotspot:active{
   transform:scale(.93);
 }
 
-/* =========================
-   PAGE 1
-========================= */
+/* =========================================================
+   PAGE 1 HOTSPOTS
+========================================================= */
 
 #messages{
   left:43.1%;
@@ -215,9 +203,9 @@ body{
   aspect-ratio:1;
 }
 
-/* =========================
+/* =========================================================
    HOME
-========================= */
+========================================================= */
 
 #home{
   position:absolute;
@@ -225,35 +213,30 @@ body{
   top:78.8%;
   width:8.2%;
   aspect-ratio:1;
-  border:0 !important;
-  background:transparent !important;
+  border:0;
+  background:transparent;
   border-radius:50%;
   cursor:pointer;
-  z-index:400;
-  outline:none !important;
-  box-shadow:none !important;
+  z-index:1000;
 }
 
-/* =========================
-   PAGE 2
-========================= */
+/* =========================================================
+   PAGE 2 HOTSPOTS
+========================================================= */
 
-#phone-container:not(.page-two) .page2-hotspot{
-  display:none !important;
-  pointer-events:none !important;
-}
-
-#phone-container.page-two .page1-hotspot{
-  display:block;
-  pointer-events:none !important;
+.page2-hotspot{
+  display:none;
+  z-index:300;
+  pointer-events:auto;
 }
 
 #phone-container.page-two .page2-hotspot{
-  display:block !important;
-  pointer-events:auto !important;
+  display:block;
 }
 
-/* PAGE 2 POSITIONS */
+#phone-container.page-two > .page1-hotspot{
+  pointer-events:none;
+}
 
 #p2-lingo{
   left:37%;
@@ -367,9 +350,9 @@ body{
   aspect-ratio:1;
 }
 
-/* =========================
+/* =========================================================
    APP WINDOW
-========================= */
+========================================================= */
 
 #overlay{
   position:absolute;
@@ -399,7 +382,7 @@ body{
   color:#111;
 }
 
-.app-header{
+.window-header{
   flex:0 0 auto;
   display:flex;
   align-items:center;
@@ -411,20 +394,17 @@ body{
   font-size:15px;
 }
 
-.back-button{
+.back{
   width:30px;
   height:30px;
-  flex:0 0 30px;
   border-radius:50%;
   border:1px solid #bbb;
   background:linear-gradient(#fff,#ddd);
   font-size:23px;
-  line-height:25px;
   cursor:pointer;
-  padding:0;
 }
 
-.app-content{
+.window-body{
   flex:1;
   min-height:0;
   overflow-y:auto;
@@ -433,46 +413,23 @@ body{
   -webkit-overflow-scrolling:touch;
 }
 
-.app-content h2{
-  margin:0 0 10px;
-}
-
-.app-content h3{
-  margin:14px 0 7px;
-}
-
-.app-content p{
-  line-height:1.4;
-}
-
 .card{
-  background:#fff;
+  background:white;
   border:1px solid #ddd;
   border-radius:13px;
-  padding:11px;
-  margin-bottom:9px;
+  padding:10px;
+  margin-bottom:10px;
 }
 
-.app-button{
-  padding:9px 13px;
-  border-radius:11px;
+.button,
+button:not(.hotspot):not(#home){
+  padding:8px 12px;
+  border-radius:10px;
   border:1px solid #bbb;
   background:linear-gradient(#fff,#ddd);
-  color:#111;
   font-weight:700;
   cursor:pointer;
   margin:3px;
-  font-family:inherit;
-}
-
-.app-button:active{
-  transform:scale(.96);
-}
-
-.row{
-  display:flex;
-  gap:7px;
-  flex-wrap:wrap;
 }
 
 input,
@@ -485,33 +442,40 @@ select{
   border:1px solid #bbb;
   border-radius:10px;
   outline:none;
-  background:#fff;
-  color:#111;
+  margin-bottom:8px;
 }
 
 textarea{
-  min-height:130px;
+  min-height:100px;
 }
 
-.bubble{
-  padding:9px 12px;
+.row{
+  display:flex;
+  gap:7px;
+  flex-wrap:wrap;
+}
+
+.message{
+  padding:8px 11px;
+  border-radius:16px;
+  margin:5px 0;
+  max-width:80%;
   width:max-content;
-  max-width:82%;
-  background:#dedfe3;
-  border-radius:17px;
-  margin-bottom:7px;
 }
 
-.bubble.me{
+.message.received{
+  background:#ddd;
+}
+
+.message.sent{
+  background:#168ce0;
+  color:white;
   margin-left:auto;
-  background:linear-gradient(#58b9ff,#1389df);
-  color:#fff;
 }
 
 .stock{
   display:flex;
   justify-content:space-between;
-  align-items:center;
   padding:10px;
   margin-bottom:7px;
   background:#fff;
@@ -519,27 +483,14 @@ textarea{
   border-radius:12px;
 }
 
-.photos{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:6px;
-}
-
-.photos img{
-  width:100%;
-  aspect-ratio:1;
-  object-fit:cover;
-  border-radius:10px;
-}
-
-.camera-video{
-  width:100%;
-  border-radius:14px;
-  background:#000;
+.big{
+  font-size:42px;
+  text-align:center;
+  padding:15px;
 }
 
 .map{
-  height:180px;
+  height:170px;
   border-radius:15px;
   background:linear-gradient(135deg,#d6e5c7,#e7dfb9);
   display:flex;
@@ -548,102 +499,31 @@ textarea{
   font-size:55px;
 }
 
-.big-display{
-  text-align:center;
-  font-size:38px;
-  font-weight:900;
-  padding:20px 5px;
+.photos{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:6px;
 }
 
-.result{
-  padding:10px;
+.photos div{
+  aspect-ratio:1;
   border-radius:10px;
-  background:#eef0f2;
-  margin-top:8px;
-}
-
-.game{
-  text-align:center;
-  padding:8px;
-}
-
-.game-button{
-  width:110px;
-  height:110px;
-  border-radius:50%;
-  border:0;
-  background:linear-gradient(145deg,#ffdb6b,#ff9f43);
+  display:flex;
+  align-items:center;
+  justify-content:center;
   font-size:35px;
-  cursor:pointer;
+  background:#ddd;
 }
 
-/* =========================
-   DARK MODE
-========================= */
-
-body.dark-mode #app-window{
-  background:#18191c;
-  color:#f4f4f4;
+.camera-video{
+  width:100%;
+  border-radius:14px;
+  background:#000;
 }
 
-body.dark-mode .app-header{
-  background:linear-gradient(#292b30,#1d1f23);
-  color:#fff;
-  border-bottom-color:#444;
-}
-
-body.dark-mode .back-button{
-  background:linear-gradient(#444,#252525);
-  color:#fff;
-  border-color:#555;
-}
-
-body.dark-mode .card,
-body.dark-mode .stock{
-  background:#24262a;
-  border-color:#3d3f44;
-  color:#f4f4f4;
-}
-
-body.dark-mode .app-button{
-  background:linear-gradient(#444,#292929);
-  color:#fff;
-  border-color:#555;
-}
-
-body.dark-mode input,
-body.dark-mode textarea,
-body.dark-mode select{
-  background:#24262a;
-  color:#fff;
-  border-color:#555;
-}
-
-body.dark-mode .result{
-  background:#292c31;
-}
-
-body.dark-mode .bubble{
-  background:#363940;
-  color:#fff;
-}
-
-/* IMPORTANT: INVISIBLE HOTSPOTS STAY INVISIBLE */
-
-body.dark-mode .hotspot,
-body.dark-mode .hotspot:hover,
-body.dark-mode .hotspot:focus,
-body.dark-mode .hotspot:focus-visible,
-body.dark-mode #home{
-  background:transparent !important;
-  border:0 !important;
-  outline:none !important;
-  box-shadow:none !important;
-}
-
-/* =========================
-   KEYBOARD
-========================= */
+/* =========================================================
+   CUSTOM KEYBOARD
+========================================================= */
 
 #pear-keyboard{
   position:absolute;
@@ -670,66 +550,75 @@ body.dark-mode #home{
   transform:translateY(0);
 }
 
-.pear-keyboard-row{
+.keyboard-row{
   display:flex;
   gap:3px;
   margin-bottom:3px;
 }
 
-.pear-keyboard-row:last-child{
+.keyboard-row:last-child{
   margin-bottom:0;
 }
 
-.pear-keyboard-row button{
+.pear-key{
   flex:1;
   min-width:0;
   height:29px;
-  border:0;
-  border-radius:5px;
-  background:#f5f5f7;
-  color:#111;
-  font-size:11px;
-  font-weight:800;
-  padding:0;
-  touch-action:manipulation;
-  user-select:none;
+  border:0!important;
+  border-radius:5px!important;
+  background:#f5f5f7!important;
+  color:#111!important;
+  font-size:11px!important;
+  font-weight:800!important;
+  padding:0!important;
+  margin:0!important;
 }
 
-.pear-keyboard-row button:active{
+.pear-key:active{
   transform:scale(.88);
-  background:#cfd0d4;
+  background:#cfd0d4!important;
 }
 
-.pear-keyboard-row.bottom button:first-child{
-  flex:1.2;
+.pear-key.wide{
+  flex:1.3;
 }
 
-.pear-keyboard-row.bottom button:nth-child(2){
+.pear-key.space{
   flex:5;
 }
 
-.pear-keyboard-row.bottom button:last-child{
-  flex:1.2;
+.pear-key.enter{
+  flex:1.3;
+}
+
+/* =========================================================
+   CAMERA
+========================================================= */
+
+#camera-video{
+  width:100%;
+  min-height:150px;
+  background:#000;
+  border-radius:14px;
+  object-fit:cover;
+}
+
+#camera-photo img{
+  width:100%;
+  border-radius:12px;
+  margin-top:8px;
 }
 
 @media(max-width:700px){
-
   #phone-container{
     width:100vw;
   }
 
-  #pear-keyboard{
-    left:3%;
-    width:94%;
+  .pear-key{
+    height:27px!important;
+    font-size:10px!important;
   }
-
-  .pear-keyboard-row button{
-    height:27px;
-    font-size:10px;
-  }
-
 }
-
 </style>
 </head>
 
@@ -737,339 +626,1658 @@ body.dark-mode #home{
 
 <div id="phone-container">
 
-<div id="page2"></div>
+  <div id="page2"></div>
 
-<!-- PAGE 1 -->
+  <!-- ================= PAGE 1 ================= -->
 
-<button class="hotspot page1-hotspot" id="messages"></button>
-<button class="hotspot page1-hotspot" id="camera"></button>
-<button class="hotspot page1-hotspot" id="splashface"></button>
-<button class="hotspot page1-hotspot" id="stocks"></button>
-<button class="hotspot page1-hotspot" id="maps"></button>
-<button class="hotspot page1-hotspot" id="photos"></button>
-<button class="hotspot page1-hotspot" id="weather"></button>
-<button class="hotspot page1-hotspot" id="notes"></button>
-<button class="hotspot page1-hotspot" id="peartunes"></button>
-<button class="hotspot page1-hotspot" id="settings"></button>
-<button class="hotspot page1-hotspot" id="clock"></button>
-<button class="hotspot page1-hotspot" id="videos"></button>
-<button class="hotspot page1-hotspot" id="phone"></button>
-<button class="hotspot page1-hotspot" id="mail"></button>
-<button class="hotspot page1-hotspot" id="compass"></button>
-<button class="hotspot page1-hotspot" id="music"></button>
+  <button class="hotspot page1-hotspot" id="messages"></button>
+  <button class="hotspot page1-hotspot" id="camera"></button>
+  <button class="hotspot page1-hotspot" id="splashface"></button>
+  <button class="hotspot page1-hotspot" id="stocks"></button>
+  <button class="hotspot page1-hotspot" id="maps"></button>
+  <button class="hotspot page1-hotspot" id="photos"></button>
+  <button class="hotspot page1-hotspot" id="weather"></button>
+  <button class="hotspot page1-hotspot" id="notes"></button>
+  <button class="hotspot page1-hotspot" id="peartunes"></button>
+  <button class="hotspot page1-hotspot" id="settings"></button>
+  <button class="hotspot page1-hotspot" id="clock"></button>
+  <button class="hotspot page1-hotspot" id="videos"></button>
+  <button class="hotspot page1-hotspot" id="phone"></button>
+  <button class="hotspot page1-hotspot" id="mail"></button>
+  <button class="hotspot page1-hotspot" id="compass"></button>
+  <button class="hotspot page1-hotspot" id="music"></button>
 
-<!-- PAGE 2 -->
+  <!-- ================= PAGE 2 ================= -->
 
-<button class="hotspot page2-hotspot" id="p2-lingo"></button>
-<button class="hotspot page2-hotspot" id="p2-splash"></button>
-<button class="hotspot page2-hotspot" id="p2-thumb"></button>
-<button class="hotspot page2-hotspot" id="p2-danwarp"></button>
-<button class="hotspot page2-hotspot" id="p2-image"></button>
-<button class="hotspot page2-hotspot" id="p2-chrono"></button>
-<button class="hotspot page2-hotspot" id="p2-zaplook"></button>
-<button class="hotspot page2-hotspot" id="p2-weather"></button>
-<button class="hotspot page2-hotspot" id="p2-music"></button>
-<button class="hotspot page2-hotspot" id="p2-monkey"></button>
-<button class="hotspot page2-hotspot" id="p2-remark"></button>
-<button class="hotspot page2-hotspot" id="p2-settings"></button>
-<button class="hotspot page2-hotspot" id="p2-phone"></button>
-<button class="hotspot page2-hotspot" id="p2-mail"></button>
-<button class="hotspot page2-hotspot" id="p2-compass"></button>
-<button class="hotspot page2-hotspot" id="p2-music2"></button>
+  <button class="hotspot page2-hotspot" id="p2-lingo"></button>
+  <button class="hotspot page2-hotspot" id="p2-splash"></button>
+  <button class="hotspot page2-hotspot" id="p2-thumb"></button>
+  <button class="hotspot page2-hotspot" id="p2-danwarp"></button>
+  <button class="hotspot page2-hotspot" id="p2-image"></button>
+  <button class="hotspot page2-hotspot" id="p2-chrono"></button>
+  <button class="hotspot page2-hotspot" id="p2-zaplook"></button>
+  <button class="hotspot page2-hotspot" id="p2-weather"></button>
+  <button class="hotspot page2-hotspot" id="p2-music"></button>
+  <button class="hotspot page2-hotspot" id="p2-monkey"></button>
+  <button class="hotspot page2-hotspot" id="p2-remark"></button>
+  <button class="hotspot page2-hotspot" id="p2-settings"></button>
+  <button class="hotspot page2-hotspot" id="p2-phone"></button>
+  <button class="hotspot page2-hotspot" id="p2-mail"></button>
+  <button class="hotspot page2-hotspot" id="p2-compass"></button>
+  <button class="hotspot page2-hotspot" id="p2-music2"></button>
 
-<button id="home"></button>
+  <button id="home"></button>
 
-<div id="overlay">
-  <div id="app-window"></div>
-</div>
+  <div id="overlay">
+    <div id="app-window"></div>
+  </div>
 
 </div>
 
 <script>
+/* =========================================================
+   PEAR PHONE OS
+   EVERYTHING IS INSIDE THIS FILE.
+   NO APP.JS.
+========================================================= */
 
-/* ============================================================
-   CORE
-============================================================ */
-
-const phone =
-  document.getElementById("phone-container");
-
-const overlay =
-  document.getElementById("overlay");
-
-const appWindow =
-  document.getElementById("app-window");
+const phone = document.getElementById("phone-container");
+const overlay = document.getElementById("overlay");
+const appWindow = document.getElementById("app-window");
 
 let currentPage = 1;
 let cameraStream = null;
-let keyboardTarget = null;
-let keyboardShift = false;
-let audioContext = null;
-
-/* ============================================================
-   HTML ESCAPE
-============================================================ */
+let cameraFacing = "user";
 
 function escapeHTML(value){
-
-  return String(value)
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
-
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 }
 
-/* ============================================================
+/* =========================================================
    PAGE SWITCHING
-============================================================ */
+========================================================= */
 
 function showPage(page){
 
+  if(page === currentPage) return;
+
   currentPage = page;
 
-  if(page === 2){
-
-    phone.classList.add("page-two");
-
-  }else{
-
-    phone.classList.remove("page-two");
-
-  }
-
-}
-
-function goHome(){
+  phone.classList.toggle(
+    "page-two",
+    page === 2
+  );
 
   closeApp();
 
-  showPage(1);
-
 }
 
-/* ============================================================
-   SWIPE DETECTION
-   IMPORTANT:
-   NEVER PROCESS SWIPES WHEN CLICKING AN APP
-============================================================ */
+document.addEventListener("keydown",function(e){
+
+  if(
+    e.target.matches("input,textarea,select")
+  ) return;
+
+  if(e.key === "ArrowUp" && currentPage === 1){
+
+    e.preventDefault();
+    showPage(2);
+
+  }
+
+  if(e.key === "ArrowDown" && currentPage === 2){
+
+    e.preventDefault();
+    showPage(1);
+
+  }
+
+});
+
+/* =========================================================
+   TOUCH SWIPING
+========================================================= */
 
 let touchStartX = 0;
 let touchStartY = 0;
-let touchTarget = null;
 
-phone.addEventListener(
-  "touchstart",
-  function(e){
+phone.addEventListener("touchstart",function(e){
 
-    if(!e.touches.length) return;
+  if(overlay.classList.contains("open")) return;
 
-    touchStartX =
-      e.touches[0].clientX;
+  if(!e.touches[0]) return;
 
-    touchStartY =
-      e.touches[0].clientY;
+  touchStartX = e.touches[0].clientX;
+  touchStartY = e.touches[0].clientY;
 
-    touchTarget =
-      e.target;
+},{passive:true});
 
-  },
-  {passive:true}
-);
+phone.addEventListener("touchend",function(e){
 
-phone.addEventListener(
-  "touchend",
-  function(e){
+  if(overlay.classList.contains("open")) return;
 
-    if(!e.changedTouches.length) return;
+  if(!e.changedTouches[0]) return;
 
-    /*
-      If the user touched an app button,
-      DO NOT treat it as a page swipe.
-    */
+  const dx =
+    e.changedTouches[0].clientX - touchStartX;
 
-    if(
-      touchTarget &&
-      touchTarget.closest &&
-      touchTarget.closest(".hotspot")
-    ){
-      return;
-    }
+  const dy =
+    e.changedTouches[0].clientY - touchStartY;
 
-    if(overlay.classList.contains("open")){
-      return;
-    }
+  if(
+    Math.abs(dy) < 60 ||
+    Math.abs(dy) <= Math.abs(dx)
+  ) return;
 
-    const x =
-      e.changedTouches[0].clientX;
+  if(dy < 0 && currentPage === 1){
+    showPage(2);
+  }
 
-    const y =
-      e.changedTouches[0].clientY;
+  if(dy > 0 && currentPage === 2){
+    showPage(1);
+  }
 
-    const dx =
-      x - touchStartX;
+},{passive:true});
 
-    const dy =
-      y - touchStartY;
+/* =========================================================
+   MOUSE / TRACKPAD SWIPE
+========================================================= */
 
-    if(
-      Math.abs(dy) > 70 &&
-      Math.abs(dy) > Math.abs(dx)
-    ){
-
-      if(dy < 0){
-        showPage(2);
-      }else{
-        showPage(1);
-      }
-
-    }
-
-  },
-  {passive:true}
-);
-
-/* MOUSE */
-
-let mouseStartX = 0;
 let mouseStartY = 0;
-let mouseTarget = null;
-let mouseDown = false;
+let mouseDragging = false;
 
 phone.addEventListener("mousedown",function(e){
 
-  if(e.button !== 0) return;
+  if(overlay.classList.contains("open")) return;
 
-  mouseDown = true;
-
-  mouseStartX = e.clientX;
   mouseStartY = e.clientY;
-
-  mouseTarget = e.target;
+  mouseDragging = true;
 
 });
 
 phone.addEventListener("mouseup",function(e){
 
-  if(!mouseDown) return;
+  if(!mouseDragging) return;
 
-  mouseDown = false;
+  mouseDragging = false;
 
-  if(
-    mouseTarget &&
-    mouseTarget.closest &&
-    mouseTarget.closest(".hotspot")
-  ){
-    return;
+  if(overlay.classList.contains("open")) return;
+
+  const dy = e.clientY - mouseStartY;
+
+  if(Math.abs(dy) < 60) return;
+
+  if(dy < 0 && currentPage === 1){
+    showPage(2);
   }
 
-  if(overlay.classList.contains("open")){
-    return;
-  }
-
-  const dx =
-    e.clientX - mouseStartX;
-
-  const dy =
-    e.clientY - mouseStartY;
-
-  if(
-    Math.abs(dy) > 80 &&
-    Math.abs(dy) > Math.abs(dx)
-  ){
-
-    if(dy < 0){
-      showPage(2);
-    }else{
-      showPage(1);
-    }
-
+  if(dy > 0 && currentPage === 2){
+    showPage(1);
   }
 
 });
 
-/* ============================================================
-   APP OPEN / CLOSE
-============================================================ */
+/* =========================================================
+   APP SYSTEM
+========================================================= */
 
 function openApp(title,content){
 
   stopCamera();
+  hideKeyboard(true);
 
   appWindow.innerHTML = `
-
-    <div class="app-header">
-
+    <div class="window-header">
       <button
-        class="back-button"
-        id="app-back"
+        class="back"
         type="button"
-      >
-        ‹
-      </button>
+        id="app-back"
+      >‹</button>
 
-      <strong>
-        ${escapeHTML(title)}
-      </strong>
-
+      <strong>${escapeHTML(title)}</strong>
     </div>
 
-    <div class="app-content">
+    <div class="window-body">
       ${content}
     </div>
-
   `;
 
   overlay.classList.add("open");
 
-  document.getElementById("app-back")
+  document
+    .getElementById("app-back")
     .onclick = closeApp;
 
-  setupKeyboardFields();
+  setupKeyboard();
 
 }
 
 function closeApp(){
 
   stopCamera();
+  hideKeyboard(true);
 
   overlay.classList.remove("open");
 
   appWindow.innerHTML = "";
 
-  hidePearKeyboard();
+}
+
+/* =========================================================
+   CAMERA
+========================================================= */
+
+function cameraApp(){
+
+  openApp(
+    "Camera",
+    `
+      <div class="card">
+
+        <video
+          id="camera-video"
+          autoplay
+          playsinline
+          muted
+        ></video>
+
+        <div class="row">
+
+          <button
+            class="button"
+            onclick="startCamera()"
+          >
+            📷 Start Camera
+          </button>
+
+          <button
+            class="button"
+            onclick="capturePhoto()"
+          >
+            ⭕ Take Photo
+          </button>
+
+          <button
+            class="button"
+            onclick="flipCamera()"
+          >
+            🔄 Flip Camera
+          </button>
+
+        </div>
+
+        <div id="camera-photo"></div>
+
+        <canvas
+          id="camera-canvas"
+          style="display:none"
+        ></canvas>
+
+      </div>
+    `
+  );
 
 }
 
-/* ============================================================
+async function startCamera(){
+
+  try{
+
+    if(
+      !navigator.mediaDevices ||
+      !navigator.mediaDevices.getUserMedia
+    ){
+
+      alert(
+        "Camera access requires HTTPS or localhost."
+      );
+
+      return;
+
+    }
+
+    stopCamera();
+
+    const video =
+      document.getElementById("camera-video");
+
+    if(!video) return;
+
+    cameraStream =
+      await navigator.mediaDevices.getUserMedia({
+
+        video:{
+          width:{ideal:1280},
+          height:{ideal:720},
+          facingMode:cameraFacing
+        },
+
+        audio:false
+
+      });
+
+    video.srcObject = cameraStream;
+
+    await video.play().catch(()=>{});
+
+    /*
+      Try to use the Freenove / USB camera
+      when one is connected.
+    */
+
+    try{
+
+      const devices =
+        await navigator.mediaDevices.enumerateDevices();
+
+      const cameras =
+        devices.filter(
+          d => d.kind === "videoinput"
+        );
+
+      const usbCamera =
+        cameras.find(
+          d => /freenove/i.test(d.label)
+        ) ||
+        cameras.find(
+          d => /usb|webcam|camera/i.test(d.label)
+        );
+
+      const currentTrack =
+        cameraStream.getVideoTracks()[0];
+
+      const currentId =
+        currentTrack
+          ?.getSettings?.()
+          ?.deviceId || "";
+
+      if(
+        usbCamera &&
+        usbCamera.deviceId &&
+        usbCamera.deviceId !== currentId
+      ){
+
+        currentTrack.stop();
+
+        cameraStream =
+          await navigator.mediaDevices.getUserMedia({
+
+            video:{
+              deviceId:{
+                exact:usbCamera.deviceId
+              },
+              width:{ideal:1280},
+              height:{ideal:720}
+            },
+
+            audio:false
+
+          });
+
+        video.srcObject = cameraStream;
+
+        await video.play().catch(()=>{});
+
+      }
+
+    }catch(error){
+
+      console.log(
+        "Using currently selected camera."
+      );
+
+    }
+
+  }catch(error){
+
+    console.error(error);
+
+    alert(
+      "Camera access was not available. " +
+      "Check your camera connection and browser permission."
+    );
+
+  }
+
+}
+
+function stopCamera(){
+
+  if(!cameraStream) return;
+
+  cameraStream
+    .getTracks()
+    .forEach(track => track.stop());
+
+  cameraStream = null;
+
+}
+
+function flipCamera(){
+
+  cameraFacing =
+    cameraFacing === "user"
+      ? "environment"
+      : "user";
+
+  startCamera();
+
+}
+
+function capturePhoto(){
+
+  const video =
+    document.getElementById("camera-video");
+
+  const canvas =
+    document.getElementById("camera-canvas");
+
+  const photo =
+    document.getElementById("camera-photo");
+
+  if(!video || !canvas || !photo) return;
+
+  if(!video.videoWidth){
+
+    alert("Start the camera first.");
+    return;
+
+  }
+
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+
+  const ctx =
+    canvas.getContext("2d");
+
+  ctx.drawImage(
+    video,
+    0,
+    0,
+    canvas.width,
+    canvas.height
+  );
+
+  photo.innerHTML = `
+    <img
+      src="${canvas.toDataURL("image/png")}"
+    >
+  `;
+
+}
+
+/* =========================================================
+   MESSAGES
+========================================================= */
+
+const chats = {
+  Chloe:[
+    "Heyyy 👋",
+    "What are you doing?",
+    "HAHA wait 😭"
+  ],
+  Sam:[
+    "Yo!",
+    "Are you free later?",
+    "That's actually crazy 😂"
+  ],
+  Cat:[
+    "meow",
+    "feed me",
+    "MEOWWW 😼"
+  ]
+};
+
+function messagesApp(){
+
+  openApp(
+    "Messages",
+    `
+      <div class="card">
+
+        <h2>💬 Messages</h2>
+
+        ${Object.keys(chats).map(name => `
+          <button
+            onclick="openChat('${name}')"
+          >
+            💬 ${name}
+          </button>
+        `).join("")}
+
+        <button onclick="newMessage()">
+          ✏️ New Message
+        </button>
+
+      </div>
+    `
+  );
+
+}
+
+function openChat(name){
+
+  openApp(
+    name,
+    `
+      <div class="card">
+
+        <div id="chat-box">
+
+          ${chats[name].slice(0,2).map(
+            msg => `
+              <div class="message received">
+                ${escapeHTML(msg)}
+              </div>
+            `
+          ).join("")}
+
+        </div>
+
+        <input
+          id="message-input"
+          placeholder="Message..."
+        >
+
+        <button
+          onclick="sendMessage('${name}')"
+        >
+          Send
+        </button>
+
+        <button
+          onclick="randomReply('${name}')"
+        >
+          🤖 Random Reply
+        </button>
+
+      </div>
+    `
+  );
+
+}
+
+function sendMessage(name){
+
+  const input =
+    document.getElementById("message-input");
+
+  const chat =
+    document.getElementById("chat-box");
+
+  if(!input || !chat || !input.value.trim())
+    return;
+
+  chat.innerHTML += `
+    <div class="message sent">
+      ${escapeHTML(input.value)}
+    </div>
+  `;
+
+  input.value = "";
+
+  setTimeout(
+    ()=>randomReply(name),
+    500
+  );
+
+}
+
+function randomReply(name){
+
+  const chat =
+    document.getElementById("chat-box");
+
+  if(!chat) return;
+
+  const list = chats[name];
+
+  const reply =
+    list[Math.floor(Math.random()*list.length)];
+
+  chat.innerHTML += `
+    <div class="message received">
+      ${escapeHTML(reply)}
+    </div>
+  `;
+
+}
+
+function newMessage(){
+
+  openApp(
+    "New Message",
+    `
+      <div class="card">
+
+        <input
+          placeholder="Contact"
+        >
+
+        <textarea
+          placeholder="Message..."
+        ></textarea>
+
+        <button
+          onclick="alert('Message sent! 📱')"
+        >
+          Send
+        </button>
+
+      </div>
+    `
+  );
+
+}
+
+/* =========================================================
+   SPLASHFACE
+========================================================= */
+
+function splashfaceApp(){
+
+  let count = 0;
+
+  openApp(
+    "SplashFace",
+    `
+      <div class="card">
+
+        <div
+          class="big"
+          id="splash-count"
+        >
+          😎
+        </div>
+
+        <h2>Welcome to SplashFace</h2>
+
+        <button
+          onclick="
+            count++;
+            document.getElementById('splash-count').textContent =
+            ['😎','😂','🤯','😍','🥳'][count%5];
+          "
+        >
+          Change Face
+        </button>
+
+        <button
+          onclick="
+            alert('You have 12 new Splashes!')
+          "
+        >
+          🔔 Check Notifications
+        </button>
+
+      </div>
+    `
+  );
+
+}
+
+/* =========================================================
+   STOCKS
+========================================================= */
+
+function stocksApp(){
+
+  const stocks = [
+    ["PEAR","$184.32","+2.4%"],
+    ["AAPL","$245.17","+1.8%"],
+    ["GOOG","$241.82","-0.6%"],
+    ["NOVA","$82.44","+4.1%"]
+  ];
+
+  openApp(
+    "Stocks",
+    `
+      <div class="card">
+
+        <h2>📈 Stocks</h2>
+
+        ${stocks.map(s=>`
+          <div class="stock">
+            <strong>${s[0]}</strong>
+            <span>
+              ${s[1]} &nbsp; ${s[2]}
+            </span>
+          </div>
+        `).join("")}
+
+        <button
+          onclick="alert('Market refreshed!')"
+        >
+          🔄 Refresh
+        </button>
+
+      </div>
+    `
+  );
+
+}
+
+/* =========================================================
+   MAPS
+========================================================= */
+
+function mapsApp(){
+
+  openApp(
+    "Maps",
+    `
+      <div class="card">
+
+        <div class="map">
+          📍
+        </div>
+
+        <input
+          id="map-search"
+          placeholder="Search location..."
+        >
+
+        <button
+          onclick="
+            const v=document.getElementById('map-search').value;
+            alert(v ? 'Searching for '+v+'...' : 'Enter a location');
+          "
+        >
+          Search
+        </button>
+
+        <button
+          onclick="alert('Current location found! 📍')"
+        >
+          📍 My Location
+        </button>
+
+      </div>
+    `
+  );
+
+}
+
+/* =========================================================
+   PHOTOS
+========================================================= */
+
+function photosApp(){
+
+  openApp(
+    "Photos",
+    `
+      <div class="card">
+
+        <h2>📸 Photos</h2>
+
+        <div class="photos">
+
+          <div>🌴</div>
+          <div>🏒</div>
+          <div>🌅</div>
+          <div>🐶</div>
+          <div>🏖️</div>
+          <div>🚗</div>
+
+        </div>
+
+        <button
+          onclick="alert('Photo selected!')"
+        >
+          Open Photo
+        </button>
+
+      </div>
+    `
+  );
+
+}
+
+/* =========================================================
+   WEATHER
+========================================================= */
+
+function weatherApp(){
+
+  let temp = 22;
+
+  openApp(
+    "Weather",
+    `
+      <div class="card">
+
+        <div
+          class="big"
+          id="temperature"
+        >
+          ☀️ ${temp}°C
+        </div>
+
+        <h2>Sunny</h2>
+
+        <p>
+          Feels like ${temp + 2}°C
+        </p>
+
+        <button
+          onclick="
+            temp++;
+            document.getElementById('temperature').textContent =
+            '☀️ '+temp+'°C';
+          "
+        >
+          🔥 Increase
+        </button>
+
+        <button
+          onclick="
+            temp--;
+            document.getElementById('temperature').textContent =
+            '☀️ '+temp+'°C';
+          "
+        >
+          ❄️ Decrease
+        </button>
+
+      </div>
+    `
+  );
+
+}
+
+/* =========================================================
+   NOTES
+========================================================= */
+
+function notesApp(){
+
+  openApp(
+    "Notes",
+    `
+      <div class="card">
+
+        <textarea
+          id="note-text"
+          placeholder="Write a note..."
+        ></textarea>
+
+        <button
+          onclick="
+            localStorage.setItem(
+              'pear-note',
+              document.getElementById('note-text').value
+            );
+            alert('Note saved!');
+          "
+        >
+          💾 Save
+        </button>
+
+        <button
+          onclick="
+            document.getElementById('note-text').value =
+            localStorage.getItem('pear-note') || '';
+          "
+        >
+          📖 Load
+        </button>
+
+      </div>
+    `
+  );
+
+}
+
+/* =========================================================
+   PEAR TUNES / MUSIC
+========================================================= */
+
+let musicPlaying = false;
+
+function pearTunesApp(){
+
+  openApp(
+    "PearTunes",
+    `
+      <div class="card">
+
+        <div
+          class="big"
+          id="music-icon"
+        >
+          🎵
+        </div>
+
+        <h2>Now Playing</h2>
+
+        <p id="song-name">
+          Pear Phone Anthem
+        </p>
+
+        <button
+          onclick="
+            musicPlaying=!musicPlaying;
+            document.getElementById('music-icon').textContent =
+            musicPlaying ? '🔊' : '🎵';
+          "
+        >
+          ▶️ / ⏸️
+        </button>
+
+        <button
+          onclick="
+            document.getElementById('song-name').textContent =
+            'Next Pear Song 🎶';
+          "
+        >
+          ⏭️ Next
+        </button>
+
+      </div>
+    `
+  );
+
+}
+
+/* =========================================================
+   SETTINGS
+========================================================= */
+
+function settingsApp(){
+
+  openApp(
+    "Settings",
+    `
+      <div class="card">
+
+        <h2>⚙️ Settings</h2>
+
+        <button
+          onclick="alert('Wi-Fi connected 📶')"
+        >
+          📶 Wi-Fi
+        </button>
+
+        <button
+          onclick="alert('Bluetooth connected 🔵')"
+        >
+          🔵 Bluetooth
+        </button>
+
+        <button
+          onclick="alert('Pear Phone OS is up to date!')"
+        >
+          🔄 Software Update
+        </button>
+
+        <button
+          onclick="
+            document.body.style.background =
+            document.body.style.background === 'white'
+              ? '#111'
+              : 'white';
+          "
+        >
+          🌙 Appearance
+        </button>
+
+      </div>
+    `
+  );
+
+}
+
+/* =========================================================
+   CLOCK
+========================================================= */
+
+function clockApp(){
+
+  openApp(
+    "Clock",
+    `
+      <div class="card">
+
+        <div
+          class="big"
+          id="clock-time"
+        >
+          --:--:--
+        </div>
+
+        <button
+          onclick="updateClock()"
+        >
+          🔄 Refresh
+        </button>
+
+      </div>
+    `
+  );
+
+  updateClock();
+
+}
+
+function updateClock(){
+
+  const el =
+    document.getElementById("clock-time");
+
+  if(!el) return;
+
+  el.textContent =
+    new Date().toLocaleTimeString();
+
+}
+
+/* =========================================================
+   VIDEOS
+========================================================= */
+
+function videosApp(){
+
+  openApp(
+    "Videos",
+    `
+      <div class="card">
+
+        <div class="big">▶️</div>
+
+        <h3>Pear Videos</h3>
+
+        <button
+          onclick="alert('Playing Pear Phone video!')"
+        >
+          ▶️ Play
+        </button>
+
+        <button
+          onclick="alert('Added to favourites! ⭐')"
+        >
+          ⭐ Favourite
+        </button>
+
+      </div>
+    `
+  );
+
+}
+
+/* =========================================================
+   PHONE
+========================================================= */
+
+function phoneApp(){
+
+  openApp(
+    "Phone",
+    `
+      <div class="card">
+
+        <div
+          class="big"
+          id="dial-number"
+        >
+          📞
+        </div>
+
+        <input
+          id="phone-number"
+          placeholder="Phone number"
+          type="tel"
+        >
+
+        <button
+          onclick="
+            const n=document.getElementById('phone-number').value;
+            alert(n ? 'Calling '+n+'...' : 'Enter a number');
+          "
+        >
+          📞 Call
+        </button>
+
+      </div>
+    `
+  );
+
+}
+
+/* =========================================================
+   MAIL
+========================================================= */
+
+function mailApp(){
+
+  openApp(
+    "Mail",
+    `
+      <div class="card">
+
+        <h2>✉️ Mail</h2>
+
+        <button
+          onclick="alert('You have 3 unread emails.')"
+        >
+          📬 Inbox
+        </button>
+
+        <button
+          onclick="
+            openApp(
+              'Compose',
+              '<div class=&quot;card&quot;>' +
+              '<input placeholder=&quot;To&quot;>' +
+              '<input placeholder=&quot;Subject&quot;>' +
+              '<textarea placeholder=&quot;Message&quot;></textarea>' +
+              '<button onclick=&quot;alert(\\'Email sent! ✉️\\')&quot;>Send</button>' +
+              '</div>'
+            )
+          "
+        >
+          ✏️ Compose
+        </button>
+
+      </div>
+    `
+  );
+
+}
+
+/* =========================================================
+   COMPASS
+========================================================= */
+
+function compassApp(){
+
+  let degree = 0;
+
+  openApp(
+    "Compass",
+    `
+      <div class="card">
+
+        <div
+          class="big"
+          id="compass-display"
+        >
+          🧭
+        </div>
+
+        <h2 id="direction">
+          North
+        </h2>
+
+        <button
+          onclick="
+            degree=(degree+45)%360;
+            document.getElementById('compass-display').textContent =
+            degree+'°';
+            document.getElementById('direction').textContent =
+            ['North','NE','East','SE','South','SW','West','NW'][Math.round(degree/45)%8];
+          "
+        >
+          🔄 Rotate
+        </button>
+
+      </div>
+    `
+  );
+
+}
+
+/* =========================================================
+   PAGE 2 APPS
+========================================================= */
+
+function lingoApp(){
+
+  openApp(
+    "Lingo",
+    `
+      <div class="card">
+
+        <h2>🌎 Lingo</h2>
+
+        <p>
+          Translate a word into Pear Language.
+        </p>
+
+        <input
+          id="lingo-input"
+          placeholder="Type something..."
+        >
+
+        <button
+          onclick="
+            const v=document.getElementById('lingo-input').value;
+            document.getElementById('lingo-result').textContent =
+            v ? v.split('').reverse().join('')+' 🍐' : 'Type something!';
+          "
+        >
+          Translate
+        </button>
+
+        <h2 id="lingo-result"></h2>
+
+      </div>
+    `
+  );
+
+}
+
+function tumsApp(){
+
+  let thumbs = 0;
+
+  openApp(
+    "Thumbs Up",
+    `
+      <div class="card">
+
+        <div
+          class="big"
+          id="thumb-count"
+        >
+          👍 0
+        </div>
+
+        <button
+          onclick="
+            thumbs++;
+            document.getElementById('thumb-count').textContent =
+            '👍 '+thumbs;
+          "
+        >
+          👍 Give Thumbs Up
+        </button>
+
+        <button
+          onclick="
+            thumbs=0;
+            document.getElementById('thumb-count').textContent =
+            '👍 0';
+          "
+        >
+          Reset
+        </button>
+
+      </div>
+    `
+  );
+
+}
+
+function danwarpApp(){
+
+  let warped = false;
+
+  openApp(
+    "DanWarp",
+    `
+      <div class="card">
+
+        <div
+          id="warp-box"
+          class="big"
+        >
+          🌀
+        </div>
+
+        <button
+          onclick="
+            warped=!warped;
+            document.getElementById('warp-box').style.transform =
+            warped ? 'rotate(180deg) scale(1.4)' : '';
+          "
+        >
+          🌀 Warp
+        </button>
+
+      </div>
+    `
+  );
+
+}
+
+function imageApp(){
+
+  openApp(
+    "Image",
+    `
+      <div class="card">
+
+        <div class="big">
+          🖼️
+        </div>
+
+        <input
+          type="file"
+          accept="image/*"
+          onchange="
+            const file=this.files[0];
+            if(!file)return;
+            const img=document.createElement('img');
+            img.src=URL.createObjectURL(file);
+            img.style.width='100%';
+            img.style.borderRadius='12px';
+            document.getElementById('image-preview').innerHTML='';
+            document.getElementById('image-preview').appendChild(img);
+          "
+        >
+
+        <div id="image-preview"></div>
+
+      </div>
+    `
+  );
+
+}
+
+function chronoApp(){
+
+  let seconds = 0;
+  let timer = null;
+
+  openApp(
+    "Chrono",
+    `
+      <div class="card">
+
+        <div
+          class="big"
+          id="chrono-time"
+        >
+          00:00
+        </div>
+
+        <button
+          onclick="
+            if(timer)return;
+            timer=setInterval(()=>{
+              seconds++;
+              const m=String(Math.floor(seconds/60)).padStart(2,'0');
+              const s=String(seconds%60).padStart(2,'0');
+              document.getElementById('chrono-time').textContent=m+':'+s;
+            },1000);
+          "
+        >
+          ▶️ Start
+        </button>
+
+        <button
+          onclick="
+            clearInterval(timer);
+            timer=null;
+          "
+        >
+          ⏸️ Stop
+        </button>
+
+        <button
+          onclick="
+            clearInterval(timer);
+            timer=null;
+            seconds=0;
+            document.getElementById('chrono-time').textContent='00:00';
+          "
+        >
+          🔄 Reset
+        </button>
+
+      </div>
+    `
+  );
+
+}
+
+function zaplookApp(){
+
+  openApp(
+    "ZapLook",
+    `
+      <div class="card">
+
+        <h2>⚡ ZapLook</h2>
+
+        <p>
+          Discover something random.
+        </p>
+
+        <div
+          class="big"
+          id="zap-result"
+        >
+          ⚡
+        </div>
+
+        <button
+          onclick="
+            const x=['🌴 Paradise','🏒 Hockey','🚀 Space','🐸 Frog','🍕 Pizza','🎮 Gaming'];
+            document.getElementById('zap-result').textContent =
+            x[Math.floor(Math.random()*x.length)];
+          "
+        >
+          ⚡ Zap!
+        </button>
+
+      </div>
+    `
+  );
+
+}
+
+function monkeyApp(){
+
+  openApp(
+    "Monkey",
+    `
+      <div class="card">
+
+        <div
+          class="big"
+          id="monkey"
+        >
+          🐒
+        </div>
+
+        <button
+          onclick="
+            const x=['🐒','🙈','🙉','🙊'];
+            document.getElementById('monkey').textContent =
+            x[Math.floor(Math.random()*x.length)];
+          "
+        >
+          🐒 Monkey
+        </button>
+
+      </div>
+    `
+  );
+
+}
+
+function remarkApp(){
+
+  openApp(
+    "Remark",
+    `
+      <div class="card">
+
+        <h2>💭 Remark</h2>
+
+        <textarea
+          id="remark"
+          placeholder="Write a remark..."
+        ></textarea>
+
+        <button
+          onclick="
+            const v=document.getElementById('remark').value;
+            alert(v ? 'Remark saved! 💭' : 'Write something first.');
+          "
+        >
+          Save Remark
+        </button>
+
+      </div>
+    `
+  );
+
+}
+
+/* =========================================================
+   PAGE 2 ROUTING
+   THIS IS THE IMPORTANT FIX.
+========================================================= */
+
+const page1Apps = {
+
+  messages:messagesApp,
+  camera:cameraApp,
+  splashface:splashfaceApp,
+  stocks:stocksApp,
+  maps:mapsApp,
+  photos:photosApp,
+  weather:weatherApp,
+  notes:notesApp,
+  peartunes:pearTunesApp,
+  settings:settingsApp,
+  clock:clockApp,
+  videos:videosApp,
+  phone:phoneApp,
+  mail:mailApp,
+  compass:compassApp,
+  music:pearTunesApp
+
+};
+
+const page2Apps = {
+
+  "p2-lingo":lingoApp,
+  "p2-splash":splashfaceApp,
+  "p2-thumb":tumsApp,
+  "p2-danwarp":danwarpApp,
+  "p2-image":imageApp,
+  "p2-chrono":chronoApp,
+  "p2-zaplook":zaplookApp,
+  "p2-weather":weatherApp,
+  "p2-music":pearTunesApp,
+  "p2-monkey":monkeyApp,
+  "p2-remark":remarkApp,
+  "p2-settings":settingsApp,
+  "p2-phone":phoneApp,
+  "p2-mail":mailApp,
+  "p2-compass":compassApp,
+  "p2-music2":pearTunesApp
+
+};
+
+/* =========================================================
+   SINGLE APP CLICK HANDLER
+
+   NO app.js.
+   NO duplicate handlers.
+   NO random routing.
+========================================================= */
+
+document.addEventListener(
+  "pointerup",
+  function(e){
+
+    const button =
+      e.target.closest(".hotspot");
+
+    if(!button) return;
+
+    if(!phone.contains(button)) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    if(overlay.classList.contains("open")){
+      return;
+    }
+
+    const id = button.id;
+
+    let app = null;
+
+    if(currentPage === 1){
+
+      if(!button.classList.contains("page1-hotspot"))
+        return;
+
+      app = page1Apps[id];
+
+    }else{
+
+      if(!button.classList.contains("page2-hotspot"))
+        return;
+
+      app = page2Apps[id];
+
+    }
+
+    if(typeof app === "function"){
+      app();
+    }
+
+  },
+  true
+);
+
+/* =========================================================
+   HOME BUTTON
+========================================================= */
+
+document.getElementById("home")
+  .addEventListener("pointerup",function(e){
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    closeApp();
+
+  },true);
+
+/* =========================================================
    CUSTOM KEYBOARD
-============================================================ */
+========================================================= */
 
-function setupKeyboardFields(){
+let keyboardTarget = null;
+let keyboardShift = false;
+let keyboardNumbers = false;
 
-  document
+function setupKeyboard(){
+
+  appWindow
     .querySelectorAll(
-      "#app-window input, #app-window textarea"
+      "input,textarea"
     )
-    .forEach(field => {
+    .forEach(field=>{
 
       field.addEventListener(
         "focus",
-        function(){
+        ()=>showKeyboard(field)
+      );
 
-          keyboardTarget = this;
-
-          showPearKeyboard(this);
-
-        }
+      field.addEventListener(
+        "click",
+        ()=>showKeyboard(field)
       );
 
     });
 
 }
 
-function showPearKeyboard(field){
+function showKeyboard(field){
 
   keyboardTarget = field;
 
@@ -1084,153 +2292,34 @@ function showPearKeyboard(field){
     keyboard.id = "pear-keyboard";
 
     keyboard.innerHTML = `
-
-      <div class="pear-keyboard-row">
-
-        ${"QWERTYUIOP".split("").map(
-          x =>
-          `<button
-             type="button"
-             data-key="${x}"
-           >${x}</button>`
-        ).join("")}
-
-      </div>
-
-      <div class="pear-keyboard-row">
-
-        ${"ASDFGHJKL".split("").map(
-          x =>
-          `<button
-             type="button"
-             data-key="${x}"
-           >${x}</button>`
-        ).join("")}
-
-      </div>
-
-      <div class="pear-keyboard-row">
-
-        <button
-          type="button"
-          id="pear-shift"
-        >
-          ⇧
-        </button>
-
-        ${"ZXCVBNM".split("").map(
-          x =>
-          `<button
-             type="button"
-             data-key="${x}"
-           >${x}</button>`
-        ).join("")}
-
-        <button
-          type="button"
-          id="pear-backspace"
-        >
-          ⌫
-        </button>
-
-      </div>
-
-      <div class="pear-keyboard-row bottom">
-
-        <button
-          type="button"
-          id="pear-number"
-        >
-          123
-        </button>
-
-        <button
-          type="button"
-          id="pear-space"
-        >
-          SPACE
-        </button>
-
-        <button
-          type="button"
-          id="pear-enter"
-        >
-          ↵
-        </button>
-
-      </div>
-
+      <div class="keyboard-row" id="key-row1"></div>
+      <div class="keyboard-row" id="key-row2"></div>
+      <div class="keyboard-row" id="key-row3"></div>
+      <div class="keyboard-row" id="key-row4"></div>
     `;
 
-    overlay.appendChild(keyboard);
-
-    keyboard
-      .querySelectorAll("[data-key]")
-      .forEach(button => {
-
-        button.addEventListener(
-          "pointerdown",
-          function(e){
-
-            e.preventDefault();
-
-            if(!keyboardTarget) return;
-
-            insertText(
-              keyboardTarget,
-              keyboardShift
-                ? this.dataset.key
-                : this.dataset.key.toLowerCase()
-            );
-
-          }
-        );
-
-      });
-
-    document.getElementById("pear-shift")
-      .onclick = function(){
-
-        keyboardShift =
-          !keyboardShift;
-
-        this.style.background =
-          keyboardShift
-            ? "#9fd3ff"
-            : "#f5f5f7";
-
-      };
-
-    document.getElementById("pear-backspace")
-      .onclick = keyboardBackspace;
-
-    document.getElementById("pear-space")
-      .onclick = keyboardSpace;
-
-    document.getElementById("pear-enter")
-      .onclick = keyboardEnter;
-
-    document.getElementById("pear-number")
-      .onclick = keyboardNumber;
+    appWindow.appendChild(keyboard);
 
   }
 
+  renderKeyboard();
+
   keyboard.style.display = "block";
 
-  requestAnimationFrame(() => {
-
+  requestAnimationFrame(()=>{
     keyboard.classList.add(
       "keyboard-show"
     );
-
   });
 
 }
 
-function hidePearKeyboard(){
+function hideKeyboard(immediate=false){
 
   const keyboard =
     document.getElementById("pear-keyboard");
+
+  keyboardTarget = null;
 
   if(!keyboard) return;
 
@@ -1238,27 +2327,187 @@ function hidePearKeyboard(){
     "keyboard-show"
   );
 
-  setTimeout(() => {
+  if(immediate){
 
-    if(
-      !keyboard.classList.contains(
-        "keyboard-show"
-      )
-    ){
+    keyboard.style.display = "none";
 
+  }else{
+
+    setTimeout(()=>{
       keyboard.style.display = "none";
+    },250);
 
-    }
-
-  },280);
-
-  keyboardTarget = null;
+  }
 
 }
 
-function insertText(field,text){
+function renderKeyboard(){
 
-  if(!field) return;
+  const keyboard =
+    document.getElementById("pear-keyboard");
+
+  if(!keyboard) return;
+
+  const rows = [
+    document.getElementById("key-row1"),
+    document.getElementById("key-row2"),
+    document.getElementById("key-row3"),
+    document.getElementById("key-row4")
+  ];
+
+  rows.forEach(r=>r.innerHTML="");
+
+  function key(row,text,fn,extra=""){
+
+    const b =
+      document.createElement("button");
+
+    b.type="button";
+    b.className =
+      "pear-key "+extra;
+
+    b.textContent=text;
+
+    b.addEventListener(
+      "pointerdown",
+      e=>{
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    );
+
+    b.addEventListener(
+      "pointerup",
+      e=>{
+        e.preventDefault();
+        e.stopPropagation();
+        fn();
+      }
+    );
+
+    row.appendChild(b);
+
+  }
+
+  if(keyboardNumbers){
+
+    "1234567890"
+      .split("")
+      .forEach(x=>
+        key(rows[0],x,()=>typeKey(x))
+      );
+
+    "-/:;()$&@\""
+      .split("")
+      .forEach(x=>
+        key(rows[1],x,()=>typeKey(x))
+      );
+
+    ".,?!'+=%*#"
+      .split("")
+      .forEach(x=>
+        key(rows[2],x,()=>typeKey(x))
+      );
+
+  }else{
+
+    const row1 =
+      keyboardShift
+        ? "QWERTYUIOP"
+        : "qwertyuiop";
+
+    const row2 =
+      keyboardShift
+        ? "ASDFGHJKL"
+        : "asdfghjkl";
+
+    const row3 =
+      keyboardShift
+        ? "ZXCVBNM"
+        : "zxcvbnm";
+
+    row1.split("").forEach(x=>
+      key(
+        rows[0],
+        x.toUpperCase(),
+        ()=>typeKey(x)
+      )
+    );
+
+    row2.split("").forEach(x=>
+      key(
+        rows[1],
+        x.toUpperCase(),
+        ()=>typeKey(x)
+      )
+    );
+
+    key(
+      rows[2],
+      "⇧",
+      ()=>{
+        keyboardShift=!keyboardShift;
+        renderKeyboard();
+      },
+      "wide"
+    );
+
+    row3.split("").forEach(x=>
+      key(
+        rows[2],
+        x.toUpperCase(),
+        ()=>typeKey(x)
+      )
+    );
+
+    key(
+      rows[2],
+      "⌫",
+      backspace,
+      "wide"
+    );
+
+  }
+
+  key(
+    rows[3],
+    keyboardNumbers ? "ABC" : "123",
+    ()=>{
+      keyboardNumbers=!keyboardNumbers;
+      keyboardShift=false;
+      renderKeyboard();
+    },
+    "wide"
+  );
+
+  key(
+    rows[3],
+    "SPACE",
+    ()=>typeKey(" "),
+    "space"
+  );
+
+  key(
+    rows[3],
+    "↵",
+    ()=>{
+      if(keyboardTarget)
+        keyboardTarget.blur();
+
+      hideKeyboard();
+
+    },
+    "enter"
+  );
+
+}
+
+function typeKey(char){
+
+  if(!keyboardTarget) return;
+
+  const field =
+    keyboardTarget;
 
   const start =
     field.selectionStart ??
@@ -1266,2002 +2515,113 @@ function insertText(field,text){
 
   const end =
     field.selectionEnd ??
-    field.value.length;
+    start;
+
+  const value =
+    keyboardNumbers
+      ? char
+      : keyboardShift
+        ? char.toUpperCase()
+        : char.toLowerCase();
 
   field.value =
     field.value.substring(0,start) +
-    text +
+    value +
     field.value.substring(end);
 
-  field.selectionStart =
-    field.selectionEnd =
-    start + text.length;
-
-  field.dispatchEvent(
-    new Event("input",{bubbles:true})
+  field.setSelectionRange(
+    start + value.length,
+    start + value.length
   );
 
-}
+  field.dispatchEvent(
+    new Event(
+      "input",
+      {bubbles:true}
+    )
+  );
 
-function keyboardSpace(){
+  if(
+    keyboardShift &&
+    !keyboardNumbers
+  ){
 
-  if(keyboardTarget){
-
-    insertText(
-      keyboardTarget,
-      " "
-    );
-
-  }
-
-}
-
-function keyboardEnter(){
-
-  if(keyboardTarget){
-
-    keyboardTarget.blur();
+    keyboardShift=false;
+    renderKeyboard();
 
   }
 
-  hidePearKeyboard();
-
 }
 
-function keyboardBackspace(){
+function backspace(){
+
+  if(!keyboardTarget) return;
 
   const field =
     keyboardTarget;
 
-  if(!field) return;
-
   const start =
-    field.selectionStart;
+    field.selectionStart ??
+    field.value.length;
 
   const end =
-    field.selectionEnd;
+    field.selectionEnd ??
+    start;
 
-  if(start !== end){
-
-    field.value =
-      field.value.substring(0,start) +
-      field.value.substring(end);
-
-    field.selectionStart =
-      field.selectionEnd =
-      start;
-
-  }else if(start > 0){
+  if(start === end && start > 0){
 
     field.value =
       field.value.substring(0,start-1) +
       field.value.substring(end);
 
-    field.selectionStart =
-      field.selectionEnd =
-      start-1;
+    field.setSelectionRange(
+      start-1,
+      start-1
+    );
 
-  }
+  }else{
 
-}
+    field.value =
+      field.value.substring(0,start) +
+      field.value.substring(end);
 
-function keyboardNumber(){
-
-  if(keyboardTarget){
-
-    insertText(
-      keyboardTarget,
-      "1234567890"
+    field.setSelectionRange(
+      start,
+      start
     );
 
   }
 
-}
-
-/* ============================================================
-   SOUND
-============================================================ */
-
-function playTone(
-  frequency=440,
-  duration=.1
-){
-
-  try{
-
-    if(
-      localStorage.getItem(
-        "pear-sound"
-      ) === "false"
-    ){
-      return;
-    }
-
-    audioContext =
-      audioContext ||
-      new (
-        window.AudioContext ||
-        window.webkitAudioContext
-      )();
-
-    const oscillator =
-      audioContext.createOscillator();
-
-    const gain =
-      audioContext.createGain();
-
-    oscillator.frequency.value =
-      frequency;
-
-    gain.gain.setValueAtTime(
-      .08,
-      audioContext.currentTime
-    );
-
-    gain.gain.exponentialRampToValueAtTime(
-      .001,
-      audioContext.currentTime +
-      duration
-    );
-
-    oscillator.connect(gain);
-    gain.connect(
-      audioContext.destination
-    );
-
-    oscillator.start();
-
-    oscillator.stop(
-      audioContext.currentTime +
-      duration
-    );
-
-  }catch(e){}
-
-}
-
-/* ============================================================
-   PAGE 1 APPS
-============================================================ */
-
-function messagesApp(){
-
-  openApp(
-    "Messages",
-    `
-      <div id="messages-list">
-
-        <div class="bubble">
-          Hey! 👋
-        </div>
-
-        <div class="bubble">
-          Welcome to Pear Phone.
-        </div>
-
-        <div class="bubble me">
-          This actually works 😂
-        </div>
-
-      </div>
-
-      <div class="row">
-
-        <input
-          id="message-input"
-          placeholder="iMessage"
-        >
-
-        <button
-          class="app-button"
-          id="send-message"
-        >
-          Send
-        </button>
-
-      </div>
-    `
-  );
-
-  document.getElementById(
-    "send-message"
-  ).onclick = function(){
-
-    const input =
-      document.getElementById(
-        "message-input"
-      );
-
-    const value =
-      input.value.trim();
-
-    if(!value) return;
-
-    const bubble =
-      document.createElement("div");
-
-    bubble.className =
-      "bubble me";
-
-    bubble.textContent =
-      value;
-
-    document.getElementById(
-      "messages-list"
-    ).appendChild(bubble);
-
-    input.value = "";
-
-    playTone(700,.08);
-
-  };
-
-  setupKeyboardFields();
-
-}
-
-async function cameraApp(){
-
-  openApp(
-    "Camera",
-    `
-      <video
-        id="camera-preview"
-        class="camera-video"
-        autoplay
-        playsinline
-      ></video>
-
-      <div class="row">
-
-        <button
-          class="app-button"
-          id="camera-start"
-        >
-          📷 Start Camera
-        </button>
-
-        <button
-          class="app-button"
-          id="camera-capture"
-        >
-          ⭕ Capture
-        </button>
-
-      </div>
-
-      <canvas
-        id="camera-canvas"
-        style="display:none"
-      ></canvas>
-
-      <div id="camera-result"></div>
-    `
-  );
-
-  document.getElementById(
-    "camera-start"
-  ).onclick = startCamera;
-
-  document.getElementById(
-    "camera-capture"
-  ).onclick = captureCamera;
-
-  await startCamera();
-
-}
-
-async function startCamera(){
-
-  const video =
-    document.getElementById(
-      "camera-preview"
-    );
-
-  if(!video) return;
-
-  try{
-
-    stopCamera();
-
-    cameraStream =
-      await navigator.mediaDevices.getUserMedia({
-        video:{
-          facingMode:"environment"
-        },
-        audio:false
-      });
-
-    video.srcObject =
-      cameraStream;
-
-  }catch(error){
-
-    const result =
-      document.getElementById(
-        "camera-result"
-      );
-
-    if(result){
-
-      result.innerHTML =
-        `<div class="result">
-          Camera permission unavailable.
-        </div>`;
-
-    }
-
-  }
-
-}
-
-function captureCamera(){
-
-  const video =
-    document.getElementById(
-      "camera-preview"
-    );
-
-  const canvas =
-    document.getElementById(
-      "camera-canvas"
-    );
-
-  if(
-    !video ||
-    !canvas ||
-    !video.videoWidth
-  ){
-    return;
-  }
-
-  canvas.width =
-    video.videoWidth;
-
-  canvas.height =
-    video.videoHeight;
-
-  canvas
-    .getContext("2d")
-    .drawImage(
-      video,
-      0,
-      0,
-      canvas.width,
-      canvas.height
-    );
-
-  const image =
-    document.createElement("img");
-
-  image.src =
-    canvas.toDataURL(
-      "image/jpeg",
-      .9
-    );
-
-  image.style.width =
-    "100%";
-
-  image.style.borderRadius =
-    "12px";
-
-  document.getElementById(
-    "camera-result"
-  ).innerHTML =
-    "<p>📸 Captured!</p>";
-
-  document.getElementById(
-    "camera-result"
-  ).appendChild(image);
-
-}
-
-function stopCamera(){
-
-  if(cameraStream){
-
-    cameraStream
-      .getTracks()
-      .forEach(track =>
-        track.stop()
-      );
-
-    cameraStream = null;
-
-  }
-
-}
-
-function splashfaceApp(){
-
-  openApp(
-    "SplashFace",
-    `
-      <div class="card">
-
-        <h2>😎 SplashFace</h2>
-
-        <input
-          id="status-input"
-          placeholder="What's happening?"
-        >
-
-        <button
-          class="app-button"
-          id="post-status"
-        >
-          Post
-        </button>
-
-      </div>
-
-      <div id="status-feed"></div>
-    `
-  );
-
-  document.getElementById(
-    "post-status"
-  ).onclick = function(){
-
-    const input =
-      document.getElementById(
-        "status-input"
-      );
-
-    const value =
-      input.value.trim();
-
-    if(!value) return;
-
-    const card =
-      document.createElement("div");
-
-    card.className =
-      "card";
-
-    card.innerHTML = `
-      <strong>You</strong>
-      <p>${escapeHTML(value)}</p>
-      <small>Just now · 🍐</small>
-    `;
-
-    document.getElementById(
-      "status-feed"
-    ).prepend(card);
-
-    input.value = "";
-
-  };
-
-  setupKeyboardFields();
-
-}
-
-function stocksApp(){
-
-  openApp(
-    "Stocks",
-    `
-      <div class="card">
-
-        <h2>📈 Market</h2>
-
-        <div class="stock">
-          <strong>PEAR</strong>
-          <span>$184.22</span>
-          <b>+2.81%</b>
-        </div>
-
-        <div class="stock">
-          <strong>AAPL</strong>
-          <span>$247.10</span>
-          <b>+1.24%</b>
-        </div>
-
-        <div class="stock">
-          <strong>NVDA</strong>
-          <span>$181.47</span>
-          <b>+3.09%</b>
-        </div>
-
-        <div class="stock">
-          <strong>TSLA</strong>
-          <span>$421.08</span>
-          <b>-0.74%</b>
-        </div>
-
-      </div>
-    `
-  );
-
-}
-
-function mapsApp(){
-
-  openApp(
-    "Maps",
-    `
-      <div class="map">
-        🗺️
-      </div>
-
-      <input
-        id="map-search"
-        placeholder="Search a place"
-      >
-
-      <button
-        class="app-button"
-        id="map-open"
-      >
-        🔎 Search
-      </button>
-
-      <div id="map-result"></div>
-    `
-  );
-
-  document.getElementById(
-    "map-open"
-  ).onclick = function(){
-
-    const query =
-      document.getElementById(
-        "map-search"
-      ).value.trim();
-
-    if(!query) return;
-
-    document.getElementById(
-      "map-result"
-    ).innerHTML = `
-      <div class="result">
-        📍 ${escapeHTML(query)}
-      </div>
-    `;
-
-  };
-
-  setupKeyboardFields();
-
-}
-
-function photosApp(){
-
-  openApp(
-    "Photos",
-    `
-      <input
-        id="photo-picker"
-        type="file"
-        accept="image/*"
-        multiple
-      >
-
-      <div
-        class="photos"
-        id="photo-grid"
-      ></div>
-    `
-  );
-
-  document.getElementById(
-    "photo-picker"
-  ).onchange = function(){
-
-    const grid =
-      document.getElementById(
-        "photo-grid"
-      );
-
-    [...this.files].forEach(file => {
-
-      const image =
-        document.createElement("img");
-
-      image.src =
-        URL.createObjectURL(file);
-
-      grid.appendChild(image);
-
-    });
-
-  };
-
-}
-
-function weatherApp(){
-
-  openApp(
-    "Weather",
-    `
-      <div class="card">
-
-        <h2>☀️ Weather</h2>
-
-        <div class="big-display">
-          22°
-        </div>
-
-        <p style="text-align:center">
-          Partly Cloudy
-        </p>
-
-      </div>
-
-      <button
-        class="app-button"
-        onclick="weatherForecast('Today')"
-      >
-        Today
-      </button>
-
-      <button
-        class="app-button"
-        onclick="weatherForecast('Tomorrow')"
-      >
-        Tomorrow
-      </button>
-
-      <div
-        id="weather-result"
-        class="result"
-      >
-        Choose a forecast.
-      </div>
-    `
-  );
-
-}
-
-function weatherForecast(day){
-
-  document.getElementById(
-    "weather-result"
-  ).textContent =
-    day +
-    ": ⛅ Partly cloudy — 22°C";
-
-}
-
-function notesApp(){
-
-  openApp(
-    "Notes",
-    `
-      <textarea
-        id="notes-area"
-        placeholder="Write something..."
-      ></textarea>
-
-      <button
-        class="app-button"
-        id="save-note"
-      >
-        💾 Save
-      </button>
-
-      <button
-        class="app-button"
-        id="clear-note"
-      >
-        🗑️ Clear
-      </button>
-
-      <div id="note-status"></div>
-    `
-  );
-
-  const area =
-    document.getElementById(
-      "notes-area"
-    );
-
-  const saved =
-    localStorage.getItem(
-      "pear-notes"
-    );
-
-  if(saved){
-    area.value = saved;
-  }
-
-  document.getElementById(
-    "save-note"
-  ).onclick = function(){
-
-    localStorage.setItem(
-      "pear-notes",
-      area.value
-    );
-
-    document.getElementById(
-      "note-status"
-    ).innerHTML =
-      `<div class="result">Saved ✓</div>`;
-
-  };
-
-  document.getElementById(
-    "clear-note"
-  ).onclick = function(){
-
-    area.value = "";
-
-    localStorage.removeItem(
-      "pear-notes"
-    );
-
-  };
-
-  setupKeyboardFields();
-
-}
-
-function pearTunesApp(){
-
-  openApp(
-    "PearTunes",
-    `
-      <div class="card">
-
-        <h2>🎵 PearTunes</h2>
-
-        <div
-          class="big-display"
-          id="music-title"
-        >
-          Choose a track
-        </div>
-
-        <button
-          class="app-button"
-          onclick="playTrack('Pear Dreams')"
-        >
-          ▶ Pear Dreams
-        </button>
-
-        <button
-          class="app-button"
-          onclick="playTrack('Midnight Pear')"
-        >
-          ▶ Midnight Pear
-        </button>
-
-        <button
-          class="app-button"
-          onclick="playTrack('Pearwave')"
-        >
-          ▶ Pearwave
-        </button>
-
-      </div>
-    `
-  );
-
-}
-
-function playTrack(title){
-
-  document.getElementById(
-    "music-title"
-  ).textContent =
-    title;
-
-  playTone(600,.2);
-
-}
-
-function settingsApp(){
-
-  openApp(
-    "Settings",
-    `
-      <div class="card">
-
-        <h2>⚙️ Settings</h2>
-
-        <button
-          class="app-button"
-          id="dark-toggle"
-        >
-          🌙 Dark / Light Mode
-        </button>
-
-        <button
-          class="app-button"
-          id="sound-toggle"
-        >
-          🔊 Sound On / Off
-        </button>
-
-        <button
-          class="app-button"
-          onclick="showPhoneInfo()"
-        >
-          🍐 Pear Phone Info
-        </button>
-
-        <button
-          class="app-button"
-          onclick="showBattery()"
-        >
-          🔋 Battery
-        </button>
-
-      </div>
-    `
-  );
-
-  document.getElementById(
-    "dark-toggle"
-  ).onclick =
-    toggleDarkMode;
-
-  document.getElementById(
-    "sound-toggle"
-  ).onclick =
-    toggleSound;
-
-}
-
-function toggleDarkMode(){
-
-  document.body.classList.toggle(
-    "dark-mode"
-  );
-
-  localStorage.setItem(
-    "pear-dark",
-    document.body.classList.contains(
-      "dark-mode"
+  field.dispatchEvent(
+    new Event(
+      "input",
+      {bubbles:true}
     )
   );
 
 }
 
-function toggleSound(){
-
-  const enabled =
-    localStorage.getItem(
-      "pear-sound"
-    ) !== "false";
-
-  localStorage.setItem(
-    "pear-sound",
-    String(!enabled)
-  );
-
-}
-
-function showPhoneInfo(){
-
-  alert(
-    "🍐 PEAR PHONE\n\n" +
-    "Pear Phone OS\n" +
-    "Version 2.0"
-  );
-
-}
-
-async function showBattery(){
-
-  if(navigator.getBattery){
-
-    const battery =
-      await navigator.getBattery();
-
-    alert(
-      "Battery: " +
-      Math.round(
-        battery.level*100
-      ) +
-      "%"
-    );
-
-  }
-
-}
-
-function clockApp(){
-
-  openApp(
-    "Clock",
-    `
-      <div class="card">
-
-        <div
-          class="big-display"
-          id="clock-display"
-        >
-          --:--:--
-        </div>
-
-      </div>
-    `
-  );
-
-  function updateClock(){
-
-    const now =
-      new Date();
-
-    const display =
-      document.getElementById(
-        "clock-display"
-      );
-
-    if(display){
-
-      display.textContent =
-        now.toLocaleTimeString();
-
-    }
-
-  }
-
-  updateClock();
-
-  window.pearClock =
-    setInterval(
-      updateClock,
-      1000
-    );
-
-}
-
-function videosApp(){
-
-  openApp(
-    "Videos",
-    `
-      <div class="card">
-
-        <h2>🎬 Videos</h2>
-
-        <input
-          type="file"
-          id="video-file"
-          accept="video/*"
-        >
-
-      </div>
-
-      <video
-        id="video-player"
-        controls
-        style="
-          display:none;
-          width:100%;
-          border-radius:12px;
-        "
-      ></video>
-    `
-  );
-
-  document.getElementById(
-    "video-file"
-  ).onchange = function(){
-
-    const file =
-      this.files[0];
-
-    if(!file) return;
-
-    const video =
-      document.getElementById(
-        "video-player"
-      );
-
-    video.src =
-      URL.createObjectURL(file);
-
-    video.style.display =
-      "block";
-
-  };
-
-}
-
-function phoneApp(){
-
-  openApp(
-    "Phone",
-    `
-      <div class="card">
-
-        <h2>📞 Phone</h2>
-
-        <div
-          class="big-display"
-          id="dial-display"
-        >
-          _
-        </div>
-
-        <div
-          style="
-            display:grid;
-            grid-template-columns:repeat(3,1fr);
-            gap:5px;
-          "
-        >
-
-          ${[
-            "1","2","3",
-            "4","5","6",
-            "7","8","9",
-            "*","0","#"
-          ].map(number => `
-            <button
-              class="app-button"
-              onclick="dialNumber('${number}')"
-            >
-              ${number}
-            </button>
-          `).join("")}
-
-        </div>
-
-        <button
-          class="app-button"
-          onclick="clearDial()"
-        >
-          Clear
-        </button>
-
-      </div>
-    `
-  );
-
-}
-
-let dialValue = "";
-
-function dialNumber(number){
-
-  dialValue += number;
-
-  const display =
-    document.getElementById(
-      "dial-display"
-    );
-
-  if(display){
-    display.textContent =
-      dialValue;
-  }
-
-}
-
-function clearDial(){
-
-  dialValue = "";
-
-  const display =
-    document.getElementById(
-      "dial-display"
-    );
-
-  if(display){
-    display.textContent =
-      "_";
-  }
-
-}
-
-function mailApp(){
-
-  openApp(
-    "Mail",
-    `
-      <input
-        id="mail-to"
-        placeholder="To"
-      >
-
-      <input
-        id="mail-subject"
-        placeholder="Subject"
-      >
-
-      <textarea
-        id="mail-body"
-        placeholder="Message"
-      ></textarea>
-
-      <button
-        class="app-button"
-        id="mail-send"
-      >
-        ✉️ Send
-      </button>
-    `
-  );
-
-  document.getElementById(
-    "mail-send"
-  ).onclick = function(){
-
-    const to =
-      document.getElementById(
-        "mail-to"
-      ).value;
-
-    const subject =
-      document.getElementById(
-        "mail-subject"
-      ).value;
-
-    const body =
-      document.getElementById(
-        "mail-body"
-      ).value;
-
-    window.location.href =
-      "mailto:" +
-      encodeURIComponent(to) +
-      "?subject=" +
-      encodeURIComponent(subject) +
-      "&body=" +
-      encodeURIComponent(body);
-
-  };
-
-  setupKeyboardFields();
-
-}
-
-function compassApp(){
-
-  openApp(
-    "Compass",
-    `
-      <div class="card">
-
-        <div
-          class="big-display"
-          id="heading"
-        >
-          0°
-        </div>
-
-        <p>
-          Tap enable to use your device orientation.
-        </p>
-
-        <button
-          class="app-button"
-          id="compass-start"
-        >
-          🧭 Enable
-        </button>
-
-      </div>
-    `
-  );
-
-  document.getElementById(
-    "compass-start"
-  ).onclick = function(){
-
-    window.addEventListener(
-      "deviceorientation",
-      updateCompass
-    );
-
-  };
-
-}
-
-function updateCompass(event){
-
-  let heading =
-    event.webkitCompassHeading;
-
-  if(heading == null){
-
-    heading =
-      event.alpha == null
-        ? 0
-        : 360-event.alpha;
-
-  }
-
-  const display =
-    document.getElementById(
-      "heading"
-    );
-
-  if(display){
-
-    display.textContent =
-      Math.round(heading) +
-      "°";
-
-  }
-
-}
-
-/* ============================================================
-   PAGE 2 APPS
-============================================================ */
-
-function lingoApp(){
-
-  openApp(
-    "Lingo",
-    `
-      <div class="card">
-
-        <h2>🌎 Lingo</h2>
-
-        <input
-          id="lingo-input"
-          placeholder="Type something..."
-        >
-
-        <button
-          class="app-button"
-          id="lingo-go"
-        >
-          Translate
-        </button>
-
-        <div
-          class="result"
-          id="lingo-result"
-        >
-          Translation appears here.
-        </div>
-
-      </div>
-    `
-  );
-
-  document.getElementById(
-    "lingo-go"
-  ).onclick = function(){
-
-    const text =
-      document.getElementById(
-        "lingo-input"
-      ).value
-      .trim()
-      .toLowerCase();
-
-    const translations = {
-
-      hello:"Hola 👋",
-      goodbye:"Adiós 👋",
-      thanks:"Gracias 🙏",
-      yes:"Sí",
-      no:"No",
-      love:"Amor ❤️",
-      pear:"Pera 🍐"
-
-    };
-
-    document.getElementById(
-      "lingo-result"
-    ).textContent =
-      translations[text] ||
-      "Try: hello, goodbye, thanks, yes, no, love, pear.";
-
-  };
-
-  setupKeyboardFields();
-
-}
-
-/* THUMBS UP */
-
-function tumsApp(){
-
-  openApp(
-    "Thumb",
-    `
-      <div class="game">
-
-        <h2>👍 Thumb Battle</h2>
-
-        <p>
-          Tap the thumb!
-        </p>
-
-        <button
-          class="game-button"
-          id="thumb-button"
-          type="button"
-        >
-          👍
-        </button>
-
-        <p id="thumb-result">
-          Ready!
-        </p>
-
-        <p id="thumb-score">
-          Score: 0
-        </p>
-
-      </div>
-    `
-  );
-
-  let score = 0;
-
-  const button =
-    document.getElementById(
-      "thumb-button"
-    );
-
-  button.onclick = function(){
-
-    score++;
-
-    document.getElementById(
-      "thumb-score"
-    ).textContent =
-      "Score: " + score;
-
-    const results = [
-      "You won! 🏆",
-      "Nice! 👍",
-      "Pear Phone approves! 🍐",
-      "Again! 🔥"
-    ];
-
-    document.getElementById(
-      "thumb-result"
-    ).textContent =
-      results[
-        Math.floor(
-          Math.random()*results.length
-        )
-      ];
-
-    playTone(650,.08);
-
-  };
-
-}
-
-/* DANWARP */
-
-function danwarpApp(){
-
-  openApp(
-    "DanWarp",
-    `
-      <div class="card">
-
-        <h2>🌀 DanWarp</h2>
-
-        <input
-          id="warp-number"
-          type="number"
-          placeholder="Number"
-        >
-
-        <button
-          class="app-button"
-          id="warp-button"
-        >
-          🌀 Warp
-        </button>
-
-        <div
-          class="big-display"
-          id="warp-result"
-        >
-          ?
-        </div>
-
-      </div>
-    `
-  );
-
-  document.getElementById(
-    "warp-button"
-  ).onclick = function(){
-
-    const number =
-      Number(
-        document.getElementById(
-          "warp-number"
-        ).value
-      );
-
-    if(isNaN(number)) return;
-
-    document.getElementById(
-      "warp-result"
-    ).textContent =
-      Math.round(
-        (number*1.618+42)*100
-      )/100;
-
-  };
-
-  setupKeyboardFields();
-
-}
-
-/* IMAGE */
-
-function imageApp(){
-
-  openApp(
-    "Image",
-    `
-      <div class="card">
-
-        <h2>🖼️ Image Lab</h2>
-
-        <input
-          type="file"
-          id="image-file"
-          accept="image/*"
-        >
-
-      </div>
-
-      <img
-        id="image-preview"
-        style="
-          display:none;
-          width:100%;
-          border-radius:12px;
-        "
-      >
-
-      <button
-        class="app-button"
-        id="image-rotate"
-      >
-        🔄 Rotate
-      </button>
-    `
-  );
-
-  const preview =
-    document.getElementById(
-      "image-preview"
-    );
-
-  let rotation = 0;
-
-  document.getElementById(
-    "image-file"
-  ).onchange = function(){
-
-    const file =
-      this.files[0];
-
-    if(!file) return;
-
-    preview.src =
-      URL.createObjectURL(file);
-
-    preview.style.display =
-      "block";
-
-  };
-
-  document.getElementById(
-    "image-rotate"
-  ).onclick = function(){
-
-    rotation += 90;
-
-    preview.style.transform =
-      `rotate(${rotation}deg)`;
-
-  };
-
-}
-
-/* CHRONO */
-
-function chronoApp(){
-
-  openApp(
-    "Chrono",
-    `
-      <div class="card">
-
-        <h2>⏱️ Chrono</h2>
-
-        <div
-          class="big-display"
-          id="chrono-display"
-        >
-          00:00.0
-        </div>
-
-        <button
-          class="app-button"
-          id="chrono-start"
-        >
-          ▶ Start
-        </button>
-
-        <button
-          class="app-button"
-          id="chrono-stop"
-        >
-          ⏸ Stop
-        </button>
-
-        <button
-          class="app-button"
-          id="chrono-reset"
-        >
-          ↺ Reset
-        </button>
-
-      </div>
-    `
-  );
-
-  let start = 0;
-  let elapsed = 0;
-  let timer = null;
-
-  function render(){
-
-    const total =
-      elapsed +
-      (
-        timer
-          ? Date.now()-start
-          : 0
-      );
-
-    const seconds =
-      Math.floor(total/1000);
-
-    const minutes =
-      Math.floor(seconds/60);
-
-    const secs =
-      seconds%60;
-
-    const tenths =
-      Math.floor(
-        (total%1000)/100
-      );
-
-    document.getElementById(
-      "chrono-display"
-    ).textContent =
-      String(minutes).padStart(2,"0") +
-      ":" +
-      String(secs).padStart(2,"0") +
-      "." +
-      tenths;
-
-  }
-
-  document.getElementById(
-    "chrono-start"
-  ).onclick = function(){
-
-    if(timer) return;
-
-    start = Date.now();
-
-    timer =
-      setInterval(
-        render,
-        50
-      );
-
-  };
-
-  document.getElementById(
-    "chrono-stop"
-  ).onclick = function(){
-
-    if(!timer) return;
-
-    elapsed +=
-      Date.now()-start;
-
-    clearInterval(timer);
-
-    timer = null;
-
-    render();
-
-  };
-
-  document.getElementById(
-    "chrono-reset"
-  ).onclick = function(){
-
-    if(timer){
-      clearInterval(timer);
-    }
-
-    timer = null;
-    elapsed = 0;
-
-    render();
-
-  };
-
-}
-
-/* ZAPLOOK */
-
-function zaplookApp(){
-
-  openApp(
-    "ZapLook",
-    `
-      <div class="card">
-
-        <h2>⚡ ZapLook</h2>
-
-        <input
-          id="zap-input"
-          placeholder="Search..."
-        >
-
-        <button
-          class="app-button"
-          id="zap-search"
-        >
-          ⚡ Zap
-        </button>
-
-        <div
-          id="zap-results"
-        ></div>
-
-      </div>
-    `
-  );
-
-  document.getElementById(
-    "zap-search"
-  ).onclick = function(){
-
-    const value =
-      document.getElementById(
-        "zap-input"
-      ).value.trim();
-
-    if(!value) return;
-
-    document.getElementById(
-      "zap-results"
-    ).innerHTML = `
-      <div class="result">
-        ⚡ Results for
-        <strong>
-          ${escapeHTML(value)}
-        </strong>
-      </div>
-    `;
-
-  };
-
-  setupKeyboardFields();
-
-}
-
-/* MONKEY */
-
-function monkeyApp(){
-
-  openApp(
-    "Monkey",
-    `
-      <div class="game">
-
-        <h2>🐒 Monkey Catch</h2>
-
-        <div
-          id="monkey-arena"
-          style="
-            position:relative;
-            height:210px;
-            background:#d9efcf;
-            border-radius:15px;
-            overflow:hidden;
-          "
-        >
-
-          <button
-            id="monkey-button"
-            style="
-              position:absolute;
-              width:60px;
-              height:60px;
-              border:0;
-              border-radius:50%;
-              background:#fff;
-              font-size:30px;
-              cursor:pointer;
-            "
-          >
-            🐒
-          </button>
-
-        </div>
-
-        <p id="monkey-score">
-          Score: 0
-        </p>
-
-      </div>
-    `
-  );
-
-  const monkey =
-    document.getElementById(
-      "monkey-button"
-    );
-
-  let score = 0;
-
-  function move(){
-
-    const arena =
-      document.getElementById(
-        "monkey-arena"
-      );
-
-    monkey.style.left =
-      Math.random() *
-      (arena.clientWidth-60) +
-      "px";
-
-    monkey.style.top =
-      Math.random() *
-      (arena.clientHeight-60) +
-      "px";
-
-  }
-
-  monkey.onclick = function(){
-
-    score++;
-
-    document.getElementById(
-      "monkey-score"
-    ).textContent =
-      "Score: " + score;
-
-    move();
-
-  };
-
-  move();
-
-}
-
-/* REMARK */
-
-function remarkApp(){
-
-  openApp(
-    "Remark",
-    `
-      <div class="card">
-
-        <h2>💬 Remark</h2>
-
-        <button
-          class="app-button"
-          id="remark-button"
-        >
-          ✨ Generate Remark
-        </button>
-
-        <div
-          class="result"
-          id="remark-result"
-        >
-          Tap generate.
-        </div>
-
-      </div>
-    `
-  );
-
-  document.getElementById(
-    "remark-button"
-  ).onclick = function(){
-
-    const remarks = [
-
-      "That's very Pear Phone of you. 🍐",
-      "Honestly? Iconic.",
-      "The Pear Phone approves.",
-      "Absolutely remarkable.",
-      "I have no notes. 😂",
-      "That was unexpected."
-
-    ];
-
-    document.getElementById(
-      "remark-result"
-    ).textContent =
-      remarks[
-        Math.floor(
-          Math.random()*remarks.length
-        )
-      ];
-
-  };
-
-}
-
-/* ============================================================
-   THE IMPORTANT PART
-   EACH BUTTON GETS ITS OWN FUNCTION
-============================================================ */
-
-const page1Apps = {
-
-  messages: messagesApp,
-  camera: cameraApp,
-  splashface: splashfaceApp,
-  stocks: stocksApp,
-  maps: mapsApp,
-  photos: photosApp,
-  weather: weatherApp,
-  notes: notesApp,
-  peartunes: pearTunesApp,
-  settings: settingsApp,
-  clock: clockApp,
-  videos: videosApp,
-  phone: phoneApp,
-  mail: mailApp,
-  compass: compassApp,
-  music: pearTunesApp
-
-};
-
-const page2Apps = {
-
-  "p2-lingo": lingoApp,
-  "p2-splash": splashfaceApp,
-  "p2-thumb": tumsApp,
-  "p2-danwarp": danwarpApp,
-  "p2-image": imageApp,
-  "p2-chrono": chronoApp,
-  "p2-zaplook": zaplookApp,
-  "p2-weather": weatherApp,
-  "p2-music": pearTunesApp,
-  "p2-monkey": monkeyApp,
-  "p2-remark": remarkApp,
-  "p2-settings": settingsApp,
-  "p2-phone": phoneApp,
-  "p2-mail": mailApp,
-  "p2-compass": compassApp,
-  "p2-music2": pearTunesApp
-
-};
-
-/*
-  PAGE 1 CLICK HANDLERS
-*/
-
-Object.keys(page1Apps).forEach(id => {
-
-  const button =
-    document.getElementById(id);
-
-  if(!button) return;
-
-  button.addEventListener(
-    "click",
-    function(e){
-
-      e.preventDefault();
-      e.stopImmediatePropagation();
-
-      if(currentPage !== 1){
-        return;
-      }
-
-      page1Apps[id]();
-
-    },
-    true
-  );
-
-});
-
-/*
-  PAGE 2 CLICK HANDLERS
-
-  Every individual Page 2 button gets
-  its own handler.
-*/
-
-Object.keys(page2Apps).forEach(id => {
-
-  const button =
-    document.getElementById(id);
-
-  if(!button) return;
-
-  button.addEventListener(
-    "click",
-    function(e){
-
-      e.preventDefault();
-      e.stopImmediatePropagation();
-
-      if(currentPage !== 2){
-        return;
-      }
-
-      const selectedApp =
-        page2Apps[id];
-
-      if(
-        typeof selectedApp ===
-        "function"
-      ){
-
-        selectedApp();
-
-      }
-
-    },
-    true
-  );
-
-});
-
-/* ============================================================
-   HOME
-============================================================ */
-
-document.getElementById(
-  "home"
-).addEventListener(
-  "click",
-  function(e){
-
-    e.preventDefault();
-    e.stopImmediatePropagation();
-
-    goHome();
-
-  },
-  true
+/* =========================================================
+   STOP APP SWIPE WHEN TOUCHING APP CONTENT
+========================================================= */
+
+overlay.addEventListener(
+  "touchstart",
+  e=>e.stopPropagation(),
+  {passive:true}
 );
 
-/* ============================================================
-   DARK MODE RESTORE
-============================================================ */
+overlay.addEventListener(
+  "touchmove",
+  e=>e.stopPropagation(),
+  {passive:true}
+);
 
-if(
-  localStorage.getItem(
-    "pear-dark"
-  ) === "true"
-){
-
-  document.body.classList.add(
-    "dark-mode"
-  );
-
-}
-
-/* ============================================================
-   START
-============================================================ */
-
-showPage(1);
+overlay.addEventListener(
+  "touchend",
+  e=>e.stopPropagation(),
+  {passive:true}
+);
 
 </script>
 

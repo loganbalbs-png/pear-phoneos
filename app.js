@@ -1,1011 +1,1816 @@
-/* =========================================================
-   PEAR PHONE OS — APP.JS
-   ========================================================= */
+// ============================================================
+// PEAR PHONE OS — FULL APP.JS
+// ============================================================
 
+const phone = document.getElementById("phone-container");
 const overlay = document.getElementById("overlay");
 const appWindow = document.getElementById("app-window");
-const phoneContainer = document.getElementById("phone-container");
+const pageDots = document.getElementById("page-dots");
 
-let currentApp = null;
-let activeKeyboardField = null;
-let keyboardVisible = false;
+let currentPage = 1;
 
-/* =========================================================
-   BASIC HELPERS
-   ========================================================= */
+// ============================================================
+// PAGE SWITCHING
+// SWIPE UP = PAGE 2
+// SWIPE DOWN = PAGE 1
+// ============================================================
 
-function esc(text) {
-  return String(text ?? "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
+let touchStartX = 0;
+let touchStartY = 0;
+let touchMoved = false;
+let mouseStartX = 0;
+let mouseStartY = 0;
+let mouseDragging = false;
+let swipeLocked = false;
+
+function showPage(page) {
+  if (page === currentPage) return;
+
+  currentPage = page;
+
+  phone.classList.remove(
+    "page-switch-up",
+    "page-switch-down"
+  );
+
+  void phone.offsetWidth;
+
+  phone.classList.add(
+    page === 2
+      ? "page-switch-up"
+      : "page-switch-down"
+  );
+
+  phone.classList.toggle(
+    "page-two",
+    page === 2
+  );
+
+  if (pageDots) {
+    pageDots.textContent =
+      page === 2 ? "○ ●" : "● ○";
+  }
+
+  closeApp();
+
+  setTimeout(() => {
+    phone.classList.remove(
+      "page-switch-up",
+      "page-switch-down"
+    );
+  }, 700);
 }
 
-function openApp(name) {
-  currentApp = name;
+document.addEventListener("keydown", e => {
+  if (e.target.matches("input, textarea, select")) return;
 
-  if (!overlay || !appWindow) return;
+  if (e.key === "ArrowUp" && currentPage === 1) {
+    e.preventDefault();
+    showPage(2);
+  }
+
+  if (e.key === "ArrowDown" && currentPage === 2) {
+    e.preventDefault();
+    showPage(1);
+  }
+});
+
+phone.addEventListener("touchstart", e => {
+  if (overlay.classList.contains("open")) return;
+
+  const t = e.touches[0];
+
+  touchStartX = t.clientX;
+  touchStartY = t.clientY;
+  touchMoved = false;
+}, { passive: true });
+
+phone.addEventListener("touchmove", e => {
+  if (overlay.classList.contains("open")) return;
+
+  const t = e.touches[0];
+
+  const dx = t.clientX - touchStartX;
+  const dy = t.clientY - touchStartY;
+
+  if (
+    Math.abs(dy) > 30 &&
+    Math.abs(dy) > Math.abs(dx)
+  ) {
+    touchMoved = true;
+  }
+}, { passive: true });
+
+phone.addEventListener("touchend", e => {
+  if (
+    overlay.classList.contains("open") ||
+    !touchMoved ||
+    swipeLocked
+  ) return;
+
+  const t = e.changedTouches[0];
+
+  const dx = t.clientX - touchStartX;
+  const dy = t.clientY - touchStartY;
+
+  if (
+    Math.abs(dy) < 80 ||
+    Math.abs(dy) <= Math.abs(dx)
+  ) return;
+
+  swipeLocked = true;
+
+  if (dy < 0 && currentPage === 1) {
+    showPage(2);
+  }
+
+  if (dy > 0 && currentPage === 2) {
+    showPage(1);
+  }
+
+  setTimeout(() => {
+    swipeLocked = false;
+  }, 700);
+}, { passive: true });
+
+phone.addEventListener("mousedown", e => {
+  if (overlay.classList.contains("open")) return;
+
+  mouseStartX = e.clientX;
+  mouseStartY = e.clientY;
+  mouseDragging = true;
+});
+
+phone.addEventListener("mouseup", e => {
+  if (!mouseDragging) return;
+
+  mouseDragging = false;
+
+  if (overlay.classList.contains("open")) return;
+
+  const dx = e.clientX - mouseStartX;
+  const dy = e.clientY - mouseStartY;
+
+  if (
+    Math.abs(dy) < 80 ||
+    Math.abs(dy) <= Math.abs(dx)
+  ) return;
+
+  if (dy < 0 && currentPage === 1) {
+    showPage(2);
+  }
+
+  if (dy > 0 && currentPage === 2) {
+    showPage(1);
+  }
+});
+
+// ============================================================
+// APP SYSTEM
+// ============================================================
+
+function openApp(title, content) {
+  appWindow.innerHTML = `
+    <div class="app-header">
+      <button class="back-button" onclick="closeApp()">‹</button>
+      <strong>${escapeHTML(title)}</strong>
+    </div>
+
+    <div class="app-content">
+      ${content}
+    </div>
+  `;
 
   overlay.classList.add("open");
 
-  const apps = {
-    messages: appMessages,
-    camera: appCamera,
-    splashface: appSplashFace,
-    stocks: appStocks,
-    maps: appMaps,
-    photos: appPhotos,
-    weather: appWeather,
-    notes: appNotes,
-    peartunes: appPearTunes,
-    settings: appSettings,
-    clock: appClock,
-    videos: appVideos,
-    phone: appPhone,
-    mail: appMail,
-    compass: appCompass,
-
-    lingo: appLingo,
-    splash: appSplashFace,
-    thumb: appThumbsUp,
-    danwarp: appDanWarp,
-    image: appImage,
-    chrono: appChrono,
-    zaplook: appZapLook,
-    monkey: appMonkey,
-    remark: appRemark
-  };
-
-  if (apps[name]) {
-    apps[name]();
-  } else {
-    appWindow.innerHTML = `
-      <div class="app-page">
-        <h2>${esc(name)}</h2>
-        <p>This Pear Phone app isn't configured yet.</p>
-      </div>
-    `;
-  }
-
-  setupKeyboardFields();
+  addKeyboardSupport();
 }
 
 function closeApp() {
-  currentApp = null;
-  hideKeyboard();
+  stopCamera();
+  stopTypingGame();
 
-  if (overlay) {
-    overlay.classList.remove("open");
-  }
-
-  if (appWindow) {
-    appWindow.innerHTML = "";
-  }
+  overlay.classList.remove("open");
+  appWindow.innerHTML = "";
 }
 
-function appShell(title, content, extra = "") {
-  appWindow.innerHTML = `
-    <div class="app-page">
-      <div class="app-header">
-        <button class="back-btn" onclick="closeApp()">‹</button>
-        <strong>${esc(title)}</strong>
-        ${extra}
-      </div>
+// ============================================================
+// CUSTOM PEAR KEYBOARD
+// ============================================================
 
-      <div class="app-content">
-        ${content}
-      </div>
-    </div>
-  `;
+let keyboardVisible = false;
+let keyboardShift = false;
 
-  setupKeyboardFields();
-}
+function addKeyboardSupport() {
+  setTimeout(() => {
+    const fields = appWindow.querySelectorAll(
+      "input[type='text'], input:not([type]), textarea"
+    );
 
-function button(text, action, cls = "") {
-  return `<button class="pear-btn ${cls}" onclick="${action}">${text}</button>`;
-}
-
-function toast(message) {
-  const old = document.getElementById("pear-toast");
-  if (old) old.remove();
-
-  const el = document.createElement("div");
-  el.id = "pear-toast";
-  el.textContent = message;
-
-  Object.assign(el.style, {
-    position: "absolute",
-    left: "50%",
-    bottom: "12px",
-    transform: "translateX(-50%)",
-    background: "rgba(0,0,0,.82)",
-    color: "white",
-    padding: "7px 12px",
-    borderRadius: "20px",
-    fontSize: "11px",
-    zIndex: "5000",
-    whiteSpace: "nowrap"
-  });
-
-  overlay.appendChild(el);
-
-  setTimeout(() => el.remove(), 1600);
-}
-
-/* =========================================================
-   KEYBOARD
-   ========================================================= */
-
-function setupKeyboardFields() {
-  document.querySelectorAll(
-    '#app-window input:not([type="file"]):not([type="checkbox"]):not([type="range"]):not([type="button"]), #app-window textarea'
-  ).forEach(field => {
-    field.addEventListener("focus", () => {
-      activeKeyboardField = field;
-      showKeyboard();
+    fields.forEach(field => {
+      field.addEventListener("focus", () => {
+        showPearKeyboard(field);
+      });
     });
-
-    field.addEventListener("click", () => {
-      activeKeyboardField = field;
-      showKeyboard();
-    });
-  });
+  }, 50);
 }
 
-function createKeyboard() {
-  if (document.getElementById("pear-keyboard")) return;
-
-  const keyboard = document.createElement("div");
-  keyboard.id = "pear-keyboard";
-
-  keyboard.innerHTML = `
-    <div class="pear-keyboard-row">
-      ${["Q","W","E","R","T","Y","U","I","O","P"]
-        .map(k => `<button type="button" data-key="${k}">${k}</button>`).join("")}
-    </div>
-
-    <div class="pear-keyboard-row">
-      ${["A","S","D","F","G","H","J","K","L"]
-        .map(k => `<button type="button" data-key="${k}">${k}</button>`).join("")}
-    </div>
-
-    <div class="pear-keyboard-row">
-      ${["Z","X","C","V","B","N","M"]
-        .map(k => `<button type="button" data-key="${k}">${k}</button>`).join("")}
-    </div>
-
-    <div class="pear-keyboard-row bottom">
-      <button type="button" data-action="backspace">⌫</button>
-      <button type="button" data-action="space">SPACE</button>
-      <button type="button" data-action="enter">↵</button>
-    </div>
-  `;
-
-  overlay.appendChild(keyboard);
-
-  keyboard.addEventListener("pointerdown", e => {
-    e.preventDefault();
-
-    const key = e.target.dataset.key;
-    const action = e.target.dataset.action;
-
-    if (!activeKeyboardField) return;
-
-    if (key) {
-      insertKeyboardText(key);
-    } else if (action === "space") {
-      insertKeyboardText(" ");
-    } else if (action === "backspace") {
-      deleteKeyboardCharacter();
-    } else if (action === "enter") {
-      insertKeyboardText("\n");
-    }
-  });
-}
-
-function showKeyboard() {
-  createKeyboard();
-
-  const keyboard = document.getElementById("pear-keyboard");
-  if (!keyboard) return;
-
-  keyboard.style.display = "block";
-
-  requestAnimationFrame(() => {
-    keyboard.classList.add("keyboard-show");
-  });
+function showPearKeyboard(input) {
+  if (!input) return;
 
   keyboardVisible = true;
 
-  if (overlay) {
-    overlay.classList.add("keyboard-open");
+  let keyboard = document.getElementById(
+    "pear-keyboard"
+  );
+
+  if (!keyboard) {
+    keyboard = document.createElement("div");
+    keyboard.id = "pear-keyboard";
+
+    keyboard.innerHTML = `
+      <div class="pear-keyboard-row">
+        ${"QWERTYUIOP".split("").map(k =>
+          `<button type="button" onclick="keyboardKey('${k}')">${k}</button>`
+        ).join("")}
+      </div>
+
+      <div class="pear-keyboard-row">
+        ${"ASDFGHJKL".split("").map(k =>
+          `<button type="button" onclick="keyboardKey('${k}')">${k}</button>`
+        ).join("")}
+      </div>
+
+      <div class="pear-keyboard-row">
+        <button type="button" onclick="keyboardShiftKey()">⇧</button>
+
+        ${"ZXCVBNM".split("").map(k =>
+          `<button type="button" onclick="keyboardKey('${k}')">${k}</button>`
+        ).join("")}
+
+        <button type="button" onclick="keyboardBackspace()">⌫</button>
+      </div>
+
+      <div class="pear-keyboard-row bottom">
+        <button type="button" onclick="keyboardNumber()">123</button>
+        <button type="button" onclick="keyboardSpace()">SPACE</button>
+        <button type="button" onclick="keyboardEnter()">↵</button>
+      </div>
+    `;
+
+    overlay.appendChild(keyboard);
   }
+
+  keyboard.style.display = "block";
+
+  setTimeout(() => {
+    keyboard.classList.add("keyboard-show");
+  }, 10);
 }
 
-function hideKeyboard() {
-  const keyboard = document.getElementById("pear-keyboard");
+function hidePearKeyboard() {
+  const keyboard =
+    document.getElementById("pear-keyboard");
 
-  if (keyboard) {
-    keyboard.classList.remove("keyboard-show");
+  if (!keyboard) return;
 
-    setTimeout(() => {
-      if (!keyboardVisible) {
-        keyboard.style.display = "none";
-      }
-    }, 280);
-  }
+  keyboard.classList.remove("keyboard-show");
+
+  setTimeout(() => {
+    keyboard.style.display = "none";
+  }, 250);
 
   keyboardVisible = false;
-
-  if (overlay) {
-    overlay.classList.remove("keyboard-open");
-  }
-
-  activeKeyboardField = null;
 }
 
-function insertKeyboardText(text) {
-  if (!activeKeyboardField) return;
+function getFocusedField() {
+  const active = document.activeElement;
 
-  const field = activeKeyboardField;
-  const start = field.selectionStart ?? field.value.length;
-  const end = field.selectionEnd ?? field.value.length;
+  if (
+    active &&
+    (
+      active.tagName === "INPUT" ||
+      active.tagName === "TEXTAREA"
+    )
+  ) {
+    return active;
+  }
+
+  return null;
+}
+
+function keyboardKey(key) {
+  const field = getFocusedField();
+
+  if (!field) return;
+
+  const character =
+    keyboardShift ? key : key.toLowerCase();
+
+  insertText(field, character);
+
+  keyboardShift = false;
+}
+
+function insertText(field, text) {
+  const start = field.selectionStart;
+  const end = field.selectionEnd;
 
   field.value =
     field.value.substring(0, start) +
     text +
     field.value.substring(end);
 
-  const newPos = start + text.length;
+  field.selectionStart =
+    field.selectionEnd =
+    start + text.length;
 
-  field.focus();
-  field.setSelectionRange(newPos, newPos);
-
-  field.dispatchEvent(new Event("input", { bubbles: true }));
+  field.dispatchEvent(
+    new Event("input", { bubbles: true })
+  );
 }
 
-function deleteKeyboardCharacter() {
-  if (!activeKeyboardField) return;
+function keyboardSpace() {
+  const field = getFocusedField();
 
-  const field = activeKeyboardField;
-  const start = field.selectionStart ?? field.value.length;
-  const end = field.selectionEnd ?? field.value.length;
+  if (field) insertText(field, " ");
+}
 
-  if (start === 0 && end === 0) return;
+function keyboardEnter() {
+  const field = getFocusedField();
+
+  if (!field) return;
+
+  if (field.tagName === "TEXTAREA") {
+    insertText(field, "\n");
+  } else {
+    field.blur();
+  }
+}
+
+function keyboardBackspace() {
+  const field = getFocusedField();
+
+  if (!field) return;
+
+  const start = field.selectionStart;
+  const end = field.selectionEnd;
 
   if (start !== end) {
     field.value =
       field.value.substring(0, start) +
       field.value.substring(end);
 
-    field.setSelectionRange(start, start);
-  } else {
+    field.selectionStart =
+      field.selectionEnd = start;
+  } else if (start > 0) {
     field.value =
       field.value.substring(0, start - 1) +
       field.value.substring(end);
 
-    field.setSelectionRange(start - 1, start - 1);
+    field.selectionStart =
+      field.selectionEnd = start - 1;
   }
 
-  field.dispatchEvent(new Event("input", { bubbles: true }));
+  field.dispatchEvent(
+    new Event("input", { bubbles: true })
+  );
 }
 
-document.addEventListener("pointerdown", e => {
-  if (!keyboardVisible) return;
+function keyboardShiftKey() {
+  keyboardShift = !keyboardShift;
+}
 
-  const keyboard = document.getElementById("pear-keyboard");
+function keyboardNumber() {
+  const field = getFocusedField();
 
-  if (
-    keyboard &&
-    !keyboard.contains(e.target) &&
-    !e.target.matches("input, textarea")
-  ) {
-    hideKeyboard();
+  if (!field) return;
+
+  insertText(
+    field,
+    keyboardShift ? "1234567890" : "1234567890"
+  );
+}
+
+// ============================================================
+// MESSAGES
+// ============================================================
+
+const messageContacts = {
+  Chloe: [
+    "Heyyy 👋",
+    "What are you doing?",
+    "HAHA wait 😭",
+    "Okayyy sounds good"
+  ],
+  Sam: [
+    "Yo!",
+    "Are you free later?",
+    "That's actually crazy 😂",
+    "See you soon"
+  ],
+  Cat: [
+    "meow",
+    "feed me",
+    "MEOWWW",
+    "😼"
+  ]
+};
+
+function messagesApp() {
+  openApp(
+    "Messages",
+    `
+      <div class="card">
+        <h2>💬 Messages</h2>
+
+        <div id="contact-list">
+          ${Object.keys(messageContacts).map(name => `
+            <button onclick="openChat('${name}')">
+              💬 ${name}
+            </button>
+          `).join("")}
+        </div>
+
+        <button onclick="newMessage()">
+          ✏️ New Message
+        </button>
+
+        <button onclick="alert('3 unread messages')">
+          🔴 Unread Messages
+        </button>
+      </div>
+    `
+  );
+}
+
+function openChat(name) {
+  const messages =
+    messageContacts[name] || [];
+
+  openApp(
+    name,
+    `
+      <div class="card">
+        <div id="chat-box">
+          ${messages.slice(0, 2).map(msg => `
+            <div class="message received">
+              ${escapeHTML(msg)}
+            </div>
+          `).join("")}
+        </div>
+
+        <input
+          id="message-input"
+          placeholder="Message..."
+        >
+
+        <button onclick="sendMessage('${name}')">
+          Send
+        </button>
+
+        <button onclick="randomReply('${name}')">
+          🤖 Random Reply
+        </button>
+      </div>
+    `
+  );
+}
+
+function sendMessage(name) {
+  const input =
+    document.getElementById("message-input");
+
+  const chat =
+    document.getElementById("chat-box");
+
+  if (!input || !chat || !input.value.trim()) {
+    return;
   }
-});
 
-/* =========================================================
-   MESSAGES
-   ========================================================= */
+  chat.innerHTML += `
+    <div class="message sent">
+      ${escapeHTML(input.value)}
+    </div>
+  `;
 
-let messages = [
+  input.value = "";
+
+  setTimeout(() => randomReply(name), 600);
+}
+
+function randomReply(name) {
+  const chat =
+    document.getElementById("chat-box");
+
+  if (!chat) return;
+
+  const replies =
+    messageContacts[name] || ["Okay!"];
+
+  const reply =
+    replies[Math.floor(Math.random() * replies.length)];
+
+  chat.innerHTML += `
+    <div class="message received">
+      ${escapeHTML(reply)}
+    </div>
+  `;
+}
+
+function newMessage() {
+  openApp(
+    "New Message",
+    `
+      <div class="card">
+        <input id="new-contact" placeholder="Contact">
+
+        <textarea
+          id="new-message"
+          placeholder="Message..."
+        ></textarea>
+
+        <button onclick="alert('Message sent! 📱')">
+          Send
+        </button>
+      </div>
+    `
+  );
+}
+
+// ============================================================
+// CAMERA
+// ============================================================
+
+let cameraStream = null;
+let cameraFacing = "user";
+
+function cameraApp() {
+  openApp(
+    "Camera",
+    `
+      <div class="card camera-box">
+        <video
+          id="camera-video"
+          autoplay
+          playsinline
+        ></video>
+
+        <button onclick="startCamera()">
+          📷 Start Camera
+        </button>
+
+        <button onclick="capturePhoto()">
+          ⭕ Take Photo
+        </button>
+
+        <button onclick="flipCamera()">
+          🔄 Flip Camera
+        </button>
+
+        <div id="camera-photo"></div>
+
+        <canvas id="camera-canvas"></canvas>
+      </div>
+    `
+  );
+
+  startCamera();
+}
+
+async function startCamera() {
+  try {
+    stopCamera();
+
+    cameraStream =
+      await navigator.mediaDevices.getUserMedia({
+        video: {
+          facingMode: cameraFacing
+        },
+        audio: false
+      });
+
+    const video =
+      document.getElementById("camera-video");
+
+    if (video) {
+      video.srcObject = cameraStream;
+    }
+  } catch {
+    alert("Camera access was not available.");
+  }
+}
+
+function flipCamera() {
+  cameraFacing =
+    cameraFacing === "user"
+      ? "environment"
+      : "user";
+
+  startCamera();
+}
+
+function capturePhoto() {
+  const video =
+    document.getElementById("camera-video");
+
+  const canvas =
+    document.getElementById("camera-canvas");
+
+  const preview =
+    document.getElementById("camera-photo");
+
+  if (!video || !canvas || !preview) return;
+
+  canvas.width =
+    video.videoWidth || 640;
+
+  canvas.height =
+    video.videoHeight || 480;
+
+  const ctx =
+    canvas.getContext("2d");
+
+  ctx.drawImage(
+    video,
+    0,
+    0,
+    canvas.width,
+    canvas.height
+  );
+
+  preview.innerHTML = `
+    <img
+      src="${canvas.toDataURL("image/png")}"
+      style="width:100%;border-radius:12px"
+    >
+  `;
+}
+
+function stopCamera() {
+  if (!cameraStream) return;
+
+  cameraStream.getTracks().forEach(track => {
+    track.stop();
+  });
+
+  cameraStream = null;
+}
+
+// ============================================================
+// SPLASHFACE
+// ============================================================
+
+let splashPosts = [
   {
-    name: "Dylan",
-    text: "Yo! You using the Pear Phone?",
-    time: "9:41 PM"
+    user: "loganbalbs",
+    text: "Living my best Pear Phone life 🍐📱",
+    likes: 24,
+    comments: []
   },
   {
-    name: "Alex",
-    text: "Check out this new app 😂",
-    time: "8:18 PM"
+    user: "sam",
+    text: "This phone is actually insane 😂",
+    likes: 12,
+    comments: []
   },
   {
-    name: "Pear Bot",
-    text: "Welcome to Pear Phone OS!",
-    time: "7:02 PM"
+    user: "chloe",
+    text: "New post!!! ✨",
+    likes: 31,
+    comments: []
   }
 ];
 
-function appMessages() {
-  appShell(
-    "Messages",
-    `
-      <div class="message-list">
-        ${messages.map((m, i) => `
-          <div class="message-card" onclick="openMessage(${i})">
-            <div>
-              <strong>${esc(m.name)}</strong>
-              <p>${esc(m.text)}</p>
-            </div>
-            <small>${esc(m.time)}</small>
-          </div>
-        `).join("")}
-      </div>
-
-      <input id="message-input" placeholder="New message...">
-
-      <button class="pear-btn wide" onclick="sendMessage()">
-        Send
-      </button>
-    `
-  );
+function splashfaceApp() {
+  renderSplashface();
 }
 
-function openMessage(index) {
-  const m = messages[index];
-
-  appShell(
-    m.name,
-    `
-      <div class="chat">
-        ${messages.slice(0, index + 1).map(x => `
-          <div class="bubble">${esc(x.text)}</div>
-        `).join("")}
-      </div>
-
-      <input id="reply-input" placeholder="Reply...">
-
-      <button class="pear-btn wide" onclick="sendReply(${index})">
-        Send Reply
-      </button>
-    `
-  );
-}
-
-function sendMessage() {
-  const input = document.getElementById("message-input");
-
-  if (!input || !input.value.trim()) {
-    toast("Type something first");
-    return;
-  }
-
-  messages.unshift({
-    name: "You",
-    text: input.value,
-    time: new Date().toLocaleTimeString([], {
-      hour: "numeric",
-      minute: "2-digit"
-    })
-  });
-
-  toast("Message sent!");
-  appMessages();
-}
-
-function sendReply(index) {
-  const input = document.getElementById("reply-input");
-
-  if (!input || !input.value.trim()) {
-    toast("Type a reply first");
-    return;
-  }
-
-  messages.splice(index + 1, 0, {
-    name: "You",
-    text: input.value,
-    time: "Now"
-  });
-
-  toast("Reply sent!");
-  appMessages();
-}
-
-/* =========================================================
-   CAMERA
-   ========================================================= */
-
-let cameraCount = 0;
-
-function appCamera() {
-  appShell(
-    "Camera",
-    `
-      <div class="camera-view">
-        <div class="camera-lens">●</div>
-        <div class="camera-cross">+</div>
-        <span>PEAR CAMERA</span>
-      </div>
-
-      <div class="camera-controls">
-        <button class="circle-btn" onclick="toggleFlash()">⚡</button>
-        <button class="shutter" onclick="takePicture()">●</button>
-        <button class="circle-btn" onclick="cameraFlip()">↻</button>
-      </div>
-
-      <p id="camera-status">Ready</p>
-    `
-  );
-}
-
-function takePicture() {
-  cameraCount++;
-
-  const status = document.getElementById("camera-status");
-
-  if (status) {
-    status.textContent = `Photo ${cameraCount} saved to Photos`;
-  }
-
-  toast("📸 Photo saved!");
-
-  localStorage.setItem(
-    "pear-camera-count",
-    cameraCount
-  );
-}
-
-function toggleFlash() {
-  toast("Flash toggled ⚡");
-}
-
-function cameraFlip() {
-  toast("Camera flipped ↻");
-}
-
-/* =========================================================
-   SPLASHFACE
-   ========================================================= */
-
-let splashLikes = [23, 81, 14];
-
-function appSplashFace() {
-  appShell(
+function renderSplashface() {
+  openApp(
     "SplashFace",
     `
-      <div class="social-post">
-        <div class="social-avatar">🙂</div>
-        <strong>pear_user</strong>
-        <div class="fake-photo">🌴</div>
-        <button class="like-btn" onclick="likeSplash(0)">
-          ❤️ <span id="like-0">${splashLikes[0]}</span>
+      <div class="card">
+        <h2>👤 SplashFace</h2>
+
+        <p>
+          Followers: 248
+        </p>
+
+        <button onclick="newPost()">
+          ➕ New Post
         </button>
-        <p>Another day in paradise.</p>
-      </div>
 
-      <div class="social-post">
-        <div class="social-avatar">🍐</div>
-        <strong>PearOfficial</strong>
-        <div class="fake-photo">🍐</div>
-        <button class="like-btn" onclick="likeSplash(1)">
-          ❤️ <span id="like-1">${splashLikes[1]}</span>
+        <button onclick="shuffleSplash()">
+          🔀 Discover
         </button>
-        <p>Think different. Think Pear.</p>
+
+        <div id="splash-feed">
+          ${splashPosts.map((post, index) => `
+            <div class="post">
+              <strong>@${escapeHTML(post.user)}</strong>
+
+              <p>${escapeHTML(post.text)}</p>
+
+              <button onclick="likeSplash(${index})">
+                ❤️ ${post.likes}
+              </button>
+
+              <button onclick="commentSplash(${index})">
+                💬 ${post.comments.length}
+              </button>
+
+              ${
+                post.comments.length
+                  ? `
+                    <div>
+                      ${post.comments.map(c =>
+                        `<small>💬 ${escapeHTML(c)}</small><br>`
+                      ).join("")}
+                    </div>
+                  `
+                  : ""
+              }
+            </div>
+          `).join("")}
+        </div>
       </div>
-
-      <input id="splash-post" placeholder="Write a post...">
-
-      <button class="pear-btn wide" onclick="makeSplashPost()">
-        Post
-      </button>
     `
   );
 }
 
 function likeSplash(index) {
-  splashLikes[index]++;
-  const el = document.getElementById(`like-${index}`);
-
-  if (el) el.textContent = splashLikes[index];
-
-  toast("❤️ Liked!");
+  splashPosts[index].likes++;
+  renderSplashface();
 }
 
-function makeSplashPost() {
-  const input = document.getElementById("splash-post");
+function commentSplash(index) {
+  const comment =
+    prompt("Write a comment:");
 
-  if (!input || !input.value.trim()) {
-    toast("Write something first");
+  if (!comment) return;
+
+  splashPosts[index].comments.push(comment);
+  renderSplashface();
+}
+
+function newPost() {
+  const text =
+    prompt("What's on your mind?");
+
+  if (!text) return;
+
+  splashPosts.unshift({
+    user: "loganbalbs",
+    text,
+    likes: 0,
+    comments: []
+  });
+
+  renderSplashface();
+}
+
+function shuffleSplash() {
+  splashPosts =
+    [...splashPosts].sort(
+      () => Math.random() - 0.5
+    );
+
+  renderSplashface();
+}
+
+// ============================================================
+// STOCKS
+// ============================================================
+
+let stockData = {
+  AAPL: 227.40,
+  TSLA: 355.20,
+  GOOG: 255.10,
+  AMZN: 232.80,
+  NFLX: 112.30,
+  NVDA: 182.60
+};
+
+let portfolio = {
+  cash: 10000,
+  holdings: {}
+};
+
+function stocksApp() {
+  const rows =
+    Object.keys(stockData).map(symbol => `
+      <div class="stock-row">
+        <strong>${symbol}</strong>
+        <span>
+          $${stockData[symbol].toFixed(2)}
+        </span>
+        <button onclick="stockDetails('${symbol}')">
+          View
+        </button>
+      </div>
+    `).join("");
+
+  openApp(
+    "Stocks",
+    `
+      <div class="card">
+        <h2>📈 Stocks</h2>
+
+        <h3>
+          Cash:
+          $${portfolio.cash.toFixed(2)}
+        </h3>
+
+        ${rows}
+
+        <button onclick="refreshStocks()">
+          🔄 Refresh Prices
+        </button>
+
+        <button onclick="addStock()">
+          ➕ Add Stock
+        </button>
+
+        <button onclick="showPortfolio()">
+          💼 Portfolio
+        </button>
+      </div>
+    `
+  );
+}
+
+function refreshStocks() {
+  Object.keys(stockData).forEach(symbol => {
+    stockData[symbol] +=
+      (Math.random() - 0.5) * 15;
+
+    if (stockData[symbol] < 1) {
+      stockData[symbol] = 1;
+    }
+  });
+
+  stocksApp();
+}
+
+function stockDetails(symbol) {
+  openApp(
+    symbol,
+    `
+      <div class="card">
+        <h2>${symbol}</h2>
+
+        <h1>
+          $${stockData[symbol].toFixed(2)}
+        </h1>
+
+        <button onclick="buyStock('${symbol}')">
+          Buy 1
+        </button>
+
+        <button onclick="sellStock('${symbol}')">
+          Sell 1
+        </button>
+
+        <button onclick="stocksApp()">
+          ← Back
+        </button>
+      </div>
+    `
+  );
+}
+
+function buyStock(symbol) {
+  const price = stockData[symbol];
+
+  if (portfolio.cash < price) {
+    alert("Not enough cash.");
     return;
   }
 
-  toast("Posted to SplashFace!");
-  input.value = "";
+  portfolio.cash -= price;
+
+  portfolio.holdings[symbol] =
+    (portfolio.holdings[symbol] || 0) + 1;
+
+  alert("Bought 1 " + symbol);
+  stocksApp();
 }
 
-/* =========================================================
-   STOCKS
-   ========================================================= */
+function sellStock(symbol) {
+  if (!portfolio.holdings[symbol]) {
+    alert("You don't own this stock.");
+    return;
+  }
 
-let stockPrice = 142.31;
-let balance = 10000;
-let shares = 0;
+  portfolio.holdings[symbol]--;
+  portfolio.cash += stockData[symbol];
 
-function appStocks() {
-  const value = shares * stockPrice;
+  alert("Sold 1 " + symbol);
+  stocksApp();
+}
 
-  appShell(
-    "Stocks",
+function showPortfolio() {
+  let text = "PORTFOLIO\n\n";
+
+  Object.keys(portfolio.holdings)
+    .forEach(symbol => {
+      if (portfolio.holdings[symbol] > 0) {
+        text +=
+          symbol +
+          ": " +
+          portfolio.holdings[symbol] +
+          "\n";
+      }
+    });
+
+  text +=
+    "\nCash: $" +
+    portfolio.cash.toFixed(2);
+
+  alert(text);
+}
+
+function addStock() {
+  const symbol =
+    prompt("Enter stock symbol:");
+
+  if (!symbol) return;
+
+  const upper =
+    symbol.toUpperCase();
+
+  stockData[upper] =
+    50 + Math.random() * 300;
+
+  stocksApp();
+}
+
+// ============================================================
+// MAPS
+// ============================================================
+
+let savedPlaces = [];
+
+function mapsApp() {
+  openApp(
+    "Maps",
     `
-      <div class="stock-main">
-        <h1>$${stockPrice.toFixed(2)}</h1>
-        <p class="up">▲ 2.41%</p>
-      </div>
+      <div class="card">
+        <h2>🗺️ Maps</h2>
 
-      <div class="stock-stats">
-        <div>
-          <small>Cash</small>
-          <strong>$${balance.toFixed(2)}</strong>
-        </div>
-        <div>
-          <small>Shares</small>
-          <strong>${shares}</strong>
-        </div>
-        <div>
-          <small>Position</small>
-          <strong>$${value.toFixed(2)}</strong>
-        </div>
-      </div>
+        <input
+          id="map-search"
+          placeholder="Search a place..."
+        >
 
-      <button class="pear-btn" onclick="buyStock()">Buy</button>
-      <button class="pear-btn" onclick="sellStock()">Sell</button>
-      <button class="pear-btn" onclick="refreshStock()">Refresh</button>
+        <button onclick="searchMap()">
+          Search
+        </button>
 
-      <div id="stock-chart">
-        ${Array.from({length: 12}, () =>
-          `<i style="height:${20 + Math.random()*65}%"></i>`
-        ).join("")}
+        <button onclick="routeDemo()">
+          🚗 Directions
+        </button>
+
+        <button onclick="locateMe()">
+          📍 Find Me
+        </button>
+
+        <button onclick="savedMapPlace()">
+          ⭐ Save Place
+        </button>
+
+        <div id="map-result"></div>
+
+        <h3>Saved Places</h3>
+
+        <div>
+          ${
+            savedPlaces.length
+              ? savedPlaces.map(place =>
+                  `<p>📍 ${escapeHTML(place)}</p>`
+                ).join("")
+              : "No saved places"
+          }
+        </div>
       </div>
     `
   );
 }
 
-function buyStock() {
-  if (balance >= stockPrice) {
-    balance -= stockPrice;
-    shares++;
-    toast("Bought 1 share 📈");
-    appStocks();
-  } else {
-    toast("Not enough cash");
-  }
+function searchMap() {
+  const input =
+    document.getElementById("map-search");
+
+  const result =
+    document.getElementById("map-result");
+
+  if (!input || !result) return;
+
+  result.innerHTML = `
+    <div class="card">
+      📍 Found:
+      <strong>
+        ${escapeHTML(input.value)}
+      </strong>
+
+      <p>
+        Distance: ${(Math.random() * 20 + 1).toFixed(1)} km
+      </p>
+
+      <p>
+        Estimated travel time:
+        ${Math.floor(Math.random() * 30 + 5)} min
+      </p>
+    </div>
+  `;
 }
 
-function sellStock() {
-  if (shares > 0) {
-    shares--;
-    balance += stockPrice;
-    toast("Sold 1 share");
-    appStocks();
-  } else {
-    toast("You have no shares");
-  }
-}
-
-function refreshStock() {
-  stockPrice += (Math.random() - 0.45) * 8;
-
-  if (stockPrice < 1) stockPrice = 1;
-
-  appStocks();
-}
-
-/* =========================================================
-   MAPS
-   ========================================================= */
-
-function appMaps() {
-  appShell(
-    "Pear Maps",
-    `
-      <div class="map-screen">
-        <div class="map-road"></div>
-        <div class="map-road road2"></div>
-        <div class="map-pin">📍</div>
-      </div>
-
-      <button class="pear-btn wide" onclick="mapDestination('Campus')">
-        🏫 Campus
-      </button>
-
-      <button class="pear-btn wide" onclick="mapDestination('Home')">
-        🏠 Home
-      </button>
-
-      <button class="pear-btn wide" onclick="mapDestination('Mall')">
-        🛍️ Mall
-      </button>
-
-      <p id="map-result">Choose a destination.</p>
-    `
+function routeDemo() {
+  alert(
+    "🚗 Route calculated!\n\n" +
+    "Distance: 8.4 km\n" +
+    "Time: 18 minutes"
   );
 }
 
-function mapDestination(place) {
-  const distances = {
-    Campus: "1.8 km",
-    Home: "4.2 km",
-    Mall: "6.7 km"
-  };
+function savedMapPlace() {
+  const input =
+    document.getElementById("map-search");
 
-  const result = document.getElementById("map-result");
-
-  if (result) {
-    result.innerHTML = `
-      Route to <strong>${place}</strong><br>
-      ${distances[place]} away<br>
-      ETA: ${Math.floor(5 + Math.random() * 15)} min
-    `;
+  if (!input || !input.value.trim()) {
+    alert("Search for a place first.");
+    return;
   }
+
+  savedPlaces.push(input.value);
+  mapsApp();
 }
 
-/* =========================================================
-   PHOTOS
-   ========================================================= */
+function locateMe() {
+  alert(
+    "📍 You are here!\n\n" +
+    "Location services connected."
+  );
+}
 
-let photos = ["🌴", "🍐", "🌅"];
+// ============================================================
+// PHOTOS
+// ============================================================
 
-function appPhotos() {
-  appShell(
+let favoritePhotos = [];
+
+function photosApp() {
+  openApp(
     "Photos",
     `
-      <div class="photo-grid">
-        ${photos.map((p, i) => `
-          <div class="photo-item" onclick="viewPhoto(${i})">
-            ${p}
-          </div>
-        `).join("")}
+      <div class="card">
+        <h2>🖼️ Photos</h2>
+
+        <input
+          type="file"
+          accept="image/*"
+          multiple
+          onchange="loadPhotos(event)"
+        >
+
+        <button onclick="showFavoritePhotos()">
+          ⭐ Favorites
+        </button>
+
+        <div id="photo-grid"></div>
       </div>
-
-      <button class="pear-btn" onclick="addPhoto()">
-        ＋ Add
-      </button>
-
-      <button class="pear-btn" onclick="deletePhoto()">
-        Delete
-      </button>
     `
   );
 }
 
-function viewPhoto(index) {
-  toast(`Photo ${index + 1}`);
+function loadPhotos(event) {
+  const grid =
+    document.getElementById("photo-grid");
+
+  if (!grid) return;
+
+  grid.innerHTML = "";
+
+  Array.from(event.target.files).forEach((file, index) => {
+    const url =
+      URL.createObjectURL(file);
+
+    grid.innerHTML += `
+      <div class="photo-item">
+        <img
+          src="${url}"
+          style="width:100%;border-radius:12px"
+        >
+
+        <button onclick="favoritePhoto(${index})">
+          ⭐ Favorite
+        </button>
+      </div>
+    `;
+  });
 }
 
-function addPhoto() {
-  const newPhotos = ["🌊", "🏔️", "🌃", "🌸", "🚀", "🎆"];
+function favoritePhoto(index) {
+  favoritePhotos.push(index);
+  alert("Added to favorites ⭐");
+}
 
-  photos.push(
-    newPhotos[Math.floor(Math.random() * newPhotos.length)]
+function showFavoritePhotos() {
+  alert(
+    favoritePhotos.length +
+    " favorite photo(s)"
   );
-
-  appPhotos();
 }
 
-function deletePhoto() {
-  if (photos.length > 0) {
-    photos.pop();
-    appPhotos();
-  }
-}
+// ============================================================
+// WEATHER
+// ============================================================
 
-/* =========================================================
-   WEATHER
-   ========================================================= */
+let weatherCities = [
+  "Toronto",
+  "Vancouver",
+  "New York",
+  "Los Angeles",
+  "London"
+];
 
-function appWeather() {
-  const temps = [18, 21, 24, 26, 19];
-
-  appShell(
+function weatherApp() {
+  openApp(
     "Weather",
     `
-      <div class="weather-big">
-        <div class="weather-icon">☀️</div>
-        <h1 id="weather-temp">24°</h1>
-        <p>Mostly Sunny</p>
-      </div>
+      <div class="card">
+        <h2>☀️ Weather</h2>
 
-      <div class="forecast">
-        ${["Mon","Tue","Wed","Thu","Fri"].map((day, i) => `
-          <div>
-            <strong>${day}</strong>
-            <span>${temps[i]}°</span>
-            <small>☀️</small>
-          </div>
-        `).join("")}
-      </div>
+        <select id="weather-city">
+          ${weatherCities.map(city =>
+            `<option>${city}</option>`
+          ).join("")}
+        </select>
 
-      <button class="pear-btn wide" onclick="refreshWeather()">
-        Refresh Weather
-      </button>
+        <div id="weather-main">
+          <h1>22°C</h1>
+          <p>Partly Cloudy ☁️</p>
+        </div>
+
+        <button onclick="refreshWeather()">
+          🔄 Refresh
+        </button>
+
+        <h3>Hourly</h3>
+
+        <p>10 AM ☀️ 21°</p>
+        <p>12 PM ☀️ 23°</p>
+        <p>2 PM 🌤️ 24°</p>
+        <p>4 PM 🌤️ 23°</p>
+
+        <h3>7 Day</h3>
+
+        <p>Mon ☀️ 24°</p>
+        <p>Tue 🌤️ 23°</p>
+        <p>Wed 🌧️ 19°</p>
+        <p>Thu ☀️ 25°</p>
+      </div>
     `
   );
 }
 
 function refreshWeather() {
-  const temp = Math.floor(15 + Math.random() * 15);
+  const temp =
+    Math.floor(Math.random() * 20) + 10;
 
-  const el = document.getElementById("weather-temp");
+  const main =
+    document.getElementById("weather-main");
 
-  if (el) {
-    el.textContent = `${temp}°`;
+  if (main) {
+    main.innerHTML = `
+      <h1>${temp}°C</h1>
+      <p>
+        ${
+          temp > 20
+            ? "Sunny ☀️"
+            : "Cool 🌤️"
+        }
+      </p>
+    `;
   }
-
-  toast("Weather updated");
 }
 
-/* =========================================================
-   NOTES
-   ========================================================= */
+// ============================================================
+// NOTES
+// ============================================================
 
 let notes = JSON.parse(
   localStorage.getItem("pear-notes") || "[]"
 );
 
-function appNotes() {
-  appShell(
+function notesApp() {
+  renderNotes();
+}
+
+function renderNotes() {
+  openApp(
     "Notes",
     `
-      <input id="note-title" placeholder="Title">
+      <div class="card">
+        <h2>📝 Notes</h2>
 
-      <textarea
-        id="note-body"
-        rows="6"
-        placeholder="Start typing..."
-      ></textarea>
+        <button onclick="createNote()">
+          ➕ New Note
+        </button>
 
-      <button class="pear-btn wide" onclick="saveNote()">
-        Save Note
-      </button>
+        <input
+          id="note-search"
+          placeholder="Search notes..."
+          oninput="searchNotes()"
+        >
 
-      <div class="saved-notes">
-        ${notes.map((n, i) => `
-          <div class="note-card" onclick="openNote(${i})">
-            <strong>${esc(n.title)}</strong>
-            <p>${esc(n.body.substring(0, 45))}</p>
-          </div>
-        `).join("")}
+        <div id="notes-list">
+          ${notes.map((note, index) => `
+            <button
+              onclick="editNote(${index})"
+              style="text-align:left"
+            >
+              <strong>
+                ${escapeHTML(note.title)}
+              </strong>
+
+              <br>
+
+              ${escapeHTML(note.text).slice(0, 60)}
+            </button>
+          `).join("")}
+        </div>
       </div>
     `
   );
 }
 
-function saveNote() {
-  const title = document.getElementById("note-title");
-  const body = document.getElementById("note-body");
+function createNote() {
+  const title =
+    prompt("Note title:");
 
-  if (!body.value.trim()) {
-    toast("Write something first");
-    return;
-  }
+  if (!title) return;
 
   notes.unshift({
-    title: title.value || "Untitled",
-    body: body.value
+    title,
+    text: "",
+    date: new Date().toLocaleString()
   });
 
-  localStorage.setItem("pear-notes", JSON.stringify(notes));
-
-  toast("Note saved!");
-  appNotes();
+  saveNotes();
+  editNote(0);
 }
 
-function openNote(index) {
-  const n = notes[index];
+function editNote(index) {
+  const note = notes[index];
 
-  appShell(
-    n.title,
+  openApp(
+    "Edit Note",
     `
-      <textarea id="edit-note" rows="9">${esc(n.body)}</textarea>
+      <div class="card">
+        <input
+          id="edit-note-title"
+          value="${escapeHTML(note.title)}"
+        >
 
-      <button class="pear-btn wide" onclick="updateNote(${index})">
-        Save Changes
-      </button>
+        <textarea
+          id="edit-note-text"
+          style="height:200px"
+        >${escapeHTML(note.text)}</textarea>
 
-      <button class="pear-btn danger wide" onclick="deleteNote(${index})">
-        Delete
-      </button>
+        <button onclick="saveEditedNote(${index})">
+          💾 Save
+        </button>
+
+        <button onclick="deleteNote(${index})">
+          🗑️ Delete
+        </button>
+      </div>
     `
   );
 }
 
-function updateNote(index) {
-  const input = document.getElementById("edit-note");
+function saveEditedNote(index) {
+  notes[index].title =
+    document.getElementById(
+      "edit-note-title"
+    ).value;
 
-  notes[index].body = input.value;
+  notes[index].text =
+    document.getElementById(
+      "edit-note-text"
+    ).value;
 
-  localStorage.setItem("pear-notes", JSON.stringify(notes));
+  notes[index].date =
+    new Date().toLocaleString();
 
-  toast("Updated!");
-  appNotes();
+  saveNotes();
+  notesApp();
 }
 
 function deleteNote(index) {
   notes.splice(index, 1);
-
-  localStorage.setItem("pear-notes", JSON.stringify(notes));
-
-  toast("Deleted");
-  appNotes();
+  saveNotes();
+  notesApp();
 }
 
-/* =========================================================
-   PEARTUNES
-   ========================================================= */
+function saveNotes() {
+  localStorage.setItem(
+    "pear-notes",
+    JSON.stringify(notes)
+  );
+}
 
-let musicPlaying = false;
-let currentSong = 0;
+function searchNotes() {
+  const search =
+    document.getElementById(
+      "note-search"
+    );
 
-const songs = [
-  ["Pearwave", "The Pears"],
-  ["Electric Summer", "P-Club"],
-  ["Midnight Drive", "Pear Radio"],
-  ["Loading...", "Pear OS"]
+  const list =
+    document.getElementById(
+      "notes-list"
+    );
+
+  if (!search || !list) return;
+
+  const query =
+    search.value.toLowerCase();
+
+  list.innerHTML =
+    notes
+      .map((note, index) => ({
+        note,
+        index
+      }))
+      .filter(item =>
+        (
+          item.note.title +
+          " " +
+          item.note.text
+        )
+          .toLowerCase()
+          .includes(query)
+      )
+      .map(item => `
+        <button
+          onclick="editNote(${item.index})"
+        >
+          ${escapeHTML(item.note.title)}
+        </button>
+      `)
+      .join("");
+}
+
+// ============================================================
+// PEARTUNES
+// ============================================================
+
+let musicIndex = 0;
+
+const demoSongs = [
+  "Pear Dreams",
+  "Midnight Drive",
+  "Pixel Paradise",
+  "Fruit Juice",
+  "Neon Apples"
 ];
 
-function appPearTunes() {
-  appShell(
+function pearTunesApp() {
+  openApp(
     "PearTunes",
     `
-      <div class="album-art">🍐</div>
+      <div class="card">
+        <h2>🎵 PearTunes</h2>
 
-      <h2 id="song-title">${songs[currentSong][0]}</h2>
-      <p>${songs[currentSong][1]}</p>
+        <h3 id="song-title">
+          ${demoSongs[musicIndex]}
+        </h3>
 
-      <div class="music-progress">
-        <div id="music-bar"></div>
-      </div>
-
-      <div class="music-controls">
-        <button class="pear-btn" onclick="previousSong()">◀</button>
-        <button class="pear-btn" onclick="toggleMusic()">
-          ${musicPlaying ? "❚❚" : "▶"}
+        <button onclick="previousSong()">
+          ⏮
         </button>
-        <button class="pear-btn" onclick="nextSong()">▶</button>
-      </div>
 
-      <div class="song-list">
-        ${songs.map((s, i) => `
-          <div class="song" onclick="selectSong(${i})">
-            ${i + 1}. ${esc(s[0])}
-          </div>
-        `).join("")}
+        <button onclick="playDemoTone()">
+          ▶
+        </button>
+
+        <button onclick="nextSong()">
+          ⏭
+        </button>
+
+        <button onclick="shuffleSongs()">
+          🔀
+        </button>
+
+        <input
+          type="range"
+          min="0"
+          max="100"
+          value="70"
+          style="width:100%"
+        >
+
+        <hr>
+
+        <input
+          type="file"
+          accept="audio/*"
+          onchange="loadAudio(event)"
+        >
+
+        <audio
+          id="audio-player"
+          controls
+          style="width:100%"
+        ></audio>
       </div>
     `
   );
 }
 
-function toggleMusic() {
-  musicPlaying = !musicPlaying;
-  appPearTunes();
+function playDemoTone() {
+  const AudioContext =
+    window.AudioContext ||
+    window.webkitAudioContext;
+
+  if (!AudioContext) return;
+
+  const context =
+    new AudioContext();
+
+  const oscillator =
+    context.createOscillator();
+
+  const gain =
+    context.createGain();
+
+  oscillator.frequency.value = 440;
+
+  oscillator.connect(gain);
+  gain.connect(context.destination);
+
+  oscillator.start();
+
+  gain.gain.exponentialRampToValueAtTime(
+    0.0001,
+    context.currentTime + 1
+  );
+
+  oscillator.stop(
+    context.currentTime + 1
+  );
 }
 
 function nextSong() {
-  currentSong = (currentSong + 1) % songs.length;
-  appPearTunes();
+  musicIndex =
+    (musicIndex + 1) %
+    demoSongs.length;
+
+  updateSongTitle();
 }
 
 function previousSong() {
-  currentSong =
-    (currentSong - 1 + songs.length) % songs.length;
+  musicIndex--;
 
-  appPearTunes();
+  if (musicIndex < 0) {
+    musicIndex =
+      demoSongs.length - 1;
+  }
+
+  updateSongTitle();
 }
 
-function selectSong(index) {
-  currentSong = index;
-  musicPlaying = true;
-  appPearTunes();
+function shuffleSongs() {
+  musicIndex =
+    Math.floor(
+      Math.random() *
+      demoSongs.length
+    );
+
+  updateSongTitle();
 }
 
-/* =========================================================
-   SETTINGS
-   ========================================================= */
+function updateSongTitle() {
+  const title =
+    document.getElementById(
+      "song-title"
+    );
 
-function appSettings() {
-  const dark =
-    localStorage.getItem("pear-dark") === "true";
+  if (title) {
+    title.textContent =
+      demoSongs[musicIndex];
+  }
+}
 
-  appShell(
+function loadAudio(event) {
+  const file =
+    event.target.files[0];
+
+  if (!file) return;
+
+  const player =
+    document.getElementById(
+      "audio-player"
+    );
+
+  player.src =
+    URL.createObjectURL(file);
+}
+
+// ============================================================
+// SETTINGS
+// ============================================================
+
+function settingsApp() {
+  openApp(
     "Settings",
     `
-      <div class="setting-row">
-        <span>Dark Mode</span>
-        <input
-          type="checkbox"
-          ${dark ? "checked" : ""}
-          onchange="toggleDark(this.checked)"
-        >
+      <div class="card">
+        <h2>⚙️ Settings</h2>
+
+        <h3>Appearance</h3>
+
+        <button onclick="toggleDarkMode()">
+          🌙 Dark / Light Mode
+        </button>
+
+        <label>
+          Brightness
+          <input
+            type="range"
+            min="50"
+            max="100"
+            value="100"
+            oninput="changeBrightness(this.value)"
+          >
+        </label>
+
+        <h3>Sound</h3>
+
+        <button onclick="toggleSound()">
+          🔊 Sound On / Off
+        </button>
+
+        <button onclick="testSound()">
+          🔔 Test Sound
+        </button>
+
+        <h3>Animations</h3>
+
+        <button onclick="toggleAnimations()">
+          ✨ Toggle Animations
+        </button>
+
+        <h3>Keyboard</h3>
+
+        <button onclick="keyboardDemo()">
+          ⌨️ Test Keyboard
+        </button>
+
+        <h3>Phone</h3>
+
+        <button onclick="phoneInfo()">
+          🍐 Pear Phone Info
+        </button>
+
+        <button onclick="batteryInfo()">
+          🔋 Battery
+        </button>
+
+        <button onclick="storageInfo()">
+          💾 Storage
+        </button>
+
+        <h3>Data</h3>
+
+        <button onclick="resetNotes()">
+          📝 Clear Notes
+        </button>
+
+        <button onclick="resetPhone()">
+          🔄 Reset Pear Phone
+        </button>
       </div>
-
-      <div class="setting-row">
-        <span>Phone Vibration</span>
-        <input type="checkbox" checked>
-      </div>
-
-      <div class="setting-row">
-        <span>Sounds</span>
-        <input type="checkbox" checked>
-      </div>
-
-      <button class="pear-btn wide" onclick="testSound()">
-        Test Sound 🔊
-      </button>
-
-      <button class="pear-btn danger wide" onclick="resetPear()">
-        Reset Pear Phone
-      </button>
     `
   );
 }
 
-function toggleDark(value) {
-  localStorage.setItem("pear-dark", value);
+function toggleDarkMode() {
+  document.body.classList.toggle("dark-mode");
 
-  appWindow.classList.toggle("dark-app", value);
+  localStorage.setItem(
+    "pear-dark",
+    document.body.classList.contains("dark-mode")
+  );
+}
 
-  toast(value ? "Dark mode on" : "Dark mode off");
+function changeBrightness(value) {
+  phone.style.filter =
+    `brightness(${value}%)`;
+}
+
+function toggleSound() {
+  const enabled =
+    localStorage.getItem("pear-sound") !== "false";
+
+  localStorage.setItem(
+    "pear-sound",
+    String(!enabled)
+  );
+
+  alert(
+    !enabled
+      ? "Sound enabled 🔊"
+      : "Sound disabled 🔇"
+  );
 }
 
 function testSound() {
-  toast("🔊 PEAR!");
+  playDemoTone();
 }
 
-function resetPear() {
-  localStorage.removeItem("pear-notes");
-  localStorage.removeItem("pear-dark");
+function toggleAnimations() {
+  document.body.classList.toggle(
+    "no-animations"
+  );
 
-  toast("Pear Phone reset");
+  localStorage.setItem(
+    "pear-animations",
+    document.body.classList.contains(
+      "no-animations"
+    )
+  );
 }
 
-/* =========================================================
-   CLOCK
-   ========================================================= */
+function keyboardDemo() {
+  openApp(
+    "Keyboard Test",
+    `
+      <div class="card">
+        <h2>⌨️ Pear Keyboard</h2>
 
-let stopwatchStart = null;
-let stopwatchTimer = null;
-let stopwatchElapsed = 0;
+        <input
+          id="keyboard-test"
+          placeholder="Type here..."
+        >
 
-function appClock() {
-  appShell(
+        <p>
+          Tap the keyboard below and try it!
+        </p>
+      </div>
+    `
+  );
+
+  setTimeout(() => {
+    const input =
+      document.getElementById(
+        "keyboard-test"
+      );
+
+    if (input) {
+      input.focus();
+      showPearKeyboard(input);
+    }
+  }, 100);
+}
+
+function phoneInfo() {
+  alert(
+    "🍐 PEAR PHONE\n\n" +
+    "Pear Phone OS\n" +
+    "Version 2.0\n" +
+    "Built for the Pear Phone"
+  );
+}
+
+function batteryInfo() {
+  if (
+    navigator.getBattery
+  ) {
+    navigator.getBattery()
+      .then(battery => {
+        alert(
+          "Battery: " +
+          Math.round(
+            battery.level * 100
+          ) +
+          "%"
+        );
+      });
+  } else {
+    alert(
+      "Battery: 87%"
+    );
+  }
+}
+
+function storageInfo() {
+  alert(
+    "Storage\n\n" +
+    "Used: 3.2 GB\n" +
+    "Free: 28.8 GB\n" +
+    "Total: 32 GB"
+  );
+}
+
+function resetNotes() {
+  localStorage.removeItem(
+    "pear-notes"
+  );
+
+  notes = [];
+
+  alert("All notes deleted.");
+}
+
+function resetPhone() {
+  localStorage.clear();
+
+  document.body.classList.remove(
+    "dark-mode",
+    "no-animations"
+  );
+
+  alert(
+    "Pear Phone has been reset!"
+  );
+}
+
+// ============================================================
+// CLOCK
+// ============================================================
+
+let stopwatchInterval = null;
+let stopwatchSeconds = 0;
+let timerInterval = null;
+let timerSeconds = 60;
+
+function clockApp() {
+  openApp(
     "Clock",
     `
-      <div class="clock-big" id="live-clock">
-        --:--
+      <div class="card">
+        <h2>🕐 Clock</h2>
+
+        <div id="live-clock"
+             style="font-size:32px">
+          ${new Date().toLocaleTimeString()}
+        </div>
+
+        <hr>
+
+        <h3>Stopwatch</h3>
+
+        <div id="stopwatch">
+          00:00
+        </div>
+
+        <button onclick="startStopwatch()">
+          Start
+        </button>
+
+        <button onclick="stopStopwatch()">
+          Stop
+        </button>
+
+        <button onclick="resetStopwatch()">
+          Reset
+        </button>
+
+        <h3>Timer</h3>
+
+        <input
+          id="timer-input"
+          type="number"
+          value="60"
+          min="1"
+        >
+
+        <div id="timer">
+          01:00
+        </div>
+
+        <button onclick="startTimer()">
+          Start
+        </button>
+
+        <button onclick="resetTimer()">
+          Reset
+        </button>
+
+        <h3>Alarm</h3>
+
+        <input
+          id="alarm-time"
+          type="time"
+        >
+
+        <button onclick="setAlarm()">
+          Set Alarm
+        </button>
       </div>
-
-      <p id="live-date"></p>
-
-      <hr>
-
-      <h3>Stopwatch</h3>
-
-      <div class="stopwatch" id="stopwatch">
-        00:00.00
-      </div>
-
-      <button class="pear-btn" onclick="startStopwatch()">
-        Start
-      </button>
-
-      <button class="pear-btn" onclick="stopStopwatch()">
-        Stop
-      </button>
-
-      <button class="pear-btn" onclick="resetStopwatch()">
-        Reset
-      </button>
     `
   );
 
@@ -1013,1044 +1818,1770 @@ function appClock() {
 }
 
 function updateClock() {
-  const clock = document.getElementById("live-clock");
-  const date = document.getElementById("live-date");
+  const clock =
+    document.getElementById("live-clock");
 
-  if (!clock) return;
-
-  const now = new Date();
-
-  clock.textContent = now.toLocaleTimeString([], {
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit"
-  });
-
-  date.textContent = now.toLocaleDateString([], {
-    weekday: "long",
-    month: "long",
-    day: "numeric"
-  });
-
-  setTimeout(updateClock, 1000);
+  if (clock) {
+    clock.textContent =
+      new Date().toLocaleTimeString();
+  }
 }
 
+setInterval(updateClock, 1000);
+
 function startStopwatch() {
-  if (stopwatchStart) return;
+  if (stopwatchInterval) return;
 
-  stopwatchStart = Date.now() - stopwatchElapsed;
+  stopwatchInterval =
+    setInterval(() => {
+      stopwatchSeconds++;
 
-  stopwatchTimer = setInterval(() => {
-    stopwatchElapsed = Date.now() - stopwatchStart;
+      const el =
+        document.getElementById(
+          "stopwatch"
+        );
 
-    const el = document.getElementById("stopwatch");
-
-    if (el) {
-      const seconds =
-        Math.floor(stopwatchElapsed / 1000);
-
-      const minutes =
-        Math.floor(seconds / 60);
-
-      const hundredths =
-        Math.floor((stopwatchElapsed % 1000) / 10);
-
-      el.textContent =
-        `${String(minutes).padStart(2, "0")}:` +
-        `${String(seconds % 60).padStart(2, "0")}.` +
-        `${String(hundredths).padStart(2, "0")}`;
-    }
-  }, 10);
+      if (el) {
+        el.textContent =
+          formatTime(stopwatchSeconds);
+      }
+    }, 1000);
 }
 
 function stopStopwatch() {
-  clearInterval(stopwatchTimer);
-  stopwatchTimer = null;
-  stopwatchStart = null;
+  clearInterval(stopwatchInterval);
+  stopwatchInterval = null;
 }
 
 function resetStopwatch() {
   stopStopwatch();
-  stopwatchElapsed = 0;
 
-  const el = document.getElementById("stopwatch");
+  stopwatchSeconds = 0;
 
-  if (el) el.textContent = "00:00.00";
+  const el =
+    document.getElementById(
+      "stopwatch"
+    );
+
+  if (el) {
+    el.textContent = "00:00";
+  }
 }
 
-/* =========================================================
-   VIDEOS
-   ========================================================= */
+function startTimer() {
+  if (timerInterval) return;
 
-function appVideos() {
-  appShell(
-    "Pear Videos",
+  const input =
+    document.getElementById(
+      "timer-input"
+    );
+
+  if (input) {
+    timerSeconds =
+      Math.max(
+        1,
+        Number(input.value) || 60
+      );
+  }
+
+  timerInterval =
+    setInterval(() => {
+      timerSeconds--;
+
+      const el =
+        document.getElementById(
+          "timer"
+        );
+
+      if (el) {
+        el.textContent =
+          formatTime(timerSeconds);
+      }
+
+      if (timerSeconds <= 0) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+
+        alert(
+          "⏰ Timer finished!"
+        );
+      }
+    }, 1000);
+}
+
+function resetTimer() {
+  clearInterval(timerInterval);
+
+  timerInterval = null;
+  timerSeconds = 60;
+
+  const el =
+    document.getElementById("timer");
+
+  if (el) {
+    el.textContent = "01:00";
+  }
+}
+
+function setAlarm() {
+  const time =
+    document.getElementById(
+      "alarm-time"
+    );
+
+  if (!time || !time.value) {
+    alert("Choose an alarm time.");
+    return;
+  }
+
+  alert(
+    "⏰ Alarm set for " +
+    time.value
+  );
+}
+
+function formatTime(seconds) {
+  const minutes =
+    Math.floor(seconds / 60);
+
+  const secs =
+    seconds % 60;
+
+  return (
+    String(minutes).padStart(2, "0") +
+    ":" +
+    String(secs).padStart(2, "0")
+  );
+}
+
+// ============================================================
+// VIDEOS
+// ============================================================
+
+function videosApp() {
+  openApp(
+    "Videos",
     `
-      <div class="video-player">
-        <div id="video-screen">▶</div>
+      <div class="card">
+        <h2>🎬 Videos</h2>
+
+        <input
+          type="file"
+          accept="video/*"
+          onchange="loadVideo(event)"
+        >
+
+        <video
+          id="video-player"
+          controls
+          style="width:100%"
+        ></video>
+
+        <button onclick="fullscreenVideo()">
+          ⛶ Fullscreen
+        </button>
+
+        <button onclick="restartVideo()">
+          🔄 Restart
+        </button>
       </div>
-
-      <button class="pear-btn wide" onclick="playFakeVideo()">
-        Play Video
-      </button>
-
-      <button class="pear-btn wide" onclick="videoEffect()">
-        Random Effect
-      </button>
-
-      <p id="video-status">Choose a video.</p>
     `
   );
 }
 
-function playFakeVideo() {
-  const screen = document.getElementById("video-screen");
-  const status = document.getElementById("video-status");
+function loadVideo(event) {
+  const file =
+    event.target.files[0];
 
-  if (screen) {
-    screen.textContent = "🎬";
-    screen.style.transform =
-      `rotate(${Math.random() * 8 - 4}deg)`;
-  }
+  if (!file) return;
 
-  if (status) {
-    status.textContent = "Now playing: Pear Adventures";
+  const video =
+    document.getElementById(
+      "video-player"
+    );
+
+  video.src =
+    URL.createObjectURL(file);
+}
+
+function fullscreenVideo() {
+  const video =
+    document.getElementById(
+      "video-player"
+    );
+
+  if (
+    video &&
+    video.requestFullscreen
+  ) {
+    video.requestFullscreen();
   }
 }
 
-function videoEffect() {
-  const screen = document.getElementById("video-screen");
+function restartVideo() {
+  const video =
+    document.getElementById(
+      "video-player"
+    );
 
-  if (!screen) return;
-
-  screen.textContent =
-    ["🍐","😂","🌈","💥","🚀"][Math.floor(Math.random()*5)];
-
-  toast("Effect applied!");
+  if (video) {
+    video.currentTime = 0;
+    video.play();
+  }
 }
 
-/* =========================================================
-   PHONE
-   ========================================================= */
+// ============================================================
+// PHONE
+// ============================================================
 
 let phoneNumber = "";
 
-function appPhone() {
-  phoneNumber = "";
-
-  appShell(
+function phoneApp() {
+  openApp(
     "Phone",
     `
-      <div class="dial-number" id="dial-number"></div>
+      <div class="card">
+        <h2>📞 Phone</h2>
 
-      <div class="dialer">
-        ${["1","2","3","4","5","6","7","8","9","*","0","#"]
-          .map(n => `
-            <button onclick="dial('${n}')">${n}</button>
+        <div
+          id="phone-number"
+          style="
+            font-size:26px;
+            text-align:center;
+          "
+        >
+          —
+        </div>
+
+        <div class="keypad">
+          ${[
+            "1","2","3",
+            "4","5","6",
+            "7","8","9",
+            "*","0","#"
+          ].map(n => `
+            <button
+              onclick="pressNumber('${n}')"
+            >
+              ${n}
+            </button>
           `).join("")}
+        </div>
+
+        <button onclick="makeCall()">
+          📞 Call
+        </button>
+
+        <button onclick="clearNumber()">
+          Clear
+        </button>
+
+        <button onclick="fakeContacts()">
+          👥 Contacts
+        </button>
+
+        <button onclick="fakeRecents()">
+          🕘 Recent Calls
+        </button>
       </div>
-
-      <button class="call-btn" onclick="makeCall()">
-        📞 Call
-      </button>
-
-      <button class="pear-btn wide" onclick="deleteDial()">
-        Delete
-      </button>
     `
   );
 }
 
-function dial(number) {
+function pressNumber(number) {
   phoneNumber += number;
 
-  const el = document.getElementById("dial-number");
+  const display =
+    document.getElementById(
+      "phone-number"
+    );
 
-  if (el) el.textContent = phoneNumber;
+  if (display) {
+    display.textContent =
+      phoneNumber;
+  }
 }
 
-function deleteDial() {
-  phoneNumber = phoneNumber.slice(0, -1);
+function clearNumber() {
+  phoneNumber = "";
 
-  const el = document.getElementById("dial-number");
+  const display =
+    document.getElementById(
+      "phone-number"
+    );
 
-  if (el) el.textContent = phoneNumber;
+  if (display) {
+    display.textContent = "—";
+  }
 }
 
 function makeCall() {
   if (!phoneNumber) {
-    toast("Enter a number");
+    alert("Enter a number first.");
     return;
   }
 
-  toast(`Calling ${phoneNumber}...`);
+  alert(
+    "📞 Calling " +
+    phoneNumber +
+    "..."
+  );
 }
 
-/* =========================================================
-   MAIL
-   ========================================================= */
+function fakeContacts() {
+  alert(
+    "Contacts\n\n" +
+    "Chloe\n" +
+    "Sam\n" +
+    "Cat\n" +
+    "Pear Support"
+  );
+}
 
-let mailMessages = [
+function fakeRecents() {
+  alert(
+    "Recent Calls\n\n" +
+    "Chloe — 2 min\n" +
+    "Sam — 14 min\n" +
+    "Pear Support — Yesterday"
+  );
+}
+
+// ============================================================
+// MAIL
+// ============================================================
+
+let emails = [
   {
     from: "Pear Team",
     subject: "Welcome!",
-    body: "Welcome to your new Pear Phone."
+    body: "Welcome to your Pear Phone!"
   },
   {
-    from: "Pear News",
-    subject: "Breaking Pear News",
-    body: "Everything is working perfectly."
+    from: "Sam",
+    subject: "What's up?",
+    body: "Are you free later?"
+  },
+  {
+    from: "PearTunes",
+    subject: "New music",
+    body: "Check out the latest tracks."
   }
 ];
 
-function appMail() {
-  appShell(
+function mailApp() {
+  openApp(
     "Mail",
     `
-      ${mailMessages.map((m, i) => `
-        <div class="mail-card" onclick="readMail(${i})">
-          <strong>${esc(m.from)}</strong>
-          <b>${esc(m.subject)}</b>
-          <p>${esc(m.body.substring(0, 35))}...</p>
-        </div>
-      `).join("")}
-
-      <button class="pear-btn wide" onclick="composeMail()">
-        ✉ Compose
-      </button>
-    `
-  );
-}
-
-function readMail(index) {
-  const m = mailMessages[index];
-
-  appShell(
-    m.subject,
-    `
-      <p><strong>From:</strong> ${esc(m.from)}</p>
-      <hr>
-      <p>${esc(m.body)}</p>
-    `
-  );
-}
-
-function composeMail() {
-  appShell(
-    "New Mail",
-    `
-      <input id="mail-to" placeholder="To">
-
-      <input id="mail-subject" placeholder="Subject">
-
-      <textarea id="mail-body" rows="6"
-        placeholder="Message"></textarea>
-
-      <button class="pear-btn wide" onclick="sendMail()">
-        Send
-      </button>
-    `
-  );
-}
-
-function sendMail() {
-  const to = document.getElementById("mail-to");
-  const subject = document.getElementById("mail-subject");
-  const body = document.getElementById("mail-body");
-
-  if (!to.value || !body.value) {
-    toast("Fill in the message");
-    return;
-  }
-
-  mailMessages.unshift({
-    from: "You → " + to.value,
-    subject: subject.value || "(No subject)",
-    body: body.value
-  });
-
-  toast("Email sent!");
-  appMail();
-}
-
-/* =========================================================
-   COMPASS
-   ========================================================= */
-
-function appCompass() {
-  appShell(
-    "Compass",
-    `
-      <div class="compass">
-        <div class="compass-ring">
-          <span class="north">N</span>
-          <span class="east">E</span>
-          <span class="south">S</span>
-          <span class="west">W</span>
-          <div class="needle"></div>
-        </div>
-      </div>
-
-      <h2 id="heading">0°</h2>
-
-      <button class="pear-btn wide" onclick="randomCompass()">
-        Calibrate
-      </button>
-    `
-  );
-}
-
-function randomCompass() {
-  const heading =
-    Math.floor(Math.random() * 360);
-
-  const el = document.getElementById("heading");
-
-  if (el) {
-    el.textContent = `${heading}°`;
-  }
-
-  toast("Compass calibrated");
-}
-
-/* =========================================================
-   LINGO
-   ========================================================= */
-
-const lingoWords = [
-  "PEAR",
-  "APPLE",
-  "PHONE",
-  "MUSIC",
-  "RADIO",
-  "CLOUD"
-];
-
-let lingoAnswer = "";
-
-function appLingo() {
-  lingoAnswer =
-    lingoWords[Math.floor(Math.random() * lingoWords.length)];
-
-  appShell(
-    "Lingo",
-    `
-      <h2>Guess the word</h2>
-      <p>Hint: It's related to Pear Phone.</p>
-
-      <input id="lingo-input"
-        maxlength="${lingoAnswer.length}"
-        placeholder="${"_".repeat(lingoAnswer.length)}">
-
-      <button class="pear-btn wide" onclick="checkLingo()">
-        Guess
-      </button>
-
-      <p id="lingo-result"></p>
-    `
-  );
-}
-
-function checkLingo() {
-  const input =
-    document.getElementById("lingo-input");
-
-  const result =
-    document.getElementById("lingo-result");
-
-  if (!input) return;
-
-  if (
-    input.value.trim().toUpperCase() ===
-    lingoAnswer
-  ) {
-    result.textContent =
-      "🎉 Correct! You got it!";
-  } else {
-    result.textContent =
-      `❌ Nope! Try again.`;
-  }
-}
-
-/* =========================================================
-   THUMBS UP
-   ========================================================= */
-
-let thumbScore = 0;
-let thumbTimer = null;
-
-function appThumbsUp() {
-  thumbScore = 0;
-
-  appShell(
-    "Thumbs Up",
-    `
-      <h2>Tap as fast as possible!</h2>
-
-      <div class="thumb-score">
-        Score: <span id="thumb-score">0</span>
-      </div>
-
-      <button
-        class="giant-thumb"
-        onclick="thumbTap()"
-      >
-        👍
-      </button>
-
-      <p id="thumb-status">
-        You have 10 seconds.
-      </p>
-    `
-  );
-
-  let time = 10;
-
-  thumbTimer = setInterval(() => {
-    time--;
-
-    const status =
-      document.getElementById("thumb-status");
-
-    if (status) {
-      status.textContent =
-        `${time} seconds left`;
-    }
-
-    if (time <= 0) {
-      clearInterval(thumbTimer);
-
-      if (status) {
-        status.textContent =
-          `Finished! Score: ${thumbScore}`;
-      }
-    }
-  }, 1000);
-}
-
-function thumbTap() {
-  thumbScore++;
-
-  const score =
-    document.getElementById("thumb-score");
-
-  if (score) {
-    score.textContent = thumbScore;
-  }
-}
-
-/* =========================================================
-   DANWARP
-   ========================================================= */
-
-function appDanWarp() {
-  appShell(
-    "DanWarp",
-    `
-      <div id="warp-box" class="warp-box">
-        DANWARP
-      </div>
-
-      <button class="pear-btn wide" onclick="warpIt()">
-        WARP!
-      </button>
-
-      <button class="pear-btn wide" onclick="warpReset()">
-        Reset
-      </button>
-    `
-  );
-}
-
-function warpIt() {
-  const box = document.getElementById("warp-box");
-
-  if (!box) return;
-
-  box.style.transform =
-    `rotate(${Math.random()*360}deg)
-     scale(${0.6 + Math.random() * 1.4})
-     skew(${Math.random()*30-15}deg)`;
-
-  box.style.borderRadius =
-    `${Math.random()*50}%`;
-
-  toast("WARP ACTIVATED!");
-}
-
-function warpReset() {
-  const box = document.getElementById("warp-box");
-
-  if (!box) return;
-
-  box.style.transform = "";
-  box.style.borderRadius = "";
-}
-
-/* =========================================================
-   IMAGE
-   ========================================================= */
-
-function appImage() {
-  appShell(
-    "Image Lab",
-    `
-      <div id="image-canvas" class="image-canvas">
-        🖼️
-      </div>
-
-      <button class="pear-btn" onclick="imageFilter('spin')">
-        Spin
-      </button>
-
-      <button class="pear-btn" onclick="imageFilter('zoom')">
-        Zoom
-      </button>
-
-      <button class="pear-btn" onclick="imageFilter('shake')">
-        Shake
-      </button>
-
-      <button class="pear-btn" onclick="imageFilter('rainbow')">
-        Rainbow
-      </button>
-
-      <input
-        type="file"
-        accept="image/*"
-        onchange="loadImage(event)"
-      >
-    `
-  );
-}
-
-function imageFilter(type) {
-  const image =
-    document.getElementById("image-canvas");
-
-  if (!image) return;
-
-  if (type === "spin") {
-    image.style.transform =
-      "rotate(360deg)";
-  }
-
-  if (type === "zoom") {
-    image.style.transform =
-      "scale(1.3)";
-  }
-
-  if (type === "shake") {
-    image.animate(
-      [
-        { transform: "translateX(-8px)" },
-        { transform: "translateX(8px)" },
-        { transform: "translateX(-8px)" },
-        { transform: "translateX(0)" }
-      ],
-      { duration: 400 }
-    );
-  }
-
-  if (type === "rainbow") {
-    image.style.filter =
-      "hue-rotate(120deg)";
-  }
-}
-
-function loadImage(event) {
-  const file = event.target.files[0];
-
-  if (!file) return;
-
-  const reader = new FileReader();
-
-  reader.onload = e => {
-    const image =
-      document.getElementById("image-canvas");
-
-    image.innerHTML =
-      `<img src="${e.target.result}">`;
-  };
-
-  reader.readAsDataURL(file);
-}
-
-/* =========================================================
-   CHRONO
-   ========================================================= */
-
-let chronoSeconds = 30;
-let chronoTimer = null;
-
-function appChrono() {
-  appShell(
-    "Chrono",
-    `
-      <div class="chrono-time" id="chrono-time">
-        00:30
-      </div>
-
-      <button class="pear-btn" onclick="startChrono()">
-        Start
-      </button>
-
-      <button class="pear-btn" onclick="stopChrono()">
-        Stop
-      </button>
-
-      <button class="pear-btn" onclick="resetChrono()">
-        Reset
-      </button>
-    `
-  );
-}
-
-function startChrono() {
-  if (chronoTimer) return;
-
-  chronoTimer = setInterval(() => {
-    chronoSeconds--;
-
-    updateChrono();
-
-    if (chronoSeconds <= 0) {
-      stopChrono();
-      toast("⏰ TIME!");
-    }
-  }, 1000);
-}
-
-function stopChrono() {
-  clearInterval(chronoTimer);
-  chronoTimer = null;
-}
-
-function resetChrono() {
-  stopChrono();
-
-  chronoSeconds = 30;
-
-  updateChrono();
-}
-
-function updateChrono() {
-  const el =
-    document.getElementById("chrono-time");
-
-  if (!el) return;
-
-  const minutes =
-    Math.floor(chronoSeconds / 60);
-
-  const seconds =
-    chronoSeconds % 60;
-
-  el.textContent =
-    `${String(minutes).padStart(2, "0")}:` +
-    `${String(seconds).padStart(2, "0")}`;
-}
-
-/* =========================================================
-   ZAPLOOK
-   ========================================================= */
-
-function appZapLook() {
-  appShell(
-    "ZapLook",
-    `
-      <input
-        id="zap-search"
-        placeholder="Search Pear..."
-      >
-
-      <button class="pear-btn wide"
-        onclick="zapSearch()">
-        🔍 Search
-      </button>
-
-      <div id="zap-results"></div>
-    `
-  );
-}
-
-function zapSearch() {
-  const input =
-    document.getElementById("zap-search");
-
-  const results =
-    document.getElementById("zap-results");
-
-  const q = input.value.toLowerCase();
-
-  if (!q) {
-    results.innerHTML =
-      "<p>Type something to search.</p>";
-    return;
-  }
-
-  const facts = [
-    "Pear Phone OS was built for maximum fun.",
-    "The Pear logo is definitely not an apple.",
-    "PearTunes has four songs.",
-    "DanWarp should probably be used responsibly.",
-    "The Pear Phone has two home pages."
-  ];
-
-  const matches =
-    facts.filter(x =>
-      x.toLowerCase().includes(q)
-    );
-
-  results.innerHTML =
-    matches.length
-      ? matches.map(x => `<p>🔎 ${esc(x)}</p>`).join("")
-      : `<p>No results for "${esc(q)}".</p>`;
-}
-
-/* =========================================================
-   MONKEY GAME
-   ========================================================= */
-
-let monkeyScore = 0;
-
-function appMonkey() {
-  monkeyScore = 0;
-
-  appShell(
-    "Monkey",
-    `
-      <h2>Catch the monkey!</h2>
-
-      <p>
-        Score:
-        <strong id="monkey-score">0</strong>
-      </p>
-
-      <div
-        id="monkey-arena"
-        class="monkey-arena"
-        onclick="catchMonkey(event)"
-      >
-        🐒
-      </div>
-
-      <button class="pear-btn wide"
-        onclick="moveMonkey()">
-        Move Monkey
-      </button>
-    `
-  );
-
-  moveMonkey();
-}
-
-function moveMonkey() {
-  const monkey =
-    document.querySelector("#monkey-arena");
-
-  if (!monkey) return;
-
-  monkey.style.textAlign =
-    ["left","center","right"]
-      [Math.floor(Math.random()*3)];
-
-  monkey.style.fontSize =
-    `${30 + Math.random()*25}px`;
-}
-
-function catchMonkey() {
-  monkeyScore++;
-
-  const score =
-    document.getElementById("monkey-score");
-
-  if (score) {
-    score.textContent = monkeyScore;
-  }
-
-  moveMonkey();
-}
-
-/* =========================================================
-   REMARK
-   ========================================================= */
-
-let remarks = [];
-
-function appRemark() {
-  appShell(
-    "Remark",
-    `
-      <textarea
-        id="remark-input"
-        rows="7"
-        placeholder="Write something..."
-      ></textarea>
-
-      <button class="pear-btn wide"
-        onclick="saveRemark()">
-        Save Remark
-      </button>
-
-      <div id="remark-list">
-        ${remarks.map(r => `
-          <div class="remark-card">
-            ${esc(r)}
-          </div>
+      <div class="card">
+        <h2>✉️ Mail</h2>
+
+        <button onclick="composeEmail()">
+          ✏️ Compose
+        </button>
+
+        ${emails.map((email, index) => `
+          <button
+            onclick="readEmail(${index})"
+            style="text-align:left"
+          >
+            <strong>
+              ${escapeHTML(email.from)}
+            </strong>
+
+            <br>
+
+            ${escapeHTML(email.subject)}
+          </button>
         `).join("")}
       </div>
     `
   );
 }
 
-function saveRemark() {
+function readEmail(index) {
+  const email = emails[index];
+
+  openApp(
+    "Mail",
+    `
+      <div class="card">
+        <h2>
+          ${escapeHTML(email.subject)}
+        </h2>
+
+        <strong>
+          From:
+          ${escapeHTML(email.from)}
+        </strong>
+
+        <p>
+          ${escapeHTML(email.body)}
+        </p>
+
+        <button onclick="replyEmail(${index})">
+          ↩️ Reply
+        </button>
+
+        <button onclick="deleteEmail(${index})">
+          🗑️ Delete
+        </button>
+      </div>
+    `
+  );
+}
+
+function replyEmail(index) {
+  openApp(
+    "Reply",
+    `
+      <div class="card">
+        <h2>
+          Re: ${escapeHTML(
+            emails[index].subject
+          )}
+        </h2>
+
+        <textarea
+          placeholder="Write reply..."
+        ></textarea>
+
+        <button onclick="alert('Reply sent! ✉️')">
+          Send
+        </button>
+      </div>
+    `
+  );
+}
+
+function deleteEmail(index) {
+  emails.splice(index, 1);
+  mailApp();
+}
+
+function composeEmail() {
+  openApp(
+    "Compose",
+    `
+      <div class="card">
+        <input placeholder="To">
+
+        <input placeholder="Subject">
+
+        <textarea
+          placeholder="Write email..."
+        ></textarea>
+
+        <button onclick="alert('Email sent! ✉️')">
+          Send
+        </button>
+
+        <button onclick="alert('Saved to Drafts!')">
+          💾 Save Draft
+        </button>
+      </div>
+    `
+  );
+}
+
+// ============================================================
+// COMPASS
+// ============================================================
+
+let compassDegree = 0;
+
+function compassApp() {
+  openApp(
+    "Compass",
+    `
+      <div
+        class="card"
+        style="text-align:center"
+      >
+        <h2>🧭 Compass</h2>
+
+        <div
+          id="compass-direction"
+          style="font-size:60px"
+        >
+          N
+        </div>
+
+        <p id="compass-degree">
+          0°
+        </p>
+
+        <button onclick="calibrateCompass()">
+          🧭 Calibrate
+        </button>
+
+        <button onclick="compassChallenge()">
+          🎯 Direction Challenge
+        </button>
+      </div>
+    `
+  );
+}
+
+function calibrateCompass() {
+  compassDegree =
+    Math.floor(Math.random() * 360);
+
+  const directions = [
+    "N","NE","E","SE",
+    "S","SW","W","NW"
+  ];
+
+  const direction =
+    directions[
+      Math.round(
+        compassDegree / 45
+      ) % 8
+    ];
+
+  document.getElementById(
+    "compass-direction"
+  ).textContent = direction;
+
+  document.getElementById(
+    "compass-degree"
+  ).textContent =
+    compassDegree + "°";
+}
+
+function compassChallenge() {
+  const directions = [
+    "N","NE","E","SE",
+    "S","SW","W","NW"
+  ];
+
+  const answer =
+    directions[
+      Math.floor(
+        Math.random() *
+        directions.length
+      )
+    ];
+
+  const guess =
+    prompt(
+      "Which direction is " +
+      answer +
+      "?"
+    );
+
+  if (
+    guess &&
+    guess.toUpperCase() === answer
+  ) {
+    alert("Correct! 🧭");
+  } else {
+    alert(
+      "Not quite! The answer was " +
+      answer
+    );
+  }
+}
+
+// ============================================================
+// TUMPS — TYPING GAME
+// ============================================================
+
+let typingTimer = null;
+let typingStartTime = 0;
+let typingSentence = "";
+let typingFinished = false;
+
+const typingSentences = [
+  "The quick brown fox jumps over the lazy dog.",
+  "Pear Phone OS is ready for another adventure.",
+  "I can type really fast when I concentrate.",
+  "The best ideas sometimes start with a tiny screen.",
+  "Welcome to the coolest phone in the world.",
+  "Today is going to be a great day.",
+  "The Raspberry Pi is running Pear Phone OS.",
+  "Never underestimate a tiny touchscreen computer.",
+  "I wonder what secret apps are hiding here.",
+  "Everything is better with a little bit of fun."
+];
+
+function thumbApp() {
+  tumsApp();
+}
+
+function tumsApp() {
+  typingSentence =
+    typingSentences[
+      Math.floor(
+        Math.random() *
+        typingSentences.length
+      )
+    ];
+
+  typingFinished = false;
+
+  openApp(
+    "Tumps",
+    `
+      <div class="card typing-game">
+
+        <h2>⌨️ Tumps</h2>
+
+        <p>
+          Type the sentence as fast and accurately
+          as possible.
+        </p>
+
+        <div
+          id="typing-sentence"
+          class="typing-sentence"
+        >
+          ${escapeHTML(typingSentence)}
+        </div>
+
+        <input
+          id="typing-input"
+          placeholder="Tap START first..."
+          disabled
+          autocomplete="off"
+          autocorrect="off"
+          autocapitalize="off"
+          spellcheck="false"
+          oninput="typingInputChanged()"
+        >
+
+        <div class="typing-stats">
+          <div>
+            ⏱️
+            <strong id="typing-time">
+              0.0
+            </strong>s
+          </div>
+
+          <div>
+            ⚡
+            <strong id="typing-wpm">
+              0
+            </strong>
+            WPM
+          </div>
+
+          <div>
+            🎯
+            <strong id="typing-accuracy">
+              100
+            </strong>%
+          </div>
+        </div>
+
+        <button onclick="startTypingGame()">
+          ▶ START
+        </button>
+
+        <button onclick="newTypingSentence()">
+          🔄 NEW SENTENCE
+        </button>
+
+        <div id="typing-result"></div>
+
+      </div>
+    `
+  );
+}
+
+function startTypingGame() {
+  stopTypingGame();
+
   const input =
-    document.getElementById("remark-input");
+    document.getElementById(
+      "typing-input"
+    );
 
-  if (!input || !input.value.trim()) {
-    toast("Write something first");
-    return;
+  const result =
+    document.getElementById(
+      "typing-result"
+    );
+
+  if (!input) return;
+
+  input.disabled = false;
+  input.value = "";
+  input.placeholder = "Start typing...";
+
+  if (result) {
+    result.innerHTML = "";
   }
 
-  remarks.unshift(input.value);
+  typingFinished = false;
+  typingStartTime = Date.now();
 
-  toast("Remark saved!");
-  appRemark();
+  typingTimer =
+    setInterval(updateTypingStats, 100);
+
+  input.focus();
+
+  showPearKeyboard(input);
 }
 
-/* =========================================================
-   PAGE 2 SETTINGS / OTHER ROUTES
-   ========================================================= */
-
-function appSplash() {
-  appSplashFace();
+function stopTypingGame() {
+  if (typingTimer) {
+    clearInterval(typingTimer);
+    typingTimer = null;
+  }
 }
 
-/* =========================================================
-   HOTSPOT ROUTING
-   IMPORTANT:
-   ONE ID = ONE APP
-   ========================================================= */
+function updateTypingStats() {
+  if (!typingStartTime) return;
 
-const appRoutes = {
+  const elapsed =
+    (Date.now() - typingStartTime) / 1000;
 
-  /* PAGE 1 */
-  messages: "messages",
-  camera: "camera",
-  splashface: "splashface",
-  stocks: "stocks",
-  maps: "maps",
-  photos: "photos",
-  weather: "weather",
-  notes: "notes",
-  peartunes: "peartunes",
-  settings: "settings",
-  clock: "clock",
-  videos: "videos",
-  phone: "phone",
-  mail: "mail",
-  compass: "compass",
+  const time =
+    document.getElementById(
+      "typing-time"
+    );
 
-  /* PAGE 2 */
-  "p2-lingo": "lingo",
-  "p2-splash": "splashface",
-  "p2-thumb": "thumb",
-  "p2-danwarp": "danwarp",
-  "p2-image": "image",
-  "p2-chrono": "chrono",
-  "p2-zaplook": "zaplook",
-  "p2-weather": "weather",
-  "p2-music": "peartunes",
-  "p2-monkey": "monkey",
-  "p2-remark": "remark",
-  "p2-settings": "settings",
-  "p2-phone": "phone",
-  "p2-mail": "mail",
-  "p2-compass": "compass",
-  "p2-music2": "peartunes"
-};
+  if (time) {
+    time.textContent =
+      elapsed.toFixed(1);
+  }
 
-function setupAppButtons() {
-  Object.entries(appRoutes).forEach(([id, app]) => {
-    const element = document.getElementById(id);
-
-    if (!element) return;
-
-    /* Remove old inline-style event behavior */
-    element.onclick = null;
-
-    element.addEventListener("click", e => {
-      e.preventDefault();
-      e.stopPropagation();
-
-      openApp(app);
-    });
-
-    element.addEventListener("pointerdown", e => {
-      e.stopPropagation();
-    });
-  });
+  updateTypingCalculations(elapsed);
 }
 
-/* =========================================================
-   HOME BUTTON
-   ========================================================= */
+function typingInputChanged() {
+  if (typingFinished) return;
 
-function setupHomeButton() {
-  const home = document.getElementById("home");
+  const input =
+    document.getElementById(
+      "typing-input"
+    );
 
-  if (!home) return;
+  if (!input) return;
 
-  home.onclick = e => {
-    e.preventDefault();
-    e.stopPropagation();
+  const typed = input.value;
 
-    closeApp();
-  };
-}
-
-/* =========================================================
-   PAGE SWITCHING
-   UP = PAGE 2
-   DOWN = PAGE 1
-   ========================================================= */
-
-let currentPage = 1;
-let pointerStartX = 0;
-let pointerStartY = 0;
-
-function setPage(page) {
-  if (page !== 1 && page !== 2) return;
-
-  currentPage = page;
-
-  if (!phoneContainer) return;
-
-  phoneContainer.classList.toggle(
-    "page-two",
-    page === 2
+  updateTypingCalculations(
+    (Date.now() - typingStartTime) / 1000
   );
 
-  const dots =
-    document.getElementById("page-dots");
-
-  if (dots) {
-    dots.textContent =
-      page === 1 ? "● ○" : "○ ●";
+  if (
+    typed === typingSentence
+  ) {
+    finishTypingGame();
   }
 }
 
-function changePage(direction) {
-  if (overlay && overlay.classList.contains("open")) {
-    return;
-  }
+function updateTypingCalculations(elapsed) {
+  const input =
+    document.getElementById(
+      "typing-input"
+    );
 
-  if (direction === "up") {
-    setPage(2);
-  }
+  if (!input) return;
 
-  if (direction === "down") {
-    setPage(1);
-  }
-}
+  const typed =
+    input.value;
 
-if (phoneContainer) {
+  let correct = 0;
 
-  phoneContainer.addEventListener(
-    "pointerdown",
-    e => {
-      pointerStartX = e.clientX;
-      pointerStartY = e.clientY;
+  for (
+    let i = 0;
+    i < typed.length &&
+    i < typingSentence.length;
+    i++
+  ) {
+    if (
+      typed[i] ===
+      typingSentence[i]
+    ) {
+      correct++;
     }
-  );
+  }
 
-  phoneContainer.addEventListener(
-    "pointerup",
-    e => {
+  const accuracy =
+    typed.length === 0
+      ? 100
+      : Math.round(
+          (correct /
+            typed.length) *
+          100
+        );
 
-      if (
-        overlay &&
-        overlay.classList.contains("open")
-      ) {
-        return;
-      }
+  const words =
+    correct / 5;
 
-      const dx = e.clientX - pointerStartX;
-      const dy = e.clientY - pointerStartY;
+  const minutes =
+    elapsed / 60;
 
-      if (Math.abs(dy) < 50) return;
+  const wpm =
+    minutes > 0
+      ? Math.round(
+          words / minutes
+        )
+      : 0;
 
-      if (Math.abs(dy) > Math.abs(dx)) {
+  const accuracyEl =
+    document.getElementById(
+      "typing-accuracy"
+    );
 
-        if (dy < 0) {
-          changePage("up");
-        } else {
-          changePage("down");
+  const wpmEl =
+    document.getElementById(
+      "typing-wpm"
+    );
+
+  if (accuracyEl) {
+    accuracyEl.textContent =
+      Math.max(
+        0,
+        Math.min(
+          100,
+          accuracy
+        )
+      );
+  }
+
+  if (wpmEl) {
+    wpmEl.textContent =
+      wpm;
+  }
+
+  highlightTyping();
+}
+
+function highlightTyping() {
+  const sentence =
+    document.getElementById(
+      "typing-sentence"
+    );
+
+  const input =
+    document.getElementById(
+      "typing-input"
+    );
+
+  if (!sentence || !input) return;
+
+  const typed = input.value;
+
+  sentence.innerHTML =
+    typingSentence
+      .split("")
+      .map((char, index) => {
+
+        if (index >= typed.length) {
+          return `
+            <span>
+              ${escapeHTML(char)}
+            </span>
+          `;
         }
+
+        if (
+          typed[index] === char
+        ) {
+          return `
+            <span style="color:green">
+              ${escapeHTML(char)}
+            </span>
+          `;
+        }
+
+        return `
+          <span style="color:red">
+            ${escapeHTML(char)}
+          </span>
+        `;
+      })
+      .join("");
+}
+
+function finishTypingGame() {
+  if (typingFinished) return;
+
+  typingFinished = true;
+
+  const elapsed =
+    (Date.now() - typingStartTime) / 1000;
+
+  stopTypingGame();
+
+  const input =
+    document.getElementById(
+      "typing-input"
+    );
+
+  if (input) {
+    input.disabled = true;
+  }
+
+  const wpm =
+    Math.round(
+      (typingSentence.length / 5) /
+      (elapsed / 60)
+    );
+
+  const result =
+    document.getElementById(
+      "typing-result"
+    );
+
+  if (result) {
+    result.innerHTML = `
+      <div class="card">
+        <h2>🎉 Finished!</h2>
+
+        <p>
+          ⏱️ Time:
+          ${elapsed.toFixed(2)} seconds
+        </p>
+
+        <p>
+          ⚡ Speed:
+          ${wpm} WPM
+        </p>
+
+        <p>
+          🎯 Accuracy:
+          100%
+        </p>
+
+        <button onclick="newTypingSentence()">
+          Play Again
+        </button>
+      </div>
+    `;
+  }
+
+  hidePearKeyboard();
+}
+
+function newTypingSentence() {
+  stopTypingGame();
+
+  typingSentence =
+    typingSentences[
+      Math.floor(
+        Math.random() *
+        typingSentences.length
+      )
+    ];
+
+  tumsApp();
+}
+
+// ============================================================
+// PAGE 2 APPS
+// ============================================================
+
+function lingoApp() {
+  openApp(
+    "Lingo",
+    `
+      <div class="card">
+        <h2>🗣️ Lingo</h2>
+
+        <input
+          id="lingo-input"
+          placeholder="Type a word..."
+        >
+
+        <button onclick="translateLingo()">
+          Translate
+        </button>
+
+        <button onclick="lingoQuiz()">
+          🎯 Word Quiz
+        </button>
+
+        <div id="lingo-result"></div>
+      </div>
+    `
+  );
+}
+
+function translateLingo() {
+  const input =
+    document.getElementById(
+      "lingo-input"
+    );
+
+  const result =
+    document.getElementById(
+      "lingo-result"
+    );
+
+  if (!input || !result) return;
+
+  const dictionary = {
+    hello: "hola",
+    goodbye: "adios",
+    apple: "manzana",
+    friend: "amigo",
+    house: "casa",
+    water: "agua",
+    music: "musica",
+    phone: "telefono"
+  };
+
+  const word =
+    input.value
+      .trim()
+      .toLowerCase();
+
+  result.innerHTML = `
+    <h3>
+      ${escapeHTML(
+        dictionary[word] || "No translation found"
+      )}
+    </h3>
+  `;
+}
+
+function lingoQuiz() {
+  const words = [
+    ["hello", "hola"],
+    ["apple", "manzana"],
+    ["friend", "amigo"],
+    ["house", "casa"],
+    ["water", "agua"]
+  ];
+
+  const item =
+    words[
+      Math.floor(
+        Math.random() *
+        words.length
+      )
+    ];
+
+  const answer =
+    prompt(
+      "Translate: " +
+      item[0]
+    );
+
+  if (
+    answer &&
+    answer.toLowerCase().trim() ===
+    item[1]
+  ) {
+    alert("Correct! 🎉");
+  } else {
+    alert(
+      "The answer was: " +
+      item[1]
+    );
+  }
+}
+
+// ============================================================
+// DANWARP
+// ============================================================
+
+const warpLocations = [
+  "Toronto",
+  "New York",
+  "Tokyo",
+  "London",
+  "Paris",
+  "Los Angeles",
+  "Vancouver",
+  "Mars 🚀",
+  "The Moon 🌙",
+  "Pear Headquarters 🍐"
+];
+
+function danwarpApp() {
+  openApp(
+    "DanWarp",
+    `
+      <div class="card">
+        <h2>🌀 DanWarp</h2>
+
+        <div
+          id="warp-location"
+          style="font-size:24px"
+        >
+          Ready...
+        </div>
+
+        <button onclick="warp()">
+          ⚡ WARP
+        </button>
+
+        <button onclick="randomWarp()">
+          🎲 Random Destination
+        </button>
+
+        <h3>Warp Energy</h3>
+
+        <input
+          type="range"
+          min="0"
+          max="100"
+          value="100"
+          id="warp-energy"
+        >
+      </div>
+    `
+  );
+}
+
+function warp() {
+  const destination =
+    warpLocations[
+      Math.floor(
+        Math.random() *
+        warpLocations.length
+      )
+    ];
+
+  const result =
+    document.getElementById(
+      "warp-location"
+    );
+
+  if (result) {
+    result.innerHTML =
+      "⚡ " +
+      destination;
+  }
+}
+
+function randomWarp() {
+  warp();
+}
+
+// ============================================================
+// IMAGE
+// ============================================================
+
+function imageApp() {
+  openApp(
+    "Image",
+    `
+      <div class="card">
+        <h2>🖼️ Image Studio</h2>
+
+        <input
+          type="file"
+          accept="image/*"
+          onchange="loadSingleImage(event)"
+        >
+
+        <div id="single-image"></div>
+
+        <button onclick="rotateImage()">
+          🔄 Rotate
+        </button>
+
+        <button onclick="imageZoom(1.2)">
+          🔍 Zoom In
+        </button>
+
+        <button onclick="imageZoom(.8)">
+          🔎 Zoom Out
+        </button>
+
+        <button onclick="imageFilter()">
+          ✨ Filter
+        </button>
+      </div>
+    `
+  );
+}
+
+function loadSingleImage(event) {
+  const file =
+    event.target.files[0];
+
+  if (!file) return;
+
+  const image =
+    document.getElementById(
+      "single-image"
+    );
+
+  image.innerHTML = `
+    <img
+      id="studio-image"
+      src="${URL.createObjectURL(file)}"
+      style="
+        width:100%;
+        transition:.3s;
+      "
+    >
+  `;
+}
+
+let imageRotation = 0;
+let imageScale = 1;
+
+function rotateImage() {
+  const image =
+    document.getElementById(
+      "studio-image"
+    );
+
+  if (!image) return;
+
+  imageRotation += 90;
+
+  image.style.transform =
+    `rotate(${imageRotation}deg)
+     scale(${imageScale})`;
+}
+
+function imageZoom(amount) {
+  const image =
+    document.getElementById(
+      "studio-image"
+    );
+
+  if (!image) return;
+
+  imageScale *= amount;
+
+  imageScale =
+    Math.max(
+      .5,
+      Math.min(
+        3,
+        imageScale
+      )
+    );
+
+  image.style.transform =
+    `rotate(${imageRotation}deg)
+     scale(${imageScale})`;
+}
+
+function imageFilter() {
+  const image =
+    document.getElementById(
+      "studio-image"
+    );
+
+  if (!image) return;
+
+  image.style.filter =
+    image.style.filter
+      ? ""
+      : "grayscale(100%) contrast(1.2)";
+}
+
+// ============================================================
+// CHRONO
+// ============================================================
+
+function chronoApp() {
+  openApp(
+    "Chrono",
+    `
+      <div class="card">
+        <h2>⏱️ Chrono</h2>
+
+        <div
+          id="chrono-time"
+          style="font-size:45px"
+        >
+          00:00
+        </div>
+
+        <button onclick="chronoStart()">
+          Start
+        </button>
+
+        <button onclick="chronoStop()">
+          Stop
+        </button>
+
+        <button onclick="chronoReset()">
+          Reset
+        </button>
+
+        <button onclick="chronoChallenge()">
+          🎯 Challenge
+        </button>
+      </div>
+    `
+  );
+}
+
+let chronoSeconds = 0;
+let chronoInterval = null;
+
+function chronoStart() {
+  if (chronoInterval) return;
+
+  chronoInterval =
+    setInterval(() => {
+      chronoSeconds++;
+
+      const el =
+        document.getElementById(
+          "chrono-time"
+        );
+
+      if (el) {
+        el.textContent =
+          formatTime(
+            chronoSeconds
+          );
       }
+    }, 1000);
+}
+
+function chronoStop() {
+  clearInterval(chronoInterval);
+  chronoInterval = null;
+}
+
+function chronoReset() {
+  chronoStop();
+
+  chronoSeconds = 0;
+
+  const el =
+    document.getElementById(
+      "chrono-time"
+    );
+
+  if (el) {
+    el.textContent = "00:00";
+  }
+}
+
+function chronoChallenge() {
+  const target =
+    Math.floor(
+      Math.random() * 10
+    ) + 5;
+
+  alert(
+    "Start the stopwatch and try to stop it at exactly " +
+    target +
+    " seconds!"
+  );
+}
+
+// ============================================================
+// ZAPLOOK
+// ============================================================
+
+const zapCategories = [
+  "Technology",
+  "Music",
+  "Games",
+  "Movies",
+  "Sports",
+  "Travel",
+  "Food",
+  "Random"
+];
+
+function zaplookApp() {
+  openApp(
+    "ZapLook",
+    `
+      <div class="card">
+        <h2>⚡ ZapLook</h2>
+
+        <input
+          id="zap-input"
+          placeholder="Search..."
+        >
+
+        <button onclick="zapSearch()">
+          🔎 Search
+        </button>
+
+        <h3>Categories</h3>
+
+        ${zapCategories.map(category => `
+          <button onclick="zapCategory('${category}')">
+            ${category}
+          </button>
+        `).join("")}
+
+        <div id="zap-result"></div>
+      </div>
+    `
+  );
+}
+
+function zapSearch() {
+  const input =
+    document.getElementById(
+      "zap-input"
+    );
+
+  if (!input) return;
+
+  const result =
+    document.getElementById(
+      "zap-result"
+    );
+
+  result.innerHTML = `
+    <div class="card">
+      <h3>
+        Results for
+        "${escapeHTML(input.value)}"
+      </h3>
+
+      <p>⚡ Result #1</p>
+      <p>⚡ Result #2</p>
+      <p>⚡ Result #3</p>
+    </div>
+  `;
+}
+
+function zapCategory(category) {
+  const result =
+    document.getElementById(
+      "zap-result"
+    );
+
+  if (result) {
+    result.innerHTML = `
+      <div class="card">
+        <h3>${category}</h3>
+        <p>
+          Discover something interesting!
+        </p>
+      </div>
+    `;
+  }
+}
+
+// ============================================================
+// MONKEY MINI GAME
+// ============================================================
+
+let monkeyScore = 0;
+
+function monkeyApp() {
+  monkeyScore = 0;
+
+  openApp(
+    "Monkey",
+    `
+      <div
+        class="card"
+        style="text-align:center"
+      >
+        <h2>🐒 Monkey Game</h2>
+
+        <div
+          id="monkey"
+          style="
+            font-size:90px;
+            transition:.25s;
+          "
+        >
+          🐒
+        </div>
+
+        <h3>
+          Bananas:
+          <span id="banana-score">
+            0
+          </span>
+        </h3>
+
+        <button onclick="monkeyJump()">
+          🍌 Catch Banana
+        </button>
+
+        <button onclick="monkeyRandom()">
+          🎲 Random Event
+        </button>
+      </div>
+    `
+  );
+}
+
+function monkeyJump() {
+  monkeyScore++;
+
+  const monkey =
+    document.getElementById(
+      "monkey"
+    );
+
+  const score =
+    document.getElementById(
+      "banana-score"
+    );
+
+  if (monkey) {
+    monkey.style.transform =
+      "translateY(-60px) rotate(-8deg)";
+
+    setTimeout(() => {
+      monkey.style.transform =
+        "translateY(0) rotate(0)";
+    }, 300);
+  }
+
+  if (score) {
+    score.textContent =
+      monkeyScore;
+  }
+}
+
+function monkeyRandom() {
+  const events = [
+    "🐒 Monkey found a banana!",
+    "🍌 Banana rain!",
+    "🌴 Monkey climbed a tree!",
+    "😂 Monkey slipped!",
+    "🏆 MONKEY POWER!"
+  ];
+
+  alert(
+    events[
+      Math.floor(
+        Math.random() *
+        events.length
+      )
+    ]
+  );
+}
+
+// ============================================================
+// REMARK
+// ============================================================
+
+let remarks = JSON.parse(
+  localStorage.getItem(
+    "pear-remarks"
+  ) || "[]"
+);
+
+function remarkApp() {
+  openApp(
+    "Remark",
+    `
+      <div class="card">
+        <h2>💭 Remark</h2>
+
+        <textarea
+          id="remark-text"
+          placeholder="Write something..."
+        ></textarea>
+
+        <button onclick="saveRemark()">
+          💾 Save
+        </button>
+
+        <button onclick="clearRemarks()">
+          🗑️ Clear All
+        </button>
+
+        <div>
+          ${remarks.map((remark, index) => `
+            <div class="post">
+              ${escapeHTML(remark)}
+              <br>
+              <button onclick="deleteRemark(${index})">
+                Delete
+              </button>
+            </div>
+          `).join("")}
+        </div>
+      </div>
+    `
+  );
+}
+
+function saveRemark() {
+  const text =
+    document.getElementById(
+      "remark-text"
+    );
+
+  if (!text || !text.value.trim()) {
+    return;
+  }
+
+  remarks.unshift(text.value);
+
+  localStorage.setItem(
+    "pear-remarks",
+    JSON.stringify(remarks)
+  );
+
+  remarkApp();
+}
+
+function deleteRemark(index) {
+  remarks.splice(index, 1);
+
+  localStorage.setItem(
+    "pear-remarks",
+    JSON.stringify(remarks)
+  );
+
+  remarkApp();
+}
+
+function clearRemarks() {
+  remarks = [];
+
+  localStorage.removeItem(
+    "pear-remarks"
+  );
+
+  remarkApp();
+}
+
+// ============================================================
+// PAGE 1 CONNECTIONS
+// ============================================================
+
+function connectPage1Apps() {
+  const connections = {
+    messages: messagesApp,
+    camera: cameraApp,
+    splashface: splashfaceApp,
+    stocks: stocksApp,
+    maps: mapsApp,
+    photos: photosApp,
+    weather: weatherApp,
+    notes: notesApp,
+    peartunes: pearTunesApp,
+    settings: settingsApp,
+    clock: clockApp,
+    videos: videosApp,
+    phone: phoneApp,
+    mail: mailApp,
+    compass: compassApp,
+    music: pearTunesApp
+  };
+
+  Object.keys(connections).forEach(id => {
+    const button =
+      document.getElementById(id);
+
+    if (!button) return;
+
+    button.addEventListener(
+      "click",
+      e => {
+        e.stopPropagation();
+        connections[id]();
+      }
+    );
+  });
+}
+
+// ============================================================
+// PAGE 2 CONNECTIONS
+// ============================================================
+
+function connectPage2Apps() {
+  const connections = {
+    "p2-lingo": lingoApp,
+    "p2-splash": splashfaceApp,
+    "p2-thumb": tumsApp,
+    "p2-danwarp": danwarpApp,
+    "p2-image": imageApp,
+    "p2-chrono": chronoApp,
+    "p2-zaplook": zaplookApp,
+    "p2-weather": weatherApp,
+    "p2-music": pearTunesApp,
+    "p2-monkey": monkeyApp,
+    "p2-remark": remarkApp,
+    "p2-settings": settingsApp,
+    "p2-phone": phoneApp,
+    "p2-mail": mailApp,
+    "p2-compass": compassApp,
+    "p2-music2": pearTunesApp
+  };
+
+  Object.keys(connections).forEach(id => {
+    const button =
+      document.getElementById(id);
+
+    if (!button) return;
+
+    button.addEventListener(
+      "click",
+      e => {
+        e.stopPropagation();
+        connections[id]();
+      }
+    );
+  });
+}
+
+// ============================================================
+// HOME BUTTON
+// ============================================================
+
+const homeButton =
+  document.getElementById("home");
+
+if (homeButton) {
+  homeButton.addEventListener(
+    "click",
+    e => {
+      e.stopPropagation();
+      closeApp();
     }
   );
 }
 
-document.addEventListener("keydown", e => {
+// ============================================================
+// UTILITY
+// ============================================================
 
-  if (e.key === "Escape") {
-    closeApp();
-    return;
-  }
-
-  if (
-    overlay &&
-    overlay.classList.contains("open")
-  ) {
-    return;
-  }
-
-  if (e.key === "ArrowUp") {
-    changePage("up");
-  }
-
-  if (e.key === "ArrowDown") {
-    changePage("down");
-  }
-});
-
-/* =========================================================
-   PREVENT APP CLICKS FROM TRIGGERING PAGE SWIPES
-   ========================================================= */
-
-if (overlay) {
-  overlay.addEventListener("pointerdown", e => {
-    e.stopPropagation();
-  });
-
-  overlay.addEventListener("pointerup", e => {
-    e.stopPropagation();
-  });
+function escapeHTML(value) {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 }
 
-/* =========================================================
-   STARTUP
-   ========================================================= */
+// ============================================================
+// STARTUP
+// ============================================================
 
-document.addEventListener("DOMContentLoaded", () => {
+connectPage1Apps();
+connectPage2Apps();
 
-  createKeyboard();
+if (
+  localStorage.getItem(
+    "pear-dark"
+  ) === "true"
+) {
+  document.body.classList.add(
+    "dark-mode"
+  );
+}
 
-  setupAppButtons();
+if (
+  localStorage.getItem(
+    "pear-animations"
+  ) === "true"
+) {
+  document.body.classList.add(
+    "no-animations"
+  );
+}
 
-  setupHomeButton();
+currentPage = 1;
 
-  setPage(1);
+phone.classList.remove(
+  "page-two"
+);
 
-  cameraCount =
-    Number(localStorage.getItem("pear-camera-count") || 0);
-
-  /* Restore dark mode */
-  if (
-    localStorage.getItem("pear-dark") === "true"
-  ) {
-    appWindow?.classList.add("dark-app");
-  }
-});
+if (pageDots) {
+  pageDots.textContent = "● ○";
+}

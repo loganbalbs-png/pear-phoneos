@@ -124,30 +124,300 @@
 
   window.openApp = openApp;
 
-  /* ==========================================================
-     PAGE SWITCHING
-     ========================================================== */
+  // ============================================================
+// PAGE SWITCHING
+// ============================================================
 
-  function showPage(page) {
-    currentPage = page === 2 ? 2 : 1;
+// Current page
+let currentPage = 1;
 
-    closeApp();
+// Touch / swipe tracking
+let touchStartX = 0;
+let touchStartY = 0;
+let touchMoved = false;
 
-    phone.classList.toggle(
-      "page-two",
+// Mouse / trackpad dragging
+let mouseStartX = 0;
+let mouseStartY = 0;
+let mouseDragging = false;
+
+// Prevent accidental double page changes
+let swipeLocked = false;
+
+
+// ============================================================
+// SHOW PAGE
+// ============================================================
+
+function showPage(page) {
+
+  if (page === currentPage) return;
+
+  currentPage = page;
+
+  // Keep the phone exactly as it is.
+  // No rotation or redesign is changed here.
+
+  phone.classList.toggle(
+    "page-two",
+    page === 2
+  );
+
+  // Close any currently open app
+  closeApp();
+
+}
+
+
+// ============================================================
+// ARROW KEYS
+// UP    = PAGE 2
+// DOWN  = PAGE 1
+// ============================================================
+
+document.addEventListener("keydown", e => {
+
+  // Do not switch pages while typing
+  if (
+    e.target &&
+    (
+      e.target.matches("input") ||
+      e.target.matches("textarea") ||
+      e.target.matches("select")
+    )
+  ) {
+    return;
+  }
+
+  // UP ARROW → PAGE 2
+  if (e.key === "ArrowUp") {
+
+    e.preventDefault();
+
+    if (currentPage === 1) {
+      showPage(2);
+    }
+
+    return;
+  }
+
+  // DOWN ARROW → PAGE 1
+  if (e.key === "ArrowDown") {
+
+    e.preventDefault();
+
+    if (currentPage === 2) {
+      showPage(1);
+    }
+
+    return;
+  }
+
+});
+
+
+// ============================================================
+// TOUCH SWIPING
+// SWIPE UP   = PAGE 2
+// SWIPE DOWN = PAGE 1
+// ============================================================
+
+phone.addEventListener(
+  "touchstart",
+  e => {
+
+    if (overlay.classList.contains("open")) {
+      return;
+    }
+
+    const touch = e.touches[0];
+
+    touchStartX = touch.clientX;
+    touchStartY = touch.clientY;
+
+    touchMoved = false;
+
+  },
+  { passive: true }
+);
+
+
+phone.addEventListener(
+  "touchmove",
+  e => {
+
+    if (overlay.classList.contains("open")) {
+      return;
+    }
+
+    const touch = e.touches[0];
+
+    const dx =
+      touch.clientX - touchStartX;
+
+    const dy =
+      touch.clientY - touchStartY;
+
+    if (
+      Math.abs(dy) > 30 &&
+      Math.abs(dy) > Math.abs(dx)
+    ) {
+
+      touchMoved = true;
+
+    }
+
+  },
+  { passive: true }
+);
+
+
+phone.addEventListener(
+  "touchend",
+  e => {
+
+    if (
+      overlay.classList.contains("open") ||
+      !touchMoved ||
+      swipeLocked
+    ) {
+      return;
+    }
+
+    const touch =
+      e.changedTouches[0];
+
+    const dx =
+      touch.clientX - touchStartX;
+
+    const dy =
+      touch.clientY - touchStartY;
+
+    // Make sure it was actually a vertical swipe
+    if (
+      Math.abs(dy) < 80 ||
+      Math.abs(dy) <= Math.abs(dx)
+    ) {
+      return;
+    }
+
+    swipeLocked = true;
+
+    // Swipe UP → Page 2
+    if (
+      dy < 0 &&
+      currentPage === 1
+    ) {
+      showPage(2);
+    }
+
+    // Swipe DOWN → Page 1
+    if (
+      dy > 0 &&
       currentPage === 2
-    );
-  }
+    ) {
+      showPage(1);
+    }
 
-  window.showPage = showPage;
+    setTimeout(() => {
 
-  function goToPage2() {
-    showPage(2);
-  }
+      swipeLocked = false;
 
-  function goToPage1() {
-    showPage(1);
+    }, 400);
+
+  },
+  { passive: true }
+);
+
+
+// ============================================================
+// MOUSE / TRACKPAD DRAGGING
+// DRAG UP   = PAGE 2
+// DRAG DOWN = PAGE 1
+// ============================================================
+
+phone.addEventListener(
+  "mousedown",
+  e => {
+
+    if (overlay.classList.contains("open")) {
+      return;
+    }
+
+    mouseStartX = e.clientX;
+    mouseStartY = e.clientY;
+
+    mouseDragging = true;
+
   }
+);
+
+
+phone.addEventListener(
+  "mouseup",
+  e => {
+
+    if (!mouseDragging) {
+      return;
+    }
+
+    mouseDragging = false;
+
+    if (overlay.classList.contains("open")) {
+      return;
+    }
+
+    const dx =
+      e.clientX - mouseStartX;
+
+    const dy =
+      e.clientY - mouseStartY;
+
+    // Only count a clear vertical drag
+    if (
+      Math.abs(dy) < 80 ||
+      Math.abs(dy) <= Math.abs(dx)
+    ) {
+      return;
+    }
+
+    // Drag UP → Page 2
+    if (
+      dy < 0 &&
+      currentPage === 1
+    ) {
+      showPage(2);
+    }
+
+    // Drag DOWN → Page 1
+    if (
+      dy > 0 &&
+      currentPage === 2
+    ) {
+      showPage(1);
+    }
+
+  }
+);
+
+
+phone.addEventListener(
+  "mouseleave",
+  () => {
+
+    mouseDragging = false;
+
+  }
+);
+
+
+// ============================================================
+// START ON PAGE 1
+// ============================================================
+
+currentPage = 1;
+
+phone.classList.remove("page-two");
 
   /* ==========================================================
      SWIPE / DRAG PAGE SWITCHING

@@ -4895,3 +4895,1691 @@ function rotateCompass() {
 // ============================================================
 // PART 2 ENDS HERE
 // ============================================================
+// ============================================================
+// PAGE 2 APPS
+// ============================================================
+
+
+// ============================================================
+// LINGO
+// ============================================================
+
+const lingoDictionary = {
+
+  hello: "hola",
+
+  goodbye: "adios",
+
+  apple: "manzana",
+
+  pear: "pera",
+
+  friend: "amigo",
+
+  house: "casa",
+
+  water: "agua",
+
+  music: "musica",
+
+  phone: "telefono",
+
+  school: "escuela",
+
+  food: "comida",
+
+  car: "coche",
+
+  computer: "computadora",
+
+  camera: "camara"
+
+};
+
+
+function lingoApp() {
+
+  openApp(
+
+    "Lingo",
+
+    `
+
+      <div
+        class="card"
+      >
+
+        <h2>
+          🗣️ Lingo
+        </h2>
+
+
+        <p>
+          Type a word and translate it.
+        </p>
+
+
+        <input
+          id="lingo-input"
+          type="text"
+          placeholder="Type a word..."
+        >
+
+
+        <button
+          onclick="translateLingo()"
+        >
+
+          🌎 Translate
+
+        </button>
+
+
+        <button
+          onclick="lingoRandom()"
+        >
+
+          🎲 Random Word
+
+        </button>
+
+
+        <div
+          id="lingo-result"
+          style="
+            margin-top:12px;
+            font-size:18px;
+            font-weight:bold;
+          "
+        ></div>
+
+      </div>
+
+    `
+
+  );
+
+}
+
+
+function translateLingo() {
+
+  const input =
+    document.getElementById(
+      "lingo-input"
+    );
+
+
+  const result =
+    document.getElementById(
+      "lingo-result"
+    );
+
+
+  if (
+    !input ||
+    !result
+  ) {
+    return;
+  }
+
+
+  const word =
+    input.value
+      .trim()
+      .toLowerCase();
+
+
+  if (!word) {
+
+    result.textContent =
+      "Type something first.";
+
+    return;
+
+  }
+
+
+  result.textContent =
+    lingoDictionary[word]
+      ? word +
+        " → " +
+        lingoDictionary[word]
+      : "No translation found.";
+
+}
+
+
+function lingoRandom() {
+
+  const words =
+    Object.keys(
+      lingoDictionary
+    );
+
+
+  const word =
+    words[
+      Math.floor(
+        Math.random() *
+        words.length
+      )
+    ];
+
+
+  const input =
+    document.getElementById(
+      "lingo-input"
+    );
+
+
+  const result =
+    document.getElementById(
+      "lingo-result"
+    );
+
+
+  if (input) {
+
+    input.value =
+      word;
+
+  }
+
+
+  if (result) {
+
+    result.textContent =
+      word +
+      " → " +
+      lingoDictionary[word];
+
+  }
+
+}
+
+
+// ============================================================
+// TUMS
+// ============================================================
+
+let tumsScore =
+  0;
+
+
+function tumsApp() {
+
+  tumsScore =
+    0;
+
+
+  openApp(
+
+    "Tums",
+
+    `
+
+      <div
+        class="card"
+        style="
+          text-align:center;
+        "
+      >
+
+        <h2>
+          🍬 Tums
+        </h2>
+
+
+        <p>
+          Catch the falling candy!
+        </p>
+
+
+        <div
+          id="tums-game"
+          style="
+            position:relative;
+            height:190px;
+            overflow:hidden;
+            background:
+              linear-gradient(
+                #bdeaff,
+                #ffffff
+              );
+            border-radius:12px;
+          "
+        >
+
+          <div
+            id="tums-player"
+            style="
+              position:absolute;
+              bottom:10px;
+              left:45%;
+              font-size:38px;
+            "
+          >
+            🧺
+          </div>
+
+        </div>
+
+
+        <h3>
+
+          Score:
+          <span id="tums-score">
+            0
+          </span>
+
+        </h3>
+
+
+        <button
+          onclick="startTumsGame()"
+        >
+
+          ▶ Start Game
+
+        </button>
+
+
+        <button
+          onclick="stopTumsGame()"
+        >
+
+          ⏹ Stop
+
+        </button>
+
+      </div>
+
+    `
+
+  );
+
+}
+
+
+let tumsInterval =
+  null;
+
+
+function startTumsGame() {
+
+  stopTumsGame();
+
+
+  const game =
+    document.getElementById(
+      "tums-game"
+    );
+
+
+  if (!game) {
+    return;
+  }
+
+
+  tumsInterval =
+    setInterval(
+      () => {
+
+        const candy =
+          document.createElement(
+            "div"
+          );
+
+
+        candy.textContent =
+          "🍬";
+
+
+        candy.style.position =
+          "absolute";
+
+
+        candy.style.top =
+          "-35px";
+
+
+        candy.style.left =
+          Math.random() * 85 +
+          "%";
+
+
+        candy.style.fontSize =
+          "30px";
+
+
+        game.appendChild(
+          candy
+        );
+
+
+        let position =
+          -35;
+
+
+        const fall =
+          setInterval(
+            () => {
+
+              position +=
+                5;
+
+
+              candy.style.top =
+                position +
+                "px";
+
+
+              if (
+                position >
+                game.clientHeight
+              ) {
+
+                clearInterval(
+                  fall
+                );
+
+
+                candy.remove();
+
+              }
+
+            },
+            40
+          );
+
+      },
+      700
+    );
+
+}
+
+
+function stopTumsGame() {
+
+  clearInterval(
+    tumsInterval
+  );
+
+  tumsInterval =
+    null;
+
+}
+
+
+// ============================================================
+// DANWARP
+// ============================================================
+
+const warpDestinations = [
+
+  "Toronto 🇨🇦",
+
+  "New York 🗽",
+
+  "Los Angeles 🌴",
+
+  "Tokyo 🗼",
+
+  "London 🇬🇧",
+
+  "Paris 🇫🇷",
+
+  "Vancouver 🌲",
+
+  "The Moon 🌙",
+
+  "Mars 🔴",
+
+  "Pear Headquarters 🍐"
+
+];
+
+
+function danwarpApp() {
+
+  openApp(
+
+    "DanWarp",
+
+    `
+
+      <div
+        class="card"
+        style="
+          text-align:center;
+        "
+      >
+
+        <h2>
+          🌀 DanWarp
+        </h2>
+
+
+        <div
+          id="warp-display"
+          style="
+            min-height:70px;
+            display:grid;
+            place-items:center;
+            font-size:25px;
+            font-weight:bold;
+          "
+        >
+
+          Ready to warp...
+
+        </div>
+
+
+        <button
+          onclick="warpNow()"
+        >
+
+          ⚡ WARP
+
+        </button>
+
+
+        <button
+          onclick="randomWarp()"
+        >
+
+          🎲 Random Destination
+
+        </button>
+
+
+        <div
+          style="
+            margin-top:15px;
+          "
+        >
+
+          Warp Energy
+
+          <input
+            type="range"
+            min="0"
+            max="100"
+            value="100"
+          >
+
+        </div>
+
+      </div>
+
+    `
+
+  );
+
+}
+
+
+function warpNow() {
+
+  const display =
+    document.getElementById(
+      "warp-display"
+    );
+
+
+  if (!display) {
+    return;
+  }
+
+
+  display.textContent =
+    "⚡ WARPING...";
+
+
+  setTimeout(
+    () => {
+
+      const destination =
+        warpDestinations[
+          Math.floor(
+            Math.random() *
+            warpDestinations.length
+          )
+        ];
+
+
+      display.textContent =
+        "📍 " +
+        destination;
+
+    },
+    600
+  );
+
+}
+
+
+function randomWarp() {
+
+  const display =
+    document.getElementById(
+      "warp-display"
+    );
+
+
+  if (!display) {
+    return;
+  }
+
+
+  const destination =
+    warpDestinations[
+      Math.floor(
+        Math.random() *
+        warpDestinations.length
+      )
+    ];
+
+
+  display.textContent =
+    "📍 " +
+    destination;
+
+}
+
+
+// ============================================================
+// IMAGE STUDIO
+// ============================================================
+
+let imageRotation =
+  0;
+
+let imageScale =
+  1;
+
+
+function imageApp() {
+
+  imageRotation =
+    0;
+
+  imageScale =
+    1;
+
+
+  openApp(
+
+    "Image",
+
+    `
+
+      <div
+        class="card"
+      >
+
+        <h2>
+          🖼️ Image Studio
+        </h2>
+
+
+        <input
+          type="file"
+          accept="image/png"
+          onchange="loadSingleImage(event)"
+        >
+
+
+        <div
+          id="single-image"
+          style="
+            text-align:center;
+            margin-top:10px;
+          "
+        >
+
+          <p>
+            Choose a PNG image.
+          </p>
+
+        </div>
+
+
+        <button
+          onclick="rotateImage()"
+        >
+
+          🔄 Rotate
+
+        </button>
+
+
+        <button
+          onclick="imageZoom(1.2)"
+        >
+
+          🔍 Zoom In
+
+        </button>
+
+
+        <button
+          onclick="imageZoom(.8)"
+        >
+
+          🔎 Zoom Out
+
+        </button>
+
+
+        <button
+          onclick="imageFilter()"
+        >
+
+          ✨ Filter
+
+        </button>
+
+
+        <button
+          onclick="resetImage()"
+        >
+
+          ↩ Reset
+
+        </button>
+
+      </div>
+
+    `
+
+  );
+
+}
+
+
+function loadSingleImage(
+  event
+) {
+
+  const file =
+    event.target.files[0];
+
+
+  if (!file) {
+    return;
+  }
+
+
+  if (
+    file.type !==
+    "image/png"
+  ) {
+
+    alert(
+      "Please choose a PNG image."
+    );
+
+    return;
+
+  }
+
+
+  const image =
+    document.getElementById(
+      "single-image"
+    );
+
+
+  if (!image) {
+    return;
+  }
+
+
+  image.innerHTML = `
+
+    <img
+      id="studio-image"
+      src="${URL.createObjectURL(file)}"
+      style="
+        max-width:100%;
+        max-height:250px;
+        border-radius:12px;
+        transition:.3s;
+      "
+    >
+
+  `;
+
+
+  imageRotation =
+    0;
+
+  imageScale =
+    1;
+
+}
+
+
+function rotateImage() {
+
+  const image =
+    document.getElementById(
+      "studio-image"
+    );
+
+
+  if (!image) {
+    return;
+  }
+
+
+  imageRotation +=
+    90;
+
+
+  updateImageTransform();
+
+}
+
+
+function imageZoom(
+  amount
+) {
+
+  const image =
+    document.getElementById(
+      "studio-image"
+    );
+
+
+  if (!image) {
+    return;
+  }
+
+
+  imageScale *=
+    amount;
+
+
+  imageScale =
+    Math.max(
+      .5,
+      Math.min(
+        3,
+        imageScale
+      )
+    );
+
+
+  updateImageTransform();
+
+}
+
+
+function updateImageTransform() {
+
+  const image =
+    document.getElementById(
+      "studio-image"
+    );
+
+
+  if (!image) {
+    return;
+  }
+
+
+  image.style.transform =
+    `rotate(${imageRotation}deg)
+     scale(${imageScale})`;
+
+}
+
+
+function imageFilter() {
+
+  const image =
+    document.getElementById(
+      "studio-image"
+    );
+
+
+  if (!image) {
+    return;
+  }
+
+
+  image.style.filter =
+    image.style.filter
+      ? ""
+      : "grayscale(100%)";
+
+}
+
+
+function resetImage() {
+
+  const image =
+    document.getElementById(
+      "studio-image"
+    );
+
+
+  if (!image) {
+    return;
+  }
+
+
+  imageRotation =
+    0;
+
+  imageScale =
+    1;
+
+  image.style.filter =
+    "";
+
+  updateImageTransform();
+
+}
+
+
+// ============================================================
+// CHRONO STOPWATCH
+// ============================================================
+
+let chronoSeconds =
+  0;
+
+let chronoInterval =
+  null;
+
+
+function chronoApp() {
+
+  chronoSeconds =
+    0;
+
+  chronoStop();
+
+
+  openApp(
+
+    "Chrono",
+
+    `
+
+      <div
+        class="card"
+        style="
+          text-align:center;
+        "
+      >
+
+        <h2>
+          ⏱️ Chrono
+        </h2>
+
+
+        <div
+          id="chrono-time"
+          style="
+            font-size:52px;
+            font-weight:900;
+            margin:20px 0;
+          "
+        >
+
+          00:00
+
+        </div>
+
+
+        <button
+          onclick="chronoStart()"
+        >
+
+          ▶ Start
+
+        </button>
+
+
+        <button
+          onclick="chronoStop()"
+        >
+
+          ⏸ Stop
+
+        </button>
+
+
+        <button
+          onclick="chronoReset()"
+        >
+
+          ↩ Reset
+
+        </button>
+
+
+        <button
+          onclick="chronoChallenge()"
+        >
+
+          🎯 Challenge
+
+        </button>
+
+      </div>
+
+    `
+
+  );
+
+}
+
+
+function chronoStart() {
+
+  if (
+    chronoInterval
+  ) {
+    return;
+  }
+
+
+  chronoInterval =
+    setInterval(
+      () => {
+
+        chronoSeconds++;
+
+
+        const display =
+          document.getElementById(
+            "chrono-time"
+          );
+
+
+        if (display) {
+
+          display.textContent =
+            formatChronoTime(
+              chronoSeconds
+            );
+
+        }
+
+      },
+      1000
+    );
+
+}
+
+
+function chronoStop() {
+
+  clearInterval(
+    chronoInterval
+  );
+
+  chronoInterval =
+    null;
+
+}
+
+
+function chronoReset() {
+
+  chronoStop();
+
+  chronoSeconds =
+    0;
+
+
+  const display =
+    document.getElementById(
+      "chrono-time"
+    );
+
+
+  if (display) {
+
+    display.textContent =
+      "00:00";
+
+  }
+
+}
+
+
+function formatChronoTime(
+  seconds
+) {
+
+  const minutes =
+    Math.floor(
+      seconds / 60
+    );
+
+
+  const remaining =
+    seconds % 60;
+
+
+  return (
+
+    String(
+      minutes
+    ).padStart(
+      2,
+      "0"
+    )
+
+    +
+
+    ":"
+
+    +
+
+    String(
+      remaining
+    ).padStart(
+      2,
+      "0"
+    )
+
+  );
+
+}
+
+
+function chronoChallenge() {
+
+  const target =
+    Math.floor(
+      Math.random() *
+      10
+    ) + 5;
+
+
+  alert(
+    "Try to stop the timer at exactly " +
+    target +
+    " seconds!"
+  );
+
+}
+
+
+// ============================================================
+// ZAPLOOK
+// ============================================================
+
+const zapCategories = [
+
+  "Technology",
+
+  "Music",
+
+  "Games",
+
+  "Movies",
+
+  "Sports",
+
+  "Travel",
+
+  "Food",
+
+  "Random"
+
+];
+
+
+function zaplookApp() {
+
+  openApp(
+
+    "ZapLook",
+
+    `
+
+      <div
+        class="card"
+      >
+
+        <h2>
+          ⚡ ZapLook
+        </h2>
+
+
+        <input
+          id="zap-input"
+          type="text"
+          placeholder="Search ZapLook..."
+        >
+
+
+        <button
+          onclick="zapSearch()"
+        >
+
+          🔎 Search
+
+        </button>
+
+
+        <h3>
+          Categories
+        </h3>
+
+
+        <div>
+
+          ${
+            zapCategories
+              .map(
+                category => `
+
+                  <button
+                    onclick="zapCategory('${category}')"
+                  >
+
+                    ${category}
+
+                  </button>
+
+                `
+              )
+              .join("")
+          }
+
+        </div>
+
+
+        <div
+          id="zap-result"
+          style="
+            margin-top:12px;
+          "
+        ></div>
+
+      </div>
+
+    `
+
+  );
+
+}
+
+
+function zapSearch() {
+
+  const input =
+    document.getElementById(
+      "zap-input"
+    );
+
+
+  const result =
+    document.getElementById(
+      "zap-result"
+    );
+
+
+  if (
+    !input ||
+    !result
+  ) {
+    return;
+  }
+
+
+  const search =
+    input.value.trim();
+
+
+  if (!search) {
+
+    result.textContent =
+      "Type something to search.";
+
+    return;
+
+  }
+
+
+  result.innerHTML = `
+
+    <div
+      class="post"
+    >
+
+      🔎 Results for:
+
+      <strong>
+        ${escapeHTML(
+          search
+        )}
+      </strong>
+
+      <p>
+        ⚡ Pear Result #1
+      </p>
+
+      <p>
+        ⚡ Pear Result #2
+      </p>
+
+      <p>
+        ⚡ Pear Result #3
+      </p>
+
+    </div>
+
+  `;
+
+}
+
+
+function zapCategory(
+  category
+) {
+
+  const result =
+    document.getElementById(
+      "zap-result"
+    );
+
+
+  if (!result) {
+    return;
+  }
+
+
+  result.innerHTML = `
+
+    <div
+      class="post"
+    >
+
+      <h3>
+        ${escapeHTML(
+          category
+        )}
+      </h3>
+
+
+      <p>
+        ⚡ Trending content in
+        ${escapeHTML(
+          category
+        )}
+      </p>
+
+
+      <p>
+        🍐 Pear Pick of the Day
+      </p>
+
+    </div>
+
+  `;
+
+}
+
+
+// ============================================================
+// MONKEY
+// ============================================================
+
+let monkeyScore =
+  0;
+
+
+function monkeyApp() {
+
+  monkeyScore =
+    0;
+
+
+  openApp(
+
+    "Monkey",
+
+    `
+
+      <div
+        class="card"
+        style="
+          text-align:center;
+        "
+      >
+
+        <h2>
+          🐒 Monkey
+        </h2>
+
+
+        <div
+          id="monkey"
+          style="
+            font-size:90px;
+            transition:.25s;
+          "
+        >
+
+          🐒
+
+        </div>
+
+
+        <h3>
+
+          🍌 Bananas:
+
+          <span
+            id="banana-score"
+          >
+            0
+          </span>
+
+        </h3>
+
+
+        <button
+          onclick="monkeyJump()"
+        >
+
+          🍌 Catch Banana
+
+        </button>
+
+
+        <button
+          onclick="monkeyRandom()"
+        >
+
+          🎲 Random Event
+
+        </button>
+
+      </div>
+
+    `
+
+  );
+
+}
+
+
+function monkeyJump() {
+
+  monkeyScore++;
+
+
+  const monkey =
+    document.getElementById(
+      "monkey"
+    );
+
+
+  const score =
+    document.getElementById(
+      "banana-score"
+    );
+
+
+  if (monkey) {
+
+    monkey.style.transform =
+      "translateY(-60px) rotate(-8deg)";
+
+
+    setTimeout(
+      () => {
+
+        if (monkey) {
+
+          monkey.style.transform =
+            "translateY(0) rotate(0)";
+
+        }
+
+      },
+      300
+    );
+
+  }
+
+
+  if (score) {
+
+    score.textContent =
+      monkeyScore;
+
+  }
+
+}
+
+
+function monkeyRandom() {
+
+  const events = [
+
+    "🐒 The monkey found a banana!",
+
+    "🍌 BANANA RAIN!",
+
+    "🌴 The monkey climbed a tree!",
+
+    "😂 The monkey slipped!",
+
+    "🏆 MONKEY POWER!"
+
+  ];
+
+
+  alert(
+    events[
+      Math.floor(
+        Math.random() *
+        events.length
+      )
+    ]
+  );
+
+}
+
+
+// ============================================================
+// REMARK
+// ============================================================
+
+let pearRemarks =
+  JSON.parse(
+    localStorage.getItem(
+      "pear-remarks"
+    ) || "[]"
+  );
+
+
+function remarkApp() {
+
+  openApp(
+
+    "Remark",
+
+    `
+
+      <div
+        class="card"
+      >
+
+        <h2>
+          💭 Remark
+        </h2>
+
+
+        <textarea
+          id="remark-text"
+          placeholder="Write a remark..."
+        ></textarea>
+
+
+        <button
+          onclick="saveRemark()"
+        >
+
+          💾 Save Remark
+
+        </button>
+
+
+        <button
+          onclick="clearRemarks()"
+        >
+
+          🗑️ Clear All
+
+        </button>
+
+
+        <div
+          id="remark-list"
+        >
+
+          ${
+            pearRemarks
+              .map(
+                (
+                  remark,
+                  index
+                ) => `
+
+                  <div
+                    class="post"
+                  >
+
+                    ${escapeHTML(
+                      remark
+                    )}
+
+
+                    <br>
+
+
+                    <button
+                      onclick="deleteRemark(${index})"
+                    >
+
+                      Delete
+
+                    </button>
+
+                  </div>
+
+                `
+              )
+              .join("")
+          }
+
+        </div>
+
+      </div>
+
+    `
+
+  );
+
+}
+
+
+function saveRemark() {
+
+  const input =
+    document.getElementById(
+      "remark-text"
+    );
+
+
+  if (
+    !input ||
+    !input.value.trim()
+  ) {
+
+    return;
+
+  }
+
+
+  pearRemarks.unshift(
+    input.value.trim()
+  );
+
+
+  pearRemarks =
+    pearRemarks.slice(
+      0,
+      50
+    );
+
+
+  localStorage.setItem(
+    "pear-remarks",
+    JSON.stringify(
+      pearRemarks
+    )
+  );
+
+
+  remarkApp();
+
+}
+
+
+function deleteRemark(
+  index
+) {
+
+  pearRemarks.splice(
+    index,
+    1
+  );
+
+
+  localStorage.setItem(
+    "pear-remarks",
+    JSON.stringify(
+      pearRemarks
+    )
+  );
+
+
+  remarkApp();
+
+}
+
+
+function clearRemarks() {
+
+  pearRemarks = [];
+
+
+  localStorage.removeItem(
+    "pear-remarks"
+  );
+
+
+  remarkApp();
+
+}
+
+
+// ============================================================
+// PART 3 ENDS HERE
+// ============================================================

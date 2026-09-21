@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
 <title>Pear Phone OS</title>
 
 <style>
@@ -26,29 +27,48 @@ body{
   justify-content:center;
 }
 
+/* =========================
+   PEAR PHONE
+========================= */
+
 #phone-container{
   position:relative;
+
   width:min(170vh,1500px);
+
   aspect-ratio:1212 / 1188;
+
   background:url("pear-phone.png") center/contain no-repeat;
+
   transform:rotate(90deg);
+
   transform-origin:center center;
+
   touch-action:none;
   user-select:none;
 }
 
-/* PAGE 2 IMAGE */
+/* =========================
+   PAGE 2 IMAGE
+========================= */
 
 #page2{
   position:absolute;
   inset:0;
+
   width:100%;
   height:100%;
+
   background:url("page2.png") center/contain no-repeat;
+
   z-index:50;
+
   pointer-events:none;
+
   opacity:0;
+
   transform:translateY(100%) scale(.96);
+
   transition:
     transform .45s cubic-bezier(.22,.8,.25,1),
     opacity .3s ease;
@@ -56,22 +76,32 @@ body{
 
 #phone-container.page-two #page2{
   opacity:1;
+
   transform:translateY(0) scale(1);
 }
 
-/* HOTSPOTS */
+/* =========================
+   HOTSPOTS
+========================= */
 
 .hotspot{
   position:absolute;
+
   border:0;
   background:transparent;
+
   padding:0;
   margin:0;
+
   border-radius:50%;
+
   cursor:pointer;
+
   touch-action:manipulation;
+
   -webkit-appearance:none;
   appearance:none;
+
   z-index:200;
 }
 
@@ -79,7 +109,9 @@ body{
   transform:scale(.93);
 }
 
-/* PAGE 1 */
+/* =========================
+   PAGE 1
+========================= */
 
 #messages{
   left:43.1%;
@@ -193,26 +225,40 @@ body{
   aspect-ratio:1;
 }
 
-/* HOME */
-
 #home{
   position:absolute;
+
   left:46%;
   top:78.8%;
+
   width:8.2%;
   aspect-ratio:1;
+
   border:0;
   background:transparent;
+
   border-radius:50%;
+
   cursor:pointer;
+
   z-index:1000;
 }
 
-/* PAGE 2 */
+/* Hide Page 1 hotspots on Page 2 */
+
+#phone-container.page-two > .page1-hotspot{
+  pointer-events:none;
+}
+
+/* =========================
+   PAGE 2 HOTSPOTS
+========================= */
 
 .page2-hotspot{
   display:none;
+
   z-index:300;
+
   pointer-events:auto;
 }
 
@@ -220,134 +266,143 @@ body{
   display:block;
 }
 
-#phone-container.page-two > .page1-hotspot{
-  pointer-events:none;
-}
-
-/*
-   PAGE 2 ICON POSITIONS
-   Each button is independent.
-*/
-
 #p2-lingo{
   left:37%;
-  top:37%;
+  top:24%;
   width:9%;
   aspect-ratio:1;
 }
 
 #p2-splash{
   left:51%;
-  top:37%;
+  top:24%;
   width:9%;
   aspect-ratio:1;
 }
 
 #p2-thumb{
   left:65%;
-  top:37%;
+  top:24%;
   width:9%;
   aspect-ratio:1;
 }
 
 #p2-danwarp{
   left:37%;
-  top:50%;
+  top:37%;
   width:9%;
   aspect-ratio:1;
 }
 
 #p2-image{
   left:51%;
-  top:50%;
+  top:37%;
   width:9%;
   aspect-ratio:1;
 }
 
 #p2-chrono{
   left:65%;
-  top:50%;
+  top:37%;
   width:9%;
   aspect-ratio:1;
 }
 
 #p2-zaplook{
   left:37%;
-  top:63%;
+  top:50%;
   width:9%;
   aspect-ratio:1;
 }
 
 #p2-weather{
   left:51%;
-  top:63%;
+  top:50%;
   width:9%;
   aspect-ratio:1;
 }
 
 #p2-music{
   left:65%;
-  top:63%;
+  top:50%;
   width:9%;
   aspect-ratio:1;
 }
 
 #p2-monkey{
   left:37%;
-  top:75%;
+  top:63%;
   width:9%;
   aspect-ratio:1;
 }
 
 #p2-remark{
   left:51%;
-  top:75%;
+  top:63%;
   width:9%;
   aspect-ratio:1;
 }
 
 #p2-settings{
   left:65%;
-  top:75%;
+  top:63%;
   width:9%;
   aspect-ratio:1;
 }
 
 #p2-phone{
   left:37%;
-  top:86%;
+  top:75%;
   width:9%;
   aspect-ratio:1;
 }
 
 #p2-mail{
   left:51%;
-  top:86%;
+  top:75%;
   width:9%;
   aspect-ratio:1;
 }
 
 #p2-compass{
   left:65%;
+  top:75%;
+  width:9%;
+  aspect-ratio:1;
+}
+
+#p2-music2{
+  left:51%;
   top:86%;
   width:9%;
   aspect-ratio:1;
 }
 
-/* APP WINDOW */
+/* =========================
+   APP WINDOW
+========================= */
 
 #overlay{
   position:absolute;
+
   left:31%;
   top:22%;
+
   width:38%;
   height:47%;
+
   z-index:500;
+
   display:none;
+
   overflow:hidden;
+
   background:#f4f5f7;
+
   border-radius:10px;
-  box-shadow:0 5px 25px rgba(0,0,0,.55);
+
+  box-shadow:
+    0 5px 25px rgba(0,0,0,.55);
 }
 
 #overlay.open{
@@ -357,329 +412,303 @@ body{
 #app-window{
   width:100%;
   height:100%;
+
   display:flex;
   flex-direction:column;
+
   overflow:hidden;
+
   background:#f4f5f7;
+
   color:#111;
 }
 
-.window-header{
+#app-window .window-header{
   flex:0 0 auto;
+
   display:flex;
   align-items:center;
+
   gap:8px;
+
   padding:8px 10px;
+
   background:linear-gradient(#fff,#e7e8ea);
+
   border-bottom:1px solid #ccc;
+
   font-weight:900;
+
   font-size:15px;
 }
 
 .back{
   width:30px;
   height:30px;
+
   border-radius:50%;
+
   border:1px solid #bbb;
+
   background:linear-gradient(#fff,#ddd);
+
   font-size:23px;
+
   cursor:pointer;
 }
 
-.window-body{
+#app-window .window-body{
   flex:1;
+
   min-height:0;
+
   overflow-y:auto;
+
   padding:12px;
+
   padding-bottom:15px;
+
   -webkit-overflow-scrolling:touch;
 }
 
-.card{
-  background:#fff;
-  border:1px solid #ddd;
-  border-radius:13px;
-  padding:10px;
-  margin-bottom:10px;
-}
+.button{
+  padding:9px 13px;
 
-button:not(.hotspot):not(#home){
-  padding:8px 12px;
-  border-radius:10px;
+  border-radius:11px;
+
   border:1px solid #bbb;
+
   background:linear-gradient(#fff,#ddd);
+
   font-weight:700;
+
   cursor:pointer;
-  margin:3px;
-}
-
-input,
-textarea,
-select{
-  width:100%;
-  font-family:inherit;
-  font-size:16px;
-  padding:9px;
-  border:1px solid #bbb;
-  border-radius:10px;
-  outline:none;
-  margin-bottom:8px;
-}
-
-textarea{
-  min-height:100px;
 }
 
 .row{
   display:flex;
   gap:7px;
-  flex-wrap:wrap;
 }
 
-.message{
-  padding:8px 11px;
-  border-radius:16px;
-  margin:5px 0;
-  max-width:80%;
+input,
+textarea{
+  font-family:inherit;
+
+  font-size:16px;
+
+  padding:9px;
+
+  border:1px solid #bbb;
+
+  border-radius:10px;
+
+  outline:none;
+}
+
+textarea{
+  width:100%;
+  min-height:130px;
+}
+
+.bubble{
+  padding:9px 12px;
+
   width:max-content;
+
+  max-width:82%;
+
+  background:#dedfe3;
+
+  border-radius:17px;
+
+  margin-bottom:7px;
 }
 
-.message.received{
-  background:#ddd;
-}
-
-.message.sent{
-  background:#168ce0;
-  color:#fff;
+.bubble.me{
   margin-left:auto;
+
+  background:linear-gradient(#58b9ff,#1389df);
+
+  color:#fff;
 }
 
 .stock{
   display:flex;
+
   justify-content:space-between;
-  padding:10px;
-  margin-bottom:7px;
-  background:#fff;
-  border:1px solid #ddd;
-  border-radius:12px;
-}
 
-.big{
-  font-size:42px;
-  text-align:center;
-  padding:15px;
-}
-
-.map{
-  height:170px;
-  border-radius:15px;
-  background:linear-gradient(135deg,#d6e5c7,#e7dfb9);
-  display:flex;
   align-items:center;
-  justify-content:center;
-  font-size:55px;
+
+  padding:10px;
+
+  margin-bottom:7px;
+
+  background:#fff;
+
+  border:1px solid #ddd;
+
+  border-radius:12px;
 }
 
 .photos{
   display:grid;
+
   grid-template-columns:repeat(3,1fr);
+
   gap:6px;
 }
 
-.photos div{
+.photos img{
+  width:100%;
+
   aspect-ratio:1;
-  border-radius:10px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:35px;
-  background:#ddd;
-}
 
-/* CAMERA */
-
-#camera-video{
-  width:100%;
-  min-height:150px;
-  background:#000;
-  border-radius:14px;
   object-fit:cover;
+
+  border-radius:10px;
 }
 
-#camera-photo img{
+.camera-video{
   width:100%;
-  border-radius:12px;
-  margin-top:8px;
+
+  border-radius:14px;
+
+  background:#000;
 }
 
-/* KEYBOARD */
+.map{
+  height:180px;
+
+  border-radius:15px;
+
+  background:linear-gradient(135deg,#d6e5c7,#e7dfb9);
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  font-size:55px;
+}
+
+/* =====================================================
+   CUSTOM KEYBOARD
+===================================================== */
 
 #pear-keyboard{
   position:absolute;
+
   left:3%;
   right:3%;
   bottom:3%;
+
   width:94%;
+
   padding:6px;
+
   background:rgba(35,35,40,.98);
+
   border-radius:11px;
+
   z-index:9999;
+
   display:none;
+
   opacity:0;
+
   transform:translateY(120%);
+
   transition:
     transform .28s cubic-bezier(.22,.8,.25,1),
     opacity .2s ease;
-  box-shadow:0 5px 18px rgba(0,0,0,.55);
+
+  box-shadow:
+    0 5px 18px rgba(0,0,0,.55);
+
   touch-action:manipulation;
 }
 
 #pear-keyboard.keyboard-show{
   opacity:1;
+
   transform:translateY(0);
 }
 
-.keyboard-row{
+.pear-keyboard-row{
   display:flex;
+
   gap:3px;
+
   margin-bottom:3px;
 }
 
-.keyboard-row:last-child{
+.pear-keyboard-row:last-child{
   margin-bottom:0;
 }
 
-.pear-key{
+.pear-keyboard-row button{
   flex:1;
+
   min-width:0;
+
   height:29px;
-  border:0!important;
-  border-radius:5px!important;
-  background:#f5f5f7!important;
-  color:#111!important;
-  font-size:11px!important;
-  font-weight:800!important;
-  padding:0!important;
-  margin:0!important;
+
+  border:0;
+
+  border-radius:5px;
+
+  background:#f5f5f7;
+
+  color:#111;
+
+  font-size:11px;
+
+  font-weight:800;
+
+  padding:0;
+
+  touch-action:manipulation;
+
+  user-select:none;
 }
 
-.pear-key:active{
+.pear-keyboard-row button:active{
   transform:scale(.88);
-  background:#cfd0d4!important;
+
+  background:#cfd0d4;
 }
 
-.pear-key.wide{
-  flex:1.3;
+.pear-keyboard-row.bottom button:first-child{
+  flex:1.2;
 }
 
-.pear-key.space{
+.pear-keyboard-row.bottom button:nth-child(2){
   flex:5;
 }
 
-.pear-key.enter{
-  flex:1.3;
+.pear-keyboard-row.bottom button:last-child{
+  flex:1.2;
 }
 
-/* ZAPLOOK */
-
-.zap-browser{
-  margin:-12px;
-  height:100%;
-  background:#fff;
-  display:flex;
-  flex-direction:column;
-}
-
-.zap-toolbar{
-  background:#e9eaed;
-  border-bottom:1px solid #c7c7c7;
-  padding:7px;
-}
-
-.zap-toolbar-row{
-  display:flex;
-  gap:4px;
-  align-items:center;
-}
-
-.zap-toolbar-row button{
-  margin:0!important;
-  padding:5px 8px!important;
-}
-
-.zap-address-row{
-  display:flex;
-  gap:5px;
-  margin-top:6px;
-}
-
-.zap-address{
-  flex:1;
-  margin:0!important;
-  border-radius:18px!important;
-  padding:8px 12px!important;
-  font-size:14px!important;
-}
-
-.zap-search-button{
-  border-radius:50%!important;
-  width:35px;
-  height:35px;
-  padding:0!important;
-  margin:0!important;
-}
-
-#zap-page{
-  flex:1;
-  overflow-y:auto;
-  padding:12px;
-  background:#fff;
-  -webkit-overflow-scrolling:touch;
-}
-
-.zap-logo{
-  text-align:center;
-  padding:18px 5px;
-}
-
-.zap-logo-icon{
-  font-size:40px;
-  font-weight:900;
-}
-
-.zap-logo h1{
-  margin:5px 0;
-  font-size:27px;
-}
-
-.zap-muted{
-  color:#777;
-}
-
-.zap-trending{
-  background:#f2f3f5;
-  border-radius:12px;
-  padding:10px;
-  margin-bottom:8px;
-}
-
-.zap-link{
-  width:100%;
-  margin:4px 0!important;
-}
-
-.zap-result{
-  cursor:pointer;
+#pear-keyboard{
+  pointer-events:auto;
 }
 
 @media(max-width:700px){
+
   #phone-container{
     width:100vw;
   }
 
-  .pear-key{
-    height:27px!important;
-    font-size:10px!important;
+  #pear-keyboard{
+    left:3%;
+    width:94%;
+  }
+
+  .pear-keyboard-row button{
+    height:27px;
+    font-size:10px;
   }
 }
 </style>
@@ -690,8 +719,6 @@ textarea{
 <div id="phone-container">
 
   <div id="page2"></div>
-
-  <!-- PAGE 1 -->
 
   <button class="hotspot page1-hotspot" id="messages"></button>
   <button class="hotspot page1-hotspot" id="camera"></button>
@@ -710,27 +737,22 @@ textarea{
   <button class="hotspot page1-hotspot" id="compass"></button>
   <button class="hotspot page1-hotspot" id="music"></button>
 
-  <!-- PAGE 2 -->
-
   <button class="hotspot page2-hotspot" id="p2-lingo"></button>
   <button class="hotspot page2-hotspot" id="p2-splash"></button>
   <button class="hotspot page2-hotspot" id="p2-thumb"></button>
-
   <button class="hotspot page2-hotspot" id="p2-danwarp"></button>
   <button class="hotspot page2-hotspot" id="p2-image"></button>
   <button class="hotspot page2-hotspot" id="p2-chrono"></button>
-
   <button class="hotspot page2-hotspot" id="p2-zaplook"></button>
   <button class="hotspot page2-hotspot" id="p2-weather"></button>
   <button class="hotspot page2-hotspot" id="p2-music"></button>
-
   <button class="hotspot page2-hotspot" id="p2-monkey"></button>
   <button class="hotspot page2-hotspot" id="p2-remark"></button>
   <button class="hotspot page2-hotspot" id="p2-settings"></button>
-
   <button class="hotspot page2-hotspot" id="p2-phone"></button>
   <button class="hotspot page2-hotspot" id="p2-mail"></button>
   <button class="hotspot page2-hotspot" id="p2-compass"></button>
+  <button class="hotspot page2-hotspot" id="p2-music2"></button>
 
   <button id="home"></button>
 
@@ -741,10 +763,10 @@ textarea{
 </div>
 
 <script>
-
-/* =========================================================
-   VARIABLES
-========================================================= */
+/* ============================================================
+   PEAR PHONE OS
+   COMPLETE INLINE JAVASCRIPT
+============================================================ */
 
 const phone =
   document.getElementById("phone-container");
@@ -757,29 +779,22 @@ const appWindow =
 
 let currentPage = 1;
 
-let cameraStream = null;
-let cameraFacing = "user";
 
-/* =========================================================
-   HELPER
-========================================================= */
-
-function escapeHTML(value){
-
-  return String(value ?? "")
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
-
-}
-
-/* =========================================================
+/* ============================================================
    PAGE SWITCHING
-========================================================= */
+============================================================ */
+
+let swipeStartX = 0;
+let swipeStartY = 0;
+let swipeTracking = false;
 
 function showPage(page){
+
+  if(page !== 1 && page !== 2)
+    return;
+
+  if(page === currentPage)
+    return;
 
   currentPage = page;
 
@@ -789,18 +804,18 @@ function showPage(page){
   );
 
   closeApp();
-
 }
 
 document.addEventListener(
   "keydown",
-  function(e){
+  e => {
 
     if(
       e.target.matches(
-        "input,textarea,select"
+        "input, textarea, select"
       )
-    ) return;
+    )
+      return;
 
     if(
       e.key === "ArrowUp" &&
@@ -808,6 +823,7 @@ document.addEventListener(
     ){
 
       e.preventDefault();
+
       showPage(2);
 
     }
@@ -818,6 +834,7 @@ document.addEventListener(
     ){
 
       e.preventDefault();
+
       showPage(1);
 
     }
@@ -825,55 +842,67 @@ document.addEventListener(
   }
 );
 
-/* =========================================================
-   TOUCH SWIPE
-========================================================= */
 
-let touchStartX = 0;
-let touchStartY = 0;
+/* ============================================================
+   TOUCH SWIPES
+============================================================ */
 
-phone.addEventListener(
+document.addEventListener(
   "touchstart",
-  function(e){
+  e => {
 
     if(
-      overlay.classList.contains("open")
-    ) return;
+      !e.touches ||
+      !e.touches[0]
+    )
+      return;
 
-    if(!e.touches[0]) return;
-
-    touchStartX =
+    swipeStartX =
       e.touches[0].clientX;
 
-    touchStartY =
+    swipeStartY =
       e.touches[0].clientY;
 
+    swipeTracking = true;
+
   },
-  {passive:true}
+  {
+    passive:true,
+    capture:true
+  }
 );
 
-phone.addEventListener(
+document.addEventListener(
   "touchend",
-  function(e){
+  e => {
 
     if(
-      overlay.classList.contains("open")
-    ) return;
-
-    if(!e.changedTouches[0]) return;
+      !swipeTracking ||
+      !e.changedTouches ||
+      !e.changedTouches[0]
+    )
+      return;
 
     const dx =
       e.changedTouches[0].clientX -
-      touchStartX;
+      swipeStartX;
 
     const dy =
       e.changedTouches[0].clientY -
-      touchStartY;
+      swipeStartY;
+
+    swipeTracking = false;
 
     if(
       Math.abs(dy) < 60 ||
       Math.abs(dy) <= Math.abs(dx)
-    ) return;
+    )
+      return;
+
+    if(
+      overlay.classList.contains("open")
+    )
+      return;
 
     if(
       dy < 0 &&
@@ -894,46 +923,59 @@ phone.addEventListener(
     }
 
   },
-  {passive:true}
-);
-
-/* =========================================================
-   MOUSE DRAG
-========================================================= */
-
-let mouseStartY = 0;
-let mouseDragging = false;
-
-phone.addEventListener(
-  "mousedown",
-  function(e){
-
-    if(
-      overlay.classList.contains("open")
-    ) return;
-
-    mouseStartY = e.clientY;
-    mouseDragging = true;
-
+  {
+    passive:true,
+    capture:true
   }
 );
 
-phone.addEventListener(
+
+/* ============================================================
+   MOUSE / TRACKPAD DRAG
+============================================================ */
+
+let mouseStartY = 0;
+let mouseTracking = false;
+
+document.addEventListener(
+  "mousedown",
+  e => {
+
+    if(e.button !== 0)
+      return;
+
+    mouseStartY =
+      e.clientY;
+
+    mouseTracking = true;
+
+  },
+  true
+);
+
+document.addEventListener(
   "mouseup",
-  function(e){
+  e => {
 
-    if(!mouseDragging) return;
+    if(
+      !mouseTracking ||
+      e.button !== 0
+    )
+      return;
 
-    mouseDragging = false;
+    const dy =
+      e.clientY -
+      mouseStartY;
+
+    mouseTracking = false;
+
+    if(Math.abs(dy) < 60)
+      return;
 
     if(
       overlay.classList.contains("open")
-    ) return;
-
-    const dy =
-      e.clientY - mouseStartY;
-
-    if(Math.abs(dy) < 60) return;
+    )
+      return;
 
     if(
       dy < 0 &&
@@ -953,17 +995,20 @@ phone.addEventListener(
 
     }
 
-  }
+  },
+  true
 );
 
-/* =========================================================
-   APP WINDOW
-========================================================= */
+
+/* ============================================================
+   APP OPEN / CLOSE
+============================================================ */
 
 function openApp(title,content){
 
   stopCamera();
-  hideKeyboard(true);
+
+  hidePearKeyboard(true);
 
   appWindow.innerHTML = `
 
@@ -971,41 +1016,35 @@ function openApp(title,content){
 
       <button
         class="back"
-        type="button"
-        id="app-back"
+        onclick="closeApp()"
       >
         ‹
       </button>
 
-      <strong>
+      <span>
         ${escapeHTML(title)}
-      </strong>
+      </span>
 
     </div>
 
     <div class="window-body">
+
       ${content}
+
     </div>
 
   `;
 
   overlay.classList.add("open");
 
-  const back =
-    document.getElementById("app-back");
-
-  if(back){
-    back.onclick = closeApp;
-  }
-
-  setupKeyboard();
-
+  addKeyboardSupport();
 }
 
 function closeApp(){
 
   stopCamera();
-  hideKeyboard(true);
+
+  hidePearKeyboard(true);
 
   overlay.classList.remove("open");
 
@@ -1013,75 +1052,529 @@ function closeApp(){
 
 }
 
-/* =========================================================
-   PAGE 1 APPS
-========================================================= */
 
-function messagesApp(){
+/* ============================================================
+   UTILITY
+============================================================ */
 
-  openApp(
-    "Messages",
-    `
-      <div class="card">
-        <h2>💬 Messages</h2>
+function escapeHTML(value){
 
-        <button onclick="openChat('Chloe')">
-          💬 Chloe
-        </button>
+  return String(value)
 
-        <button onclick="openChat('Sam')">
-          💬 Sam
-        </button>
-
-        <button onclick="openChat('Cat')">
-          💬 Cat
-        </button>
-
-        <button onclick="newMessage()">
-          ✏️ New Message
-        </button>
-      </div>
-    `
-  );
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 
 }
 
-const chats = {
+
+/* ============================================================
+   CUSTOM KEYBOARD
+============================================================ */
+
+let keyboardVisible = false;
+let keyboardShift = false;
+let activeKeyboardField = null;
+
+function addKeyboardSupport(){
+
+  setTimeout(() => {
+
+    const fields =
+      appWindow.querySelectorAll(
+        "input[type='text'], input:not([type]), textarea"
+      );
+
+    fields.forEach(field => {
+
+      field.addEventListener(
+        "pointerdown",
+        () => {
+
+          activeKeyboardField =
+            field;
+
+        }
+      );
+
+      field.addEventListener(
+        "click",
+        () => {
+
+          activeKeyboardField =
+            field;
+
+          field.focus({
+            preventScroll:true
+          });
+
+          showPearKeyboard(field);
+
+        }
+      );
+
+    });
+
+  },50);
+
+}
+
+function showPearKeyboard(input){
+
+  if(!input)
+    return;
+
+  activeKeyboardField =
+    input;
+
+  keyboardVisible = true;
+
+  let keyboard =
+    document.getElementById(
+      "pear-keyboard"
+    );
+
+  if(!keyboard){
+
+    keyboard =
+      document.createElement(
+        "div"
+      );
+
+    keyboard.id =
+      "pear-keyboard";
+
+    keyboard.innerHTML = `
+
+      <div class="pear-keyboard-row">
+
+        ${"QWERTYUIOP".split("").map(k =>
+          `<button type="button"
+             onclick="keyboardKey('${k}')">${k}</button>`
+        ).join("")}
+
+      </div>
+
+      <div class="pear-keyboard-row">
+
+        ${"ASDFGHJKL".split("").map(k =>
+          `<button type="button"
+             onclick="keyboardKey('${k}')">${k}</button>`
+        ).join("")}
+
+      </div>
+
+      <div class="pear-keyboard-row">
+
+        <button
+          type="button"
+          onclick="keyboardShiftKey()"
+        >
+          ⇧
+        </button>
+
+        ${"ZXCVBNM".split("").map(k =>
+          `<button type="button"
+             onclick="keyboardKey('${k}')">${k}</button>`
+        ).join("")}
+
+        <button
+          type="button"
+          onclick="keyboardBackspace()"
+        >
+          ⌫
+        </button>
+
+      </div>
+
+      <div class="pear-keyboard-row bottom">
+
+        <button
+          type="button"
+          onclick="keyboardNumber()"
+        >
+          123
+        </button>
+
+        <button
+          type="button"
+          onclick="keyboardSpace()"
+        >
+          SPACE
+        </button>
+
+        <button
+          type="button"
+          onclick="keyboardEnter()"
+        >
+          ↵
+        </button>
+
+      </div>
+
+    `;
+
+    overlay.appendChild(
+      keyboard
+    );
+
+    keyboard.addEventListener(
+      "pointerdown",
+      e => e.preventDefault()
+    );
+
+    keyboard.addEventListener(
+      "mousedown",
+      e => e.preventDefault()
+    );
+
+    keyboard.addEventListener(
+      "touchstart",
+      e => e.preventDefault(),
+      {passive:false}
+    );
+
+  }
+
+  keyboard.style.display =
+    "grid";
+
+  setTimeout(() => {
+
+    keyboard.classList.add(
+      "keyboard-show"
+    );
+
+  },10);
+
+}
+
+function hidePearKeyboard(
+  immediate=false
+){
+
+  activeKeyboardField = null;
+
+  const keyboard =
+    document.getElementById(
+      "pear-keyboard"
+    );
+
+  if(!keyboard){
+
+    keyboardVisible =
+      false;
+
+    return;
+
+  }
+
+  keyboard.classList.remove(
+    "keyboard-show"
+  );
+
+  keyboardVisible =
+    false;
+
+  if(immediate){
+
+    keyboard.style.display =
+      "none";
+
+    return;
+
+  }
+
+  setTimeout(() => {
+
+    if(!keyboardVisible){
+
+      keyboard.style.display =
+        "none";
+
+    }
+
+  },250);
+
+}
+
+function getFocusedField(){
+
+  if(
+    activeKeyboardField &&
+    document.body.contains(
+      activeKeyboardField
+    )
+  ){
+
+    return activeKeyboardField;
+
+  }
+
+  const active =
+    document.activeElement;
+
+  if(
+    active &&
+    (
+      active.tagName === "INPUT" ||
+      active.tagName === "TEXTAREA"
+    )
+  ){
+
+    activeKeyboardField =
+      active;
+
+    return active;
+
+  }
+
+  return null;
+
+}
+
+function keyboardKey(key){
+
+  const field =
+    getFocusedField();
+
+  if(!field)
+    return;
+
+  const value =
+    keyboardShift
+      ? key.toUpperCase()
+      : key.toLowerCase();
+
+  const start =
+    field.selectionStart ??
+    field.value.length;
+
+  const end =
+    field.selectionEnd ??
+    field.value.length;
+
+  field.value =
+    field.value.slice(0,start) +
+    value +
+    field.value.slice(end);
+
+  field.selectionStart =
+    field.selectionEnd =
+      start + value.length;
+
+  if(keyboardShift){
+
+    keyboardShift = false;
+
+  }
+
+}
+
+function keyboardShiftKey(){
+
+  keyboardShift =
+    !keyboardShift;
+
+}
+
+function keyboardBackspace(){
+
+  const field =
+    getFocusedField();
+
+  if(!field)
+    return;
+
+  const start =
+    field.selectionStart ??
+    field.value.length;
+
+  const end =
+    field.selectionEnd ??
+    field.value.length;
+
+  if(start !== end){
+
+    field.value =
+      field.value.slice(0,start) +
+      field.value.slice(end);
+
+    field.selectionStart =
+      field.selectionEnd =
+        start;
+
+    return;
+
+  }
+
+  if(start <= 0)
+    return;
+
+  field.value =
+    field.value.slice(0,start - 1) +
+    field.value.slice(end);
+
+  field.selectionStart =
+    field.selectionEnd =
+      start - 1;
+
+}
+
+function keyboardSpace(){
+
+  keyboardKey(" ");
+
+}
+
+function keyboardEnter(){
+
+  const field =
+    getFocusedField();
+
+  if(!field)
+    return;
+
+  if(
+    field.tagName ===
+    "TEXTAREA"
+  ){
+
+    keyboardKey("\n");
+
+  }else{
+
+    field.blur();
+
+    hidePearKeyboard();
+
+  }
+
+}
+
+function keyboardNumber(){
+
+  const field =
+    getFocusedField();
+
+  if(!field)
+    return;
+
+  const numbers =
+    "1234567890";
+
+  const key =
+    numbers[
+      Math.floor(
+        Math.random() *
+        numbers.length
+      )
+    ];
+
+  keyboardKey(key);
+
+}
+
+
+/* ============================================================
+   MESSAGES
+============================================================ */
+
+const messageContacts = {
 
   Chloe:[
     "Heyyy 👋",
     "What are you doing?",
-    "HAHA wait 😭"
+    "HAHA wait 😭",
+    "Okayyy sounds good"
   ],
 
   Sam:[
     "Yo!",
     "Are you free later?",
-    "That's actually crazy 😂"
+    "That's actually crazy 😂",
+    "See you soon"
   ],
 
   Cat:[
     "meow",
     "feed me",
-    "MEOWWW"
+    "MEOWWW",
+    "😼"
   ]
 
 };
 
+function messagesApp(){
+
+  openApp(
+    "Messages",
+
+    `
+
+      <div class="card">
+
+        <h2>💬 Messages</h2>
+
+        <div>
+
+          ${Object.keys(
+            messageContacts
+          ).map(name => `
+
+            <button
+              onclick="openChat('${name}')"
+            >
+              💬 ${name}
+            </button>
+
+          `).join("")}
+
+        </div>
+
+        <button
+          onclick="newMessage()"
+        >
+          ✏️ New Message
+        </button>
+
+        <button
+          onclick="alert('3 unread messages')"
+        >
+          🔴 Unread Messages
+        </button>
+
+      </div>
+
+    `
+
+  );
+
+}
+
 function openChat(name){
+
+  const messages =
+    messageContacts[name] || [];
 
   openApp(
     name,
+
     `
+
       <div class="card">
 
         <div id="chat-box">
 
-          ${chats[name].map(
+          ${messages.slice(0,2).map(
             msg => `
-              <div class="message received">
+
+              <div class="bubble">
                 ${escapeHTML(msg)}
               </div>
+
             `
           ).join("")}
 
@@ -1098,8 +1591,16 @@ function openChat(name){
           Send
         </button>
 
+        <button
+          onclick="randomReply('${name}')"
+        >
+          🤖 Random Reply
+        </button>
+
       </div>
+
     `
+
   );
 
 }
@@ -1120,11 +1621,12 @@ function sendMessage(name){
     !input ||
     !chat ||
     !input.value.trim()
-  ) return;
+  )
+    return;
 
   chat.innerHTML += `
 
-    <div class="message sent">
+    <div class="bubble me">
       ${escapeHTML(input.value)}
     </div>
 
@@ -1132,66 +1634,121 @@ function sendMessage(name){
 
   input.value = "";
 
+  setTimeout(
+    () => randomReply(name),
+    600
+  );
+
+}
+
+function randomReply(name){
+
+  const chat =
+    document.getElementById(
+      "chat-box"
+    );
+
+  if(!chat)
+    return;
+
+  const replies =
+    messageContacts[name] ||
+    ["Okay!"];
+
+  const reply =
+    replies[
+      Math.floor(
+        Math.random() *
+        replies.length
+      )
+    ];
+
+  chat.innerHTML += `
+
+    <div class="bubble">
+      ${escapeHTML(reply)}
+    </div>
+
+  `;
+
 }
 
 function newMessage(){
 
   openApp(
     "New Message",
+
     `
+
       <div class="card">
 
-        <input placeholder="Contact">
+        <input
+          id="new-contact"
+          placeholder="Contact"
+        >
 
         <textarea
+          id="new-message"
           placeholder="Message..."
         ></textarea>
 
         <button
-          onclick="
-            alert('Message sent! 📱')
-          "
+          onclick="alert('Message sent! 📱')"
         >
           Send
         </button>
 
       </div>
+
     `
+
   );
 
 }
 
-/* CAMERA */
+
+/* ============================================================
+   CAMERA
+   DOES NOT AUTO-START
+============================================================ */
+
+let cameraStream = null;
+let cameraFacing = "user";
 
 function cameraApp(){
 
   openApp(
     "Camera",
+
     `
-      <div class="card">
+
+      <div class="card camera-box">
 
         <video
           id="camera-video"
+          class="camera-video"
           autoplay
           playsinline
           muted
         ></video>
 
-        <div class="row">
+        <button
+          onclick="startCamera()"
+        >
+          📷 Start Camera
+        </button>
 
-          <button onclick="startCamera()">
-            📷 Start Camera
-          </button>
+        <button
+          onclick="capturePhoto()"
+        >
+          ⭕ Take Photo
+        </button>
 
-          <button onclick="capturePhoto()">
-            ⭕ Take Photo
-          </button>
-
-          <button onclick="flipCamera()">
-            🔄 Flip Camera
-          </button>
-
-        </div>
+        <button
+          onclick="flipCamera()"
+        >
+          🔄 Flip Camera
+        </button>
 
         <div id="camera-photo"></div>
 
@@ -1201,7 +1758,9 @@ function cameraApp(){
         ></canvas>
 
       </div>
+
     `
+
   );
 
 }
@@ -1230,14 +1789,24 @@ async function startCamera(){
         "camera-video"
       );
 
+    if(!video)
+      return;
+
     cameraStream =
       await navigator.mediaDevices
         .getUserMedia({
 
           video:{
-            width:{ideal:1280},
-            height:{ideal:720},
-            facingMode:cameraFacing
+            width:{
+              ideal:1280
+            },
+
+            height:{
+              ideal:720
+            },
+
+            facingMode:
+              cameraFacing
           },
 
           audio:false
@@ -1247,7 +1816,15 @@ async function startCamera(){
     video.srcObject =
       cameraStream;
 
-    await video.play().catch(()=>{});
+    video.muted = true;
+
+    video.setAttribute(
+      "playsinline",
+      ""
+    );
+
+    await video.play()
+      .catch(()=>{});
 
     try{
 
@@ -1257,15 +1834,9 @@ async function startCamera(){
 
       const cameras =
         devices.filter(
-          d => d.kind === "videoinput"
-        );
-
-      const freenove =
-        cameras.find(
-          d => /freenove/i.test(d.label)
-        ) ||
-        cameras.find(
-          d => /usb|webcam|camera/i.test(d.label)
+          device =>
+            device.kind ===
+            "videoinput"
         );
 
       const currentTrack =
@@ -1277,13 +1848,28 @@ async function startCamera(){
           ?.getSettings?.()
           ?.deviceId || "";
 
+      const preferred =
+        cameras.find(
+          device =>
+            /freenove/i.test(
+              device.label
+            )
+        ) ||
+        cameras.find(
+          device =>
+            /usb|webcam|camera/i.test(
+              device.label
+            )
+        );
+
       if(
-        freenove &&
-        freenove.deviceId &&
-        freenove.deviceId !== currentDeviceId
+        preferred &&
+        preferred.deviceId &&
+        preferred.deviceId !==
+          currentDeviceId
       ){
 
-        currentTrack.stop();
+        currentTrack?.stop();
 
         cameraStream =
           await navigator.mediaDevices
@@ -1291,11 +1877,18 @@ async function startCamera(){
 
               video:{
                 deviceId:{
-                  exact:freenove.deviceId
+                  exact:
+                    preferred.deviceId
                 },
 
-                width:{ideal:1280},
-                height:{ideal:720}
+                width:{
+                  ideal:1280
+                },
+
+                height:{
+                  ideal:720
+                }
+
               },
 
               audio:false
@@ -1305,41 +1898,32 @@ async function startCamera(){
         video.srcObject =
           cameraStream;
 
-        await video.play().catch(()=>{});
+        await video.play()
+          .catch(()=>{});
 
       }
 
     }catch(error){
 
-      console.log(
-        "Using active camera."
+      console.warn(
+        "Could not select preferred USB/Freenove camera.",
+        error
       );
 
     }
 
   }catch(error){
 
-    console.error(error);
+    console.error(
+      "Pear Phone camera error:",
+      error
+    );
 
     alert(
-      "Camera access was not available. Check the camera and browser permission."
+      "Camera access was not available. Make sure the Freenove camera is connected and browser permission is allowed."
     );
 
   }
-
-}
-
-function stopCamera(){
-
-  if(!cameraStream) return;
-
-  cameraStream
-    .getTracks()
-    .forEach(
-      track => track.stop()
-    );
-
-  cameraStream = null;
 
 }
 
@@ -1366,15 +1950,17 @@ function capturePhoto(){
       "camera-canvas"
     );
 
-  const photo =
+  const preview =
     document.getElementById(
       "camera-photo"
     );
 
-  if(!video || !canvas || !photo)
-    return;
-
-  if(!video.videoWidth){
+  if(
+    !video ||
+    !canvas ||
+    !preview ||
+    !cameraStream
+  ){
 
     alert(
       "Start the camera first."
@@ -1385,251 +1971,642 @@ function capturePhoto(){
   }
 
   canvas.width =
-    video.videoWidth;
+    video.videoWidth || 640;
 
   canvas.height =
-    video.videoHeight;
+    video.videoHeight || 480;
 
-  canvas
-    .getContext("2d")
-    .drawImage(
-      video,
-      0,
-      0,
-      canvas.width,
-      canvas.height
-    );
+  const ctx =
+    canvas.getContext("2d");
 
-  photo.innerHTML = `
+  ctx.drawImage(
+    video,
+    0,
+    0,
+    canvas.width,
+    canvas.height
+  );
+
+  preview.innerHTML = `
 
     <img
       src="${canvas.toDataURL("image/png")}"
+      style="
+        width:100%;
+        border-radius:12px;
+        margin-top:8px;
+      "
     >
 
   `;
 
 }
 
-/* SPLASH FACE */
+function stopCamera(){
+
+  if(!cameraStream)
+    return;
+
+  cameraStream
+    .getTracks()
+    .forEach(
+      track => track.stop()
+    );
+
+  cameraStream = null;
+
+}
+
+
+/* ============================================================
+   SPLASHFACE
+============================================================ */
+
+let splashPosts = [
+
+  {
+    user:"loganbalbs",
+    text:"Living my best Pear Phone life 🍐📱",
+    likes:24,
+    comments:[]
+  },
+
+  {
+    user:"sam",
+    text:"This phone is actually insane 😂",
+    likes:12,
+    comments:[]
+  },
+
+  {
+    user:"chloe",
+    text:"New post!!! ✨",
+    likes:31,
+    comments:[]
+  }
+
+];
 
 function splashfaceApp(){
 
+  renderSplashface();
+
+}
+
+function renderSplashface(){
+
   openApp(
     "SplashFace",
+
     `
+
       <div class="card">
 
-        <div
-          class="big"
-          id="splash-face"
-        >
-          😎
-        </div>
+        <h2>👤 SplashFace</h2>
 
-        <h2>
-          SplashFace
-        </h2>
+        <p>
+          Followers: 248
+        </p>
 
         <button
-          onclick="
-            const faces=[
-              '😎',
-              '😂',
-              '🤯',
-              '😍',
-              '🥳'
-            ];
-
-            document
-              .getElementById('splash-face')
-              .textContent=
-              faces[
-                Math.floor(
-                  Math.random()*faces.length
-                )
-              ];
-          "
+          onclick="newPost()"
         >
-          Change Face
+          ➕ New Post
         </button>
 
+        <button
+          onclick="shuffleSplash()"
+        >
+          🔀 Discover
+        </button>
+
+        <div id="splash-feed">
+
+          ${splashPosts.map(
+            (post,index) => `
+
+              <div class="post">
+
+                <strong>
+                  @${escapeHTML(post.user)}
+                </strong>
+
+                <p>
+                  ${escapeHTML(post.text)}
+                </p>
+
+                <button
+                  onclick="likeSplash(${index})"
+                >
+                  ❤️ ${post.likes}
+                </button>
+
+                <button
+                  onclick="commentSplash(${index})"
+                >
+                  💬 ${post.comments.length}
+                </button>
+
+                ${
+                  post.comments.length
+                    ? `
+
+                      <div>
+
+                        ${post.comments.map(
+                          c => `
+                            <small>
+                              💬 ${escapeHTML(c)}
+                            </small>
+                            <br>
+                          `
+                        ).join("")}
+
+                      </div>
+
+                    `
+                    : ""
+                }
+
+              </div>
+
+            `
+          ).join("")}
+
+        </div>
+
       </div>
+
     `
+
   );
 
 }
 
-/* STOCKS */
+function likeSplash(index){
+
+  splashPosts[index].likes++;
+
+  renderSplashface();
+
+}
+
+function commentSplash(index){
+
+  openApp(
+    "Comment",
+
+    `
+
+      <div class="card">
+
+        <textarea
+          id="comment-input"
+          placeholder="Write a comment..."
+        ></textarea>
+
+        <button
+          onclick="saveSplashComment(${index})"
+        >
+          Post Comment
+        </button>
+
+      </div>
+
+    `
+
+  );
+
+}
+
+function saveSplashComment(index){
+
+  const input =
+    document.getElementById(
+      "comment-input"
+    );
+
+  if(
+    !input ||
+    !input.value.trim()
+  )
+    return;
+
+  splashPosts[index]
+    .comments
+    .push(input.value.trim());
+
+  renderSplashface();
+
+}
+
+function newPost(){
+
+  openApp(
+    "New Splash",
+
+    `
+
+      <div class="card">
+
+        <input
+          id="post-user"
+          placeholder="Username"
+        >
+
+        <textarea
+          id="post-text"
+          placeholder="What's happening?"
+        ></textarea>
+
+        <button
+          onclick="publishSplash()"
+        >
+          Publish
+        </button>
+
+      </div>
+
+    `
+
+  );
+
+}
+
+function publishSplash(){
+
+  const user =
+    document.getElementById(
+      "post-user"
+    );
+
+  const text =
+    document.getElementById(
+      "post-text"
+    );
+
+  if(
+    !user ||
+    !text ||
+    !text.value.trim()
+  )
+    return;
+
+  splashPosts.unshift({
+
+    user:
+      user.value.trim() ||
+      "pearuser",
+
+    text:
+      text.value.trim(),
+
+    likes:0,
+
+    comments:[]
+
+  });
+
+  renderSplashface();
+
+}
+
+function shuffleSplash(){
+
+  splashPosts =
+    [...splashPosts]
+      .sort(
+        () => Math.random() - .5
+      );
+
+  renderSplashface();
+
+}
+
+
+/* ============================================================
+   STOCKS
+============================================================ */
+
+const stockData = [
+
+  {
+    symbol:"PEAR",
+    price:184.23,
+    change:"+2.41%"
+  },
+
+  {
+    symbol:"AAPL",
+    price:226.19,
+    change:"+0.72%"
+  },
+
+  {
+    symbol:"GOOG",
+    price:241.12,
+    change:"-0.31%"
+  },
+
+  {
+    symbol:"PI",
+    price:3.14,
+    change:"+8.88%"
+  }
+
+];
 
 function stocksApp(){
 
   openApp(
     "Stocks",
+
     `
+
       <div class="card">
 
         <h2>📈 Stocks</h2>
 
-        <div class="stock">
-          <strong>PEAR</strong>
-          <span>$184.32 +2.4%</span>
-        </div>
-
-        <div class="stock">
-          <strong>AAPL</strong>
-          <span>$245.17 +1.8%</span>
-        </div>
-
-        <div class="stock">
-          <strong>GOOG</strong>
-          <span>$241.82 -0.6%</span>
-        </div>
-
         <button
-          onclick="
-            alert('Market refreshed!')
-          "
+          onclick="randomizeStocks()"
         >
           🔄 Refresh
         </button>
 
+        <div id="stocks-list">
+
+          ${stockData.map(
+            stock => `
+
+              <div class="stock">
+
+                <strong>
+                  ${stock.symbol}
+                </strong>
+
+                <span>
+                  $${stock.price.toFixed(2)}
+                </span>
+
+                <span>
+                  ${stock.change}
+                </span>
+
+              </div>
+
+            `
+          ).join("")}
+
+        </div>
+
       </div>
+
     `
+
   );
 
 }
 
-/* MAPS */
+function randomizeStocks(){
+
+  stockData.forEach(
+    stock => {
+
+      stock.price +=
+        (Math.random() - .5) * 5;
+
+      const change =
+        (Math.random() * 6 - 3)
+          .toFixed(2);
+
+      stock.change =
+        `${change >= 0 ? "+" : ""}${change}%`;
+
+    }
+  );
+
+  stocksApp();
+
+}
+
+
+/* ============================================================
+   MAPS
+============================================================ */
 
 function mapsApp(){
 
   openApp(
     "Maps",
+
     `
+
       <div class="card">
+
+        <h2>🗺️ Pear Maps</h2>
+
+        <input
+          id="map-search"
+          placeholder="Search a place..."
+        >
+
+        <button
+          onclick="searchMap()"
+        >
+          🔍 Search
+        </button>
 
         <div class="map">
           📍
         </div>
 
-        <input
-          id="map-search"
-          placeholder="Search location..."
-        >
-
-        <button
-          onclick="
-            const v=
-              document
-                .getElementById('map-search')
-                .value;
-
-            alert(
-              v
-                ? 'Searching for '+v+'...'
-                : 'Enter a location'
-            );
-          "
-        >
-          Search
-        </button>
+        <p id="map-result">
+          Search for a place.
+        </p>
 
       </div>
+
     `
+
   );
 
 }
 
-/* PHOTOS */
+function searchMap(){
+
+  const input =
+    document.getElementById(
+      "map-search"
+    );
+
+  const result =
+    document.getElementById(
+      "map-result"
+    );
+
+  if(!input || !result)
+    return;
+
+  result.textContent =
+    input.value.trim()
+      ? `Showing results for "${input.value.trim()}" 📍`
+      : "Enter a place.";
+
+}
+
+
+/* ============================================================
+   PHOTOS
+============================================================ */
+
+let photoIndex = 0;
 
 function photosApp(){
 
+  const images = [
+
+    "https://picsum.photos/seed/pear1/400",
+    "https://picsum.photos/seed/pear2/400",
+    "https://picsum.photos/seed/pear3/400",
+    "https://picsum.photos/seed/pear4/400",
+    "https://picsum.photos/seed/pear5/400",
+    "https://picsum.photos/seed/pear6/400"
+
+  ];
+
   openApp(
     "Photos",
+
     `
+
       <div class="card">
 
-        <h2>📸 Photos</h2>
+        <h2>🖼️ Photos</h2>
 
         <div class="photos">
-          <div>🌴</div>
-          <div>🏒</div>
-          <div>🌅</div>
-          <div>🐶</div>
-          <div>🏖️</div>
-          <div>🚗</div>
+
+          ${images.map(
+            src => `
+              <img
+                src="${src}"
+                alt="Photo"
+              >
+            `
+          ).join("")}
+
         </div>
 
+        <button
+          onclick="alert('Photo selected! 📸')"
+        >
+          Open Selected
+        </button>
+
       </div>
+
     `
+
   );
 
 }
 
-/* WEATHER */
+
+/* ============================================================
+   WEATHER
+============================================================ */
 
 function weatherApp(){
 
-  let temp = 22;
+  const temps = [
+    18,
+    21,
+    24,
+    19,
+    22
+  ];
 
   openApp(
     "Weather",
+
     `
+
       <div class="card">
 
-        <div
-          class="big"
-          id="temperature"
-        >
-          ☀️ 22°C
-        </div>
+        <h2>☀️ Weather</h2>
 
-        <h2>Sunny</h2>
+        <h1>
+          ${temps[0]}°C
+        </h1>
 
-        <button
-          onclick="
-            temp++;
+        <p>
+          Richmond Hill
+        </p>
 
-            document
-              .getElementById(
-                'temperature'
-              )
-              .textContent=
-              '☀️ '+temp+'°C';
-          "
-        >
-          🔥 Increase
-        </button>
+        <p>
+          Feels like ${temps[0] - 1}°C
+        </p>
 
         <button
-          onclick="
-            temp--;
-
-            document
-              .getElementById(
-                'temperature'
-              )
-              .textContent=
-              '☀️ '+temp+'°C';
-          "
+          onclick="refreshWeather()"
         >
-          ❄️ Decrease
+          🔄 Refresh
         </button>
+
+        <hr>
+
+        ${temps.map(
+          (temp,index) => `
+
+            <div class="stock">
+
+              <strong>
+                Day ${index + 1}
+              </strong>
+
+              <span>
+                ${temp}°C
+              </span>
+
+            </div>
+
+          `
+        ).join("")}
 
       </div>
+
     `
+
   );
 
 }
 
-/* NOTES */
+function refreshWeather(){
+
+  weatherApp();
+
+}
+
+
+/* ============================================================
+   NOTES
+============================================================ */
+
+let notes = JSON.parse(
+  localStorage.getItem(
+    "pear-notes"
+  ) || "[]"
+);
 
 function notesApp(){
 
   openApp(
     "Notes",
+
     `
+
       <div class="card">
+
+        <h2>📝 Notes</h2>
 
         <textarea
           id="note-text"
@@ -1637,2085 +2614,2830 @@ function notesApp(){
         ></textarea>
 
         <button
-          onclick="
-            localStorage.setItem(
-              'pear-note',
-              document
-                .getElementById('note-text')
-                .value
-            );
-
-            alert('Note saved!');
-          "
+          onclick="saveNote()"
         >
           💾 Save
         </button>
 
         <button
-          onclick="
-            document
-              .getElementById('note-text')
-              .value=
-              localStorage.getItem(
-                'pear-note'
-              ) || '';
-          "
+          onclick="clearNotes()"
         >
-          📖 Load
+          🗑️ Clear
         </button>
 
+        <div>
+
+          ${notes.map(
+            (note,index) => `
+
+              <div class="bubble">
+
+                ${escapeHTML(note)}
+
+                <br>
+
+                <button
+                  onclick="deleteNote(${index})"
+                >
+                  Delete
+                </button>
+
+              </div>
+
+            `
+          ).join("")}
+
+        </div>
+
       </div>
+
     `
+
   );
 
 }
 
-/* PEARTUNES */
+function saveNote(){
+
+  const input =
+    document.getElementById(
+      "note-text"
+    );
+
+  if(
+    !input ||
+    !input.value.trim()
+  )
+    return;
+
+  notes.unshift(
+    input.value.trim()
+  );
+
+  localStorage.setItem(
+    "pear-notes",
+    JSON.stringify(notes)
+  );
+
+  notesApp();
+
+}
+
+function deleteNote(index){
+
+  notes.splice(
+    index,
+    1
+  );
+
+  localStorage.setItem(
+    "pear-notes",
+    JSON.stringify(notes)
+  );
+
+  notesApp();
+
+}
+
+function clearNotes(){
+
+  notes = [];
+
+  localStorage.removeItem(
+    "pear-notes"
+  );
+
+  notesApp();
+
+}
+   
+/* ============================================================
+   PEARTUNES
+============================================================ */
+
+let musicPlaying = false;
+let currentSong = 0;
+
+const songs = [
+  {
+    title:"Pear Phone Anthem",
+    artist:"PearTunes",
+    duration:"3:42"
+  },
+  {
+    title:"Midnight Drive",
+    artist:"The Pears",
+    duration:"4:18"
+  },
+  {
+    title:"Electric Dreams",
+    artist:"PearWave",
+    duration:"3:51"
+  },
+  {
+    title:"Sunset Boulevard",
+    artist:"Pear Phone",
+    duration:"4:02"
+  }
+];
 
 function pearTunesApp(){
 
   openApp(
     "PearTunes",
+
     `
+
       <div class="card">
 
+        <h2>🎵 PearTunes</h2>
+
         <div
-          class="big"
-          id="music-icon"
-        >
-          🎵
-        </div>
-
-        <h2>
-          Now Playing
-        </h2>
-
-        <p id="song-name">
-          Pear Phone Anthem
-        </p>
-
-        <button
-          onclick="
-            const icon=
-              document.getElementById(
-                'music-icon'
-              );
-
-            icon.textContent=
-              icon.textContent==='🔊'
-                ? '🎵'
-                : '🔊';
+          style="
+            text-align:center;
+            padding:15px;
+            background:linear-gradient(135deg,#8ed0ff,#c5f2ff);
+            border-radius:15px;
+            margin-bottom:10px;
           "
         >
-          ▶️ / ⏸️
+
+          <div style="font-size:45px">
+            ${musicPlaying ? "🎶" : "⏸️"}
+          </div>
+
+          <h3>
+            ${escapeHTML(
+              songs[currentSong].title
+            )}
+          </h3>
+
+          <p>
+            ${escapeHTML(
+              songs[currentSong].artist
+            )}
+          </p>
+
+          <strong>
+            ${songs[currentSong].duration}
+          </strong>
+
+        </div>
+
+        <button
+          onclick="toggleMusic()"
+        >
+          ${musicPlaying
+            ? "⏸️ Pause"
+            : "▶️ Play"}
         </button>
 
+        <button
+          onclick="previousSong()"
+        >
+          ⏮️ Previous
+        </button>
+
+        <button
+          onclick="nextSong()"
+        >
+          ⏭️ Next
+        </button>
+
+        <hr>
+
+        ${songs.map(
+          (song,index) => `
+
+            <div class="stock">
+
+              <div>
+
+                <strong>
+                  ${escapeHTML(song.title)}
+                </strong>
+
+                <br>
+
+                <small>
+                  ${escapeHTML(song.artist)}
+                </small>
+
+              </div>
+
+              <button
+                onclick="selectSong(${index})"
+              >
+                ▶
+              </button>
+
+            </div>
+
+          `
+        ).join("")}
+
       </div>
+
     `
+
   );
 
 }
 
-/* SETTINGS */
+function toggleMusic(){
+
+  musicPlaying =
+    !musicPlaying;
+
+  pearTunesApp();
+
+}
+
+function nextSong(){
+
+  currentSong =
+    (currentSong + 1) %
+    songs.length;
+
+  musicPlaying = true;
+
+  pearTunesApp();
+
+}
+
+function previousSong(){
+
+  currentSong =
+    (currentSong - 1 +
+      songs.length) %
+    songs.length;
+
+  musicPlaying = true;
+
+  pearTunesApp();
+
+}
+
+function selectSong(index){
+
+  currentSong = index;
+
+  musicPlaying = true;
+
+  pearTunesApp();
+
+}
+
+
+/* ============================================================
+   SETTINGS
+============================================================ */
+
+let darkMode =
+  localStorage.getItem(
+    "pear-dark"
+  ) === "true";
+
+let animationsEnabled =
+  localStorage.getItem(
+    "pear-animations"
+  ) !== "false";
 
 function settingsApp(){
 
   openApp(
     "Settings",
+
     `
+
       <div class="card">
 
         <h2>⚙️ Settings</h2>
 
         <button
-          onclick="
-            alert('Wi-Fi connected 📶')
-          "
+          onclick="toggleDarkMode()"
         >
-          📶 Wi-Fi
+          ${darkMode
+            ? "☀️ Light Mode"
+            : "🌙 Dark Mode"}
         </button>
 
         <button
-          onclick="
-            alert('Bluetooth connected 🔵')
-          "
+          onclick="toggleAnimations()"
         >
-          🔵 Bluetooth
+          ${animationsEnabled
+            ? "✨ Disable Animations"
+            : "✨ Enable Animations"}
         </button>
 
         <button
-          onclick="
-            alert('Pear Phone is up to date!')
-          "
+          onclick="resetPearPhone()"
         >
-          🔄 Software Update
+          🔄 Reset Pear Phone
         </button>
+
+        <hr>
+
+        <p>
+          <strong>Pear Phone OS</strong>
+        </p>
+
+        <p>
+          Version 1.0
+        </p>
+
+        <p>
+          Built for Pear Phone.
+        </p>
 
       </div>
+
     `
+
   );
 
 }
 
-/* CLOCK */
+function toggleDarkMode(){
+
+  darkMode =
+    !darkMode;
+
+  localStorage.setItem(
+    "pear-dark",
+    darkMode
+  );
+
+  document.body.classList.toggle(
+    "dark-mode",
+    darkMode
+  );
+
+  settingsApp();
+
+}
+
+function toggleAnimations(){
+
+  animationsEnabled =
+    !animationsEnabled;
+
+  localStorage.setItem(
+    "pear-animations",
+    animationsEnabled
+  );
+
+  settingsApp();
+
+}
+
+function resetPearPhone(){
+
+  if(
+    !confirm(
+      "Reset Pear Phone settings?"
+    )
+  )
+    return;
+
+  localStorage.clear();
+
+  darkMode = false;
+
+  animationsEnabled = true;
+
+  location.reload();
+
+}
+
+
+/* ============================================================
+   CLOCK
+============================================================ */
+
+let clockTimer = null;
 
 function clockApp(){
 
   openApp(
     "Clock",
+
     `
+
       <div class="card">
 
+        <h2>🕐 Clock</h2>
+
         <div
-          class="big"
-          id="clock-time"
+          id="big-clock"
+          style="
+            text-align:center;
+            font-size:30px;
+            font-weight:900;
+            padding:15px;
+          "
         >
-          --:--:--
+          --
         </div>
 
-        <button
-          onclick="updateClock()"
+        <div
+          id="big-date"
+          style="
+            text-align:center;
+          "
         >
-          🔄 Refresh
+          --
+        </div>
+
+        <hr>
+
+        <button
+          onclick="clockAlert()"
+        >
+          ⏰ Test Alarm
+        </button>
+
+        <button
+          onclick="startTimer()"
+        >
+          ⏱️ Start 10 Second Timer
         </button>
 
       </div>
+
     `
+
   );
 
   updateClock();
+
+  clearInterval(
+    clockTimer
+  );
+
+  clockTimer =
+    setInterval(
+      updateClock,
+      1000
+    );
 
 }
 
 function updateClock(){
 
-  const el =
+  const clock =
     document.getElementById(
-      "clock-time"
+      "big-clock"
     );
 
-  if(!el) return;
+  const date =
+    document.getElementById(
+      "big-date"
+    );
 
-  el.textContent =
-    new Date().toLocaleTimeString();
+  if(!clock || !date){
+
+    clearInterval(
+      clockTimer
+    );
+
+    return;
+
+  }
+
+  const now =
+    new Date();
+
+  clock.textContent =
+    now.toLocaleTimeString(
+      [],
+      {
+        hour:"numeric",
+        minute:"2-digit",
+        second:"2-digit"
+      }
+    );
+
+  date.textContent =
+    now.toLocaleDateString(
+      [],
+      {
+        weekday:"long",
+        month:"long",
+        day:"numeric",
+        year:"numeric"
+      }
+    );
 
 }
 
-/* VIDEOS */
+function clockAlert(){
+
+  alert(
+    "⏰ Alarm test!\n\nYour Pear Phone is awake."
+  );
+
+}
+
+function startTimer(){
+
+  let seconds = 10;
+
+  const timer =
+    setInterval(
+      () => {
+
+        seconds--;
+
+        if(seconds <= 0){
+
+          clearInterval(timer);
+
+          alert(
+            "⏱️ Timer finished!"
+          );
+
+        }
+
+      },
+      1000
+    );
+
+  alert(
+    "10 second timer started!"
+  );
+
+}
+
+
+/* ============================================================
+   VIDEOS
+============================================================ */
 
 function videosApp(){
 
   openApp(
     "Videos",
+
     `
-      <div class="card">
-
-        <div class="big">
-          ▶️
-        </div>
-
-        <h3>
-          Pear Videos
-        </h3>
-
-        <button
-          onclick="
-            alert('Playing video ▶️')
-          "
-        >
-          ▶️ Play
-        </button>
-
-      </div>
-    `
-  );
-
-}
-
-/* PHONE */
-
-function phoneApp(){
-
-  openApp(
-    "Pear Phone",
-    `
-      <div class="card">
-
-        <div class="big">
-          📞
-        </div>
-
-        <input
-          id="phone-number"
-          placeholder="Phone number"
-          type="tel"
-        >
-
-        <button
-          onclick="
-            const n=
-              document
-                .getElementById(
-                  'phone-number'
-                )
-                .value;
-
-            alert(
-              n
-                ? 'Calling '+n+'...'
-                : 'Enter a number'
-            );
-          "
-        >
-          📞 Call
-        </button>
-
-      </div>
-    `
-  );
-
-}
-
-/* MAIL */
-
-function mailApp(){
-
-  openApp(
-    "Mail",
-    `
-      <div class="card">
-
-        <h2>✉️ Mail</h2>
-
-        <button
-          onclick="
-            alert(
-              'You have 3 unread emails.'
-            )
-          "
-        >
-          📬 Inbox
-        </button>
-
-        <button
-          onclick="
-            openApp(
-              'Compose',
-              '<div class=&quot;card&quot;>' +
-              '<input placeholder=&quot;To&quot;>' +
-              '<input placeholder=&quot;Subject&quot;>' +
-              '<textarea placeholder=&quot;Message&quot;></textarea>' +
-              '<button onclick=&quot;alert(\\'Email sent! ✉️\\')&quot;>Send</button>' +
-              '</div>'
-            )
-          "
-        >
-          ✏️ Compose
-        </button>
-
-      </div>
-    `
-  );
-
-}
-
-/* COMPASS */
-
-function compassApp(){
-
-  openApp(
-    "Compass",
-    `
-      <div class="card">
-
-        <div
-          class="big"
-          id="compass-display"
-        >
-          🧭
-        </div>
-
-        <h2 id="direction">
-          North
-        </h2>
-
-        <button
-          onclick="
-            const dirs=[
-              'North',
-              'NE',
-              'East',
-              'SE',
-              'South',
-              'SW',
-              'West',
-              'NW'
-            ];
-
-            const n=
-              Math.floor(
-                Math.random()*dirs.length
-              );
-
-            document
-              .getElementById(
-                'direction'
-              )
-              .textContent=
-              dirs[n];
-
-            document
-              .getElementById(
-                'compass-display'
-              )
-              .textContent=
-              '🧭 '+dirs[n];
-          "
-        >
-          🔄 Rotate
-        </button>
-
-      </div>
-    `
-  );
-
-}
-
-/* =========================================================
-   PAGE 2 APPS
-========================================================= */
-
-/* LINGO */
-
-function lingoApp(){
-
-  openApp(
-    "Lingo",
-    `
-      <div class="card">
-
-        <h2>🌎 Lingo</h2>
-
-        <p>
-          Translate a word.
-        </p>
-
-        <input
-          id="lingo-input"
-          placeholder="Type something..."
-        >
-
-        <button
-          onclick="
-            const v=
-              document
-                .getElementById(
-                  'lingo-input'
-                )
-                .value;
-
-            document
-              .getElementById(
-                'lingo-result'
-              )
-              .textContent=
-              v
-                ? v.split('')
-                    .reverse()
-                    .join('')+' 🍐'
-                : 'Type something!';
-          "
-        >
-          Translate
-        </button>
-
-        <h2 id="lingo-result"></h2>
-
-      </div>
-    `
-  );
-
-}
-
-/* THUMBS */
-
-let thumbs = 0;
-
-function tumsApp(){
-
-  thumbs = 0;
-
-  openApp(
-    "Thumbs",
-    `
-      <div class="card">
-
-        <div
-          class="big"
-          id="thumb-count"
-        >
-          👍 0
-        </div>
-
-        <button
-          onclick="
-            thumbs++;
-
-            document
-              .getElementById(
-                'thumb-count'
-              )
-              .textContent=
-              '👍 '+thumbs;
-          "
-        >
-          👍 Give Thumbs Up
-        </button>
-
-        <button
-          onclick="
-            thumbs=0;
-
-            document
-              .getElementById(
-                'thumb-count'
-              )
-              .textContent=
-              '👍 0';
-          "
-        >
-          Reset
-        </button>
-
-      </div>
-    `
-  );
-
-}
-
-/* DANWARP */
-
-function danwarpApp(){
-
-  openApp(
-    "DanWarp",
-    `
-      <div class="card">
-
-        <div
-          id="warp-box"
-          class="big"
-        >
-          🌀
-        </div>
-
-        <button
-          onclick="
-            const box=
-              document.getElementById(
-                'warp-box'
-              );
-
-            box.style.transform=
-              box.style.transform
-                ? ''
-                : 'rotate(180deg) scale(1.4)';
-          "
-        >
-          🌀 Warp
-        </button>
-
-      </div>
-    `
-  );
-
-}
-
-/* IMAGE */
-
-function imageApp(){
-
-  openApp(
-    "Image",
-    `
-      <div class="card">
-
-        <div class="big">
-          🖼️
-        </div>
-
-        <input
-          type="file"
-          accept="image/*"
-          onchange="
-            const file=this.files[0];
-
-            if(!file)return;
-
-            const img=
-              document.createElement('img');
-
-            img.src=
-              URL.createObjectURL(file);
-
-            img.style.width='100%';
-            img.style.borderRadius='12px';
-
-            const preview=
-              document.getElementById(
-                'image-preview'
-              );
-
-            preview.innerHTML='';
-            preview.appendChild(img);
-          "
-        >
-
-        <div id="image-preview"></div>
-
-      </div>
-    `
-  );
-
-}
-
-/* CHRONO */
-
-let chronoSeconds = 0;
-let chronoTimer = null;
-
-function chronoApp(){
-
-  clearInterval(chronoTimer);
-
-  chronoSeconds = 0;
-  chronoTimer = null;
-
-  openApp(
-    "Chrono",
-    `
-      <div class="card">
-
-        <div
-          class="big"
-          id="chrono-time"
-        >
-          00:00
-        </div>
-
-        <button
-          onclick="
-            if(chronoTimer)return;
-
-            chronoTimer=
-              setInterval(()=>{
-
-                chronoSeconds++;
-
-                const m=
-                  String(
-                    Math.floor(
-                      chronoSeconds/60
-                    )
-                  ).padStart(2,'0');
-
-                const s=
-                  String(
-                    chronoSeconds%60
-                  ).padStart(2,'0');
-
-                const el=
-                  document.getElementById(
-                    'chrono-time'
-                  );
-
-                if(el)
-                  el.textContent=
-                    m+':'+s;
-
-              },1000);
-          "
-        >
-          ▶️ Start
-        </button>
-
-        <button
-          onclick="
-            clearInterval(chronoTimer);
-            chronoTimer=null;
-          "
-        >
-          ⏸️ Stop
-        </button>
-
-        <button
-          onclick="
-            clearInterval(chronoTimer);
-            chronoTimer=null;
-            chronoSeconds=0;
-
-            document
-              .getElementById(
-                'chrono-time'
-              )
-              .textContent='00:00';
-          "
-        >
-          🔄 Reset
-        </button>
-
-      </div>
-    `
-  );
-
-}
-
-/* ZAPLOOK */
-
-let zapHistory = [];
-let zapHistoryIndex = -1;
-
-function zaplookApp(){
-
-  zapHistory=[];
-  zapHistoryIndex=-1;
-
-  openApp(
-    "ZapLook",
-    `
-      <div class="zap-browser">
-
-        <div class="zap-toolbar">
-
-          <div class="zap-toolbar-row">
-
-            <button onclick="zapBack()">
-              ◀
-            </button>
-
-            <button onclick="zapForward()">
-              ▶
-            </button>
-
-            <button onclick="zapRefresh()">
-              ↻
-            </button>
-
-          </div>
-
-          <div class="zap-address-row">
-
-            <input
-              id="zap-url"
-              class="zap-address"
-              placeholder="Search or enter website"
-              onkeydown="
-                if(event.key==='Enter'){
-                  zapSearch();
-                }
-              "
-            >
-
-            <button
-              class="zap-search-button"
-              onclick="zapSearch()"
-            >
-              🔍
-            </button>
-
-          </div>
-
-        </div>
-
-        <div id="zap-page">
-
-          <div class="zap-logo">
-
-            <div class="zap-logo-icon">
-              ⚡
-            </div>
-
-            <h1>ZapLook</h1>
-
-            <p class="zap-muted">
-              The Pear Phone Internet
-            </p>
-
-          </div>
-
-          <div class="zap-trending">
-
-            <strong>
-              Trending
-            </strong>
-
-            <p>🌎 World News</p>
-            <p>🏒 Hockey</p>
-            <p>🎮 Gaming</p>
-            <p>🎵 Music</p>
-
-          </div>
-
-          <button
-            class="zap-link"
-            onclick="
-              zapOpenSite('Pear Search')
-            "
-          >
-            🔎 Pear Search
-          </button>
-
-          <button
-            class="zap-link"
-            onclick="
-              zapOpenSite('Pear News')
-            "
-          >
-            📰 Pear News
-          </button>
-
-          <button
-            class="zap-link"
-            onclick="
-              zapOpenSite('PearTube')
-            "
-          >
-            ▶️ PearTube
-          </button>
-
-        </div>
-
-      </div>
-    `
-  );
-
-}
-
-function zapSearch(){
-
-  const input=
-    document.getElementById(
-      "zap-url"
-    );
-
-  if(!input)return;
-
-  const query=
-    input.value.trim();
-
-  if(!query)return;
-
-  if(
-    query==="Pear Search" ||
-    query==="Pear News" ||
-    query==="PearTube"
-  ){
-
-    zapOpenSite(query);
-
-    return;
-
-  }
-
-  zapPerformSearch(query);
-
-}
-
-function zapPerformSearch(query){
-
-  zapHistory=
-    zapHistory.slice(
-      0,
-      zapHistoryIndex+1
-    );
-
-  zapHistory.push(
-    "search:"+query
-  );
-
-  zapHistoryIndex=
-    zapHistory.length-1;
-
-  zapPerformSearchWithoutHistory(
-    query
-  );
-
-}
-
-function zapPerformSearchWithoutHistory(query){
-
-  const page=
-    document.getElementById(
-      "zap-page"
-    );
-
-  if(!page)return;
-
-  page.innerHTML=`
-
-    <button onclick="zapHome()">
-      🏠 Home
-    </button>
-
-    <h2>
-      Search Results
-    </h2>
-
-    <p>
-      Results for:
-      <strong>
-        ${escapeHTML(query)}
-      </strong>
-    </p>
-
-    <div
-      class="card zap-result"
-      onclick="
-        zapOpenResult('Pear Wikipedia')
-      "
-    >
-
-      <strong>
-        📖 Pear Wikipedia
-      </strong>
-
-      <p>
-        Learn more about
-        ${escapeHTML(query)}.
-      </p>
-
-    </div>
-
-    <div
-      class="card zap-result"
-      onclick="
-        zapOpenResult('PearTube')
-      "
-    >
-
-      <strong>
-        ▶️ PearTube
-      </strong>
-
-      <p>
-        Videos about
-        ${escapeHTML(query)}.
-      </p>
-
-    </div>
-
-    <div
-      class="card zap-result"
-      onclick="
-        zapOpenResult('Pear News')
-      "
-    >
-
-      <strong>
-        📰 Pear News
-      </strong>
-
-      <p>
-        News about
-        ${escapeHTML(query)}.
-      </p>
-
-    </div>
-
-  `;
-
-}
-
-function zapOpenSite(site){
-
-  zapHistory=
-    zapHistory.slice(
-      0,
-      zapHistoryIndex+1
-    );
-
-  zapHistory.push(site);
-
-  zapHistoryIndex=
-    zapHistory.length-1;
-
-  const url=
-    document.getElementById(
-      "zap-url"
-    );
-
-  if(url){
-    url.value=site;
-  }
-
-  zapRenderSite(site);
-
-}
-
-function zapOpenResult(result){
-
-  zapHistory.push(result);
-
-  zapHistoryIndex=
-    zapHistory.length-1;
-
-  const url=
-    document.getElementById(
-      "zap-url"
-    );
-
-  if(url){
-    url.value=result;
-  }
-
-  zapRenderSite(result);
-
-}
-
-function zapRenderSite(site){
-
-  const page=
-    document.getElementById(
-      "zap-page"
-    );
-
-  if(!page)return;
-
-  if(site==="Pear Search"){
-
-    page.innerHTML=`
-
-      <button onclick="zapHome()">
-        🏠 Home
-      </button>
-
-      <h2>
-        🔎 Pear Search
-      </h2>
-
-      <input
-        id="zap-search-box"
-        placeholder="Search the Internet..."
-        onkeydown="
-          if(event.key==='Enter'){
-            zapSearchBox();
-          }
-        "
-      >
-
-      <button onclick="zapSearchBox()">
-        🔍 Search
-      </button>
-
-      <div id="zap-results"></div>
-
-    `;
-
-    return;
-  }
-
-  if(site==="Pear News"){
-
-    page.innerHTML=`
-
-      <button onclick="zapHome()">
-        🏠 Home
-      </button>
-
-      <h2>
-        📰 Pear News
-      </h2>
 
       <div class="card">
 
-        <h3>
-          🌎 World News
-        </h3>
-
-        <p>
-          Pear Phone announces a brand
-          new software update.
-        </p>
-
-      </div>
-
-      <div class="card">
-
-        <h3>
-          🏒 Hockey
-        </h3>
-
-        <p>
-          Hockey fans celebrate another
-          huge game.
-        </p>
-
-      </div>
-
-      <div class="card">
-
-        <h3>
-          💻 Technology
-        </h3>
-
-        <p>
-          New technology is changing
-          the way people use phones.
-        </p>
-
-      </div>
-
-    `;
-
-    return;
-  }
-
-  if(site==="PearTube"){
-
-    page.innerHTML=`
-
-      <button onclick="zapHome()">
-        🏠 Home
-      </button>
-
-      <h2>
-        ▶️ PearTube
-      </h2>
-
-      <div class="card">
+        <h2>🎬 Pear Videos</h2>
 
         <div
           style="
             background:#111;
             color:#fff;
-            height:130px;
-            border-radius:10px;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            font-size:50px;
+            padding:35px 10px;
+            text-align:center;
+            border-radius:14px;
+            margin-bottom:10px;
           "
         >
+
           ▶️
+
+          <br>
+
+          <strong>
+            Pear Phone Videos
+          </strong>
+
         </div>
 
-        <h3>
-          Popular PearTube Video
-        </h3>
+        <button
+          onclick="playVideoDemo()"
+        >
+          ▶️ Play Demo
+        </button>
 
         <button
-          onclick="
-            alert('Playing video ▶️')
+          onclick="alert('Added to Watch Later!')"
+        >
+          ➕ Watch Later
+        </button>
+
+        <hr>
+
+        <div class="stock">
+          🍐 Pear Phone Commercial
+          <button
+            onclick="playVideoDemo()"
+          >
+            ▶
+          </button>
+        </div>
+
+        <div class="stock">
+          📱 Pear Phone Tour
+          <button
+            onclick="playVideoDemo()"
+          >
+            ▶
+          </button>
+        </div>
+
+        <div class="stock">
+          😂 Pear Phone Fails
+          <button
+            onclick="playVideoDemo()"
+          >
+            ▶
+          </button>
+        </div>
+
+      </div>
+
+    `
+
+  );
+
+}
+
+function playVideoDemo(){
+
+  alert(
+    "▶️ Now playing!\n\nPear Phone Video"
+  );
+
+}
+
+
+/* ============================================================
+   PHONE
+============================================================ */
+
+let dialNumber = "";
+
+function phoneApp(){
+
+  openApp(
+    "Phone",
+
+    `
+
+      <div class="card">
+
+        <h2>📞 Phone</h2>
+
+        <div
+          id="dial-display"
+          style="
+            text-align:center;
+            font-size:25px;
+            font-weight:900;
+            padding:10px;
+            min-height:45px;
           "
         >
-          ▶️ Play
+          ${escapeHTML(
+            dialNumber || "Enter number"
+          )}
+        </div>
+
+        <div
+          style="
+            display:grid;
+            grid-template-columns:repeat(3,1fr);
+            gap:5px;
+          "
+        >
+
+          ${[
+            "1","2","3",
+            "4","5","6",
+            "7","8","9",
+            "*","0","#"
+          ].map(
+            number => `
+
+              <button
+                onclick="dialKey('${number}')"
+                style="
+                  height:40px;
+                  font-size:18px;
+                "
+              >
+                ${number}
+              </button>
+
+            `
+          ).join("")}
+
+        </div>
+
+        <button
+          onclick="makeCall()"
+        >
+          📞 Call
+        </button>
+
+        <button
+          onclick="clearDial()"
+        >
+          ⌫ Clear
         </button>
 
       </div>
 
-    `;
+    `
+
+  );
+
+}
+
+function dialKey(number){
+
+  dialNumber += number;
+
+  phoneApp();
+
+}
+
+function clearDial(){
+
+  dialNumber =
+    dialNumber.slice(
+      0,
+      -1
+    );
+
+  phoneApp();
+
+}
+
+function makeCall(){
+
+  if(!dialNumber){
+
+    alert(
+      "Enter a phone number first."
+    );
 
     return;
+
   }
 
-  if(site==="Pear Wikipedia"){
+  alert(
+    `📞 Calling ${dialNumber}...`
+  );
 
-    page.innerHTML=`
+}
 
-      <button onclick="zapHome()">
-        🏠 Home
-      </button>
+ 
+/* ============================================================
+   MAIL
+============================================================ */
 
-      <h2>
-        📖 Pear Wikipedia
-      </h2>
+const mailMessages = [
+
+  {
+    from:"Pear Support",
+    subject:"Welcome to Pear Phone!",
+    body:"Thanks for using Pear Phone OS."
+  },
+
+  {
+    from:"Sam",
+    subject:"Yo!",
+    body:"Are you doing anything later?"
+  },
+
+  {
+    from:"PearTunes",
+    subject:"New music available",
+    body:"Check out the newest PearTunes releases."
+  }
+
+];
+
+function mailApp(){
+
+  openApp(
+    "Mail",
+
+    `
 
       <div class="card">
 
+        <h2>✉️ Mail</h2>
+
+        <button
+          onclick="composeMail()"
+        >
+          ✏️ Compose
+        </button>
+
+        <hr>
+
+        ${mailMessages.map(
+          (mail,index) => `
+
+            <div
+              class="stock"
+              onclick="openMail(${index})"
+              style="cursor:pointer"
+            >
+
+              <div>
+
+                <strong>
+                  ${escapeHTML(mail.from)}
+                </strong>
+
+                <br>
+
+                <small>
+                  ${escapeHTML(mail.subject)}
+                </small>
+
+              </div>
+
+              📩
+
+            </div>
+
+          `
+        ).join("")}
+
+      </div>
+
+    `
+
+  );
+
+}
+
+function openMail(index){
+
+  const mail =
+    mailMessages[index];
+
+  openApp(
+    mail.subject,
+
+    `
+
+      <div class="card">
+
+        <strong>
+          From:
+        </strong>
+
+        ${escapeHTML(mail.from)}
+
+        <hr>
+
         <h3>
-          Pear Phone
+          ${escapeHTML(mail.subject)}
         </h3>
 
         <p>
-          The Pear Phone is a fictional
-          smartphone with a collection
-          of unusual applications.
+          ${escapeHTML(mail.body)}
+        </p>
+
+        <button
+          onclick="composeMail()"
+        >
+          ↩️ Reply
+        </button>
+
+      </div>
+
+    `
+
+  );
+
+}
+
+function composeMail(){
+
+  openApp(
+    "Compose Mail",
+
+    `
+
+      <div class="card">
+
+        <input
+          id="mail-to"
+          placeholder="To..."
+        >
+
+        <input
+          id="mail-subject"
+          placeholder="Subject..."
+        >
+
+        <textarea
+          id="mail-body"
+          placeholder="Write your email..."
+        ></textarea>
+
+        <button
+          onclick="sendMail()"
+        >
+          📤 Send
+        </button>
+
+      </div>
+
+    `
+
+  );
+
+}
+
+function sendMail(){
+
+  alert(
+    "📤 Email sent!"
+  );
+
+  mailApp();
+
+}
+
+
+/* ============================================================
+   COMPASS
+============================================================ */
+
+let compassHeading = 0;
+
+function compassApp(){
+
+  openApp(
+    "Compass",
+
+    `
+
+      <div class="card">
+
+        <h2>🧭 Compass</h2>
+
+        <div
+          style="
+            width:170px;
+            height:170px;
+            margin:15px auto;
+            border-radius:50%;
+            border:5px solid #333;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:35px;
+            background:linear-gradient(
+              135deg,
+              #eee,
+              #fff
+            );
+          "
+          id="compass-face"
+        >
+          🧭
+        </div>
+
+        <h2
+          id="compass-direction"
+          style="text-align:center"
+        >
+          N
+        </h2>
+
+        <button
+          onclick="spinCompass()"
+        >
+          🔄 Spin Compass
+        </button>
+
+        <p
+          style="text-align:center"
+        >
+          Heading:
+          <strong
+            id="heading-number"
+          >
+            0°
+          </strong>
         </p>
 
       </div>
 
-    `;
+    `
 
-  }
+  );
 
 }
 
-function zapSearchBox(){
+function spinCompass(){
 
-  const input=
+  compassHeading =
+    Math.floor(
+      Math.random() * 360
+    );
+
+  const directions = [
+    "N","NE","E","SE",
+    "S","SW","W","NW"
+  ];
+
+  const index =
+    Math.round(
+      compassHeading / 45
+    ) % 8;
+
+  const direction =
+    directions[index];
+
+  const face =
     document.getElementById(
-      "zap-search-box"
+      "compass-face"
     );
 
-  if(!input)return;
-
-  const query=
-    input.value.trim();
-
-  if(!query)return;
-
-  zapPerformSearch(query);
-
-}
-
-function zapBack(){
-
-  if(
-    zapHistoryIndex<=0
-  ) return;
-
-  zapHistoryIndex--;
-
-  const site=
-    zapHistory[
-      zapHistoryIndex
-    ];
-
-  if(
-    site.startsWith("search:")
-  ){
-
-    zapPerformSearchWithoutHistory(
-      site.substring(7)
-    );
-
-  }else{
-
-    zapRenderSite(site);
-
-  }
-
-}
-
-function zapForward(){
-
-  if(
-    zapHistoryIndex>=
-    zapHistory.length-1
-  ) return;
-
-  zapHistoryIndex++;
-
-  const site=
-    zapHistory[
-      zapHistoryIndex
-    ];
-
-  if(
-    site.startsWith("search:")
-  ){
-
-    zapPerformSearchWithoutHistory(
-      site.substring(7)
-    );
-
-  }else{
-
-    zapRenderSite(site);
-
-  }
-
-}
-
-function zapRefresh(){
-
-  if(
-    zapHistoryIndex<0
-  ){
-
-    zapHome();
-    return;
-
-  }
-
-  const site=
-    zapHistory[
-      zapHistoryIndex
-    ];
-
-  if(
-    site.startsWith("search:")
-  ){
-
-    zapPerformSearchWithoutHistory(
-      site.substring(7)
-    );
-
-  }else{
-
-    zapRenderSite(site);
-
-  }
-
-}
-
-function zapHome(){
-
-  zapHistory=[];
-  zapHistoryIndex=-1;
-
-  const url=
+  const label =
     document.getElementById(
-      "zap-url"
+      "compass-direction"
     );
 
-  if(url)url.value="";
-
-  const page=
+  const number =
     document.getElementById(
-      "zap-page"
+      "heading-number"
     );
 
-  if(!page)return;
+  if(face){
 
-  page.innerHTML=`
+    face.style.transform =
+      `rotate(${compassHeading}deg)`;
 
-    <div class="zap-logo">
+  }
 
-      <div class="zap-logo-icon">
-        ⚡
+  if(label){
+
+    label.textContent =
+      direction;
+
+  }
+
+  if(number){
+
+    number.textContent =
+      `${compassHeading}°`;
+
+  }
+
+}
+
+
+/* ============================================================
+   TUMS
+============================================================ */
+
+let tumsCount = 0;
+
+function tumsApp(){
+
+  openApp(
+    "Thumbs",
+    
+    `
+
+      <div class="card">
+
+        <h2>👍 Thumbs</h2>
+
+        <div
+          style="
+            text-align:center;
+            font-size:70px;
+            padding:15px;
+          "
+        >
+          👍
+        </div>
+
+        <h2
+          style="text-align:center"
+          id="thumb-count"
+        >
+          ${tumsCount}
+        </h2>
+
+        <button
+          onclick="addThumb()"
+        >
+          👍 Give a Thumbs Up
+        </button>
+
+        <button
+          onclick="resetThumbs()"
+        >
+          🔄 Reset
+        </button>
+
+        <p
+          style="text-align:center"
+        >
+          Keep tapping!
+        </p>
+
       </div>
 
-      <h1>
-        ZapLook
-      </h1>
+    `
 
-      <p class="zap-muted">
-        The Pear Phone Internet
-      </p>
+  );
+
+}
+
+function addThumb(){
+
+  tumsCount++;
+
+  tumsApp();
+
+}
+
+function resetThumbs(){
+
+  tumsCount = 0;
+
+  tumsApp();
+
+}
+
+
+/* ============================================================
+   LINGO
+============================================================ */
+
+const lingoWords = [
+
+  {
+    word:"HELLO",
+    answer:"BONJOUR",
+    language:"French"
+  },
+
+  {
+    word:"THANK YOU",
+    answer:"MERCI",
+    language:"French"
+  },
+
+  {
+    word:"GOODBYE",
+    answer:"ADIOS",
+    language:"Spanish"
+  },
+
+  {
+    word:"APPLE",
+    answer:"MANZANA",
+    language:"Spanish"
+  },
+
+  {
+    word:"WATER",
+    answer:"AGUA",
+    language:"Spanish"
+  }
+
+];
+
+let lingoIndex = 0;
+
+function lingoApp(){
+
+  const item =
+    lingoWords[
+      lingoIndex
+    ];
+
+  openApp(
+    "Lingo",
+
+    `
+
+      <div class="card">
+
+        <h2>🌎 Lingo</h2>
+
+        <p>
+          Translate this word:
+        </p>
+
+        <h1
+          style="text-align:center"
+        >
+          ${item.word}
+        </h1>
+
+        <input
+          id="lingo-answer"
+          placeholder="Your answer..."
+        >
+
+        <button
+          onclick="checkLingo()"
+        >
+          Check
+        </button>
+
+        <button
+          onclick="nextLingo()"
+        >
+          Skip
+        </button>
+
+        <p>
+          Language:
+          ${item.language}
+        </p>
+
+      </div>
+
+    `
+
+  );
+
+}
+
+function checkLingo(){
+
+  const input =
+    document.getElementById(
+      "lingo-answer"
+    );
+
+  const item =
+    lingoWords[
+      lingoIndex
+    ];
+
+  if(!input)
+    return;
+
+  if(
+    input.value.trim()
+      .toUpperCase() ===
+    item.answer
+  ){
+
+    alert(
+      "✅ Correct!"
+    );
+
+    nextLingo();
+
+  }else{
+
+    alert(
+      `❌ Not quite!\n\nAnswer: ${item.answer}`
+    );
+
+  }
+
+}
+
+function nextLingo(){
+
+  lingoIndex =
+    (lingoIndex + 1) %
+    lingoWords.length;
+
+  lingoApp();
+
+}
+
+
+/* ============================================================
+   DANWARP
+============================================================ */
+
+let danWarpAmount = 0;
+
+function danwarpApp(){
+
+  openApp(
+    "DanWarp",
+
+    `
+
+      <div class="card">
+
+        <h2>🌀 DanWarp</h2>
+
+        <p>
+          Warp the Pear Phone!
+        </p>
+
+        <div
+          id="warp-box"
+          style="
+            height:140px;
+            border-radius:15px;
+            background:linear-gradient(
+              45deg,
+              #6a5acd,
+              #00bfff,
+              #ff69b4
+            );
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:45px;
+            transition:.4s;
+          "
+        >
+          🍐
+        </div>
+
+        <button
+          onclick="warpPear()"
+        >
+          🌀 WARP
+        </button>
+
+        <button
+          onclick="resetWarp()"
+        >
+          🔄 Reset
+        </button>
+
+        <p>
+          Warp level:
+          <strong>
+            ${danWarpAmount}
+          </strong>
+        </p>
+
+      </div>
+
+    `
+
+  );
+
+}
+
+function warpPear(){
+
+  danWarpAmount++;
+
+  const box =
+    document.getElementById(
+      "warp-box"
+    );
+
+  if(box){
+
+    box.style.transform =
+      `rotate(${danWarpAmount * 37}deg)
+       scale(${1 + danWarpAmount * .04})`;
+
+  }
+
+}
+
+function resetWarp(){
+
+  danWarpAmount = 0;
+
+  danwarpApp();
+
+}
+
+
+/* ============================================================
+   IMAGE
+============================================================ */
+
+function imageApp(){
+
+  openApp(
+    "Image",
+
+    `
+
+      <div class="card">
+
+        <h2>🖼️ Image</h2>
+
+        <input
+          id="image-text"
+          placeholder="Type something..."
+        >
+
+        <button
+          onclick="generateImageCard()"
+        >
+          ✨ Generate
+        </button>
+
+        <div
+          id="generated-image"
+          style="
+            margin-top:10px;
+          "
+        ></div>
+
+      </div>
+
+    `
+
+  );
+
+}
+
+function generateImageCard(){
+
+  const input =
+    document.getElementById(
+      "image-text"
+    );
+
+  const output =
+    document.getElementById(
+      "generated-image"
+    );
+
+  if(!input || !output)
+    return;
+
+  const text =
+    input.value.trim() ||
+    "Pear Phone";
+
+  output.innerHTML = `
+
+    <div
+      style="
+        min-height:150px;
+        border-radius:15px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        text-align:center;
+        padding:15px;
+        background:
+          linear-gradient(
+            135deg,
+            #9be7ff,
+            #ffd1f4
+          );
+        font-size:25px;
+        font-weight:900;
+      "
+    >
+
+      🍐
+
+      <br>
+
+      ${escapeHTML(text)}
 
     </div>
-
-    <div class="zap-trending">
-
-      <strong>
-        Trending
-      </strong>
-
-      <p>🌎 World News</p>
-      <p>🏒 Hockey</p>
-      <p>🎮 Gaming</p>
-      <p>🎵 Music</p>
-
-    </div>
-
-    <button
-      class="zap-link"
-      onclick="
-        zapOpenSite('Pear Search')
-      "
-    >
-      🔎 Pear Search
-    </button>
-
-    <button
-      class="zap-link"
-      onclick="
-        zapOpenSite('Pear News')
-      "
-    >
-      📰 Pear News
-    </button>
-
-    <button
-      class="zap-link"
-      onclick="
-        zapOpenSite('PearTube')
-      "
-    >
-      ▶️ PearTube
-    </button>
 
   `;
 
 }
+  function chronoApp(){
+  openApp("Chrono",`
+    <div class="card">
+      <h2>⏱ Chrono</h2>
+      <div id="chrono-display" style="font-size:38px;text-align:center;margin:20px 0;font-weight:800;">00:00.00</div>
 
-/* MONKEY */
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+        <button onclick="chronoStart()">▶ Start</button>
+        <button onclick="chronoStop()">⏸ Stop</button>
+        <button onclick="chronoReset()">↩ Reset</button>
+        <button onclick="chronoLap()">🏁 Lap</button>
+      </div>
+
+      <div id="chrono-laps" style="margin-top:15px;max-height:120px;overflow:auto;"></div>
+    </div>
+  `);
+}
+
+let chronoRunning=false;
+let chronoStartTime=0;
+let chronoElapsed=0;
+let chronoTimer=null;
+let chronoLaps=[];
+
+function chronoRender(){
+  const display=document.getElementById("chrono-display");
+  if(!display)return;
+
+  const elapsed=chronoRunning
+    ? performance.now()-chronoStartTime
+    : chronoElapsed;
+
+  const total=Math.max(0,elapsed);
+  const minutes=Math.floor(total/60000);
+  const seconds=Math.floor((total%60000)/1000);
+  const hundredths=Math.floor((total%1000)/10);
+
+  display.textContent=
+    String(minutes).padStart(2,"0")+":"+
+    String(seconds).padStart(2,"0")+"."+
+    String(hundredths).padStart(2,"0");
+}
+
+function chronoStart(){
+  if(chronoRunning)return;
+
+  chronoStartTime=performance.now()-chronoElapsed;
+  chronoRunning=true;
+
+  clearInterval(chronoTimer);
+  chronoTimer=setInterval(chronoRender,30);
+  chronoRender();
+}
+
+function chronoStop(){
+  if(!chronoRunning)return;
+
+  chronoElapsed=performance.now()-chronoStartTime;
+  chronoRunning=false;
+
+  clearInterval(chronoTimer);
+  chronoTimer=null;
+  chronoRender();
+}
+
+function chronoReset(){
+  chronoRunning=false;
+  chronoElapsed=0;
+  chronoLaps=[];
+
+  clearInterval(chronoTimer);
+  chronoTimer=null;
+
+  chronoRender();
+
+  const laps=document.getElementById("chrono-laps");
+  if(laps)laps.innerHTML="";
+}
+
+function chronoLap(){
+  if(!chronoRunning)return;
+
+  chronoElapsed=performance.now()-chronoStartTime;
+
+  const total=chronoElapsed;
+  const minutes=Math.floor(total/60000);
+  const seconds=Math.floor((total%60000)/1000);
+  const hundredths=Math.floor((total%1000)/10);
+
+  const value=
+    String(minutes).padStart(2,"0")+":"+
+    String(seconds).padStart(2,"0")+"."+
+    String(hundredths).padStart(2,"0");
+
+  chronoLaps.push(value);
+
+  const laps=document.getElementById("chrono-laps");
+  if(!laps)return;
+
+  laps.innerHTML=chronoLaps
+    .slice()
+    .reverse()
+    .map((lap,i)=>`<div style="padding:5px;border-bottom:1px solid #ddd;">
+      Lap ${chronoLaps.length-i}: <b>${lap}</b>
+    </div>`)
+    .join("");
+}
+
+
+function zaplookApp(){
+  openApp("ZapLook",`
+    <div class="card">
+      <h2>⚡ ZapLook</h2>
+      <p>Search the Pear Phone instantly.</p>
+
+      <input
+        id="zap-search"
+        class="app-input"
+        placeholder="Search apps..."
+        oninput="zapSearch()"
+      >
+
+      <div id="zap-results" style="margin-top:12px;">
+        <div class="result">📱 Messages</div>
+        <div class="result">📷 Camera</div>
+        <div class="result">🗺 Maps</div>
+        <div class="result">🌤 Weather</div>
+        <div class="result">📝 Notes</div>
+        <div class="result">🎵 PearTunes</div>
+        <div class="result">⏱ Chrono</div>
+      </div>
+    </div>
+  `);
+}
+
+function zapSearch(){
+  const input=document.getElementById("zap-search");
+  const results=document.getElementById("zap-results");
+
+  if(!input||!results)return;
+
+  const query=input.value.toLowerCase().trim();
+
+  const apps=[
+    ["📱","Messages","messagesApp"],
+    ["📷","Camera","cameraApp"],
+    ["🌈","SplashFace","splashfaceApp"],
+    ["📈","Stocks","stocksApp"],
+    ["🗺","Maps","mapsApp"],
+    ["🖼","Photos","photosApp"],
+    ["🌤","Weather","weatherApp"],
+    ["📝","Notes","notesApp"],
+    ["🎵","PearTunes","pearTunesApp"],
+    ["⚙️","Settings","settingsApp"],
+    ["⏰","Clock","clockApp"],
+    ["🎬","Videos","videosApp"],
+    ["📞","Phone","phoneApp"],
+    ["✉️","Mail","mailApp"],
+    ["🧭","Compass","compassApp"],
+    ["⏱","Chrono","chronoApp"],
+    ["🐒","Monkey","monkeyApp"],
+    ["💬","Remark","remarkApp"]
+  ];
+
+  const filtered=apps.filter(item =>
+    item[1].toLowerCase().includes(query)
+  );
+
+  if(!filtered.length){
+    results.innerHTML="<div class='result'>No apps found.</div>";
+    return;
+  }
+
+  results.innerHTML=filtered.map(item=>`
+    <button
+      class="result"
+      style="width:100%;text-align:left;border:0;background:#fff;"
+      onclick="${item[2]}()"
+    >
+      ${item[0]} ${item[1]}
+    </button>
+  `).join("");
+}
+
 
 function monkeyApp(){
+  openApp("Monkey",`
+    <div class="card" style="text-align:center;">
+      <h2>🐒 Monkey</h2>
+      <div id="monkey-face" style="font-size:80px;margin:15px;">🐒</div>
 
-  openApp(
-    "Monkey",
-    `
-      <div class="card">
+      <p id="monkey-text">
+        Tap the button to summon a monkey.
+      </p>
 
-        <div
-          class="big"
-          id="monkey"
-        >
-          🐒
-        </div>
-
-        <button
-          onclick="
-            const x=[
-              '🐒',
-              '🙈',
-              '🙉',
-              '🙊'
-            ];
-
-            document
-              .getElementById('monkey')
-              .textContent=
-              x[
-                Math.floor(
-                  Math.random()*x.length
-                )
-              ];
-          "
-        >
-          🐒 Monkey
-        </button>
-
-      </div>
-    `
-  );
-
+      <button onclick="monkeyAction()">🐒 Do Something</button>
+      <button onclick="monkeyDance()">💃 Monkey Dance</button>
+    </div>
+  `);
 }
 
-/* REMARK */
+const monkeyFaces=["🐒","🦍","🙈","🙉","🙊","🐵"];
+
+function monkeyAction(){
+  const face=document.getElementById("monkey-face");
+  const text=document.getElementById("monkey-text");
+
+  if(!face||!text)return;
+
+  const faceValue=
+    monkeyFaces[Math.floor(Math.random()*monkeyFaces.length)];
+
+  face.textContent=faceValue;
+
+  const messages=[
+    "The monkey has arrived.",
+    "The monkey stole your phone.",
+    "The monkey is judging you.",
+    "The monkey wants a banana.",
+    "The monkey pressed something.",
+    "The monkey has no idea what is happening."
+  ];
+
+  text.textContent=
+    messages[Math.floor(Math.random()*messages.length)];
+
+  face.animate(
+    [
+      {transform:"scale(.7) rotate(-10deg)"},
+      {transform:"scale(1.2) rotate(10deg)"},
+      {transform:"scale(1) rotate(0deg)"}
+    ],
+    {
+      duration:450,
+      easing:"ease-out"
+    }
+  );
+}
+
+function monkeyDance(){
+  const face=document.getElementById("monkey-face");
+  const text=document.getElementById("monkey-text");
+
+  if(!face)return;
+
+  face.animate(
+    [
+      {transform:"translateX(0) rotate(0deg)"},
+      {transform:"translateX(-25px) rotate(-20deg)"},
+      {transform:"translateX(25px) rotate(20deg)"},
+      {transform:"translateX(-20px) rotate(-15deg)"},
+      {transform:"translateX(20px) rotate(15deg)"},
+      {transform:"translateX(0) rotate(0deg)"}
+    ],
+    {
+      duration:900,
+      iterations:2,
+      easing:"ease-in-out"
+    }
+  );
+
+  if(text){
+    text.textContent="🕺 MONKEY DANCE ACTIVATED 🐒";
+  }
+}
+
 
 function remarkApp(){
+  openApp("Remark",`
+    <div class="card">
+      <h2>💬 Remark</h2>
 
-  openApp(
-    "Remark",
-    `
-      <div class="card">
+      <textarea
+        id="remark-input"
+        class="app-textarea"
+        placeholder="Write a remark..."
+        rows="5"
+      ></textarea>
 
-        <h2>
-          💭 Remark
-        </h2>
-
-        <textarea
-          id="remark"
-          placeholder="Write a remark..."
-        ></textarea>
-
-        <button
-          onclick="
-            localStorage.setItem(
-              'pear-remark',
-              document
-                .getElementById('remark')
-                .value
-            );
-
-            alert('Remark saved!');
-          "
-        >
-          💾 Save Remark
-        </button>
-
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;">
+        <button onclick="saveRemark()">💾 Save</button>
+        <button onclick="clearRemark()">🗑 Clear</button>
+        <button onclick="remarkRandom()">✨ Random</button>
       </div>
-    `
-  );
 
+      <div id="remark-output" style="margin-top:12px;"></div>
+    </div>
+  `);
+
+  const saved=localStorage.getItem("pear-remark");
+
+  if(saved){
+    const input=document.getElementById("remark-input");
+    if(input)input.value=saved;
+  }
 }
 
-/* =========================================================
-   PAGE 1 ROUTING
-========================================================= */
+function saveRemark(){
+  const input=document.getElementById("remark-input");
+  const output=document.getElementById("remark-output");
 
-const page1Apps = {
+  if(!input)return;
 
-  messages:messagesApp,
-  camera:cameraApp,
-  splashface:splashfaceApp,
-  stocks:stocksApp,
-  maps:mapsApp,
-  photos:photosApp,
-  weather:weatherApp,
-  notes:notesApp,
-  peartunes:pearTunesApp,
-  settings:settingsApp,
-  clock:clockApp,
-  videos:videosApp,
-  phone:phoneApp,
-  mail:mailApp,
-  compass:compassApp,
-  music:pearTunesApp
+  localStorage.setItem("pear-remark",input.value);
 
-};
+  if(output){
+    output.innerHTML=
+      `<div class="result">✅ Remark saved.</div>`;
+  }
+}
 
-/* =========================================================
-   PAGE 2 ROUTING
-   THIS IS THE IMPORTANT PART
-========================================================= */
+function clearRemark(){
+  const input=document.getElementById("remark-input");
+  const output=document.getElementById("remark-output");
 
-const page2Apps = {
+  if(input)input.value="";
 
-  "p2-lingo": lingoApp,
+  localStorage.removeItem("pear-remark");
 
-  "p2-splash": splashfaceApp,
+  if(output){
+    output.innerHTML=
+      `<div class="result">🗑 Remark cleared.</div>`;
+  }
+}
 
-  "p2-thumb": tumsApp,
+function remarkRandom(){
+  const input=document.getElementById("remark-input");
 
-  "p2-danwarp": danwarpApp,
+  if(!input)return;
 
-  "p2-image": imageApp,
+  const remarks=[
+    "Today is going to be a good day.",
+    "Pear Phone technology is incredible.",
+    "Remember to charge your phone.",
+    "This phone has way too many apps.",
+    "You are officially using Pear Phone OS.",
+    "Don't forget to have fun."
+  ];
 
-  "p2-chrono": chronoApp,
+  input.value=
+    remarks[Math.floor(Math.random()*remarks.length)];
 
-  "p2-zaplook": zaplookApp,
+  input.dispatchEvent(new Event("input",{bubbles:true}));
+}
 
-  "p2-weather": weatherApp,
 
-  "p2-music": pearTunesApp,
+function connectAllPearApps(){
 
-  "p2-monkey": monkeyApp,
+  const connections={
 
-  "p2-remark": remarkApp,
+    /* PAGE 1 */
 
-  "p2-settings": settingsApp,
+    "messages":messagesApp,
+    "camera":cameraApp,
+    "splashface":splashfaceApp,
+    "stocks":stocksApp,
+    "maps":mapsApp,
+    "photos":photosApp,
+    "weather":weatherApp,
+    "notes":notesApp,
+    "peartunes":pearTunesApp,
+    "settings":settingsApp,
+    "clock":clockApp,
+    "videos":videosApp,
+    "phone":phoneApp,
+    "mail":mailApp,
+    "compass":compassApp,
+    "music":pearTunesApp,
 
-  "p2-phone": phoneApp,
+    /* PAGE 2 */
 
-  "p2-mail": mailApp,
+    "p2-lingo":lingoApp,
+    "p2-splash":splashfaceApp,
+    "p2-thumb":tumsApp,
+    "p2-danwarp":danwarpApp,
+    "p2-image":imageApp,
+    "p2-chrono":chronoApp,
+    "p2-zaplook":zaplookApp,
+    "p2-weather":weatherApp,
+    "p2-music":pearTunesApp,
+    "p2-monkey":monkeyApp,
+    "p2-remark":remarkApp,
+    "p2-settings":settingsApp,
+    "p2-phone":phoneApp,
+    "p2-mail":mailApp,
+    "p2-compass":compassApp,
+    "p2-music2":pearTunesApp
+  };
 
-  "p2-compass": compassApp
+  Object.entries(connections).forEach(([id,app])=>{
 
-};
+    const button=document.getElementById(id);
 
-/*
-   IMPORTANT:
-   The clicked button's EXACT ID is used.
-   No neighboring app is guessed.
-*/
+    if(!button || typeof app!=="function")return;
 
-document.addEventListener(
-  "pointerup",
-  function(e){
+    button.dataset.pearConnected="1";
 
-    const button =
-      e.target.closest(
-        ".hotspot"
-      );
+    button.style.touchAction="manipulation";
+    button.style.pointerEvents="auto";
 
-    if(!button) return;
+    const launch=(event)=>{
 
-    if(
-      !phone.contains(button)
-    ) return;
+      event.preventDefault();
+      event.stopPropagation();
+      event.stopImmediatePropagation();
 
-    e.preventDefault();
-    e.stopPropagation();
-    e.stopImmediatePropagation();
+      if(currentPage===2){
 
-    if(
-      overlay.classList.contains("open")
-    ) return;
+        if(!button.classList.contains("page2-hotspot")){
+          return;
+        }
 
-    let app = null;
+      }else{
 
-    if(
-      currentPage === 1 &&
-      button.classList.contains(
-        "page1-hotspot"
-      )
-    ){
-
-      app =
-        page1Apps[
-          button.id
-        ];
-
-    }
-
-    else if(
-      currentPage === 2 &&
-      button.classList.contains(
-        "page2-hotspot"
-      )
-    ){
-
-      /*
-         EXACT ID → EXACT APP
-      */
-
-      switch(button.id){
-
-        case "p2-lingo":
-          app = lingoApp;
-          break;
-
-        case "p2-splash":
-          app = splashfaceApp;
-          break;
-
-        case "p2-thumb":
-          app = tumsApp;
-          break;
-
-        case "p2-danwarp":
-          app = danwarpApp;
-          break;
-
-        case "p2-image":
-          app = imageApp;
-          break;
-
-        case "p2-chrono":
-          app = chronoApp;
-          break;
-
-        case "p2-zaplook":
-          app = zaplookApp;
-          break;
-
-        case "p2-weather":
-          app = weatherApp;
-          break;
-
-        case "p2-music":
-          app = pearTunesApp;
-          break;
-
-        case "p2-monkey":
-          app = monkeyApp;
-          break;
-
-        case "p2-remark":
-          app = remarkApp;
-          break;
-
-        case "p2-settings":
-          app = settingsApp;
-          break;
-
-        case "p2-phone":
-          app = phoneApp;
-          break;
-
-        case "p2-mail":
-          app = mailApp;
-          break;
-
-        case "p2-compass":
-          app = compassApp;
-          break;
-
-        default:
-          app = null;
+        if(button.classList.contains("page2-hotspot")){
+          return;
+        }
 
       }
 
-    }
-
-    if(
-      typeof app === "function"
-    ){
+      if(overlay.classList.contains("open"))return;
 
       app();
+    };
+
+    /*
+      POINTERUP IS USED INSTEAD OF ONLY CLICK.
+
+      This is important on the Raspberry Pi touchscreen because
+      touchscreen browsers can sometimes interpret a tap as both
+      a swipe and a click.
+    */
+
+    button.addEventListener(
+      "pointerup",
+      launch,
+      {
+        capture:true,
+        passive:false
+      }
+    );
+
+    /*
+      Keep touch events from reaching the page swipe handler.
+    */
+
+    button.addEventListener(
+      "touchstart",
+      event=>event.stopPropagation(),
+      {
+        capture:true,
+        passive:true
+      }
+    );
+
+    button.addEventListener(
+      "touchmove",
+      event=>event.stopPropagation(),
+      {
+        capture:true,
+        passive:true
+      }
+    );
+
+    button.addEventListener(
+      "touchend",
+      event=>event.stopPropagation(),
+      {
+        capture:true,
+        passive:true
+      }
+    );
+
+  });
+}
+
+
+/* HOME BUTTON */
+
+const homeButton=document.getElementById("home");
+
+if(homeButton){
+
+  homeButton.addEventListener("pointerup",event=>{
+    event.preventDefault();
+    event.stopPropagation();
+
+    closeApp();
+  },{
+    capture:true,
+    passive:false
+  });
+
+}
+
+
+/*
+  PREVENT PAGE-2 HOTSPOTS FROM ACCIDENTALLY BEING
+  TREATED AS PAGE-1 BUTTONS.
+*/
+
+document.querySelectorAll(".page2-hotspot").forEach(button=>{
+
+  button.addEventListener(
+    "pointerdown",
+    event=>{
+      event.stopPropagation();
+    },
+    {
+      capture:true,
+      passive:true
+    }
+  );
+
+});
+
+
+/*
+  INITIALIZE EVERYTHING AFTER THE DOM HAS BEEN CREATED.
+*/
+
+connectAllPearApps();
+
+showPage(1);
+
+window.addEventListener("resize",()=>{
+  /*
+    Keep the Pear Phone centered when the browser window
+    changes size.
+  */
+  if(typeof positionKeyboard==="function"){
+    positionKeyboard();
+  }
+});
+
+
+/*
+  Stop camera when the browser is leaving the page.
+*/
+
+window.addEventListener("beforeunload",()=>{
+  stopCamera();
+});
+
+
+</script>
+</body>
+</html>
+/* 
+  EXTRA PAGE / SWIPE SAFETY
+
+  The phone itself stays rotated 90 degrees.
+  We only use the user's finger/mouse movement to determine
+  whether they want to move between the two home pages.
+*/
+
+let swipeStartX = null;
+let swipeStartY = null;
+let swipeTracking = false;
+
+phone.addEventListener("pointerdown",event=>{
+
+  /*
+    Do not begin a page swipe when an app is open.
+  */
+
+  if(overlay.classList.contains("open"))return;
+
+  /*
+    Do not begin a page swipe from a hotspot.
+  */
+
+  if(event.target.closest(".hotspot"))return;
+
+  swipeStartX=event.clientX;
+  swipeStartY=event.clientY;
+  swipeTracking=true;
+
+},{
+  passive:true
+});
+
+
+phone.addEventListener("pointerup",event=>{
+
+  if(!swipeTracking)return;
+
+  swipeTracking=false;
+
+  if(swipeStartX===null || swipeStartY===null)return;
+
+  const dx=event.clientX-swipeStartX;
+  const dy=event.clientY-swipeStartY;
+
+  swipeStartX=null;
+  swipeStartY=null;
+
+  /*
+    We intentionally look at VERTICAL movement.
+
+    Because the Pear Phone itself is rotated, the physical
+    swipe direction on the touchscreen is still translated
+    into the page movement the user expects.
+  */
+
+  if(Math.abs(dy)<55)return;
+
+  /*
+    Swipe UP -> Page 2
+    Swipe DOWN -> Page 1
+  */
+
+  if(dy < 0){
+
+    showPage(2);
+
+  }else{
+
+    showPage(1);
+
+  }
+
+},{
+  passive:true
+});
+
+
+/*
+  ALSO SUPPORT MOUSE DRAGGING ON A COMPUTER.
+*/
+
+let mouseDownX=null;
+let mouseDownY=null;
+
+phone.addEventListener("mousedown",event=>{
+
+  if(overlay.classList.contains("open"))return;
+
+  if(event.target.closest(".hotspot"))return;
+
+  mouseDownX=event.clientX;
+  mouseDownY=event.clientY;
+
+});
+
+
+phone.addEventListener("mouseup",event=>{
+
+  if(mouseDownX===null || mouseDownY===null)return;
+
+  const dx=event.clientX-mouseDownX;
+  const dy=event.clientY-mouseDownY;
+
+  mouseDownX=null;
+  mouseDownY=null;
+
+  if(Math.abs(dy)<55)return;
+
+  if(dy<0){
+
+    showPage(2);
+
+  }else{
+
+    showPage(1);
+
+  }
+
+});
+
+
+/*
+  KEYBOARD PAGE SWITCHING
+
+  Arrow Up  = Page 2
+  Arrow Down = Page 1
+*/
+
+document.addEventListener("keydown",event=>{
+
+  /*
+    Don't change home pages while the user is typing.
+  */
+
+  const tag=document.activeElement
+    ? document.activeElement.tagName
+    : "";
+
+  if(
+    tag==="INPUT" ||
+    tag==="TEXTAREA" ||
+    tag==="SELECT"
+  ){
+    return;
+  }
+
+  if(event.key==="ArrowUp"){
+
+    event.preventDefault();
+    showPage(2);
+
+  }
+
+  if(event.key==="ArrowDown"){
+
+    event.preventDefault();
+    showPage(1);
+
+  }
+
+});
+
+
+/*
+  PAGE DOTS
+
+  If the original HTML contains the page dots,
+  make them work as well.
+*/
+
+if(pageDots){
+
+  pageDots.addEventListener("pointerup",event=>{
+
+    const dot=event.target.closest("[data-page]");
+
+    if(!dot)return;
+
+    const page=Number(dot.dataset.page);
+
+    if(page===1 || page===2){
+
+      event.preventDefault();
+      event.stopPropagation();
+
+      showPage(page);
 
     }
 
-  },
-  true
-);
+  },true);
 
-/* =========================================================
-   HOME BUTTON
-========================================================= */
+}
 
-document
-  .getElementById("home")
-  .addEventListener(
-    "pointerup",
-    function(e){
 
-      e.preventDefault();
-      e.stopPropagation();
+/*
+  MAKE SURE PAGE 2 NEVER BLOCKS PAGE 1 WHEN IT IS HIDDEN.
+*/
 
-      closeApp();
+function updatePageInteraction(){
 
-    },
-    true
-  );
+  const pageTwo=
+    phone.classList.contains("page-two");
 
-/* =========================================================
-   CUSTOM KEYBOARD
-========================================================= */
+  document.querySelectorAll(".page1-hotspot").forEach(button=>{
 
-let keyboardTarget = null;
-let keyboardShift = false;
-let keyboardNumbers = false;
+    button.style.pointerEvents=
+      pageTwo ? "none" : "auto";
 
-function setupKeyboard(){
+  });
 
-  appWindow
-    .querySelectorAll(
-      "input,textarea"
-    )
-    .forEach(field=>{
+  document.querySelectorAll(".page2-hotspot").forEach(button=>{
 
-      field.addEventListener(
-        "focus",
-        ()=>showKeyboard(field)
-      );
+    button.style.pointerEvents=
+      pageTwo ? "auto" : "none";
 
-      field.addEventListener(
-        "click",
-        ()=>showKeyboard(field)
-      );
+  });
+
+}
+
+
+/*
+  Wrap the existing showPage function behavior so that
+  interaction state always gets updated.
+*/
+
+const originalShowPage=showPage;
+
+showPage=function(page){
+
+  originalShowPage(page);
+
+  currentPage=page;
+
+  updatePageInteraction();
+
+  if(pageDots){
+
+    pageDots.querySelectorAll("*").forEach(dot=>{
+
+      const dotPage=Number(dot.dataset.page);
+
+      if(dotPage===page){
+
+        dot.classList.add("active");
+
+      }else{
+
+        dot.classList.remove("active");
+
+      }
 
     });
 
-}
-
-function showKeyboard(field){
-
-  keyboardTarget=field;
-
-  let keyboard=
-    document.getElementById(
-      "pear-keyboard"
-    );
-
-  if(!keyboard){
-
-    keyboard=
-      document.createElement(
-        "div"
-      );
-
-    keyboard.id=
-      "pear-keyboard";
-
-    keyboard.innerHTML=`
-
-      <div
-        class="keyboard-row"
-        id="key-row1"
-      ></div>
-
-      <div
-        class="keyboard-row"
-        id="key-row2"
-      ></div>
-
-      <div
-        class="keyboard-row"
-        id="key-row3"
-      ></div>
-
-      <div
-        class="keyboard-row"
-        id="key-row4"
-      ></div>
-
-    `;
-
-    appWindow.appendChild(
-      keyboard
-    );
-
   }
 
-  renderKeyboard();
+};
 
-  keyboard.style.display=
-    "block";
 
-  requestAnimationFrame(
-    ()=>{
-      keyboard.classList.add(
-        "keyboard-show"
+/*
+  Run once immediately.
+*/
+
+updatePageInteraction();
+
+
+/* =========================================================
+   PEAR PHONE KEYBOARD
+   ========================================================= */
+
+let pearKeyboard=null;
+let keyboardTarget=null;
+
+
+/*
+  Create the custom keyboard only once.
+*/
+
+function createPearKeyboard(){
+
+  if(pearKeyboard)return pearKeyboard;
+
+  pearKeyboard=document.createElement("div");
+
+  pearKeyboard.id="pear-keyboard";
+
+  pearKeyboard.innerHTML=`
+
+    <div class="pear-keyboard-row">
+      <button data-key="q">Q</button>
+      <button data-key="w">W</button>
+      <button data-key="e">E</button>
+      <button data-key="r">R</button>
+      <button data-key="t">T</button>
+      <button data-key="y">Y</button>
+      <button data-key="u">U</button>
+      <button data-key="i">I</button>
+      <button data-key="o">O</button>
+      <button data-key="p">P</button>
+    </div>
+
+    <div class="pear-keyboard-row">
+      <button data-key="a">A</button>
+      <button data-key="s">S</button>
+      <button data-key="d">D</button>
+      <button data-key="f">F</button>
+      <button data-key="g">G</button>
+      <button data-key="h">H</button>
+      <button data-key="j">J</button>
+      <button data-key="k">K</button>
+      <button data-key="l">L</button>
+    </div>
+
+    <div class="pear-keyboard-row">
+      <button data-key="shift">⇧</button>
+      <button data-key="z">Z</button>
+      <button data-key="x">X</button>
+      <button data-key="c">C</button>
+      <button data-key="v">V</button>
+      <button data-key="b">B</button>
+      <button data-key="n">N</button>
+      <button data-key="m">M</button>
+      <button data-key="backspace">⌫</button>
+    </div>
+
+    <div class="pear-keyboard-row">
+      <button data-key="123">123</button>
+      <button data-key="space" class="space-key">SPACE</button>
+      <button data-key="enter">↵</button>
+    </div>
+
+  `;
+
+  /*
+    The keyboard is placed INSIDE the app overlay.
+    It therefore cannot cover the three circles at the
+    top of the Pear Phone.
+  */
+
+  overlay.appendChild(pearKeyboard);
+
+  pearKeyboard.addEventListener("pointerdown",event=>{
+
+    const key=event.target.closest("[data-key]");
+
+    if(!key)return;
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    keyboardKey(key.dataset.key);
+
+  },{
+    capture:true,
+    passive:false
+  });
+
+  return pearKeyboard;
+}
+
+
+let keyboardShift=false;
+let keyboardNumbers=false;
+
+
+function keyboardKey(key){
+
+  if(!keyboardTarget)return;
+
+  const target=keyboardTarget;
+
+  /*
+    SHIFT
+  */
+
+  if(key==="shift"){
+
+    keyboardShift=!keyboardShift;
+
+    if(pearKeyboard){
+
+      pearKeyboard.classList.toggle(
+        "shift-active",
+        keyboardShift
       );
+
     }
-  );
 
-}
-
-function hideKeyboard(immediate=false){
-
-  const keyboard=
-    document.getElementById(
-      "pear-keyboard"
-    );
-
-  keyboardTarget=null;
-
-  if(!keyboard)return;
-
-  keyboard.classList.remove(
-    "keyboard-show"
-  );
-
-  if(immediate){
-
-    keyboard.style.display=
-      "none";
-
-  }else{
-
-    setTimeout(
-      ()=>{
-        keyboard.style.display=
-          "none";
-      },
-      250
-    );
-
+    return;
   }
 
-}
 
-function renderKeyboard(){
+  /*
+    NUMBER / SYMBOL MODE
+  */
 
-  const keyboard=
-    document.getElementById(
-      "pear-keyboard"
-    );
+  if(key==="123"){
 
-  if(!keyboard)return;
+    keyboardNumbers=!keyboardNumbers;
 
-  const rows=[
+    if(pearKeyboard){
 
-    document.getElementById(
-      "key-row1"
-    ),
-
-    document.getElementById(
-      "key-row2"
-    ),
-
-    document.getElementById(
-      "key-row3"
-    ),
-
-    document.getElementById(
-      "key-row4"
-    )
-
-  ];
-
-  rows.forEach(
-    row=>row.innerHTML=""
-  );
-
-  function key(
-    row,
-    text,
-    fn,
-    extra=""
-  ){
-
-    const b=
-      document.createElement(
-        "button"
+      pearKeyboard.classList.toggle(
+        "number-mode",
+        keyboardNumbers
       );
 
-    b.type="button";
+    }
 
-    b.className=
-      "pear-key "+extra;
-
-    b.textContent=text;
-
-    b.addEventListener(
-      "pointerdown",
-      e=>{
-        e.preventDefault();
-        e.stopPropagation();
-      }
-    );
-
-    b.addEventListener(
-      "pointerup",
-      e=>{
-        e.preventDefault();
-        e.stopPropagation();
-        fn();
-      }
-    );
-
-    row.appendChild(b);
-
+    return;
   }
+
+
+  /*
+    BACKSPACE
+  */
+
+  if(key==="backspace"){
+
+    const start=target.selectionStart;
+    const end=target.selectionEnd;
+
+    if(
+      typeof start==="number" &&
+      typeof end==="number"
+    ){
+
+      if(start!==end){
+
+        target.value=
+          target.value.slice(0,start)+
+          target.value.slice(end);
+
+        target.selectionStart=start;
+        target.selectionEnd=start;
+
+      }else if(start>0){
+
+        target.value=
+          target.value.slice(0,start-1)+
+          target.value.slice(end);
+
+        target.selectionStart=start-1;
+        target.selectionEnd=start-1;
+
+      }
+
+    }else{
+
+      target.value=
+        target.value.slice(0,-1);
+
+    }
+
+    target.dispatchEvent(
+      new Event("input",{bubbles:true})
+    );
+
+    return;
+  }
+
+
+  /*
+    SPACE
+  */
+
+  if(key==="space"){
+
+    insertKeyboardText(" ");
+
+    return;
+  }
+
+
+  /*
+    ENTER
+  */
+
+  if(key==="enter"){
+
+    if(target.tagName==="TEXTAREA"){
+
+      insertKeyboardText("\n");
+
+    }else{
+
+      /*
+        On a normal input, blur instead of inserting a newline.
+      */
+
+      target.blur();
+      hidePearKeyboard();
+
+    }
+
+    return;
+  }
+
+
+  /*
+    LETTERS / NUMBERS / SYMBOLS
+  */
+
+  let value=key;
 
   if(keyboardNumbers){
 
-    "1234567890"
-      .split("")
-      .forEach(
-        x=>key(
-          rows[0],
-          x,
-          ()=>typeKey(x)
-        )
-      );
+    const numberMap={
+      q:"1",
+      w:"2",
+      e:"3",
+      r:"4",
+      t:"5",
+      y:"6",
+      u:"7",
+      i:"8",
+      o:"9",
+      p:"0",
+      a:"@",
+      s:"#",
+      d:"$",
+      f:"%",
+      g:"&",
+      h:"*",
+      j:"(",
+      k:")",
+      l:"!",
+      z:"?",
+      x:"/",
+      c:".",
+      v:",",
+      b:"-",
+      n:"+",
+      m:"="
+    };
 
-    "-/:;()$&@"
-      .split("")
-      .forEach(
-        x=>key(
-          rows[1],
-          x,
-          ()=>typeKey(x)
-        )
-      );
+    value=numberMap[key] || key;
 
-    ".,?!'+=%*#"
-      .split("")
-      .forEach(
-        x=>key(
-          rows[2],
-          x,
-          ()=>typeKey(x)
-        )
-      );
+  }else if(keyboardShift){
 
-  }else{
-
-    const row1=
-      keyboardShift
-        ? "QWERTYUIOP"
-        : "qwertyuiop";
-
-    const row2=
-      keyboardShift
-        ? "ASDFGHJKL"
-        : "asdfghjkl";
-
-    const row3=
-      keyboardShift
-        ? "ZXCVBNM"
-        : "zxcvbnm";
-
-    row1.split("").forEach(
-      x=>key(
-        rows[0],
-        x.toUpperCase(),
-        ()=>typeKey(x)
-      )
-    );
-
-    row2.split("").forEach(
-      x=>key(
-        rows[1],
-        x.toUpperCase(),
-        ()=>typeKey(x)
-      )
-    );
-
-    key(
-      rows[2],
-      "⇧",
-      ()=>{
-        keyboardShift=
-          !keyboardShift;
-
-        renderKeyboard();
-      },
-      "wide"
-    );
-
-    row3.split("").forEach(
-      x=>key(
-        rows[2],
-        x.toUpperCase(),
-        ()=>typeKey(x)
-      )
-    );
-
-    key(
-      rows[2],
-      "⌫",
-      backspace,
-      "wide"
-    );
+    value=value.toUpperCase();
 
   }
 
-  key(
-    rows[3],
-    keyboardNumbers
-      ? "ABC"
-      : "123",
-    ()=>{
-      keyboardNumbers=
-        !keyboardNumbers;
+  insertKeyboardText(value);
 
-      keyboardShift=false;
-
-      renderKeyboard();
-    },
-    "wide"
-  );
-
-  key(
-    rows[3],
-    "SPACE",
-    ()=>typeKey(" "),
-    "space"
-  );
-
-  key(
-    rows[3],
-    "↵",
-    ()=>{
-      if(keyboardTarget)
-        keyboardTarget.blur();
-
-      hideKeyboard();
-    },
-    "enter"
-  );
-
-}
-
-function typeKey(char){
-
-  if(!keyboardTarget)return;
-
-  const field=
-    keyboardTarget;
-
-  const start=
-    field.selectionStart ??
-    field.value.length;
-
-  const end=
-    field.selectionEnd ??
-    start;
-
-  const value=
-    keyboardNumbers
-      ? char
-      : keyboardShift
-        ? char.toUpperCase()
-        : char.toLowerCase();
-
-  field.value=
-    field.value.substring(
-      0,
-      start
-    )+
-    value+
-    field.value.substring(
-      end
-    );
-
-  field.setSelectionRange(
-    start+value.length,
-    start+value.length
-  );
-
-  field.dispatchEvent(
-    new Event(
-      "input",
-      {bubbles:true}
-    )
-  );
-
-  if(
-    keyboardShift &&
-    !keyboardNumbers
-  ){
+  if(keyboardShift){
 
     keyboardShift=false;
 
-    renderKeyboard();
+    if(pearKeyboard){
+
+      pearKeyboard.classList.remove(
+        "shift-active"
+      );
+
+    }
 
   }
-
 }
 
-function backspace(){
+
+function insertKeyboardText(value){
 
   if(!keyboardTarget)return;
 
-  const field=
-    keyboardTarget;
+  const target=keyboardTarget;
 
   const start=
-    field.selectionStart ??
-    field.value.length;
+    typeof target.selectionStart==="number"
+      ? target.selectionStart
+      : target.value.length;
 
   const end=
-    field.selectionEnd ??
-    start;
+    typeof target.selectionEnd==="number"
+      ? target.selectionEnd
+      : target.value.length;
+
+  target.value=
+    target.value.slice(0,start)+
+    value+
+    target.value.slice(end);
+
+  const newPosition=start+value.length;
+
+  try{
+
+    target.selectionStart=newPosition;
+    target.selectionEnd=newPosition;
+
+  }catch(error){}
+
+  target.dispatchEvent(
+    new Event("input",{bubbles:true})
+  );
+
+  target.dispatchEvent(
+    new Event("change",{bubbles:true})
+  );
+}
+
+
+function showPearKeyboard(target){
+
+  if(!target)return;
+
+  /*
+    Only show the keyboard for actual text controls.
+  */
 
   if(
-    start===end &&
-    start>0
+    target.tagName!=="INPUT" &&
+    target.tagName!=="TEXTAREA"
   ){
 
-    field.value=
-      field.value.substring(
-        0,
-        start-1
-      )+
-      field.value.substring(
-        end
-      );
-
-    field.setSelectionRange(
-      start-1,
-      start-1
-    );
-
-  }else{
-
-    field.value=
-      field.value.substring(
-        0,
-        start
-      )+
-      field.value.substring(
-        end
-      );
-
-    field.setSelectionRange(
-      start,
-      start
-    );
-
+    return;
   }
 
-  field.dispatchEvent(
-    new Event(
-      "input",
-      {bubbles:true}
-    )
-  );
+  keyboardTarget=target;
+
+  createPearKeyboard();
+
+  pearKeyboard.classList.add("visible");
+
+  positionKeyboard();
 
 }
 
-/* =========================================================
-   STOP APP TOUCH FROM BECOMING PHONE SWIPE
-========================================================= */
 
-overlay.addEventListener(
-  "touchstart",
-  e=>e.stopPropagation(),
-  {passive:true}
-);
+function hidePearKeyboard(){
 
-overlay.addEventListener(
-  "touchmove",
-  e=>e.stopPropagation(),
-  {passive:true}
-);
+  keyboardTarget=null;
 
-overlay.addEventListener(
-  "touchend",
-  e=>e.stopPropagation(),
-  {passive:true}
-);
+  if(pearKeyboard){
 
-</script>
+    pearKeyboard.classList.remove("visible");
+
+  }
+
+}
+
+
+function positionKeyboard(){
+
+  if(!pearKeyboard)return;
+
+  if(!pearKeyboard.classList.contains("visible"))return;
+
+  /*
+    Keep the keyboard entirely inside the app window.
+  */
+
+  pearKeyboard.style.left="3%";
+  pearKeyboard.style.right="3%";
+  pearKeyboard.style.bottom="3%";
+  pearKeyboard.style.width="94%";
+
+}
+
+
+/*
+  Automatically activate the custom keyboard for inputs
+  created inside apps.
+*/
+
+document.addEventListener("focusin",event=>{
+
+  const target=event.target;
+
+  if(
+    target &&
+    (
+      target.tagName==="INPUT" ||
+      target.tagName==="TEXTAREA"
+    )
+  ){
+
+    /*
+      Let the browser focus the input first,
+      then show our custom keyboard.
+    */
+
+    setTimeout(()=>{
+
+      if(overlay.classList.contains("open")){
+
+        showPearKeyboard(target);
+
+      }
+
+    },20);
+
+  }
+
+});
+
+
+document.addEventListener("focusout",event=>{
+
+  /*
+    Do not instantly hide it because the user may be
+    moving from the input to a keyboard button.
+  */
+
+  setTimeout(()=>{
+
+    if(
+      !pearKeyboard ||
+      !pearKeyboard.contains(document.activeElement)
+    ){
+
+      /*
+        Keep it available while another input is focused.
+      */
+
+      if(
+        document.activeElement &&
+        (
+          document.activeElement.tagName==="INPUT" ||
+          document.activeElement.tagName==="TEXTAREA"
+        )
+      ){
+
+        return;
+
+      }
+
+    }
+
+  },100);
+
+});
+
+
+/*
+  Prevent the physical/browser keyboard from being required
+  for the touchscreen experience.
+
+  We do NOT disable normal typing on a Mac.
+*/
+
+document.addEventListener("pointerdown",event=>{
+
+  const input=event.target.closest(
+    "input, textarea"
+  );
+
+  if(input){
+
+    keyboardTarget=input;
+
+  }
+
+},{
+  capture:true,
+  passive:true
+});
+
+
+/*
+  When the app closes, hide the custom keyboard.
+*/
+
+const originalCloseApp=closeApp;
+
+closeApp=function(){
+
+  hidePearKeyboard();
+
+  originalCloseApp();
+
+};
+
+
+/*
+  When an app opens, make sure the keyboard starts hidden.
+*/
+
+const originalOpenApp=openApp;
+
+openApp=function(title,content){
+
+  hidePearKeyboard();
+
+  originalOpenApp(title,content);
+
+};
+    </script>
 
 </body>
 </html>

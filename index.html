@@ -597,39 +597,82 @@ textarea{
    IMPORTANT: HIDDEN BY DEFAULT
 ===================================================== */
 
-#pear-keyboard{
+#pear-keyboard#pear-keyboard{
   position:absolute;
-
-  left:3%;
-  right:3%;
-  bottom:3%;
-
-  width:94%;
-
-  padding:6px;
+  left:12%;
+  right:auto;
+  bottom:6%;
+  width:76%;
+  max-width:330px;
+  padding:5px;
 
   background:rgba(35,35,40,.98);
-
-  border-radius:11px;
+  border-radius:10px;
 
   z-index:9999;
-
   display:none;
 
   opacity:0;
-
-  transform:translateY(120%);
+  transform:translateY(25px) scale(.96);
 
   transition:
-    transform .28s cubic-bezier(.22,.8,.25,1),
-    opacity .2s ease;
+    transform .22s cubic-bezier(.22,.8,.25,1),
+    opacity .18s ease;
 
-  box-shadow:
-    0 5px 18px rgba(0,0,0,.55);
-
+  box-shadow:0 4px 15px rgba(0,0,0,.5);
   touch-action:manipulation;
 }
 
+#pear-keyboard.keyboard-show{
+  opacity:1;
+  transform:translateY(0) scale(1);
+}
+
+.pear-keyboard-row{
+  display:flex;
+  gap:3px;
+  margin-bottom:3px;
+}
+
+.pear-keyboard-row:last-child{
+  margin-bottom:0;
+}
+
+.pear-keyboard-row button{
+  flex:1;
+  min-width:0;
+  height:25px;
+
+  border:0;
+  border-radius:5px;
+
+  background:#f5f5f7;
+  color:#111;
+
+  font-size:10px;
+  font-weight:800;
+  padding:0;
+
+  touch-action:manipulation;
+  user-select:none;
+}
+
+.pear-keyboard-row button:active{
+  transform:scale(.88);
+  background:#cfd0d4;
+}
+
+.pear-keyboard-row.bottom button:first-child{
+  flex:1.15;
+}
+
+.pear-keyboard-row.bottom button:nth-child(2){
+  flex:4;
+}
+
+.pear-keyboard-row.bottom button:last-child{
+  flex:1.15;
+}
 #pear-keyboard.keyboard-show{
   opacity:1;
 

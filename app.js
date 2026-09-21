@@ -5152,3 +5152,238 @@ function escapeHTML(
     );
 
 }
+// ============================================================
+// PAGE 1 CONNECTIONS
+// ============================================================
+
+function connectPage1Apps() {
+
+  const connections = {
+    messages: messagesApp,
+    camera: cameraApp,
+    splashface: splashfaceApp,
+    stocks: stocksApp,
+    maps: mapsApp,
+    photos: photosApp,
+    weather: weatherApp,
+    notes: notesApp,
+    peartunes: pearTunesApp,
+    settings: settingsApp,
+    clock: clockApp,
+    videos: videosApp,
+    phone: phoneApp,
+    mail: mailApp,
+    compass: compassApp,
+    music: pearTunesApp
+  };
+
+  Object.keys(connections).forEach(id => {
+
+    const button =
+      document.getElementById(id);
+
+    if (!button) return;
+
+    button.addEventListener(
+      "click",
+      e => {
+
+        e.preventDefault();
+        e.stopPropagation();
+
+        connections[id]();
+
+      }
+    );
+
+  });
+
+}
+
+
+// ============================================================
+// PAGE 2 CONNECTIONS
+// ============================================================
+
+function connectPage2Apps() {
+
+  const connections = {
+
+    "p2-lingo": lingoApp,
+
+    "p2-splash": splashfaceApp,
+
+    "p2-thumb": tumsApp,
+
+    "p2-danwarp": danwarpApp,
+
+    "p2-image": imageApp,
+
+    "p2-chrono": chronoApp,
+
+    "p2-zaplook": zaplookApp,
+
+    "p2-weather": weatherApp,
+
+    "p2-music": pearTunesApp,
+
+    "p2-monkey": monkeyApp,
+
+    "p2-remark": remarkApp,
+
+    "p2-settings": settingsApp,
+
+    "p2-phone": phoneApp,
+
+    "p2-mail": mailApp,
+
+    "p2-compass": compassApp,
+
+    "p2-music2": pearTunesApp
+
+  };
+
+
+  Object.keys(
+    connections
+  ).forEach(id => {
+
+    const button =
+      document.getElementById(id);
+
+    if (!button) return;
+
+
+    button.addEventListener(
+      "click",
+      e => {
+
+        e.preventDefault();
+        e.stopPropagation();
+
+        connections[id]();
+
+      }
+    );
+
+  });
+
+}
+
+
+// ============================================================
+// HOME BUTTON
+// ============================================================
+
+const homeButton =
+  document.getElementById(
+    "home"
+  );
+
+
+if (homeButton) {
+
+  homeButton.addEventListener(
+    "click",
+    e => {
+
+      e.preventDefault();
+      e.stopPropagation();
+
+      closeApp();
+
+    }
+  );
+
+}
+
+
+// ============================================================
+// UTILITY
+// ============================================================
+
+function escapeHTML(
+  value
+) {
+
+  return String(
+    value
+  )
+
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+
+    .replace(
+      /</g,
+      "&lt;"
+    )
+
+    .replace(
+      />/g,
+      "&gt;"
+    )
+
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
+}
+
+
+// ============================================================
+// STARTUP
+// ============================================================
+
+connectPage1Apps();
+
+connectPage2Apps();
+
+
+if (
+  localStorage.getItem(
+    "pear-dark"
+  ) === "true"
+) {
+
+  document.body.classList.add(
+    "dark-mode"
+  );
+
+}
+
+
+if (
+  localStorage.getItem(
+    "pear-animations"
+  ) === "true"
+) {
+
+  document.body.classList.add(
+    "no-animations"
+  );
+
+}
+
+
+currentPage = 1;
+
+
+phone.classList.remove(
+  "page-two"
+);
+
+
+if (pageDots) {
+
+  pageDots.textContent =
+    "● ○";
+
+}

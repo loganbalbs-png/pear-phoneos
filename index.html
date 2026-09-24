@@ -1,3268 +1,958 @@
+
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
-
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Pear Phone OS</title>
 
 <style>
 
-*{
-  box-sizing:border-box;
-  -webkit-tap-highlight-color:transparent;
+* {
+    box-sizing: border-box;
 }
 
-html,body{
-  margin:0;
-  width:100%;
-  height:100%;
-  overflow:hidden;
-  background:#111;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+html,
+body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #111;
 }
 
-body{
-  display:flex;
-  align-items:center;
-  justify-content:center;
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
-
 /* =========================
-   PEAR PHONE
-========================= */
-
-#phone-container{
-  position:relative;
-  width:min(170vh,1500px);
-  aspect-ratio:1212 / 1188;
-  background:url("pear-phone.png") center/contain no-repeat;
-  transform:rotate(90deg);
-  transform-origin:center center;
-  touch-action:none;
-  user-select:none;
-}
-
-/* =========================
-   PAGE 2 IMAGE
-========================= */
-
-#page2{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  background:url("page2.png") center/contain no-repeat;
-  z-index:50;
-  pointer-events:none;
-  opacity:0;
-  transform:translateY(100%) scale(.96);
-  transition:
-    transform .45s cubic-bezier(.22,.8,.25,1),
-    opacity .3s ease;
-}
-
-#phone-container.page-two #page2{
-  opacity:1;
-  transform:translateY(0) scale(1);
-}
-
-/* =========================
-   HOTSPOTS
-========================= */
-
-.hotspot{
-  position:absolute;
-  border:0 !important;
-  outline:none !important;
-  background:transparent !important;
-  padding:0;
-  margin:0;
-  border-radius:50%;
-  cursor:pointer;
-  touch-action:manipulation;
-  -webkit-appearance:none;
-  appearance:none;
-  box-shadow:none !important;
-  z-index:300;
-}
-
-.hotspot:hover,
-.hotspot:focus,
-.hotspot:focus-visible{
-  background:transparent !important;
-  border:0 !important;
-  outline:none !important;
-  box-shadow:none !important;
-}
-
-.hotspot:active{
-  transform:scale(.93);
-}
-
-/* =========================
-   PAGE 1
-========================= */
-
-#messages{
-  left:43.1%;
-  top:25.7%;
-  width:9.6%;
-  aspect-ratio:1;
-}
-
-#camera{
-  left:54%;
-  top:25.7%;
-  width:9.6%;
-  aspect-ratio:1;
-}
-
-#splashface{
-  left:38%;
-  top:36.1%;
-  width:9.6%;
-  aspect-ratio:1;
-}
-
-#stocks{
-  left:47.5%;
-  top:36.1%;
-  width:9.6%;
-  aspect-ratio:1;
-}
-
-#maps{
-  left:57%;
-  top:36.1%;
-  width:9.6%;
-  aspect-ratio:1;
-}
-
-#photos{
-  left:38%;
-  top:46.9%;
-  width:9.6%;
-  aspect-ratio:1;
-}
-
-#weather{
-  left:47.5%;
-  top:46.9%;
-  width:9.6%;
-  aspect-ratio:1;
-}
-
-#notes{
-  left:57%;
-  top:46.9%;
-  width:9.6%;
-  aspect-ratio:1;
-}
-
-#peartunes{
-  left:32%;
-  top:55.9%;
-  width:9.6%;
-  aspect-ratio:1;
-}
-
-#settings{
-  left:42%;
-  top:55.9%;
-  width:9.6%;
-  aspect-ratio:1;
-}
-
-#clock{
-  left:52%;
-  top:55.9%;
-  width:9.6%;
-  aspect-ratio:1;
-}
-
-#videos{
-  left:62%;
-  top:55.9%;
-  width:9.6%;
-  aspect-ratio:1;
-}
-
-#phone{
-  left:32%;
-  top:65.9%;
-  width:9.6%;
-  aspect-ratio:1;
-}
-
-#mail{
-  left:42%;
-  top:65.9%;
-  width:9.6%;
-  aspect-ratio:1;
-}
-
-#compass{
-  left:52%;
-  top:65.9%;
-  width:9.6%;
-  aspect-ratio:1;
-}
-
-#music{
-  left:62%;
-  top:65.9%;
-  width:9.6%;
-  aspect-ratio:1;
-}
-
-/* =========================
-   HOME
-========================= */
-
-#home{
-  position:absolute;
-  left:46%;
-  top:78.8%;
-  width:8.2%;
-  aspect-ratio:1;
-  border:0 !important;
-  background:transparent !important;
-  border-radius:50%;
-  cursor:pointer;
-  z-index:400;
-  outline:none !important;
-  box-shadow:none !important;
-}
-
-/* =========================
-   PAGE 2
-========================= */
-
-#phone-container:not(.page-two) .page2-hotspot{
-  display:none !important;
-  pointer-events:none !important;
-}
-
-#phone-container.page-two .page1-hotspot{
-  display:block;
-  pointer-events:none !important;
-}
-
-#phone-container.page-two .page2-hotspot{
-  display:block !important;
-  pointer-events:auto !important;
-}
-
-/* PAGE 2 POSITIONS */
-
-#p2-lingo{
-  left:37%;
-  top:24%;
-  width:9%;
-  aspect-ratio:1;
-}
-
-#p2-splash{
-  left:51%;
-  top:24%;
-  width:9%;
-  aspect-ratio:1;
-}
-
-#p2-thumb{
-  left:65%;
-  top:24%;
-  width:9%;
-  aspect-ratio:1;
-}
-
-#p2-danwarp{
-  left:37%;
-  top:37%;
-  width:9%;
-  aspect-ratio:1;
-}
-
-#p2-image{
-  left:51%;
-  top:37%;
-  width:9%;
-  aspect-ratio:1;
-}
-
-#p2-chrono{
-  left:65%;
-  top:37%;
-  width:9%;
-  aspect-ratio:1;
-}
-
-#p2-zaplook{
-  left:37%;
-  top:50%;
-  width:9%;
-  aspect-ratio:1;
-}
-
-#p2-weather{
-  left:51%;
-  top:50%;
-  width:9%;
-  aspect-ratio:1;
-}
-
-#p2-music{
-  left:65%;
-  top:50%;
-  width:9%;
-  aspect-ratio:1;
-}
-
-#p2-monkey{
-  left:37%;
-  top:63%;
-  width:9%;
-  aspect-ratio:1;
-}
-
-#p2-remark{
-  left:51%;
-  top:63%;
-  width:9%;
-  aspect-ratio:1;
-}
-
-#p2-settings{
-  left:65%;
-  top:63%;
-  width:9%;
-  aspect-ratio:1;
-}
-
-#p2-phone{
-  left:37%;
-  top:75%;
-  width:9%;
-  aspect-ratio:1;
-}
-
-#p2-mail{
-  left:51%;
-  top:75%;
-  width:9%;
-  aspect-ratio:1;
-}
-
-#p2-compass{
-  left:65%;
-  top:75%;
-  width:9%;
-  aspect-ratio:1;
-}
-
-#p2-music2{
-  left:51%;
-  top:86%;
-  width:9%;
-  aspect-ratio:1;
-}
-
-/* =========================
-   APP WINDOW
-========================= */
-
-#overlay{
-  position:absolute;
-  left:31%;
-  top:22%;
-  width:38%;
-  height:47%;
-  z-index:500;
-  display:none;
-  overflow:hidden;
-  background:#f4f5f7;
-  border-radius:10px;
-  box-shadow:0 5px 25px rgba(0,0,0,.55);
-}
-
-#overlay.open{
-  display:block;
-}
-
-#app-window{
-  width:100%;
-  height:100%;
-  display:flex;
-  flex-direction:column;
-  overflow:hidden;
-  background:#f4f5f7;
-  color:#111;
-}
-
-.app-header{
-  flex:0 0 auto;
-  display:flex;
-  align-items:center;
-  gap:8px;
-  padding:8px 10px;
-  background:linear-gradient(#fff,#e7e8ea);
-  border-bottom:1px solid #ccc;
-  font-weight:900;
-  font-size:15px;
-}
-
-.back-button{
-  width:30px;
-  height:30px;
-  flex:0 0 30px;
-  border-radius:50%;
-  border:1px solid #bbb;
-  background:linear-gradient(#fff,#ddd);
-  font-size:23px;
-  line-height:25px;
-  cursor:pointer;
-  padding:0;
-}
-
-.app-content{
-  flex:1;
-  min-height:0;
-  overflow-y:auto;
-  padding:12px;
-  padding-bottom:15px;
-  -webkit-overflow-scrolling:touch;
-}
-
-.app-content h2{
-  margin:0 0 10px;
-}
-
-.app-content h3{
-  margin:14px 0 7px;
-}
-
-.app-content p{
-  line-height:1.4;
-}
-
-.card{
-  background:#fff;
-  border:1px solid #ddd;
-  border-radius:13px;
-  padding:11px;
-  margin-bottom:9px;
-}
-
-.app-button{
-  padding:9px 13px;
-  border-radius:11px;
-  border:1px solid #bbb;
-  background:linear-gradient(#fff,#ddd);
-  color:#111;
-  font-weight:700;
-  cursor:pointer;
-  margin:3px;
-  font-family:inherit;
-}
-
-.app-button:active{
-  transform:scale(.96);
-}
-
-.row{
-  display:flex;
-  gap:7px;
-  flex-wrap:wrap;
-}
-
-input,
-textarea,
-select{
-  width:100%;
-  font-family:inherit;
-  font-size:16px;
-  padding:9px;
-  border:1px solid #bbb;
-  border-radius:10px;
-  outline:none;
-  background:#fff;
-  color:#111;
-}
-
-textarea{
-  min-height:130px;
-}
-
-.bubble{
-  padding:9px 12px;
-  width:max-content;
-  max-width:82%;
-  background:#dedfe3;
-  border-radius:17px;
-  margin-bottom:7px;
-}
-
-.bubble.me{
-  margin-left:auto;
-  background:linear-gradient(#58b9ff,#1389df);
-  color:#fff;
-}
-
-.stock{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:10px;
-  margin-bottom:7px;
-  background:#fff;
-  border:1px solid #ddd;
-  border-radius:12px;
-}
-
-.photos{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:6px;
-}
-
-.photos img{
-  width:100%;
-  aspect-ratio:1;
-  object-fit:cover;
-  border-radius:10px;
-}
-
-.camera-video{
-  width:100%;
-  border-radius:14px;
-  background:#000;
-}
-
-.map{
-  height:180px;
-  border-radius:15px;
-  background:linear-gradient(135deg,#d6e5c7,#e7dfb9);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:55px;
-}
-
-.big-display{
-  text-align:center;
-  font-size:38px;
-  font-weight:900;
-  padding:20px 5px;
-}
-
-.result{
-  padding:10px;
-  border-radius:10px;
-  background:#eef0f2;
-  margin-top:8px;
-}
-
-.game{
-  text-align:center;
-  padding:8px;
-}
-
-.game-button{
-  width:110px;
-  height:110px;
-  border-radius:50%;
-  border:0;
-  background:linear-gradient(145deg,#ffdb6b,#ff9f43);
-  font-size:35px;
-  cursor:pointer;
-}
-
-/* =========================
-   DARK MODE
-========================= */
-
-body.dark-mode #app-window{
-  background:#18191c;
-  color:#f4f4f4;
-}
-
-body.dark-mode .app-header{
-  background:linear-gradient(#292b30,#1d1f23);
-  color:#fff;
-  border-bottom-color:#444;
-}
-
-body.dark-mode .back-button{
-  background:linear-gradient(#444,#252525);
-  color:#fff;
-  border-color:#555;
-}
-
-body.dark-mode .card,
-body.dark-mode .stock{
-  background:#24262a;
-  border-color:#3d3f44;
-  color:#f4f4f4;
-}
-
-body.dark-mode .app-button{
-  background:linear-gradient(#444,#292929);
-  color:#fff;
-  border-color:#555;
-}
-
-body.dark-mode input,
-body.dark-mode textarea,
-body.dark-mode select{
-  background:#24262a;
-  color:#fff;
-  border-color:#555;
-}
-
-body.dark-mode .result{
-  background:#292c31;
-}
-
-body.dark-mode .bubble{
-  background:#363940;
-  color:#fff;
-}
-
-/* IMPORTANT: INVISIBLE HOTSPOTS STAY INVISIBLE */
-
-body.dark-mode .hotspot,
-body.dark-mode .hotspot:hover,
-body.dark-mode .hotspot:focus,
-body.dark-mode .hotspot:focus-visible,
-body.dark-mode #home{
-  background:transparent !important;
-  border:0 !important;
-  outline:none !important;
-  box-shadow:none !important;
-}
-
-/* =========================
-   KEYBOARD
+   PEAR PHONE KEYBOARD
 ========================= */
 
 #pear-keyboard{
   position:absolute;
-  left:3%;
-  right:3%;
+  left:5%;
   bottom:3%;
-  width:94%;
-  padding:6px;
-  background:rgba(35,35,40,.98);
-  border-radius:11px;
-  z-index:9999;
+  width:90%;
+  padding:8px;
+  background:rgba(30,30,30,.96);
+  border-radius:12px;
+  z-index:1000;
   display:none;
-  opacity:0;
-  transform:translateY(120%);
-  transition:
-    transform .28s cubic-bezier(.22,.8,.25,1),
-    opacity .2s ease;
-  box-shadow:0 5px 18px rgba(0,0,0,.55);
-  touch-action:manipulation;
+  pointer-events:auto;
 }
 
-#pear-keyboard.keyboard-show{
-  opacity:1;
-  transform:translateY(0);
+#pear-keyboard.show{
+  display:block;
 }
 
 .pear-keyboard-row{
   display:flex;
-  gap:3px;
-  margin-bottom:3px;
-}
-
-.pear-keyboard-row:last-child{
-  margin-bottom:0;
+  gap:4px;
+  margin-bottom:4px;
 }
 
 .pear-keyboard-row button{
   flex:1;
-  min-width:0;
-  height:29px;
+  height:32px;
   border:0;
   border-radius:5px;
-  background:#f5f5f7;
+  background:#eee;
   color:#111;
-  font-size:11px;
-  font-weight:800;
-  padding:0;
-  touch-action:manipulation;
-  user-select:none;
+  font-size:12px;
+  cursor:pointer;
 }
 
 .pear-keyboard-row button:active{
-  transform:scale(.88);
-  background:#cfd0d4;
+  transform:scale(.94);
 }
 
-.pear-keyboard-row.bottom button:first-child{
-  flex:1.2;
+.pear-keyboard-space{
+  flex:4 !important;
+}
+/* =========================================================
+   PHONE
+   ========================================================= */
+
+#phone-container {
+
+    position: relative;
+
+    width: min(170vh, 1500px);
+
+    height: auto;
+
+    aspect-ratio: 1212 / 1188;
+
+    background-image: url("pear-phone.png");
+
+    background-repeat: no-repeat;
+
+    background-position: center;
+
+    background-size: contain;
+
+    /* KEEP PHONE FACING THE SAME WAY */
+    transform: rotate(90deg);
+
+    touch-action: pan-y;
 }
 
-.pear-keyboard-row.bottom button:nth-child(2){
-  flex:5;
+/* =========================================================
+   PAGE 2 IMAGE
+   ========================================================= */
+
+#page2 {
+
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    background-image: url("page2.png");
+
+    background-repeat: no-repeat;
+
+    background-position: center;
+
+    background-size: contain;
+
+    display: none;
+
+    z-index: 50;
+
+    pointer-events: none;
 }
 
-.pear-keyboard-row.bottom button:last-child{
-  flex:1.2;
+#phone-container.page-two #page2 {
+    display: block;
 }
 
-@media(max-width:700px){
+/* =========================================================
+   HOTSPOTS
+   ========================================================= */
 
-  #phone-container{
-    width:100vw;
-  }
+.hotspot {
 
-  #pear-keyboard{
-    left:3%;
-    width:94%;
-  }
+    position: absolute;
 
-  .pear-keyboard-row button{
-    height:27px;
-    font-size:10px;
-  }
+    display: block;
 
+    border: none;
+
+    outline: none;
+
+    background: transparent;
+
+    padding: 0;
+
+    margin: 0;
+
+    cursor: pointer;
+
+    z-index: 200;
+
+    -webkit-tap-highlight-color: transparent;
+
+    touch-action: manipulation;
+}
+
+.hotspot::after {
+
+    content: "";
+
+    position: absolute;
+
+    left: -15%;
+
+    top: -15%;
+
+    width: 130%;
+
+    height: 130%;
+
+    background: transparent;
+}
+
+.hotspot:active {
+
+    transform: scale(.90);
+
+}
+
+/* =========================================================
+   PAGE 1 HOTSPOTS
+   ========================================================= */
+
+#messages {
+    left: 43.1%;
+    top: 25.7%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+#camera {
+    left: 54%;
+    top: 25.7%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+#splashface {
+    left: 38%;
+    top: 36.1%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+#stocks {
+    left: 47.5%;
+    top: 36.1%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+#maps {
+    left: 57%;
+    top: 36.1%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+#photos {
+    left: 38%;
+    top: 46.9%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+#weather {
+    left: 47.5%;
+    top: 46.9%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+#notes {
+    left: 57%;
+    top: 46.9%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+#peartunes {
+    left: 32%;
+    top: 55.9%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+#settings {
+    left: 42%;
+    top: 55.9%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+#clock {
+    left: 52%;
+    top: 55.9%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+#videos {
+    left: 62%;
+    top: 55.9%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+#phone {
+    left: 32%;
+    top: 65.9%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+#mail {
+    left: 42%;
+    top: 65.9%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+#compass {
+    left: 52%;
+    top: 65.9%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+#music {
+    left: 62%;
+    top: 65.9%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+#home {
+    left: 46%;
+    top: 78.8%;
+    width: 9%;
+    aspect-ratio: 1;
+}
+
+/* =========================================================
+   PAGE 2 HOTSPOTS
+   ========================================================= */
+
+.page2-hotspot {
+
+    display: none;
+
+    z-index: 250;
+}
+
+#phone-container.page-two .page2-hotspot {
+
+    display: block;
+}
+
+/* Lingo */
+
+#p2-lingo {
+    left: 41%;
+    top: 24%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+/* SplashFace */
+
+#p2-splash {
+    left: 55%;
+    top: 24%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+/* Thumb */
+
+#p2-thumb {
+    left: 33%;
+    top: 35%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+/* DanWarp */
+
+#p2-danwarp {
+    left: 47%;
+    top: 36%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+/* Image */
+
+#p2-image {
+    left: 61%;
+    top: 35%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+/* Chrono */
+
+#p2-chrono {
+    left: 33%;
+    top: 47%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+/* ZapLook */
+
+#p2-zaplook {
+    left: 47%;
+    top: 48%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+/* Weather */
+
+#p2-weather {
+    left: 62%;
+    top: 47%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+/* Music */
+
+#p2-music {
+    left: 27%;
+    top: 59%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+/* Monkey */
+
+#p2-monkey {
+    left: 40%;
+    top: 62%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+/* Remark */
+
+#p2-remark {
+    left: 54%;
+    top: 62%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+/* Settings */
+
+#p2-settings {
+    left: 68%;
+    top: 59%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+/* Phone */
+
+#p2-phone {
+    left: 26%;
+    top: 72%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+/* Mail */
+
+#p2-mail {
+    left: 40%;
+    top: 73%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+/* Compass */
+
+#p2-compass {
+    left: 54%;
+    top: 73%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+/* Bottom Music */
+
+#p2-music2 {
+    left: 68%;
+    top: 72%;
+    width: 10%;
+    aspect-ratio: 1;
+}
+
+/* =========================================================
+   APP WINDOW
+   ========================================================= */
+
+#overlay {
+
+    position: absolute;
+
+    left: 31%;
+
+    top: 22%;
+
+    width: 38%;
+
+    height: 47%;
+
+    background: #f2f2f7;
+
+    z-index: 500;
+
+    display: none;
+
+    overflow: hidden;
+
+    border-radius: 9px;
+
+    box-shadow:
+        0 4px 18px rgba(0,0,0,.5);
+}
+
+#overlay.open {
+    display: block;
+}
+
+#app-window {
+
+    width: 100%;
+
+    height: 100%;
+
+    overflow: auto;
+
+    background: #f2f2f7;
+
+    color: #111;
+}
+
+/* =========================================================
+   APP STYLES
+   ========================================================= */
+
+.header {
+
+    height: 38px;
+
+    min-height: 38px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 5px 8px;
+
+    background: #eee;
+
+    border-bottom: 1px solid #ccc;
+
+    font-weight: bold;
+
+    position: sticky;
+
+    top: 0;
+
+    z-index: 5;
+}
+
+.back {
+
+    border: none;
+
+    background: #ddd;
+
+    border-radius: 6px;
+
+    width: 30px;
+
+    height: 28px;
+
+    font-size: 20px;
+
+    line-height: 20px;
+
+    cursor: pointer;
+}
+
+.content {
+
+    padding: 10px;
+
+    font-size: 13px;
+}
+
+.button {
+
+    border: none;
+
+    background: #ddd;
+
+    color: #111;
+
+    border-radius: 7px;
+
+    padding: 8px 11px;
+
+    margin: 3px;
+
+    font-size: 12px;
+
+    cursor: pointer;
+
+    touch-action: manipulation;
+}
+
+.button:active {
+    transform: scale(.94);
+}
+
+input,
+textarea,
+select {
+
+    width: 100%;
+
+    padding: 8px;
+
+    margin: 4px 0;
+
+    border: 1px solid #bbb;
+
+    border-radius: 6px;
+
+    font-family: inherit;
+
+    font-size: 13px;
+}
+
+textarea {
+
+    min-height: 65px;
+
+    resize: vertical;
+}
+
+.card {
+
+    background: #fff;
+
+    border-radius: 9px;
+
+    padding: 10px;
+
+    margin-bottom: 8px;
+
+    box-shadow:
+        0 1px 4px rgba(0,0,0,.12);
+
+    cursor: pointer;
+}
+
+.card:active {
+    transform: scale(.98);
+}
+
+.grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 7px;
+}
+
+.big-icon {
+
+    font-size: 55px;
+
+    text-align: center;
+
+    margin: 8px;
+}
+
+.message {
+
+    background: #e5e5ea;
+
+    padding: 7px 10px;
+
+    border-radius: 12px;
+
+    margin: 5px 0;
+
+    max-width: 85%;
+}
+
+.message.me {
+
+    margin-left: auto;
+
+    background: #cfe8ff;
+}
+
+.progress {
+
+    height: 10px;
+
+    background: #ddd;
+
+    border-radius: 10px;
+
+    overflow: hidden;
+}
+
+.progress div {
+
+    height: 100%;
+
+    background: #5cb85c;
+}
+
+/* =========================================================
+   PAGE INDICATOR
+   ========================================================= */
+
+#page-dots {
+
+    position: absolute;
+
+    bottom: 3%;
+
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    z-index: 600;
+
+    color: white;
+
+    font-size: 16px;
+
+    pointer-events: none;
+
+    letter-spacing: 5px;
+}
+
+#phone-container.page-two #page-dots {
+    color: white;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (orientation: portrait) {
+
+    #phone-container {
+
+        width: min(170vh, 1500px);
+
+        transform: rotate(90deg);
+    }
+}
+
+@media (orientation: landscape) {
+
+    #phone-container {
+
+        width: min(170vh, 1500px);
+
+        transform: rotate(90deg);
+    }
 }
 
 </style>
-
 </head>
 
 <body>
 
 <div id="phone-container">
 
-<div id="page2"></div>
+    <!-- PAGE 2 EXACT IMAGE -->
+    <div id="page2"></div>
 
-<!-- PAGE 1 -->
+    <!-- =====================================================
+         PAGE 1 APPS
+         ===================================================== -->
 
-<button class="hotspot page1-hotspot" id="messages"></button>
-<button class="hotspot page1-hotspot" id="camera"></button>
-<button class="hotspot page1-hotspot" id="splashface"></button>
-<button class="hotspot page1-hotspot" id="stocks"></button>
-<button class="hotspot page1-hotspot" id="maps"></button>
-<button class="hotspot page1-hotspot" id="photos"></button>
-<button class="hotspot page1-hotspot" id="weather"></button>
-<button class="hotspot page1-hotspot" id="notes"></button>
-<button class="hotspot page1-hotspot" id="peartunes"></button>
-<button class="hotspot page1-hotspot" id="settings"></button>
-<button class="hotspot page1-hotspot" id="clock"></button>
-<button class="hotspot page1-hotspot" id="videos"></button>
-<button class="hotspot page1-hotspot" id="phone"></button>
-<button class="hotspot page1-hotspot" id="mail"></button>
-<button class="hotspot page1-hotspot" id="compass"></button>
-<button class="hotspot page1-hotspot" id="music"></button>
+    <button class="hotspot" id="messages"></button>
+    <button class="hotspot" id="camera"></button>
+    <button class="hotspot" id="splashface"></button>
+    <button class="hotspot" id="stocks"></button>
+    <button class="hotspot" id="maps"></button>
+    <button class="hotspot" id="photos"></button>
+    <button class="hotspot" id="weather"></button>
+    <button class="hotspot" id="notes"></button>
+    <button class="hotspot" id="peartunes"></button>
+    <button class="hotspot" id="settings"></button>
+    <button class="hotspot" id="clock"></button>
+    <button class="hotspot" id="videos"></button>
+    <button class="hotspot" id="phone"></button>
+    <button class="hotspot" id="mail"></button>
+    <button class="hotspot" id="compass"></button>
+    <button class="hotspot" id="music"></button>
+    <button class="hotspot" id="home"></button>
 
-<!-- PAGE 2 -->
+    <!-- =====================================================
+         PAGE 2 APPS
+         ===================================================== -->
 
-<button class="hotspot page2-hotspot" id="p2-lingo"></button>
-<button class="hotspot page2-hotspot" id="p2-splash"></button>
-<button class="hotspot page2-hotspot" id="p2-thumb"></button>
-<button class="hotspot page2-hotspot" id="p2-danwarp"></button>
-<button class="hotspot page2-hotspot" id="p2-image"></button>
-<button class="hotspot page2-hotspot" id="p2-chrono"></button>
-<button class="hotspot page2-hotspot" id="p2-zaplook"></button>
-<button class="hotspot page2-hotspot" id="p2-weather"></button>
-<button class="hotspot page2-hotspot" id="p2-music"></button>
-<button class="hotspot page2-hotspot" id="p2-monkey"></button>
-<button class="hotspot page2-hotspot" id="p2-remark"></button>
-<button class="hotspot page2-hotspot" id="p2-settings"></button>
-<button class="hotspot page2-hotspot" id="p2-phone"></button>
-<button class="hotspot page2-hotspot" id="p2-mail"></button>
-<button class="hotspot page2-hotspot" id="p2-compass"></button>
-<button class="hotspot page2-hotspot" id="p2-music2"></button>
+    <button class="hotspot page2-hotspot" id="p2-lingo"></button>
 
-<button id="home"></button>
+    <button class="hotspot page2-hotspot" id="p2-splash"></button>
 
-<div id="overlay">
-  <div id="app-window"></div>
+    <button class="hotspot page2-hotspot" id="p2-thumb"></button>
+
+    <button class="hotspot page2-hotspot" id="p2-danwarp"></button>
+
+    <button class="hotspot page2-hotspot" id="p2-image"></button>
+
+    <button class="hotspot page2-hotspot" id="p2-chrono"></button>
+
+    <button class="hotspot page2-hotspot" id="p2-zaplook"></button>
+
+    <button class="hotspot page2-hotspot" id="p2-weather"></button>
+
+    <button class="hotspot page2-hotspot" id="p2-music"></button>
+
+    <button class="hotspot page2-hotspot" id="p2-monkey"></button>
+
+    <button class="hotspot page2-hotspot" id="p2-remark"></button>
+
+    <button class="hotspot page2-hotspot" id="p2-settings"></button>
+
+    <button class="hotspot page2-hotspot" id="p2-phone"></button>
+
+    <button class="hotspot page2-hotspot" id="p2-mail"></button>
+
+    <button class="hotspot page2-hotspot" id="p2-compass"></button>
+
+    <button class="hotspot page2-hotspot" id="p2-music2"></button>
+
+    <!-- =====================================================
+         APP WINDOW
+         ===================================================== -->
+
+    <div id="overlay">
+
+        <div id="app-window"></div>
+
+    </div>
+
+    <div id="page-dots">● ○</div>
+
 </div>
 
-</div>
+<script src="app.js"></script>
 
 <script>
 
-/* ============================================================
-   CORE
-============================================================ */
-
-const phone =
-  document.getElementById("phone-container");
-
-const overlay =
-  document.getElementById("overlay");
-
-const appWindow =
-  document.getElementById("app-window");
+/* =========================================================
+   PAGE SWIPING
+   ========================================================= */
 
 let currentPage = 1;
-let cameraStream = null;
-let keyboardTarget = null;
-let keyboardShift = false;
-let audioContext = null;
-
-/* ============================================================
-   HTML ESCAPE
-============================================================ */
-
-function escapeHTML(value){
-
-  return String(value)
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
-
-}
-
-/* ============================================================
-   PAGE SWITCHING
-
-   SWIPE UP = PAGE 2
-   SWIPE DOWN = PAGE 1
-
-   APP TAPS NEVER COUNT AS SWIPES
-============================================================ */
-
-function showPage(page){
-
-  if(page !== 1 && page !== 2) return;
-
-  if(page === currentPage) return;
-
-  currentPage = page;
-
-  closeApp();
-
-  phone.classList.toggle(
-    "page-two",
-    page === 2
-  );
-
-}
 
 let swipeStartX = 0;
 let swipeStartY = 0;
-let swipeTracking = false;
-let swipeTarget = null;
 
-phone.addEventListener(
-  "pointerdown",
-  function(e){
+const phone = document.getElementById("phone-container");
+const overlay = document.getElementById("overlay");
+const dots = document.getElementById("page-dots");
 
-    if(
-      e.pointerType === "mouse" &&
-      e.button !== 0
-    ) return;
+function showPage(page) {
 
-    swipeStartX = e.clientX;
-    swipeStartY = e.clientY;
-    swipeTarget = e.target;
-    swipeTracking = true;
+    currentPage = page;
 
-  },
-  {passive:true}
-);
+    if (page === 2) {
 
-phone.addEventListener(
-  "pointerup",
-  function(e){
+        phone.classList.add("page-two");
 
-    if(!swipeTracking) return;
+        dots.textContent = "○ ●";
 
-    swipeTracking = false;
+    } else {
 
-    const target = swipeTarget;
+        phone.classList.remove("page-two");
 
-    swipeTarget = null;
-
-    if(
-      target &&
-      target.closest &&
-      (
-        target.closest(".hotspot") ||
-        target.closest("#overlay") ||
-        target.closest("#home")
-      )
-    ){
-      return;
+        dots.textContent = "● ○";
     }
 
-    if(
-      overlay.classList.contains("open")
-    ){
-      return;
-    }
+    if (overlay.classList.contains("open")) {
 
-    const dx =
-      e.clientX - swipeStartX;
-
-    const dy =
-      e.clientY - swipeStartY;
-
-    if(
-      Math.abs(dy) < 70 ||
-      Math.abs(dy) <= Math.abs(dx)
-    ){
-      return;
-    }
-
-    if(dy < 0){
-
-      showPage(2);
-
-    }else{
-
-      showPage(1);
-
-    }
-
-  },
-  {passive:true}
-);
-
-phone.addEventListener(
-  "pointercancel",
-  function(){
-
-    swipeTracking = false;
-    swipeTarget = null;
-
-  },
-  {passive:true}
-);
-
-function goHome(){
-
-  closeApp();
-  showPage(1);
-
-}
-
-/* ============================================================
-   APP OPEN / CLOSE
-============================================================ */
-
-function openApp(title,content){
-
-  stopCamera();
-
-  appWindow.innerHTML = `
-
-    <div class="app-header">
-
-      <button
-        class="back-button"
-        id="app-back"
-        type="button"
-      >
-
-        ‹
-
-      </button>
-
-      <strong>
-
-        ${escapeHTML(title)}
-
-      </strong>
-
-    </div>
-
-    <div class="app-content">
-
-      ${content}
-
-    </div>
-
-  `;
-
-  overlay.classList.add("open");
-
-  document.getElementById(
-    "app-back"
-  ).onclick = closeApp;
-
-  setupKeyboardFields();
-
-}
-
-function closeApp(){
-
-  stopCamera();
-
-  overlay.classList.remove("open");
-
-  appWindow.innerHTML = "";
-
-  hidePearKeyboard();
-
-}
-
-/* ============================================================
-   CUSTOM KEYBOARD
-============================================================ */
-
-function setupKeyboardFields(){
-
-  document
-    .querySelectorAll(
-      "#app-window input, #app-window textarea"
-    )
-    .forEach(field => {
-
-      field.addEventListener(
-        "focus",
-        function(){
-
-          keyboardTarget = this;
-
-          showPearKeyboard(this);
-
+        if (typeof closeApp === "function") {
+            closeApp();
         }
-      );
-
-      field.addEventListener(
-        "click",
-        function(){
-
-          keyboardTarget = this;
-
-          showPearKeyboard(this);
-
-        }
-      );
-
-    });
-
+    }
 }
 
-function showPearKeyboard(field){
+/* Touch */
 
-  keyboardTarget = field;
+phone.addEventListener("touchstart", function(event) {
 
-  let keyboard =
-    document.getElementById(
-      "pear-keyboard"
-    );
+    if (overlay.classList.contains("open")) return;
 
-  if(!keyboard){
+    const touch = event.touches[0];
 
-    keyboard =
-      document.createElement("div");
+    swipeStartX = touch.clientX;
+    swipeStartY = touch.clientY;
 
-    keyboard.id =
-      "pear-keyboard";
+}, { passive: true });
 
-    keyboard.innerHTML = `
 
-      <div class="pear-keyboard-row">
+phone.addEventListener("touchend", function(event) {
 
-        ${"QWERTYUIOP".split("").map(
+    if (overlay.classList.contains("open")) return;
 
-          x =>
+    const touch = event.changedTouches[0];
 
-          `<button
-             type="button"
-             data-key="${x}"
-           >${x}</button>`
+    const differenceX =
+        touch.clientX - swipeStartX;
 
-        ).join("")}
+    const differenceY =
+        touch.clientY - swipeStartY;
 
-      </div>
+    if (Math.abs(differenceX) < 60) return;
 
-      <div class="pear-keyboard-row">
+    if (Math.abs(differenceX) <
+        Math.abs(differenceY)) return;
 
-        ${"ASDFGHJKL".split("").map(
+    if (differenceX < 0) {
 
-          x =>
+        showPage(2);
 
-          `<button
-             type="button"
-             data-key="${x}"
-           >${x}</button>`
+    } else {
 
-        ).join("")}
-
-      </div>
-
-      <div class="pear-keyboard-row">
-
-        <button
-          type="button"
-          id="pear-shift"
-        >
-
-          ⇧
-
-        </button>
-
-        ${"ZXCVBNM".split("").map(
-
-          x =>
-
-          `<button
-             type="button"
-             data-key="${x}"
-           >${x}</button>`
-
-        ).join("")}
-
-        <button
-          type="button"
-          id="pear-backspace"
-        >
-
-          ⌫
-
-        </button>
-
-      </div>
-
-      <div class="pear-keyboard-row bottom">
-
-        <button
-          type="button"
-          id="pear-number"
-        >
-
-          123
-
-        </button>
-
-        <button
-          type="button"
-          id="pear-space"
-        >
-
-          SPACE
-
-        </button>
-
-        <button
-          type="button"
-          id="pear-enter"
-        >
-
-          ↵
-
-        </button>
-
-      </div>
-
-    `;
-
-    overlay.appendChild(keyboard);
-
-    keyboard
-      .querySelectorAll("[data-key]")
-      .forEach(button => {
-
-        button.addEventListener(
-          "pointerdown",
-          function(e){
-
-            e.preventDefault();
-            e.stopPropagation();
-
-            if(!keyboardTarget) return;
-
-            insertText(
-              keyboardTarget,
-              keyboardShift
-                ? this.dataset.key
-                : this.dataset.key.toLowerCase()
-            );
-
-          }
-        );
-
-      });
-
-    document
-      .getElementById("pear-shift")
-      .addEventListener(
-        "pointerdown",
-        function(e){
-
-          e.preventDefault();
-          e.stopPropagation();
-
-          keyboardShift =
-            !keyboardShift;
-
-          this.style.background =
-            keyboardShift
-              ? "#9fd3ff"
-              : "#f5f5f7";
-
-        }
-      );
-
-    const backspaceButton =
-      document.getElementById(
-        "pear-backspace"
-      );
-
-    const spaceButton =
-      document.getElementById(
-        "pear-space"
-      );
-
-    const enterButton =
-      document.getElementById(
-        "pear-enter"
-      );
-
-    const numberButton =
-      document.getElementById(
-        "pear-number"
-      );
-
-    backspaceButton.addEventListener(
-      "pointerdown",
-      function(e){
-
-        e.preventDefault();
-        e.stopPropagation();
-
-        keyboardBackspace();
-
-      }
-    );
-
-    spaceButton.addEventListener(
-      "pointerdown",
-      function(e){
-
-        e.preventDefault();
-        e.stopPropagation();
-
-        keyboardSpace();
-
-      }
-    );
-
-    enterButton.addEventListener(
-      "pointerdown",
-      function(e){
-
-        e.preventDefault();
-        e.stopPropagation();
-
-        keyboardEnter();
-
-      }
-    );
-
-    numberButton.addEventListener(
-      "pointerdown",
-      function(e){
-
-        e.preventDefault();
-        e.stopPropagation();
-
-        keyboardNumber();
-
-      }
-    );
-
-  }
-
-  keyboard.style.display =
-    "block";
-
-  requestAnimationFrame(() => {
-
-    keyboard.classList.add(
-      "keyboard-show"
-    );
-
-  });
-
-}
-
-function hidePearKeyboard(){
-
-  const keyboard =
-    document.getElementById(
-      "pear-keyboard"
-    );
-
-  if(!keyboard) return;
-
-  keyboard.classList.remove(
-    "keyboard-show"
-  );
-
-  setTimeout(() => {
-
-    if(
-      !keyboard.classList.contains(
-        "keyboard-show"
-      )
-    ){
-
-      keyboard.style.display =
-        "none";
-
+        showPage(1);
     }
 
-  },280);
+}, { passive: true });
 
-  keyboardTarget = null;
 
-}
+/* Mouse drag support too */
 
-function insertText(field,text){
+let mouseStartX = 0;
 
-  if(!field) return;
+phone.addEventListener("mousedown", function(event) {
 
-  const start =
-    field.selectionStart ??
-    field.value.length;
+    if (overlay.classList.contains("open")) return;
 
-  const end =
-    field.selectionEnd ??
-    field.value.length;
+    mouseStartX = event.clientX;
 
-  field.value =
-    field.value.substring(0,start) +
-    text +
-    field.value.substring(end);
+});
 
-  field.selectionStart =
-    field.selectionEnd =
-      start + text.length;
+phone.addEventListener("mouseup", function(event) {
 
-  field.dispatchEvent(
-    new Event(
-      "input",
-      {bubbles:true}
-    )
-  );
+    if (overlay.classList.contains("open")) return;
 
-}
+    const difference =
+        event.clientX - mouseStartX;
 
-function keyboardSpace(){
+    if (Math.abs(difference) < 70) return;
 
-  if(keyboardTarget){
+    if (difference < 0) {
 
-    insertText(
-      keyboardTarget,
-      " "
-    );
+        showPage(2);
 
-  }
+    } else {
 
-}
-
-function keyboardEnter(){
-
-  if(keyboardTarget){
-
-    keyboardTarget.blur();
-
-  }
-
-  hidePearKeyboard();
-
-}
-
-function keyboardBackspace(){
-
-  const field =
-    keyboardTarget;
-
-  if(!field) return;
-
-  const start =
-    field.selectionStart;
-
-  const end =
-    field.selectionEnd;
-
-  if(start !== end){
-
-    field.value =
-      field.value.substring(0,start) +
-      field.value.substring(end);
-
-    field.selectionStart =
-      field.selectionEnd =
-        start;
-
-  }else if(start > 0){
-
-    field.value =
-      field.value.substring(0,start-1) +
-      field.value.substring(end);
-
-    field.selectionStart =
-      field.selectionEnd =
-        start-1;
-
-  }
-
-}
-
-function keyboardNumber(){
-
-  if(keyboardTarget){
-
-    insertText(
-      keyboardTarget,
-      "1234567890"
-    );
-
-  }
-
-}
-
-/* ============================================================
-   SOUND
-============================================================ */
-
-function playTone(
-  frequency=440,
-  duration=.1
-){
-
-  try{
-
-    if(
-      localStorage.getItem(
-        "pear-sound"
-      ) === "false"
-    ){
-
-      return;
-
+        showPage(1);
     }
 
-    audioContext =
-      audioContext ||
-      new (
-        window.AudioContext ||
-        window.webkitAudioContext
-      )();
-
-    const oscillator =
-      audioContext.createOscillator();
-
-    const gain =
-      audioContext.createGain();
-
-    oscillator.frequency.value =
-      frequency;
-
-    gain.gain.setValueAtTime(
-      .08,
-      audioContext.currentTime
-    );
-
-    gain.gain.exponentialRampToValueAtTime(
-      .001,
-      audioContext.currentTime +
-      duration
-    );
-
-    oscillator.connect(gain);
-
-    gain.connect(
-      audioContext.destination
-    );
-
-    oscillator.start();
-
-    oscillator.stop(
-      audioContext.currentTime +
-      duration
-    );
-
-  }catch(e){}
-
-}
-
-/* ============================================================
-   PAGE 1 APPS
-============================================================ */
-
-function messagesApp(){
-
-  openApp(
-    "Messages",
-    `
-
-      <div id="messages-list">
-
-        <div class="bubble">
-          Hey! 👋
-        </div>
-
-        <div class="bubble">
-          Welcome to Pear Phone.
-        </div>
-
-        <div class="bubble me">
-          This actually works 😂
-        </div>
-
-      </div>
-
-      <div class="row">
-
-        <input
-          id="message-input"
-          placeholder="iMessage"
-        >
-
-        <button
-          class="app-button"
-          id="send-message"
-        >
-          Send
-        </button>
-
-      </div>
-
-    `
-  );
-
-  document.getElementById(
-    "send-message"
-  ).onclick = function(){
-
-    const input =
-      document.getElementById(
-        "message-input"
-      );
-
-    const value =
-      input.value.trim();
-
-    if(!value) return;
-
-    const bubble =
-      document.createElement("div");
-
-    bubble.className =
-      "bubble me";
-
-    bubble.textContent =
-      value;
-
-    document.getElementById(
-      "messages-list"
-    ).appendChild(bubble);
-
-    input.value = "";
-
-    playTone(700,.08);
-
-  };
-
-  setupKeyboardFields();
-
-}
-
-async function cameraApp(){
-
-  openApp(
-    "Camera",
-    `
-
-      <video
-        id="camera-preview"
-        class="camera-video"
-        autoplay
-        playsinline
-      ></video>
-
-      <div class="row">
-
-        <button
-          class="app-button"
-          id="camera-start"
-        >
-          📷 Start Camera
-        </button>
-
-        <button
-          class="app-button"
-          id="camera-capture"
-        >
-          ⭕ Capture
-        </button>
-
-      </div>
-
-      <canvas
-        id="camera-canvas"
-        style="display:none"
-      ></canvas>
-
-      <div id="camera-result"></div>
-
-    `
-  );
-
-  document.getElementById(
-    "camera-start"
-  ).onclick = startCamera;
-
-  document.getElementById(
-    "camera-capture"
-  ).onclick = captureCamera;
-
-}
-
-async function startCamera(){
-
-  const video =
-    document.getElementById(
-      "camera-preview"
-    );
-
-  if(!video) return;
-
-  try{
-
-    stopCamera();
-
-    cameraStream =
-      await navigator.mediaDevices.getUserMedia({
-
-        video:{
-          facingMode:"environment"
-        },
-
-        audio:false
-
-      });
-
-    video.srcObject =
-      cameraStream;
-
-  }catch(error){
-
-    const result =
-      document.getElementById(
-        "camera-result"
-      );
-
-    if(result){
-
-      result.innerHTML =
-        `<div class="result">
-          Camera permission unavailable.
-        </div>`;
-
-    }
-
-  }
-
-}
-
-function captureCamera(){
-
-  const video =
-    document.getElementById(
-      "camera-preview"
-    );
-
-  const canvas =
-    document.getElementById(
-      "camera-canvas"
-    );
-
-  if(
-    !video ||
-    !canvas ||
-    !video.videoWidth
-  ){
-
-    return;
-
-  }
-
-  canvas.width =
-    video.videoWidth;
-
-  canvas.height =
-    video.videoHeight;
-
-  canvas
-    .getContext("2d")
-    .drawImage(
-      video,
-      0,
-      0,
-      canvas.width,
-      canvas.height
-    );
-
-  const image =
-    document.createElement("img");
-
-  image.src =
-    canvas.toDataURL(
-      "image/jpeg",
-      .9
-    );
-
-  image.style.width =
-    "100%";
-
-  image.style.borderRadius =
-    "12px";
-
-  document.getElementById(
-    "camera-result"
-  ).innerHTML =
-    "<p>📸 Captured!</p>";
-
-  document.getElementById(
-    "camera-result"
-  ).appendChild(image);
-
-}
-
-function stopCamera(){
-
-  if(cameraStream){
-
-    cameraStream
-      .getTracks()
-      .forEach(track =>
-        track.stop()
-      );
-
-    cameraStream = null;
-
-  }
-
-}
-
-function splashfaceApp(){
-
-  openApp(
-    "SplashFace",
-    `
-
-      <div class="card">
-
-        <h2>😎 SplashFace</h2>
-
-        <input
-          id="status-input"
-          placeholder="What's happening?"
-        >
-
-        <button
-          class="app-button"
-          id="post-status"
-        >
-          Post
-        </button>
-
-      </div>
-
-      <div id="status-feed"></div>
-
-    `
-  );
-
-  document.getElementById(
-    "post-status"
-  ).onclick = function(){
-
-    const input =
-      document.getElementById(
-        "status-input"
-      );
-
-    const value =
-      input.value.trim();
-
-    if(!value) return;
-
-    const card =
-      document.createElement("div");
-
-    card.className =
-      "card";
-
-    card.innerHTML = `
-      <strong>You</strong>
-      <p>${escapeHTML(value)}</p>
-      <small>Just now · 🍐</small>
-    `;
-
-    document.getElementById(
-      "status-feed"
-    ).prepend(card);
-
-    input.value = "";
-
-  };
-
-  setupKeyboardFields();
-
-}
-
-function stocksApp(){
-
-  openApp(
-    "Stocks",
-    `
-
-      <div class="card">
-
-        <h2>📈 Market</h2>
-
-        <div class="stock">
-          <strong>PEAR</strong>
-          <span>$184.22</span>
-          <b>+2.81%</b>
-        </div>
-
-        <div class="stock">
-          <strong>AAPL</strong>
-          <span>$247.10</span>
-          <b>+1.24%</b>
-        </div>
-
-        <div class="stock">
-          <strong>NVDA</strong>
-          <span>$181.47</span>
-          <b>+3.09%</b>
-        </div>
-
-        <div class="stock">
-          <strong>TSLA</strong>
-          <span>$421.08</span>
-          <b>-0.74%</b>
-        </div>
-
-      </div>
-
-    `
-  );
-
-}
-
-function mapsApp(){
-
-  openApp(
-    "Maps",
-    `
-
-      <div class="map">
-        🗺️
-      </div>
-
-      <input
-        id="map-search"
-        placeholder="Search a place"
-      >
-
-      <button
-        class="app-button"
-        id="map-open"
-      >
-        🔎 Search
-      </button>
-
-      <div id="map-result"></div>
-
-    `
-  );
-
-  document.getElementById(
-    "map-open"
-  ).onclick = function(){
-
-    const query =
-      document.getElementById(
-        "map-search"
-      ).value.trim();
-
-    if(!query) return;
-
-    document.getElementById(
-      "map-result"
-    ).innerHTML = `
-      <div class="result">
-        📍 ${escapeHTML(query)}
-      </div>
-    `;
-
-  };
-
-  setupKeyboardFields();
-
-}
-
-function photosApp(){
-
-  openApp(
-    "Photos",
-    `
-
-      <input
-        id="photo-picker"
-        type="file"
-        accept="image/*"
-        multiple
-      >
-
-      <div
-        class="photos"
-        id="photo-grid"
-      ></div>
-
-    `
-  );
-
-  document.getElementById(
-    "photo-picker"
-  ).onchange = function(){
-
-    const grid =
-      document.getElementById(
-        "photo-grid"
-      );
-
-    [...this.files].forEach(file => {
-
-      const image =
-        document.createElement("img");
-
-      image.src =
-        URL.createObjectURL(file);
-
-      grid.appendChild(image);
-
-    });
-
-  };
-
-}
-
-function weatherApp(){
-
-  openApp(
-    "Weather",
-    `
-
-      <div class="card">
-
-        <h2>☀️ Weather</h2>
-
-        <div class="big-display">
-          22°
-        </div>
-
-        <p style="text-align:center">
-          Partly Cloudy
-        </p>
-
-      </div>
-
-      <button
-        class="app-button"
-        onclick="weatherForecast('Today')"
-      >
-        Today
-      </button>
-
-      <button
-        class="app-button"
-        onclick="weatherForecast('Tomorrow')"
-      >
-        Tomorrow
-      </button>
-
-      <div
-        id="weather-result"
-        class="result"
-      >
-        Choose a forecast.
-      </div>
-
-    `
-  );
-
-}
-
-function weatherForecast(day){
-
-  document.getElementById(
-    "weather-result"
-  ).textContent =
-    day +
-    ": ⛅ Partly cloudy — 22°C";
-
-}
-
-function notesApp(){
-
-  openApp(
-    "Notes",
-    `
-
-      <textarea
-        id="notes-area"
-        placeholder="Write something..."
-      ></textarea>
-
-      <button
-        class="app-button"
-        id="save-note"
-      >
-        💾 Save
-      </button>
-
-      <button
-        class="app-button"
-        id="clear-note"
-      >
-        🗑️ Clear
-      </button>
-
-      <div id="note-status"></div>
-
-    `
-  );
-
-  const area =
-    document.getElementById(
-      "notes-area"
-    );
-
-  const saved =
-    localStorage.getItem(
-      "pear-notes"
-    );
-
-  if(saved){
-    area.value = saved;
-  }
-
-  document.getElementById(
-    "save-note"
-  ).onclick = function(){
-
-    localStorage.setItem(
-      "pear-notes",
-      area.value
-    );
-
-    document.getElementById(
-      "note-status"
-    ).innerHTML =
-      `<div class="result">Saved ✓</div>`;
-
-  };
-
-  document.getElementById(
-    "clear-note"
-  ).onclick = function(){
-
-    area.value = "";
-
-    localStorage.removeItem(
-      "pear-notes"
-    );
-
-  };
-
-  setupKeyboardFields();
-
-}
-
-function pearTunesApp(){
-
-  openApp(
-    "PearTunes",
-    `
-
-      <div class="card">
-
-        <h2>🎵 PearTunes</h2>
-
-        <div
-          class="big-display"
-          id="music-title"
-        >
-          Choose a track
-        </div>
-
-        <button
-          class="app-button"
-          onclick="playTrack('Pear Dreams')"
-        >
-          ▶ Pear Dreams
-        </button>
-
-        <button
-          class="app-button"
-          onclick="playTrack('Midnight Pear')"
-        >
-          ▶ Midnight Pear
-        </button>
-
-        <button
-          class="app-button"
-          onclick="playTrack('Pearwave')"
-        >
-          ▶ Pearwave
-        </button>
-
-      </div>
-
-    `
-  );
-
-}
-
-function playTrack(title){
-
-  document.getElementById(
-    "music-title"
-  ).textContent =
-    title;
-
-  playTone(600,.2);
-
-}
-
-function settingsApp(){
-
-  openApp(
-    "Settings",
-    `
-
-      <div class="card">
-
-        <h2>⚙️ Settings</h2>
-
-        <button
-          class="app-button"
-          id="dark-toggle"
-        >
-          🌙 Dark / Light Mode
-        </button>
-
-        <button
-          class="app-button"
-          id="sound-toggle"
-        >
-          🔊 Sound On / Off
-        </button>
-
-        <button
-          class="app-button"
-          onclick="showPhoneInfo()"
-        >
-          🍐 Pear Phone Info
-        </button>
-
-        <button
-          class="app-button"
-          onclick="showBattery()"
-        >
-          🔋 Battery
-        </button>
-
-      </div>
-
-    `
-  );
-
-  document.getElementById(
-    "dark-toggle"
-  ).onclick =
-    toggleDarkMode;
-
-  document.getElementById(
-    "sound-toggle"
-  ).onclick =
-    toggleSound;
-
-}
-
-function toggleDarkMode(){
-
-  document.body.classList.toggle(
-    "dark-mode"
-  );
-
-  localStorage.setItem(
-    "pear-dark",
-    document.body.classList.contains(
-      "dark-mode"
-    )
-  );
-
-}
-
-function toggleSound(){
-
-  const enabled =
-    localStorage.getItem(
-      "pear-sound"
-    ) !== "false";
-
-  localStorage.setItem(
-    "pear-sound",
-    String(!enabled)
-  );
-
-}
-
-function showPhoneInfo(){
-
-  alert(
-    "🍐 PEAR PHONE\n\n" +
-    "Pear Phone OS\n" +
-    "Version 2.0"
-  );
-
-}
-
-async function showBattery(){
-
-  if(navigator.getBattery){
-
-    const battery =
-      await navigator.getBattery();
-
-    alert(
-      "Battery: " +
-      Math.round(
-        battery.level*100
-      ) +
-      "%"
-    );
-
-  }
-
-}
-
-function clockApp(){
-
-  openApp(
-    "Clock",
-    `
-
-      <div class="card">
-
-        <div
-          class="big-display"
-          id="clock-display"
-        >
-          --:--:--
-        </div>
-
-      </div>
-
-    `
-  );
-
-  function updateClock(){
-
-    const now =
-      new Date();
-
-    const display =
-      document.getElementById(
-        "clock-display"
-      );
-
-    if(display){
-
-      display.textContent =
-        now.toLocaleTimeString();
-
-    }
-
-  }
-
-  updateClock();
-
-  window.pearClock =
-    setInterval(
-      updateClock,
-      1000
-    );
-
-}
-
-function videosApp(){
-
-  openApp(
-    "Videos",
-    `
-
-      <div class="card">
-
-        <h2>🎬 Videos</h2>
-
-        <input
-          type="file"
-          id="video-file"
-          accept="video/*"
-        >
-
-      </div>
-
-      <video
-        id="video-player"
-        controls
-        style="
-          display:none;
-          width:100%;
-          border-radius:12px;
-        "
-      ></video>
-
-    `
-  );
-
-  document.getElementById(
-    "video-file"
-  ).onchange = function(){
-
-    const file =
-      this.files[0];
-
-    if(!file) return;
-
-    const video =
-      document.getElementById(
-        "video-player"
-      );
-
-    video.src =
-      URL.createObjectURL(file);
-
-    video.style.display =
-      "block";
-
-  };
-
-}
-
-let dialValue = "";
-
-function phoneApp(){
-
-  openApp(
-    "Phone",
-    `
-
-      <div class="card">
-
-        <h2>📞 Phone</h2>
-
-        <div
-          class="big-display"
-          id="dial-display"
-        >
-          _
-        </div>
-
-        <div
-          style="
-            display:grid;
-            grid-template-columns:repeat(3,1fr);
-            gap:5px;
-          "
-        >
-
-          ${[
-            "1","2","3",
-            "4","5","6",
-            "7","8","9",
-            "*","0","#"
-          ].map(number => `
-
-            <button
-              class="app-button"
-              onclick="dialNumber('${number}')"
-            >
-              ${number}
-            </button>
-
-          `).join("")}
-
-        </div>
-
-        <button
-          class="app-button"
-          onclick="clearDial()"
-        >
-          Clear
-        </button>
-
-      </div>
-
-    `
-  );
-
-}
-
-function dialNumber(number){
-
-  dialValue += number;
-
-  const display =
-    document.getElementById(
-      "dial-display"
-    );
-
-  if(display){
-
-    display.textContent =
-      dialValue;
-
-  }
-
-}
-
-function clearDial(){
-
-  dialValue = "";
-
-  const display =
-    document.getElementById(
-      "dial-display"
-    );
-
-  if(display){
-
-    display.textContent =
-      "_";
-
-  }
-
-}
-
-function mailApp(){
-
-  openApp(
-    "Mail",
-    `
-
-      <input
-        id="mail-to"
-        placeholder="To"
-      >
-
-      <input
-        id="mail-subject"
-        placeholder="Subject"
-      >
-
-      <textarea
-        id="mail-body"
-        placeholder="Message"
-      ></textarea>
-
-      <button
-        class="app-button"
-        id="mail-send"
-      >
-        ✉️ Send
-      </button>
-
-    `
-  );
-
-  document.getElementById(
-    "mail-send"
-  ).onclick = function(){
-
-    const to =
-      document.getElementById(
-        "mail-to"
-      ).value;
-
-    const subject =
-      document.getElementById(
-        "mail-subject"
-      ).value;
-
-    const body =
-      document.getElementById(
-        "mail-body"
-      ).value;
-
-    window.location.href =
-      "mailto:" +
-      encodeURIComponent(to) +
-      "?subject=" +
-      encodeURIComponent(subject) +
-      "&body=" +
-      encodeURIComponent(body);
-
-  };
-
-  setupKeyboardFields();
-
-}
-
-function compassApp(){
-
-  openApp(
-    "Compass",
-    `
-
-      <div class="card">
-
-        <h2>🧭 Compass</h2>
-
-        <div
-          class="big-display"
-          id="compass-display"
-        >
-          N
-        </div>
-
-        <button
-          class="app-button"
-          onclick="randomCompass()"
-        >
-          Rotate
-        </button>
-
-      </div>
-
-    `
-  );
-
-}
-
-function randomCompass(){
-
-  const directions = [
-    "N","NE","E","SE",
-    "S","SW","W","NW"
-  ];
-
-  const direction =
-    directions[
-      Math.floor(
-        Math.random() *
-        directions.length
-      )
-    ];
-
-  const display =
-    document.getElementById(
-      "compass-display"
-    );
-
-  if(display){
-
-    display.textContent =
-      direction;
-
-  }
-
-}
-
-/* ============================================================
-   PAGE 2 APPS
-============================================================ */
-
-function lingoApp(){
-
-  openApp(
-    "Lingo",
-    `
-
-      <div class="card">
-
-        <h2>🔤 Lingo</h2>
-
-        <input
-          id="lingo-input"
-          placeholder="Type a word"
-        >
-
-        <button
-          class="app-button"
-          id="lingo-check"
-        >
-          Check
-        </button>
-
-        <div
-          id="lingo-result"
-          class="result"
-        ></div>
-
-      </div>
-
-    `
-  );
-
-  document.getElementById(
-    "lingo-check"
-  ).onclick = function(){
-
-    const word =
-      document.getElementById(
-        "lingo-input"
-      ).value.trim();
-
-    document.getElementById(
-      "lingo-result"
-    ).textContent =
-      word
-        ? `🍐 "${word}" sounds Pear-approved!`
-        : "Type something first.";
-
-  };
-
-  setupKeyboardFields();
-
-}
-
-function tumsApp(){
-
-  openApp(
-    "Tums",
-    `
-
-      <div class="game">
-
-        <h2>💊 Tums</h2>
-
-        <p>
-          Tap the button to dispense a virtual Tums.
-        </p>
-
-        <button
-          class="game-button"
-          id="tums-button"
-        >
-          💊
-        </button>
-
-        <div
-          id="tums-result"
-          class="result"
-        >
-          Ready.
-        </div>
-
-      </div>
-
-    `
-  );
-
-  let count = 0;
-
-  document.getElementById(
-    "tums-button"
-  ).onclick = function(){
-
-    count++;
-
-    document.getElementById(
-      "tums-result"
-    ).textContent =
-      `Tums dispensed: ${count}`;
-
-    playTone(500,.08);
-
-  };
-
-}
-
-function danwarpApp(){
-
-  openApp(
-    "DanWarp",
-    `
-
-      <div class="card">
-
-        <h2>🌀 DanWarp</h2>
-
-        <p>
-          Warp through random Pear Phone locations.
-        </p>
-
-        <button
-          class="app-button"
-          id="warp-button"
-        >
-          Warp!
-        </button>
-
-        <div
-          id="warp-result"
-          class="result"
-        >
-          Destination unknown.
-        </div>
-
-      </div>
-
-    `
-  );
-
-  const locations = [
-    "Pear HQ",
-    "Downtown",
-    "The Beach",
-    "Mars",
-    "School",
-    "Home",
-    "The Pear Store"
-  ];
-
-  document.getElementById(
-    "warp-button"
-  ).onclick = function(){
-
-    const destination =
-      locations[
-        Math.floor(
-          Math.random() *
-          locations.length
-        )
-      ];
-
-    document.getElementById(
-      "warp-result"
-    ).textContent =
-      "Warped to " +
-      destination +
-      " 🚀";
-
-  };
-
-}
-
-function imageApp(){
-
-  openApp(
-    "Image",
-    `
-
-      <div class="card">
-
-        <h2>🖼️ Image</h2>
-
-        <input
-          type="file"
-          id="image-file"
-          accept="image/*"
-        >
-
-      </div>
-
-      <img
-        id="image-preview"
-        style="
-          display:none;
-          width:100%;
-          border-radius:12px;
-        "
-      >
-
-    `
-  );
-
-  document.getElementById(
-    "image-file"
-  ).onchange = function(){
-
-    const file =
-      this.files[0];
-
-    if(!file) return;
-
-    const image =
-      document.getElementById(
-        "image-preview"
-      );
-
-    image.src =
-      URL.createObjectURL(file);
-
-    image.style.display =
-      "block";
-
-  };
-
-}
-
-function chronoApp(){
-
-  openApp(
-    "Chrono",
-    `
-
-      <div class="card">
-
-        <h2>⏱️ Chrono</h2>
-
-        <div
-          class="big-display"
-          id="chrono-display"
-        >
-          0
-        </div>
-
-        <button
-          class="app-button"
-          id="chrono-start"
-        >
-          Start
-        </button>
-
-        <button
-          class="app-button"
-          id="chrono-stop"
-        >
-          Stop
-        </button>
-
-        <button
-          class="app-button"
-          id="chrono-reset"
-        >
-          Reset
-        </button>
-
-      </div>
-
-    `
-  );
-
-  let seconds = 0;
-  let timer = null;
-
-  const display =
-    document.getElementById(
-      "chrono-display"
-    );
-
-  document.getElementById(
-    "chrono-start"
-  ).onclick = function(){
-
-    if(timer) return;
-
-    timer =
-      setInterval(() => {
-
-        seconds++;
-
-        display.textContent =
-          seconds;
-
-      },1000);
-
-  };
-
-  document.getElementById(
-    "chrono-stop"
-  ).onclick = function(){
-
-    clearInterval(timer);
-    timer = null;
-
-  };
-
-  document.getElementById(
-    "chrono-reset"
-  ).onclick = function(){
-
-    clearInterval(timer);
-    timer = null;
-
-    seconds = 0;
-
-    display.textContent =
-      "0";
-
-  };
-
-}
-
-function zaplookApp(){
-
-  openApp(
-    "ZapLook",
-    `
-
-      <div class="card">
-
-        <h2>⚡ ZapLook</h2>
-
-        <p>
-          Tap to generate a random look.
-        </p>
-
-        <button
-          class="app-button"
-          id="zap-button"
-        >
-          ⚡ Zap
-        </button>
-
-        <div
-          id="zap-result"
-          class="result"
-        >
-          Ready.
-        </div>
-
-      </div>
-
-    `
-  );
-
-  const looks = [
-    "Retro Pear",
-    "Space Explorer",
-    "Beach Mode",
-    "Classic Black",
-    "Future Green",
-    "Pixel Style"
-  ];
-
-  document.getElementById(
-    "zap-button"
-  ).onclick = function(){
-
-    document.getElementById(
-      "zap-result"
-    ).textContent =
-      looks[
-        Math.floor(
-          Math.random()*looks.length
-        )
-      ];
-
-  };
-
-}
-
-function monkeyApp(){
-
-  openApp(
-    "Monkey",
-    `
-
-      <div class="game">
-
-        <h2>🐒 Monkey</h2>
-
-        <p>
-          Tap the monkey!
-        </p>
-
-        <button
-          class="game-button"
-          id="monkey-button"
-        >
-          🐒
-        </button>
-
-        <div
-          class="result"
-          id="monkey-score"
-        >
-          Score: 0
-        </div>
-
-      </div>
-
-    `
-  );
-
-  let score = 0;
-
-  document.getElementById(
-    "monkey-button"
-  ).onclick = function(){
-
-    score++;
-
-    document.getElementById(
-      "monkey-score"
-    ).textContent =
-      "Score: " + score;
-
-    playTone(
-      350 + score*15,
-      .06
-    );
-
-  };
-
-}
-
-function remarkApp(){
-
-  openApp(
-    "Remark",
-    `
-
-      <div class="card">
-
-        <h2>💬 Remark</h2>
-
-        <button
-          class="app-button"
-          id="remark-button"
-        >
-          Give Me A Remark
-        </button>
-
-        <div
-          id="remark-result"
-          class="result"
-        >
-          Press the button.
-        </div>
-
-      </div>
-
-    `
-  );
-
-  document.getElementById(
-    "remark-button"
-  ).onclick = function(){
-
-    const remarks = [
-
-      "Honestly? Iconic.",
-
-      "The Pear Phone approves.",
-
-      "Absolutely remarkable.",
-
-      "I have no notes. 😂",
-
-      "That was unexpected."
-
-    ];
-
-    document.getElementById(
-      "remark-result"
-    ).textContent =
-      remarks[
-        Math.floor(
-          Math.random()*remarks.length
-        )
-      ];
-
-  };
-
-}
-
-/* ============================================================
-   APP MAPPINGS
-============================================================ */
-
-const page1Apps = {
-
-  messages: messagesApp,
-
-  camera: cameraApp,
-
-  splashface: splashfaceApp,
-
-  stocks: stocksApp,
-
-  maps: mapsApp,
-
-  photos: photosApp,
-
-  weather: weatherApp,
-
-  notes: notesApp,
-
-  peartunes: pearTunesApp,
-
-  settings: settingsApp,
-
-  clock: clockApp,
-
-  videos: videosApp,
-
-  phone: phoneApp,
-
-  mail: mailApp,
-
-  compass: compassApp,
-
-  music: pearTunesApp
-
-};
-
-const page2Apps = {
-
-  "p2-lingo": lingoApp,
-
-  "p2-splash": splashfaceApp,
-
-  "p2-thumb": tumsApp,
-
-  "p2-danwarp": danwarpApp,
-
-  "p2-image": imageApp,
-
-  "p2-chrono": chronoApp,
-
-  "p2-zaplook": zaplookApp,
-
-  "p2-weather": weatherApp,
-
-  "p2-music": pearTunesApp,
-
-  "p2-monkey": monkeyApp,
-
-  "p2-remark": remarkApp,
-
-  "p2-settings": settingsApp,
-
-  "p2-phone": phoneApp,
-
-  "p2-mail": mailApp,
-
-  "p2-compass": compassApp,
-
-  "p2-music2": pearTunesApp
-
-};
-
-/* ============================================================
-   APP HOTSPOTS
-
-   EACH ICON OPENS ONLY ITS OWN APP
-============================================================ */
-
-Object.entries(page1Apps).forEach(
-  ([id, app]) => {
-
-    const button =
-      document.getElementById(id);
-
-    if(!button) return;
-
-    button.addEventListener(
-      "click",
-      function(e){
-
-        e.preventDefault();
-        e.stopPropagation();
-
-        if(currentPage !== 1)
-          return;
-
-        if(typeof app === "function")
-          app();
-
-      }
-    );
-
-  }
-);
-
-Object.entries(page2Apps).forEach(
-  ([id, app]) => {
-
-    const button =
-      document.getElementById(id);
-
-    if(!button) return;
-
-    button.addEventListener(
-      "click",
-      function(e){
-
-        e.preventDefault();
-        e.stopPropagation();
-
-        if(currentPage !== 2)
-          return;
-
-        if(typeof app === "function")
-          app();
-
-      }
-    );
-
-  }
-);
-
-/* ============================================================
-   HOME
-============================================================ */
-
-document.getElementById(
-  "home"
-).addEventListener(
-  "click",
-  function(e){
-
-    e.preventDefault();
-    e.stopImmediatePropagation();
-
-    goHome();
-
-  },
-  true
-);
-
-/* ============================================================
-   DARK MODE RESTORE
-============================================================ */
-
-if(
-  localStorage.getItem(
-    "pear-dark"
-  ) === "true"
-){
-
-  document.body.classList.add(
-    "dark-mode"
-  );
-
-}
-
-/* ============================================================
-   START
-============================================================ */
-
-showPage(1);
+});
 
 </script>
 
 </body>
-
 </html>

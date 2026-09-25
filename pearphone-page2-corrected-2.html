@@ -1,0 +1,4867 @@
+**Index.html **
+
+
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+<title>Pear Phone OS</title>
+
+<style>
+
+*{
+
+  box-sizing:border-box;
+
+  -webkit-tap-highlight-color:transparent;
+
+}
+
+html,body{
+
+  margin:0;
+
+  width:100%;
+
+  height:100%;
+
+  overflow:hidden;
+
+  background:#111;
+
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+
+}
+
+body{
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+}
+
+/* =========================
+
+   PEAR PHONE
+
+========================= */
+
+#phone-container{
+
+  position:relative;
+
+  width:min(170vh,1500px);
+
+  aspect-ratio:1212 / 1188;
+
+  background:url("pear-phone.png") center/contain no-repeat;
+
+  transform:rotate(90deg);
+
+  transform-origin:center center;
+
+  touch-action:none;
+
+  user-select:none;
+
+}
+
+/* =========================
+
+   PAGE 2 IMAGE
+
+========================= */
+
+#page2{
+
+  position:absolute;
+
+  inset:0;
+
+  width:100%;
+
+  height:100%;
+
+  background:url("page2.png") center/contain no-repeat;
+
+  z-index:50;
+
+  pointer-events:none;
+
+  opacity:0;
+
+  transform:translateY(100%) scale(.96);
+
+  transition:
+
+    transform .45s cubic-bezier(.22,.8,.25,1),
+
+    opacity .3s ease;
+
+}
+
+#phone-container.page-two #page2{
+
+  opacity:1;
+
+  transform:translateY(0) scale(1);
+
+}
+
+/* =========================
+
+   HOTSPOTS
+
+========================= */
+
+.hotspot{
+
+  position:absolute;
+
+  border:0 !important;
+
+  outline:none !important;
+
+  background:transparent !important;
+
+  padding:0;
+
+  margin:0;
+
+  border-radius:50%;
+
+  cursor:pointer;
+
+  touch-action:manipulation;
+
+  -webkit-appearance:none;
+
+  appearance:none;
+
+  box-shadow:none !important;
+
+  z-index:300;
+
+}
+
+.hotspot:hover,
+
+.hotspot:focus,
+
+.hotspot:focus-visible{
+
+  background:transparent !important;
+
+  border:0 !important;
+
+  outline:none !important;
+
+  box-shadow:none !important;
+
+}
+
+.hotspot:active{
+
+  transform:scale(.93);
+
+}
+
+/* =========================
+
+   PAGE 1
+
+========================= */
+
+#messages{
+
+  left:43.1%;
+
+  top:25.7%;
+
+  width:9.6%;
+
+  aspect-ratio:1;
+
+}
+
+#camera{
+
+  left:54%;
+
+  top:25.7%;
+
+  width:9.6%;
+
+  aspect-ratio:1;
+
+}
+
+#splashface{
+
+  left:38%;
+
+  top:36.1%;
+
+  width:9.6%;
+
+  aspect-ratio:1;
+
+}
+
+#stocks{
+
+  left:47.5%;
+
+  top:36.1%;
+
+  width:9.6%;
+
+  aspect-ratio:1;
+
+}
+
+#maps{
+
+  left:57%;
+
+  top:36.1%;
+
+  width:9.6%;
+
+  aspect-ratio:1;
+
+}
+
+#photos{
+
+  left:38%;
+
+  top:46.9%;
+
+  width:9.6%;
+
+  aspect-ratio:1;
+
+}
+
+#weather{
+
+  left:47.5%;
+
+  top:46.9%;
+
+  width:9.6%;
+
+  aspect-ratio:1;
+
+}
+
+#notes{
+
+  left:57%;
+
+  top:46.9%;
+
+  width:9.6%;
+
+  aspect-ratio:1;
+
+}
+
+#peartunes{
+
+  left:32%;
+
+  top:55.9%;
+
+  width:9.6%;
+
+  aspect-ratio:1;
+
+}
+
+#settings{
+
+  left:42%;
+
+  top:55.9%;
+
+  width:9.6%;
+
+  aspect-ratio:1;
+
+}
+
+#clock{
+
+  left:52%;
+
+  top:55.9%;
+
+  width:9.6%;
+
+  aspect-ratio:1;
+
+}
+
+#videos{
+
+  left:62%;
+
+  top:55.9%;
+
+  width:9.6%;
+
+  aspect-ratio:1;
+
+}
+
+#phone{
+
+  left:32%;
+
+  top:65.9%;
+
+  width:9.6%;
+
+  aspect-ratio:1;
+
+}
+
+#mail{
+
+  left:42%;
+
+  top:65.9%;
+
+  width:9.6%;
+
+  aspect-ratio:1;
+
+}
+
+#compass{
+
+  left:52%;
+
+  top:65.9%;
+
+  width:9.6%;
+
+  aspect-ratio:1;
+
+}
+
+#music{
+
+  left:62%;
+
+  top:65.9%;
+
+  width:9.6%;
+
+  aspect-ratio:1;
+
+}
+
+/* =========================
+
+   HOME
+
+========================= */
+
+#home{
+
+  position:absolute;
+
+  left:46%;
+
+  top:78.8%;
+
+  width:8.2%;
+
+  aspect-ratio:1;
+
+  border:0 !important;
+
+  background:transparent !important;
+
+  border-radius:50%;
+
+  cursor:pointer;
+
+  z-index:400;
+
+  outline:none !important;
+
+  box-shadow:none !important;
+
+}
+
+/* =========================
+
+   PAGE 2
+
+========================= */
+
+#phone-container:not(.page-two) .page2-hotspot{
+
+  display:none !important;
+
+  pointer-events:none !important;
+
+}
+
+#phone-container.page-two .page1-hotspot{
+
+  display:block;
+
+  pointer-events:none !important;
+
+}
+
+#phone-container.page-two .page2-hotspot{
+
+  display:block !important;
+
+  pointer-events:auto !important;
+
+  z-index:1000 !important;
+
+}
+
+/* PAGE 2 POSITIONS */
+
+#p2-lingo{
+  left:26.3%;
+  top:55.1%;
+  width:9%;
+  aspect-ratio:1;
+}
+
+#p2-splash{
+  left:26.2%;
+  top:46%;
+  width:9%;
+  aspect-ratio:1;
+}
+
+#p2-thumb{
+  left:35.1%;
+  top:60.8%;
+  width:9%;
+  aspect-ratio:1;
+}
+
+#p2-danwarp{
+  left:35.1%;
+  top:53.2%;
+  width:9%;
+  aspect-ratio:1;
+}
+
+#p2-image{
+  left:35.1%;
+  top:44.4%;
+  width:9%;
+  aspect-ratio:1;
+}
+
+#p2-chrono{
+  left:44.4%;
+  top:60.7%;
+  width:9%;
+  aspect-ratio:1;
+}
+
+#p2-zaplook{
+  left:44.5%;
+  top:53.1%;
+  width:9%;
+  aspect-ratio:1;
+}
+
+#p2-weather{
+  left:44.5%;
+  top:43.8%;
+  width:9%;
+  aspect-ratio:1;
+}
+
+#p2-music{
+  left:54.2%;
+  top:62.3%;
+  width:9%;
+  aspect-ratio:1;
+}
+
+#p2-monkey{
+  left:55%;
+  top:49.9%;
+  width:9%;
+  aspect-ratio:1;
+}
+
+#p2-remark{
+  left:55%;
+  top:40.7%;
+  width:9%;
+  aspect-ratio:1;
+}
+
+#p2-settings{
+  left:55%;
+  top:30.2%;
+  width:9%;
+  aspect-ratio:1;
+}
+
+#p2-phone{
+  left:63.4%;
+  top:63%;
+  width:9%;
+  aspect-ratio:1;
+}
+
+#p2-mail{
+  left:64.4%;
+  top:50.5%;
+  width:9%;
+  aspect-ratio:1;
+}
+
+#p2-compass{
+  left:64.4%;
+  top:39.5%;
+  width:9%;
+  aspect-ratio:1;
+}
+
+#p2-music2{
+  left:63.4%;
+  top:28.8%;
+  width:9%;
+  aspect-ratio:1;
+}
+
+/* =========================
+
+   APP WINDOW
+
+========================= */
+
+#overlay{
+
+  position:absolute;
+
+  left:31%;
+
+  top:22%;
+
+  width:38%;
+
+  height:47%;
+
+  z-index:500;
+
+  display:none;
+
+  overflow:hidden;
+
+  background:#f4f5f7;
+
+  border-radius:10px;
+
+  box-shadow:0 5px 25px rgba(0,0,0,.55);
+
+}
+
+#overlay.open{
+
+  display:block;
+
+}
+
+#app-window{
+
+  width:100%;
+
+  height:100%;
+
+  display:flex;
+
+  flex-direction:column;
+
+  overflow:hidden;
+
+  background:#f4f5f7;
+
+  color:#111;
+
+}
+
+.app-header{
+
+  flex:0 0 auto;
+
+  display:flex;
+
+  align-items:center;
+
+  gap:8px;
+
+  padding:8px 10px;
+
+  background:linear-gradient(#fff,#e7e8ea);
+
+  border-bottom:1px solid #ccc;
+
+  font-weight:900;
+
+  font-size:15px;
+
+}
+
+.back-button{
+
+  width:30px;
+
+  height:30px;
+
+  flex:0 0 30px;
+
+  border-radius:50%;
+
+  border:1px solid #bbb;
+
+  background:linear-gradient(#fff,#ddd);
+
+  font-size:23px;
+
+  line-height:25px;
+
+  cursor:pointer;
+
+  padding:0;
+
+}
+
+.app-content{
+
+  flex:1;
+
+  min-height:0;
+
+  overflow-y:auto;
+
+  padding:12px;
+
+  padding-bottom:15px;
+
+  -webkit-overflow-scrolling:touch;
+
+}
+
+.app-content h2{
+
+  margin:0 0 10px;
+
+}
+
+.app-content h3{
+
+  margin:14px 0 7px;
+
+}
+
+.app-content p{
+
+  line-height:1.4;
+
+}
+
+.card{
+
+  background:#fff;
+
+  border:1px solid #ddd;
+
+  border-radius:13px;
+
+  padding:11px;
+
+  margin-bottom:9px;
+
+}
+
+.app-button{
+
+  padding:9px 13px;
+
+  border-radius:11px;
+
+  border:1px solid #bbb;
+
+  background:linear-gradient(#fff,#ddd);
+
+  color:#111;
+
+  font-weight:700;
+
+  cursor:pointer;
+
+  margin:3px;
+
+  font-family:inherit;
+
+}
+
+.app-button:active{
+
+  transform:scale(.96);
+
+}
+
+.row{
+
+  display:flex;
+
+  gap:7px;
+
+  flex-wrap:wrap;
+
+}
+
+input,
+
+textarea,
+
+select{
+
+  width:100%;
+
+  font-family:inherit;
+
+  font-size:16px;
+
+  padding:9px;
+
+  border:1px solid #bbb;
+
+  border-radius:10px;
+
+  outline:none;
+
+  background:#fff;
+
+  color:#111;
+
+}
+
+textarea{
+
+  min-height:130px;
+
+}
+
+.bubble{
+
+  padding:9px 12px;
+
+  width:max-content;
+
+  max-width:82%;
+
+  background:#dedfe3;
+
+  border-radius:17px;
+
+  margin-bottom:7px;
+
+}
+
+.bubble.me{
+
+  margin-left:auto;
+
+  background:linear-gradient(#58b9ff,#1389df);
+
+  color:#fff;
+
+}
+
+.stock{
+
+  display:flex;
+
+  justify-content:space-between;
+
+  align-items:center;
+
+  padding:10px;
+
+  margin-bottom:7px;
+
+  background:#fff;
+
+  border:1px solid #ddd;
+
+  border-radius:12px;
+
+}
+
+.photos{
+
+  display:grid;
+
+  grid-template-columns:repeat(3,1fr);
+
+  gap:6px;
+
+}
+
+.photos img{
+
+  width:100%;
+
+  aspect-ratio:1;
+
+  object-fit:cover;
+
+  border-radius:10px;
+
+}
+
+.camera-video{
+
+  width:100%;
+
+  border-radius:14px;
+
+  background:#000;
+
+}
+
+.map{
+
+  height:180px;
+
+  border-radius:15px;
+
+  background:linear-gradient(135deg,#d6e5c7,#e7dfb9);
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  font-size:55px;
+
+}
+
+.big-display{
+
+  text-align:center;
+
+  font-size:38px;
+
+  font-weight:900;
+
+  padding:20px 5px;
+
+}
+
+.result{
+
+  padding:10px;
+
+  border-radius:10px;
+
+  background:#eef0f2;
+
+  margin-top:8px;
+
+}
+
+.game{
+
+  text-align:center;
+
+  padding:8px;
+
+}
+
+.game-button{
+
+  width:110px;
+
+  height:110px;
+
+  border-radius:50%;
+
+  border:0;
+
+  background:linear-gradient(145deg,#ffdb6b,#ff9f43);
+
+  font-size:35px;
+
+  cursor:pointer;
+
+}
+
+/* =========================
+
+   DARK MODE
+
+========================= */
+
+body.dark-mode #app-window{
+
+  background:#18191c;
+
+  color:#f4f4f4;
+
+}
+
+body.dark-mode .app-header{
+
+  background:linear-gradient(#292b30,#1d1f23);
+
+  color:#fff;
+
+  border-bottom-color:#444;
+
+}
+
+body.dark-mode .back-button{
+
+  background:linear-gradient(#444,#252525);
+
+  color:#fff;
+
+  border-color:#555;
+
+}
+
+body.dark-mode .card,
+
+body.dark-mode .stock{
+
+  background:#24262a;
+
+  border-color:#3d3f44;
+
+  color:#f4f4f4;
+
+}
+
+body.dark-mode .app-button{
+
+  background:linear-gradient(#444,#292929);
+
+  color:#fff;
+
+  border-color:#555;
+
+}
+
+body.dark-mode input,
+
+body.dark-mode textarea,
+
+body.dark-mode select{
+
+  background:#24262a;
+
+  color:#fff;
+
+  border-color:#555;
+
+}
+
+body.dark-mode .result{
+
+  background:#292c31;
+
+}
+
+body.dark-mode .bubble{
+
+  background:#363940;
+
+  color:#fff;
+
+}
+
+/* IMPORTANT: INVISIBLE HOTSPOTS STAY INVISIBLE */
+
+body.dark-mode .hotspot,
+
+body.dark-mode .hotspot:hover,
+
+body.dark-mode .hotspot:focus,
+
+body.dark-mode .hotspot:focus-visible,
+
+body.dark-mode #home{
+
+  background:transparent !important;
+
+  border:0 !important;
+
+  outline:none !important;
+
+  box-shadow:none !important;
+
+}
+
+/* =========================
+
+   KEYBOARD
+
+========================= */
+
+#pear-keyboard{
+
+  position:absolute;
+
+  left:3%;
+
+  right:3%;
+
+  bottom:3%;
+
+  width:94%;
+
+  padding:6px;
+
+  background:rgba(35,35,40,.98);
+
+  border-radius:11px;
+
+  z-index:9999;
+
+  display:none;
+
+  opacity:0;
+
+  transform:translateY(120%);
+
+  transition:
+
+    transform .28s cubic-bezier(.22,.8,.25,1),
+
+    opacity .2s ease;
+
+  box-shadow:0 5px 18px rgba(0,0,0,.55);
+
+  touch-action:manipulation;
+
+}
+
+#pear-keyboard.keyboard-show{
+
+  opacity:1;
+
+  transform:translateY(0);
+
+}
+
+.pear-keyboard-row{
+
+  display:flex;
+
+  gap:3px;
+
+  margin-bottom:3px;
+
+}
+
+.pear-keyboard-row:last-child{
+
+  margin-bottom:0;
+
+}
+
+.pear-keyboard-row button{
+
+  flex:1;
+
+  min-width:0;
+
+  height:29px;
+
+  border:0;
+
+  border-radius:5px;
+
+  background:#f5f5f7;
+
+  color:#111;
+
+  font-size:11px;
+
+  font-weight:800;
+
+  padding:0;
+
+  touch-action:manipulation;
+
+  user-select:none;
+
+}
+
+.pear-keyboard-row button:active{
+
+  transform:scale(.88);
+
+  background:#cfd0d4;
+
+}
+
+.pear-keyboard-row.bottom button:first-child{
+
+  flex:1.2;
+
+}
+
+.pear-keyboard-row.bottom button:nth-child(2){
+
+  flex:5;
+
+}
+
+.pear-keyboard-row.bottom button:last-child{
+
+  flex:1.2;
+
+}
+
+@media(max-width:700px){
+
+  #phone-container{
+
+    width:100vw;
+
+  }
+
+  #pear-keyboard{
+
+    left:3%;
+
+    width:94%;
+
+  }
+
+  .pear-keyboard-row button{
+
+    height:27px;
+
+    font-size:10px;
+
+  }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div id="phone-container">
+
+<div id="page2"></div>
+
+<!-- PAGE 1 -->
+
+<button class="hotspot page1-hotspot" id="messages"></button>
+
+<button class="hotspot page1-hotspot" id="camera"></button>
+
+<button class="hotspot page1-hotspot" id="splashface"></button>
+
+<button class="hotspot page1-hotspot" id="stocks"></button>
+
+<button class="hotspot page1-hotspot" id="maps"></button>
+
+<button class="hotspot page1-hotspot" id="photos"></button>
+
+<button class="hotspot page1-hotspot" id="weather"></button>
+
+<button class="hotspot page1-hotspot" id="notes"></button>
+
+<button class="hotspot page1-hotspot" id="peartunes"></button>
+
+<button class="hotspot page1-hotspot" id="settings"></button>
+
+<button class="hotspot page1-hotspot" id="clock"></button>
+
+<button class="hotspot page1-hotspot" id="videos"></button>
+
+<button class="hotspot page1-hotspot" id="phone"></button>
+
+<button class="hotspot page1-hotspot" id="mail"></button>
+
+<button class="hotspot page1-hotspot" id="compass"></button>
+
+<button class="hotspot page1-hotspot" id="music"></button>
+
+<!-- PAGE 2 -->
+
+<button class="hotspot page2-hotspot" id="p2-lingo"></button>
+
+<button class="hotspot page2-hotspot" id="p2-splash"></button>
+
+<button class="hotspot page2-hotspot" id="p2-thumb"></button>
+
+<button class="hotspot page2-hotspot" id="p2-danwarp"></button>
+
+<button class="hotspot page2-hotspot" id="p2-image"></button>
+
+<button class="hotspot page2-hotspot" id="p2-chrono"></button>
+
+<button class="hotspot page2-hotspot" id="p2-zaplook"></button>
+
+<button class="hotspot page2-hotspot" id="p2-weather"></button>
+
+<button class="hotspot page2-hotspot" id="p2-music"></button>
+
+<button class="hotspot page2-hotspot" id="p2-monkey"></button>
+
+<button class="hotspot page2-hotspot" id="p2-remark"></button>
+
+<button class="hotspot page2-hotspot" id="p2-settings"></button>
+
+<button class="hotspot page2-hotspot" id="p2-phone"></button>
+
+<button class="hotspot page2-hotspot" id="p2-mail"></button>
+
+<button class="hotspot page2-hotspot" id="p2-compass"></button>
+
+<button class="hotspot page2-hotspot" id="p2-music2"></button>
+
+<button id="home"></button>
+
+<div id="overlay">
+
+  <div id="app-window"></div>
+
+</div>
+
+</div>
+
+<script>
+
+/* ============================================================
+
+   CORE
+
+============================================================ */
+
+const phone =
+
+  document.getElementById("phone-container");
+
+const overlay =
+
+  document.getElementById("overlay");
+
+const appWindow =
+
+  document.getElementById("app-window");
+
+let currentPage = 1;
+
+let cameraStream = null;
+
+let keyboardTarget = null;
+
+let keyboardShift = false;
+
+let audioContext = null;
+
+/* ============================================================
+
+   HTML ESCAPE
+
+============================================================ */
+
+function escapeHTML(value){
+
+  return String(value)
+
+    .replaceAll("&","&amp;")
+
+    .replaceAll("<","&lt;")
+
+    .replaceAll(">","&gt;")
+
+    .replaceAll('"',"&quot;")
+
+    .replaceAll("'","&#039;");
+
+}
+
+/* ============================================================
+
+   PAGE SWITCHING
+
+============================================================ */
+
+function showPage(page){
+
+  currentPage = page;
+
+  if(page === 2){
+
+    phone.classList.add("page-two");
+
+  }else{
+
+    phone.classList.remove("page-two");
+
+  }
+
+}
+
+function goHome(){
+
+  closeApp();
+
+  showPage(1);
+
+}
+
+/* ============================================================
+
+   SWIPE DETECTION
+
+   IMPORTANT:
+
+   NEVER PROCESS SWIPES WHEN CLICKING AN APP
+
+============================================================ */
+
+let touchStartX = 0;
+
+let touchStartY = 0;
+
+let touchTarget = null;
+
+phone.addEventListener(
+
+  "touchstart",
+
+  function(e){
+
+    if(!e.touches.length) return;
+
+    touchStartX =
+
+      e.touches[0].clientX;
+
+    touchStartY =
+
+      e.touches[0].clientY;
+
+    touchTarget =
+
+      e.target;
+
+  },
+
+  {passive:true}
+
+);
+
+phone.addEventListener(
+
+  "touchend",
+
+  function(e){
+
+    if(!e.changedTouches.length) return;
+
+    /*
+
+      If the user touched an app button,
+
+      DO NOT treat it as a page swipe.
+
+    */
+
+    if(
+
+      touchTarget &&
+
+      touchTarget.closest &&
+
+      touchTarget.closest(".hotspot")
+
+    ){
+
+      return;
+
+    }
+
+    if(overlay.classList.contains("open")){
+
+      return;
+
+    }
+
+    const x =
+
+      e.changedTouches[0].clientX;
+
+    const y =
+
+      e.changedTouches[0].clientY;
+
+    const dx =
+
+      x - touchStartX;
+
+    const dy =
+
+      y - touchStartY;
+
+    if(
+
+      Math.abs(dy) > 70 &&
+
+      Math.abs(dy) > Math.abs(dx)
+
+    ){
+
+      if(dy < 0){
+
+        showPage(2);
+
+      }else{
+
+        showPage(1);
+
+      }
+
+    }
+
+  },
+
+  {passive:true}
+
+);
+
+/* MOUSE */
+
+let mouseStartX = 0;
+
+let mouseStartY = 0;
+
+let mouseTarget = null;
+
+let mouseDown = false;
+
+phone.addEventListener("mousedown",function(e){
+
+  if(e.button !== 0) return;
+
+  mouseDown = true;
+
+  mouseStartX = e.clientX;
+
+  mouseStartY = e.clientY;
+
+  mouseTarget = e.target;
+
+});
+
+phone.addEventListener("mouseup",function(e){
+
+  if(!mouseDown) return;
+
+  mouseDown = false;
+
+  if(
+
+    mouseTarget &&
+
+    mouseTarget.closest &&
+
+    mouseTarget.closest(".hotspot")
+
+  ){
+
+    return;
+
+  }
+
+  if(overlay.classList.contains("open")){
+
+    return;
+
+  }
+
+  const dx =
+
+    e.clientX - mouseStartX;
+
+  const dy =
+
+    e.clientY - mouseStartY;
+
+  if(
+
+    Math.abs(dy) > 80 &&
+
+    Math.abs(dy) > Math.abs(dx)
+
+  ){
+
+    if(dy < 0){
+
+      showPage(2);
+
+    }else{
+
+      showPage(1);
+
+    }
+
+  }
+
+});
+
+/* ============================================================
+
+   APP OPEN / CLOSE
+
+============================================================ */
+
+function openApp(title,content){
+
+  stopCamera();
+
+  appWindow.innerHTML = `
+
+    <div class="app-header">
+
+      <button
+
+        class="back-button"
+
+        id="app-back"
+
+        type="button"
+
+      >
+
+        ‹
+
+      </button>
+
+      <strong>
+
+        ${escapeHTML(title)}
+
+      </strong>
+
+    </div>
+
+    <div class="app-content">
+
+      ${content}
+
+    </div>
+
+  `;
+
+  overlay.classList.add("open");
+
+  document.getElementById("app-back")
+
+    .onclick = closeApp;
+
+  setupKeyboardFields();
+
+}
+
+function closeApp(){
+
+  stopCamera();
+
+  overlay.classList.remove("open");
+
+  appWindow.innerHTML = "";
+
+  hidePearKeyboard();
+
+}
+
+/* ============================================================
+
+   CUSTOM KEYBOARD
+
+============================================================ */
+
+function setupKeyboardFields(){
+
+  document
+
+    .querySelectorAll(
+
+      "#app-window input, #app-window textarea"
+
+    )
+
+    .forEach(field => {
+
+      field.addEventListener(
+
+        "focus",
+
+        function(){
+
+          keyboardTarget = this;
+
+          showPearKeyboard(this);
+
+        }
+
+      );
+
+    });
+
+}
+
+function showPearKeyboard(field){
+
+  keyboardTarget = field;
+
+  let keyboard =
+
+    document.getElementById("pear-keyboard");
+
+  if(!keyboard){
+
+    keyboard =
+
+      document.createElement("div");
+
+    keyboard.id = "pear-keyboard";
+
+    keyboard.innerHTML = `
+
+      <div class="pear-keyboard-row">
+
+        ${"QWERTYUIOP".split("").map(
+
+          x =>
+
+          `<button
+
+             type="button"
+
+             data-key="${x}"
+
+           >${x}</button>`
+
+        ).join("")}
+
+      </div>
+
+      <div class="pear-keyboard-row">
+
+        ${"ASDFGHJKL".split("").map(
+
+          x =>
+
+          `<button
+
+             type="button"
+
+             data-key="${x}"
+
+           >${x}</button>`
+
+        ).join("")}
+
+      </div>
+
+      <div class="pear-keyboard-row">
+
+        <button
+
+          type="button"
+
+          id="pear-shift"
+
+        >
+
+          ⇧
+
+        </button>
+
+        ${"ZXCVBNM".split("").map(
+
+          x =>
+
+          `<button
+
+             type="button"
+
+             data-key="${x}"
+
+           >${x}</button>`
+
+        ).join("")}
+
+        <button
+
+          type="button"
+
+          id="pear-backspace"
+
+        >
+
+          ⌫
+
+        </button>
+
+      </div>
+
+      <div class="pear-keyboard-row bottom">
+
+        <button
+
+          type="button"
+
+          id="pear-number"
+
+        >
+
+          123
+
+        </button>
+
+        <button
+
+          type="button"
+
+          id="pear-space"
+
+        >
+
+          SPACE
+
+        </button>
+
+        <button
+
+          type="button"
+
+          id="pear-enter"
+
+        >
+
+          ↵
+
+        </button>
+
+      </div>
+
+    `;
+
+    overlay.appendChild(keyboard);
+
+    keyboard
+
+      .querySelectorAll("[data-key]")
+
+      .forEach(button => {
+
+        button.addEventListener(
+
+          "pointerdown",
+
+          function(e){
+
+            e.preventDefault();
+
+            if(!keyboardTarget) return;
+
+            insertText(
+
+              keyboardTarget,
+
+              keyboardShift
+
+                ? this.dataset.key
+
+                : this.dataset.key.toLowerCase()
+
+            );
+
+          }
+
+        );
+
+      });
+
+    document.getElementById("pear-shift")
+
+      .onclick = function(){
+
+        keyboardShift =
+
+          !keyboardShift;
+
+        this.style.background =
+
+          keyboardShift
+
+            ? "#9fd3ff"
+
+            : "#f5f5f7";
+
+      };
+
+    document.getElementById("pear-backspace")
+
+      .onclick = keyboardBackspace;
+
+    document.getElementById("pear-space")
+
+      .onclick = keyboardSpace;
+
+    document.getElementById("pear-enter")
+
+      .onclick = keyboardEnter;
+
+    document.getElementById("pear-number")
+
+      .onclick = keyboardNumber;
+
+  }
+
+  keyboard.style.display = "block";
+
+  requestAnimationFrame(() => {
+
+    keyboard.classList.add(
+
+      "keyboard-show"
+
+    );
+
+  });
+
+}
+
+function hidePearKeyboard(){
+
+  const keyboard =
+
+    document.getElementById("pear-keyboard");
+
+  if(!keyboard) return;
+
+  keyboard.classList.remove(
+
+    "keyboard-show"
+
+  );
+
+  setTimeout(() => {
+
+    if(
+
+      !keyboard.classList.contains(
+
+        "keyboard-show"
+
+      )
+
+    ){
+
+      keyboard.style.display = "none";
+
+    }
+
+  },280);
+
+  keyboardTarget = null;
+
+}
+
+function insertText(field,text){
+
+  if(!field) return;
+
+  const start =
+
+    field.selectionStart ??
+
+    field.value.length;
+
+  const end =
+
+    field.selectionEnd ??
+
+    field.value.length;
+
+  field.value =
+
+    field.value.substring(0,start) +
+
+    text +
+
+    field.value.substring(end);
+
+  field.selectionStart =
+
+    field.selectionEnd =
+
+    start + text.length;
+
+  field.dispatchEvent(
+
+    new Event("input",{bubbles:true})
+
+  );
+
+}
+
+function keyboardSpace(){
+
+  if(keyboardTarget){
+
+    insertText(
+
+      keyboardTarget,
+
+      " "
+
+    );
+
+  }
+
+}
+
+function keyboardEnter(){
+
+  if(keyboardTarget){
+
+    keyboardTarget.blur();
+
+  }
+
+  hidePearKeyboard();
+
+}
+
+function keyboardBackspace(){
+
+  const field =
+
+    keyboardTarget;
+
+  if(!field) return;
+
+  const start =
+
+    field.selectionStart;
+
+  const end =
+
+    field.selectionEnd;
+
+  if(start !== end){
+
+    field.value =
+
+      field.value.substring(0,start) +
+
+      field.value.substring(end);
+
+    field.selectionStart =
+
+      field.selectionEnd =
+
+      start;
+
+  }else if(start > 0){
+
+    field.value =
+
+      field.value.substring(0,start-1) +
+
+      field.value.substring(end);
+
+    field.selectionStart =
+
+      field.selectionEnd =
+
+      start-1;
+
+  }
+
+}
+
+function keyboardNumber(){
+
+  if(keyboardTarget){
+
+    insertText(
+
+      keyboardTarget,
+
+      "1234567890"
+
+    );
+
+  }
+
+}
+
+/* ============================================================
+
+   SOUND
+
+============================================================ */
+
+function playTone(
+
+  frequency=440,
+
+  duration=.1
+
+){
+
+  try{
+
+    if(
+
+      localStorage.getItem(
+
+        "pear-sound"
+
+      ) === "false"
+
+    ){
+
+      return;
+
+    }
+
+    audioContext =
+
+      audioContext ||
+
+      new (
+
+        window.AudioContext ||
+
+        window.webkitAudioContext
+
+      )();
+
+    const oscillator =
+
+      audioContext.createOscillator();
+
+    const gain =
+
+      audioContext.createGain();
+
+    oscillator.frequency.value =
+
+      frequency;
+
+    gain.gain.setValueAtTime(
+
+      .08,
+
+      audioContext.currentTime
+
+    );
+
+    gain.gain.exponentialRampToValueAtTime(
+
+      .001,
+
+      audioContext.currentTime +
+
+      duration
+
+    );
+
+    oscillator.connect(gain);
+
+    gain.connect(
+
+      audioContext.destination
+
+    );
+
+    oscillator.start();
+
+    oscillator.stop(
+
+      audioContext.currentTime +
+
+      duration
+
+    );
+
+  }catch(e){}
+
+}
+
+/* ============================================================
+
+   PAGE 1 APPS
+
+============================================================ */
+
+function messagesApp(){
+
+  openApp(
+
+    "Messages",
+
+    `
+
+      <div id="messages-list">
+
+        <div class="bubble">
+
+          Hey! 👋
+
+        </div>
+
+        <div class="bubble">
+
+          Welcome to Pear Phone.
+
+        </div>
+
+        <div class="bubble me">
+
+          This actually works 😂
+
+        </div>
+
+      </div>
+
+      <div class="row">
+
+        <input
+
+          id="message-input"
+
+          placeholder="iMessage"
+
+        >
+
+        <button
+
+          class="app-button"
+
+          id="send-message"
+
+        >
+
+          Send
+
+        </button>
+
+      </div>
+
+    `
+
+  );
+
+  document.getElementById(
+
+    "send-message"
+
+  ).onclick = function(){
+
+    const input =
+
+      document.getElementById(
+
+        "message-input"
+
+      );
+
+    const value =
+
+      input.value.trim();
+
+    if(!value) return;
+
+    const bubble =
+
+      document.createElement("div");
+
+    bubble.className =
+
+      "bubble me";
+
+    bubble.textContent =
+
+      value;
+
+    document.getElementById(
+
+      "messages-list"
+
+    ).appendChild(bubble);
+
+    input.value = "";
+
+    playTone(700,.08);
+
+  };
+
+  setupKeyboardFields();
+
+}
+
+async function cameraApp(){
+
+  openApp(
+
+    "Camera",
+
+    `
+
+      <video
+
+        id="camera-preview"
+
+        class="camera-video"
+
+        autoplay
+
+        playsinline
+
+      ></video>
+
+      <div class="row">
+
+        <button
+
+          class="app-button"
+
+          id="camera-start"
+
+        >
+
+          📷 Start Camera
+
+        </button>
+
+        <button
+
+          class="app-button"
+
+          id="camera-capture"
+
+        >
+
+          ⭕ Capture
+
+        </button>
+
+      </div>
+
+      <canvas
+
+        id="camera-canvas"
+
+        style="display:none"
+
+      ></canvas>
+
+      <div id="camera-result"></div>
+
+    `
+
+  );
+
+  document.getElementById(
+
+    "camera-start"
+
+  ).onclick = startCamera;
+
+  document.getElementById(
+
+    "camera-capture"
+
+  ).onclick = captureCamera;
+}
+
+async function startCamera(){
+
+  const video =
+
+    document.getElementById(
+
+      "camera-preview"
+
+    );
+
+  if(!video) return;
+
+  try{
+    stopCamera();
+
+    if(!navigator.mediaDevices ||
+       !navigator.mediaDevices.getUserMedia){
+      throw new Error("Camera API unavailable");
+    }
+
+    const initialStream =
+      await navigator.mediaDevices.getUserMedia({
+        video:true,
+        audio:false
+      });
+
+    initialStream.getTracks().forEach(track => track.stop());
+
+    const devices =
+      await navigator.mediaDevices.enumerateDevices();
+
+    const cameras = devices.filter(
+      device => device.kind === "videoinput"
+    );
+
+    const freenove =
+      cameras.find(device =>
+        /freenove/i.test(device.label)
+      );
+
+    const selectedCamera =
+      freenove || cameras[0];
+
+    if(!selectedCamera){
+      throw new Error("No camera found");
+    }
+
+    cameraStream =
+      await navigator.mediaDevices.getUserMedia({
+        video:{
+          deviceId:{exact:selectedCamera.deviceId}
+        },
+        audio:false
+      });
+
+    video.srcObject = cameraStream;
+
+    await video.play().catch(() => {});
+
+  }catch(error){
+
+    const result =
+
+      document.getElementById(
+
+        "camera-result"
+
+      );
+
+    if(result){
+
+      result.innerHTML =
+
+        `<div class="result">
+
+          Camera could not be started. Check that the Freenove camera is connected and camera permission is allowed.
+
+        </div>`;
+
+    }
+
+  }
+
+}
+
+function captureCamera(){
+
+  const video =
+
+    document.getElementById(
+
+      "camera-preview"
+
+    );
+
+  const canvas =
+
+    document.getElementById(
+
+      "camera-canvas"
+
+    );
+
+  if(
+
+    !video ||
+
+    !canvas ||
+
+    !video.videoWidth
+
+  ){
+
+    return;
+
+  }
+
+  canvas.width =
+
+    video.videoWidth;
+
+  canvas.height =
+
+    video.videoHeight;
+
+  canvas
+
+    .getContext("2d")
+
+    .drawImage(
+
+      video,
+
+      0,
+
+      0,
+
+      canvas.width,
+
+      canvas.height
+
+    );
+
+  const image =
+
+    document.createElement("img");
+
+  image.src =
+
+    canvas.toDataURL(
+
+      "image/jpeg",
+
+      .9
+
+    );
+
+  image.style.width =
+
+    "100%";
+
+  image.style.borderRadius =
+
+    "12px";
+
+  document.getElementById(
+
+    "camera-result"
+
+  ).innerHTML =
+
+    "<p>📸 Captured!</p>";
+
+  document.getElementById(
+
+    "camera-result"
+
+  ).appendChild(image);
+
+}
+
+function stopCamera(){
+
+  if(cameraStream){
+
+    cameraStream
+
+      .getTracks()
+
+      .forEach(track =>
+
+        track.stop()
+
+      );
+
+    cameraStream = null;
+
+  }
+
+}
+
+function splashfaceApp(){
+
+  openApp(
+
+    "SplashFace",
+
+    `
+
+      <div class="card">
+
+        <h2>😎 SplashFace</h2>
+
+        <input
+
+          id="status-input"
+
+          placeholder="What's happening?"
+
+        >
+
+        <button
+
+          class="app-button"
+
+          id="post-status"
+
+        >
+
+          Post
+
+        </button>
+
+      </div>
+
+      <div id="status-feed"></div>
+
+    `
+
+  );
+
+  document.getElementById(
+
+    "post-status"
+
+  ).onclick = function(){
+
+    const input =
+
+      document.getElementById(
+
+        "status-input"
+
+      );
+
+    const value =
+
+      input.value.trim();
+
+    if(!value) return;
+
+    const card =
+
+      document.createElement("div");
+
+    card.className =
+
+      "card";
+
+    card.innerHTML = `
+
+      <strong>You</strong>
+
+      <p>${escapeHTML(value)}</p>
+
+      <small>Just now · 🍐</small>
+
+    `;
+
+    document.getElementById(
+
+      "status-feed"
+
+    ).prepend(card);
+
+    input.value = "";
+
+  };
+
+  setupKeyboardFields();
+
+}
+
+function stocksApp(){
+
+  openApp(
+
+    "Stocks",
+
+    `
+
+      <div class="card">
+
+        <h2>📈 Market</h2>
+
+        <div class="stock">
+
+          <strong>PEAR</strong>
+
+          <span>$184.22</span>
+
+          <b>+2.81%</b>
+
+        </div>
+
+        <div class="stock">
+
+          <strong>AAPL</strong>
+
+          <span>$247.10</span>
+
+          <b>+1.24%</b>
+
+        </div>
+
+        <div class="stock">
+
+          <strong>NVDA</strong>
+
+          <span>$181.47</span>
+
+          <b>+3.09%</b>
+
+        </div>
+
+        <div class="stock">
+
+          <strong>TSLA</strong>
+
+          <span>$421.08</span>
+
+          <b>-0.74%</b>
+
+        </div>
+
+      </div>
+
+    `
+
+  );
+
+}
+
+function mapsApp(){
+
+  openApp(
+
+    "Maps",
+
+    `
+
+      <div class="map">
+
+        🗺️
+
+      </div>
+
+      <input
+
+        id="map-search"
+
+        placeholder="Search a place"
+
+      >
+
+      <button
+
+        class="app-button"
+
+        id="map-open"
+
+      >
+
+        🔎 Search
+
+      </button>
+
+      <div id="map-result"></div>
+
+    `
+
+  );
+
+  document.getElementById(
+
+    "map-open"
+
+  ).onclick = function(){
+
+    const query =
+
+      document.getElementById(
+
+        "map-search"
+
+      ).value.trim();
+
+    if(!query) return;
+
+    document.getElementById(
+
+      "map-result"
+
+    ).innerHTML = `
+
+      <div class="result">
+
+        📍 ${escapeHTML(query)}
+
+      </div>
+
+    `;
+
+  };
+
+  setupKeyboardFields();
+
+}
+
+function photosApp(){
+
+  openApp(
+
+    "Photos",
+
+    `
+
+      <input
+
+        id="photo-picker"
+
+        type="file"
+
+        accept="image/*"
+
+        multiple
+
+      >
+
+      <div
+
+        class="photos"
+
+        id="photo-grid"
+
+      ></div>
+
+    `
+
+  );
+
+  document.getElementById(
+
+    "photo-picker"
+
+  ).onchange = function(){
+
+    const grid =
+
+      document.getElementById(
+
+        "photo-grid"
+
+      );
+
+    [...this.files].forEach(file => {
+
+      const image =
+
+        document.createElement("img");
+
+      image.src =
+
+        URL.createObjectURL(file);
+
+      grid.appendChild(image);
+
+    });
+
+  };
+
+}
+
+function weatherApp(){
+
+  openApp(
+
+    "Weather",
+
+    `
+
+      <div class="card">
+
+        <h2>☀️ Weather</h2>
+
+        <div class="big-display">
+
+          22°
+
+        </div>
+
+        <p style="text-align:center">
+
+          Partly Cloudy
+
+        </p>
+
+      </div>
+
+      <button
+
+        class="app-button"
+
+        onclick="weatherForecast('Today')"
+
+      >
+
+        Today
+
+      </button>
+
+      <button
+
+        class="app-button"
+
+        onclick="weatherForecast('Tomorrow')"
+
+      >
+
+        Tomorrow
+
+      </button>
+
+      <div
+
+        id="weather-result"
+
+        class="result"
+
+      >
+
+        Choose a forecast.
+
+      </div>
+
+    `
+
+  );
+
+}
+
+function weatherForecast(day){
+
+  document.getElementById(
+
+    "weather-result"
+
+  ).textContent =
+
+    day +
+
+    ": ⛅ Partly cloudy — 22°C";
+
+}
+
+function notesApp(){
+
+  openApp(
+
+    "Notes",
+
+    `
+
+      <textarea
+
+        id="notes-area"
+
+        placeholder="Write something..."
+
+      ></textarea>
+
+      <button
+
+        class="app-button"
+
+        id="save-note"
+
+      >
+
+        💾 Save
+
+      </button>
+
+      <button
+
+        class="app-button"
+
+        id="clear-note"
+
+      >
+
+        🗑️ Clear
+
+      </button>
+
+      <div id="note-status"></div>
+
+    `
+
+  );
+
+  const area =
+
+    document.getElementById(
+
+      "notes-area"
+
+    );
+
+  const saved =
+
+    localStorage.getItem(
+
+      "pear-notes"
+
+    );
+
+  if(saved){
+
+    area.value = saved;
+
+  }
+
+  document.getElementById(
+
+    "save-note"
+
+  ).onclick = function(){
+
+    localStorage.setItem(
+
+      "pear-notes",
+
+      area.value
+
+    );
+
+    document.getElementById(
+
+      "note-status"
+
+    ).innerHTML =
+
+      `<div class="result">Saved ✓</div>`;
+
+  };
+
+  document.getElementById(
+
+    "clear-note"
+
+  ).onclick = function(){
+
+    area.value = "";
+
+    localStorage.removeItem(
+
+      "pear-notes"
+
+    );
+
+  };
+
+  setupKeyboardFields();
+
+}
+
+function pearTunesApp(){
+
+  openApp(
+
+    "PearTunes",
+
+    `
+
+      <div class="card">
+
+        <h2>🎵 PearTunes</h2>
+
+        <div
+
+          class="big-display"
+
+          id="music-title"
+
+        >
+
+          Choose a track
+
+        </div>
+
+        <button
+
+          class="app-button"
+
+          onclick="playTrack('Pear Dreams')"
+
+        >
+
+          ▶ Pear Dreams
+
+        </button>
+
+        <button
+
+          class="app-button"
+
+          onclick="playTrack('Midnight Pear')"
+
+        >
+
+          ▶ Midnight Pear
+
+        </button>
+
+        <button
+
+          class="app-button"
+
+          onclick="playTrack('Pearwave')"
+
+        >
+
+          ▶ Pearwave
+
+        </button>
+
+      </div>
+
+    `
+
+  );
+
+}
+
+function playTrack(title){
+
+  document.getElementById(
+
+    "music-title"
+
+  ).textContent =
+
+    title;
+
+  playTone(600,.2);
+
+}
+
+function settingsApp(){
+
+  openApp(
+
+    "Settings",
+
+    `
+
+      <div class="card">
+
+        <h2>⚙️ Settings</h2>
+
+        <button
+
+          class="app-button"
+
+          id="dark-toggle"
+
+        >
+
+          🌙 Dark / Light Mode
+
+        </button>
+
+        <button
+
+          class="app-button"
+
+          id="sound-toggle"
+
+        >
+
+          🔊 Sound On / Off
+
+        </button>
+
+        <button
+
+          class="app-button"
+
+          onclick="showPhoneInfo()"
+
+        >
+
+          🍐 Pear Phone Info
+
+        </button>
+
+        <button
+
+          class="app-button"
+
+          onclick="showBattery()"
+
+        >
+
+          🔋 Battery
+
+        </button>
+
+      </div>
+
+    `
+
+  );
+
+  document.getElementById(
+
+    "dark-toggle"
+
+  ).onclick =
+
+    toggleDarkMode;
+
+  document.getElementById(
+
+    "sound-toggle"
+
+  ).onclick =
+
+    toggleSound;
+
+}
+
+function toggleDarkMode(){
+
+  document.body.classList.toggle(
+
+    "dark-mode"
+
+  );
+
+  localStorage.setItem(
+
+    "pear-dark",
+
+    document.body.classList.contains(
+
+      "dark-mode"
+
+    )
+
+  );
+
+}
+
+function toggleSound(){
+
+  const enabled =
+
+    localStorage.getItem(
+
+      "pear-sound"
+
+    ) !== "false";
+
+  localStorage.setItem(
+
+    "pear-sound",
+
+    String(!enabled)
+
+  );
+
+}
+
+function showPhoneInfo(){
+
+  alert(
+
+    "🍐 PEAR PHONE\n\n" +
+
+    "Pear Phone OS\n" +
+
+    "Version 2.0"
+
+  );
+
+}
+
+async function showBattery(){
+
+  if(navigator.getBattery){
+
+    const battery =
+
+      await navigator.getBattery();
+
+    alert(
+
+      "Battery: " +
+
+      Math.round(
+
+        battery.level*100
+
+      ) +
+
+      "%"
+
+    );
+
+  }
+
+}
+
+function clockApp(){
+
+  openApp(
+
+    "Clock",
+
+    `
+
+      <div class="card">
+
+        <div
+
+          class="big-display"
+
+          id="clock-display"
+
+        >
+
+          --:--:--
+
+        </div>
+
+      </div>
+
+    `
+
+  );
+
+  function updateClock(){
+
+    const now =
+
+      new Date();
+
+    const display =
+
+      document.getElementById(
+
+        "clock-display"
+
+      );
+
+    if(display){
+
+      display.textContent =
+
+        now.toLocaleTimeString();
+
+    }
+
+  }
+
+  updateClock();
+
+  window.pearClock =
+
+    setInterval(
+
+      updateClock,
+
+      1000
+
+    );
+
+}
+
+function videosApp(){
+
+  openApp(
+
+    "Videos",
+
+    `
+
+      <div class="card">
+
+        <h2>🎬 Videos</h2>
+
+        <input
+
+          type="file"
+
+          id="video-file"
+
+          accept="video/*"
+
+        >
+
+      </div>
+
+      <video
+
+        id="video-player"
+
+        controls
+
+        style="
+
+          display:none;
+
+          width:100%;
+
+          border-radius:12px;
+
+        "
+
+      ></video>
+
+    `
+
+  );
+
+  document.getElementById(
+
+    "video-file"
+
+  ).onchange = function(){
+
+    const file =
+
+      this.files[0];
+
+    if(!file) return;
+
+    const video =
+
+      document.getElementById(
+
+        "video-player"
+
+      );
+
+    video.src =
+
+      URL.createObjectURL(file);
+
+    video.style.display =
+
+      "block";
+
+  };
+
+}
+
+function phoneApp(){
+
+  openApp(
+
+    "Phone",
+
+    `
+
+      <div class="card">
+
+        <h2>📞 Phone</h2>
+
+        <div
+
+          class="big-display"
+
+          id="dial-display"
+
+        >
+
+          _
+
+        </div>
+
+        <div
+
+          style="
+
+            display:grid;
+
+            grid-template-columns:repeat(3,1fr);
+
+            gap:5px;
+
+          "
+
+        >
+
+          ${[
+
+            "1","2","3",
+
+            "4","5","6",
+
+            "7","8","9",
+
+            "*","0","#"
+
+          ].map(number => `
+
+            <button
+
+              class="app-button"
+
+              onclick="dialNumber('${number}')"
+
+            >
+
+              ${number}
+
+            </button>
+
+          `).join("")}
+
+        </div>
+
+        <button
+
+          class="app-button"
+
+          onclick="clearDial()"
+
+        >
+
+          Clear
+
+        </button>
+
+      </div>
+
+    `
+
+  );
+
+}
+
+let dialValue = "";
+
+function dialNumber(number){
+
+  dialValue += number;
+
+  const display =
+
+    document.getElementById(
+
+      "dial-display"
+
+    );
+
+  if(display){
+
+    display.textContent =
+
+      dialValue;
+
+  }
+
+}
+
+function clearDial(){
+
+  dialValue = "";
+
+  const display =
+
+    document.getElementById(
+
+      "dial-display"
+
+    );
+
+  if(display){
+
+    display.textContent =
+
+      "_";
+
+  }
+
+}
+
+function mailApp(){
+
+  openApp(
+
+    "Mail",
+
+    `
+
+      <input
+
+        id="mail-to"
+
+        placeholder="To"
+
+      >
+
+      <input
+
+        id="mail-subject"
+
+        placeholder="Subject"
+
+      >
+
+      <textarea
+
+        id="mail-body"
+
+        placeholder="Message"
+
+      ></textarea>
+
+      <button
+
+        class="app-button"
+
+        id="mail-send"
+
+      >
+
+        ✉️ Send
+
+      </button>
+
+    `
+
+  );
+
+  document.getElementById(
+
+    "mail-send"
+
+  ).onclick = function(){
+
+    const to =
+
+      document.getElementById(
+
+        "mail-to"
+
+      ).value;
+
+    const subject =
+
+      document.getElementById(
+
+        "mail-subject"
+
+      ).value;
+
+    const body =
+
+      document.getElementById(
+
+        "mail-body"
+
+      ).value;
+
+    window.location.href =
+
+      "mailto:" +
+
+      encodeURIComponent(to) +
+
+      "?subject=" +
+
+      encodeURIComponent(subject) +
+
+      "&body=" +
+
+      encodeURIComponent(body);
+
+  };
+
+  setupKeyboardFields();
+
+}
+
+function compassApp(){
+
+  openApp(
+
+    "Compass",
+
+    `
+
+      <div class="card">
+
+        <div
+
+          class="big-display"
+
+          id="heading"
+
+        >
+
+          0°
+
+        </div>
+
+        <p>
+
+          Tap enable to use your device orientation.
+
+        </p>
+
+        <button
+
+          class="app-button"
+
+          id="compass-start"
+
+        >
+
+          🧭 Enable
+
+        </button>
+
+      </div>
+
+    `
+
+  );
+
+  document.getElementById(
+
+    "compass-start"
+
+  ).onclick = function(){
+
+    window.addEventListener(
+
+      "deviceorientation",
+
+      updateCompass
+
+    );
+
+  };
+
+}
+
+function updateCompass(event){
+
+  let heading =
+
+    event.webkitCompassHeading;
+
+  if(heading == null){
+
+    heading =
+
+      event.alpha == null
+
+        ? 0
+
+        : 360-event.alpha;
+
+  }
+
+  const display =
+
+    document.getElementById(
+
+      "heading"
+
+    );
+
+  if(display){
+
+    display.textContent =
+
+      Math.round(heading) +
+
+      "°";
+
+  }
+
+}
+
+/* ============================================================
+
+   PAGE 2 APPS
+
+============================================================ */
+
+function lingoApp(){
+
+  openApp(
+
+    "Lingo",
+
+    `
+
+      <div class="card">
+
+        <h2>🌎 Lingo</h2>
+
+        <input
+
+          id="lingo-input"
+
+          placeholder="Type something..."
+
+        >
+
+        <button
+
+          class="app-button"
+
+          id="lingo-go"
+
+        >
+
+          Translate
+
+        </button>
+
+        <div
+
+          class="result"
+
+          id="lingo-result"
+
+        >
+
+          Translation appears here.
+
+        </div>
+
+      </div>
+
+    `
+
+  );
+
+  document.getElementById(
+
+    "lingo-go"
+
+  ).onclick = function(){
+
+    const text =
+
+      document.getElementById(
+
+        "lingo-input"
+
+      ).value
+
+      .trim()
+
+      .toLowerCase();
+
+    const translations = {
+
+      hello:"Hola 👋",
+
+      goodbye:"Adiós 👋",
+
+      thanks:"Gracias 🙏",
+
+      yes:"Sí",
+
+      no:"No",
+
+      love:"Amor ❤️",
+
+      pear:"Pera 🍐"
+
+    };
+
+    document.getElementById(
+
+      "lingo-result"
+
+    ).textContent =
+
+      translations[text] ||
+
+      "Try: hello, goodbye, thanks, yes, no, love, pear.";
+
+  };
+
+  setupKeyboardFields();
+
+}
+
+/* THUMBS UP */
+
+function tumsApp(){
+
+  openApp(
+
+    "Thumb",
+
+    `
+
+      <div class="game">
+
+        <h2>👍 Thumb Battle</h2>
+
+        <p>
+
+          Tap the thumb!
+
+        </p>
+
+        <button
+
+          class="game-button"
+
+          id="thumb-button"
+
+          type="button"
+
+        >
+
+          👍
+
+        </button>
+
+        <p id="thumb-result">
+
+          Ready!
+
+        </p>
+
+        <p id="thumb-score">
+
+          Score: 0
+
+        </p>
+
+      </div>
+
+    `
+
+  );
+
+  let score = 0;
+
+  const button =
+
+    document.getElementById(
+
+      "thumb-button"
+
+    );
+
+  button.onclick = function(){
+
+    score++;
+
+    document.getElementById(
+
+      "thumb-score"
+
+    ).textContent =
+
+      "Score: " + score;
+
+    const results = [
+
+      "You won! 🏆",
+
+      "Nice! 👍",
+
+      "Pear Phone approves! 🍐",
+
+      "Again! 🔥"
+
+    ];
+
+    document.getElementById(
+
+      "thumb-result"
+
+    ).textContent =
+
+      results[
+
+        Math.floor(
+
+          Math.random()*results.length
+
+        )
+
+      ];
+
+    playTone(650,.08);
+
+  };
+
+}
+
+/* DANWARP */
+
+function danwarpApp(){
+
+  openApp(
+
+    "DanWarp",
+
+    `
+
+      <div class="card">
+
+        <h2>🌀 DanWarp</h2>
+
+        <input
+
+          id="warp-number"
+
+          type="number"
+
+          placeholder="Number"
+
+        >
+
+        <button
+
+          class="app-button"
+
+          id="warp-button"
+
+        >
+
+          🌀 Warp
+
+        </button>
+
+        <div
+
+          class="big-display"
+
+          id="warp-result"
+
+        >
+
+          ?
+
+        </div>
+
+      </div>
+
+    `
+
+  );
+
+  document.getElementById(
+
+    "warp-button"
+
+  ).onclick = function(){
+
+    const number =
+
+      Number(
+
+        document.getElementById(
+
+          "warp-number"
+
+        ).value
+
+      );
+
+    if(isNaN(number)) return;
+
+    document.getElementById(
+
+      "warp-result"
+
+    ).textContent =
+
+      Math.round(
+
+        (number*1.618+42)*100
+
+      )/100;
+
+  };
+
+  setupKeyboardFields();
+
+}
+
+/* IMAGE */
+
+function imageApp(){
+
+  openApp(
+
+    "Image",
+
+    `
+
+      <div class="card">
+
+        <h2>🖼️ Image Lab</h2>
+
+        <input
+
+          type="file"
+
+          id="image-file"
+
+          accept="image/*"
+
+        >
+
+      </div>
+
+      <img
+
+        id="image-preview"
+
+        style="
+
+          display:none;
+
+          width:100%;
+
+          border-radius:12px;
+
+        "
+
+      >
+
+      <button
+
+        class="app-button"
+
+        id="image-rotate"
+
+      >
+
+        🔄 Rotate
+
+      </button>
+
+    `
+
+  );
+
+  const preview =
+
+    document.getElementById(
+
+      "image-preview"
+
+    );
+
+  let rotation = 0;
+
+  document.getElementById(
+
+    "image-file"
+
+  ).onchange = function(){
+
+    const file =
+
+      this.files[0];
+
+    if(!file) return;
+
+    preview.src =
+
+      URL.createObjectURL(file);
+
+    preview.style.display =
+
+      "block";
+
+  };
+
+  document.getElementById(
+
+    "image-rotate"
+
+  ).onclick = function(){
+
+    rotation += 90;
+
+    preview.style.transform =
+
+      `rotate(${rotation}deg)`;
+
+  };
+
+}
+
+/* CHRONO */
+
+function chronoApp(){
+
+  openApp(
+
+    "Chrono",
+
+    `
+
+      <div class="card">
+
+        <h2>⏱️ Chrono</h2>
+
+        <div
+
+          class="big-display"
+
+          id="chrono-display"
+
+        >
+
+          00:00.0
+
+        </div>
+
+        <button
+
+          class="app-button"
+
+          id="chrono-start"
+
+        >
+
+          ▶ Start
+
+        </button>
+
+        <button
+
+          class="app-button"
+
+          id="chrono-stop"
+
+        >
+
+          ⏸ Stop
+
+        </button>
+
+        <button
+
+          class="app-button"
+
+          id="chrono-reset"
+
+        >
+
+          ↺ Reset
+
+        </button>
+
+      </div>
+
+    `
+
+  );
+
+  let start = 0;
+
+  let elapsed = 0;
+
+  let timer = null;
+
+  function render(){
+
+    const total =
+
+      elapsed +
+
+      (
+
+        timer
+
+          ? Date.now()-start
+
+          : 0
+
+      );
+
+    const seconds =
+
+      Math.floor(total/1000);
+
+    const minutes =
+
+      Math.floor(seconds/60);
+
+    const secs =
+
+      seconds%60;
+
+    const tenths =
+
+      Math.floor(
+
+        (total%1000)/100
+
+      );
+
+    document.getElementById(
+
+      "chrono-display"
+
+    ).textContent =
+
+      String(minutes).padStart(2,"0") +
+
+      ":" +
+
+      String(secs).padStart(2,"0") +
+
+      "." +
+
+      tenths;
+
+  }
+
+  document.getElementById(
+
+    "chrono-start"
+
+  ).onclick = function(){
+
+    if(timer) return;
+
+    start = Date.now();
+
+    timer =
+
+      setInterval(
+
+        render,
+
+        50
+
+      );
+
+  };
+
+  document.getElementById(
+
+    "chrono-stop"
+
+  ).onclick = function(){
+
+    if(!timer) return;
+
+    elapsed +=
+
+      Date.now()-start;
+
+    clearInterval(timer);
+
+    timer = null;
+
+    render();
+
+  };
+
+  document.getElementById(
+
+    "chrono-reset"
+
+  ).onclick = function(){
+
+    if(timer){
+
+      clearInterval(timer);
+
+    }
+
+    timer = null;
+
+    elapsed = 0;
+
+    render();
+
+  };
+
+}
+
+/* ZAPLOOK */
+
+function zaplookApp(){
+
+  openApp(
+
+    "ZapLook",
+
+    `
+
+      <div class="card">
+
+        <h2>⚡ ZapLook</h2>
+
+        <input
+
+          id="zap-input"
+
+          placeholder="Search..."
+
+        >
+
+        <button
+
+          class="app-button"
+
+          id="zap-search"
+
+        >
+
+          ⚡ Zap
+
+        </button>
+
+        <div
+
+          id="zap-results"
+
+        ></div>
+
+      </div>
+
+    `
+
+  );
+
+  document.getElementById(
+
+    "zap-search"
+
+  ).onclick = function(){
+
+    const value =
+
+      document.getElementById(
+
+        "zap-input"
+
+      ).value.trim();
+
+    if(!value) return;
+
+    document.getElementById(
+
+      "zap-results"
+
+    ).innerHTML = `
+
+      <div class="result">
+
+        ⚡ Results for
+
+        <strong>
+
+          ${escapeHTML(value)}
+
+        </strong>
+
+      </div>
+
+    `;
+
+  };
+
+  setupKeyboardFields();
+
+}
+
+/* MONKEY */
+
+function monkeyApp(){
+
+  openApp(
+
+    "Monkey",
+
+    `
+
+      <div class="game">
+
+        <h2>🐒 Monkey Catch</h2>
+
+        <div
+
+          id="monkey-arena"
+
+          style="
+
+            position:relative;
+
+            height:210px;
+
+            background:#d9efcf;
+
+            border-radius:15px;
+
+            overflow:hidden;
+
+          "
+
+        >
+
+          <button
+
+            id="monkey-button"
+
+            style="
+
+              position:absolute;
+
+              width:60px;
+
+              height:60px;
+
+              border:0;
+
+              border-radius:50%;
+
+              background:#fff;
+
+              font-size:30px;
+
+              cursor:pointer;
+
+            "
+
+          >
+
+            🐒
+
+          </button>
+
+        </div>
+
+        <p id="monkey-score">
+
+          Score: 0
+
+        </p>
+
+      </div>
+
+    `
+
+  );
+
+  const monkey =
+
+    document.getElementById(
+
+      "monkey-button"
+
+    );
+
+  let score = 0;
+
+  function move(){
+
+    const arena =
+
+      document.getElementById(
+
+        "monkey-arena"
+
+      );
+
+    monkey.style.left =
+
+      Math.random() *
+
+      (arena.clientWidth-60) +
+
+      "px";
+
+    monkey.style.top =
+
+      Math.random() *
+
+      (arena.clientHeight-60) +
+
+      "px";
+
+  }
+
+  monkey.onclick = function(){
+
+    score++;
+
+    document.getElementById(
+
+      "monkey-score"
+
+    ).textContent =
+
+      "Score: " + score;
+
+    move();
+
+  };
+
+  move();
+
+}
+
+/* REMARK */
+
+function remarkApp(){
+
+  openApp(
+
+    "Remark",
+
+    `
+
+      <div class="card">
+
+        <h2>💬 Remark</h2>
+
+        <button
+
+          class="app-button"
+
+          id="remark-button"
+
+        >
+
+          ✨ Generate Remark
+
+        </button>
+
+        <div
+
+          class="result"
+
+          id="remark-result"
+
+        >
+
+          Tap generate.
+
+        </div>
+
+      </div>
+
+    `
+
+  );
+
+  document.getElementById(
+
+    "remark-button"
+
+  ).onclick = function(){
+
+    const remarks = [
+
+      "That's very Pear Phone of you. 🍐",
+
+      "Honestly? Iconic.",
+
+      "The Pear Phone approves.",
+
+      "Absolutely remarkable.",
+
+      "I have no notes. 😂",
+
+      "That was unexpected."
+
+    ];
+
+    document.getElementById(
+
+      "remark-result"
+
+    ).textContent =
+
+      remarks[
+
+        Math.floor(
+
+          Math.random()*remarks.length
+
+        )
+
+      ];
+
+  };
+
+}
+
+/* ============================================================
+
+   THE IMPORTANT PART
+
+   EACH BUTTON GETS ITS OWN FUNCTION
+
+============================================================ */
+
+const page1Apps = {
+
+  messages: messagesApp,
+
+  camera: cameraApp,
+
+  splashface: splashfaceApp,
+
+  stocks: stocksApp,
+
+  maps: mapsApp,
+
+  photos: photosApp,
+
+  weather: weatherApp,
+
+  notes: notesApp,
+
+  peartunes: pearTunesApp,
+
+  settings: settingsApp,
+
+  clock: clockApp,
+
+  videos: videosApp,
+
+  phone: phoneApp,
+
+  mail: mailApp,
+
+  compass: compassApp,
+
+  music: pearTunesApp
+
+};
+
+const page2Apps = {
+
+  "p2-lingo": lingoApp,
+
+  "p2-splash": splashfaceApp,
+
+  "p2-thumb": tumsApp,
+
+  "p2-danwarp": danwarpApp,
+
+  "p2-image": imageApp,
+
+  "p2-chrono": chronoApp,
+
+  "p2-zaplook": zaplookApp,
+
+  "p2-weather": weatherApp,
+
+  "p2-music": pearTunesApp,
+
+  "p2-monkey": monkeyApp,
+
+  "p2-remark": remarkApp,
+
+  "p2-settings": settingsApp,
+
+  "p2-phone": phoneApp,
+
+  "p2-mail": mailApp,
+
+  "p2-compass": compassApp,
+
+  "p2-music2": pearTunesApp
+
+};
+
+/*
+
+  PAGE 1 CLICK HANDLERS
+
+*/
+
+Object.keys(page1Apps).forEach(id => {
+
+  const button =
+
+    document.getElementById(id);
+
+  if(!button) return;
+
+  button.addEventListener(
+
+    "click",
+
+    function(e){
+
+      e.preventDefault();
+
+      e.stopImmediatePropagation();
+
+      if(currentPage !== 1){
+
+        return;
+
+      }
+
+      page1Apps[id]();
+
+    },
+
+    true
+
+  );
+
+});
+
+/*
+
+  PAGE 2 CLICK HANDLERS
+
+  Every individual Page 2 button gets
+
+  its own handler.
+
+*/
+
+Object.keys(page2Apps).forEach(id => {
+
+  const button = document.getElementById(id);
+
+  if(!button) return;
+
+  button.onclick = function(e){
+
+    e.preventDefault();
+
+    e.stopPropagation();
+
+    if(currentPage !== 2) return;
+
+    const selectedApp = page2Apps[id];
+
+    if(typeof selectedApp === "function"){
+
+      selectedApp();
+
+    }
+
+  };
+
+});
+
+/* ============================================================
+
+   HOME
+
+============================================================ */
+
+document.getElementById(
+
+  "home"
+
+).addEventListener(
+
+  "click",
+
+  function(e){
+
+    e.preventDefault();
+
+    e.stopImmediatePropagation();
+
+    goHome();
+
+  },
+
+  true
+
+);
+
+/* ============================================================
+
+   DARK MODE RESTORE
+
+============================================================ */
+
+if(
+
+  localStorage.getItem(
+
+    "pear-dark"
+
+  ) === "true"
+
+){
+
+  document.body.classList.add(
+
+    "dark-mode"
+
+  );
+
+}
+
+/* ============================================================
+
+   START
+
+============================================================ */
+
+showPage(1);
+
+</script>
+
+</body>
+
+</html>

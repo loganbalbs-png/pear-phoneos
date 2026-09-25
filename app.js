@@ -3270,3 +3270,535 @@ connectPage1Apps();
 connectPage2Apps();
 
 showPage(1);
+/* ============================================================
+   RASPBERRY PI + CAMERA + KEYBOARD FIX
+   ONLY ADDITIONS — DO NOT CHANGE ANYTHING ELSE
+============================================================ */
+
+
+/* ============================================================
+   RASPBERRY PI TOUCHSCREEN PAGE SWITCHING
+   SWIPE UP   = PAGE 2
+   SWIPE DOWN = PAGE 1
+============================================================ */
+
+(function(){
+
+  let piPointerStartX = 0;
+  let piPointerStartY = 0;
+  let piPointerActive = false;
+  let piPointerTarget = null;
+
+  phone.style.touchAction = "none";
+
+  phone.addEventListener(
+    "pointerdown",
+    function(e){
+
+      if(e.pointerType !== "touch"){
+        return;
+      }
+
+      if(overlay.classList.contains("open")){
+        return;
+      }
+
+      piPointerStartX = e.clientX;
+      piPointerStartY = e.clientY;
+      piPointerActive = true;
+      piPointerTarget = e.target;
+
+      try{
+        phone.setPointerCapture(e.pointerId);
+      }catch(error){}
+
+    },
+    {passive:false}
+  );
+
+
+  phone.addEventListener(
+    "pointerup",
+    function(e){
+
+      if(e.pointerType !== "touch"){
+        return;
+      }
+
+      if(!piPointerActive){
+        return;
+      }
+
+      piPointerActive = false;
+
+      if(overlay.classList.contains("open")){
+        return;
+      }
+
+      /*
+        NEVER switch pages when the user is
+        touching an app icon.
+      */
+
+      if(
+        piPointerTarget &&
+        piPointerTarget.closest &&
+        piPointerTarget.closest(".hotspot")
+      ){
+        return;
+      }
+
+      const dx =
+        e.clientX - piPointerStartX;
+
+      const dy =
+        e.clientY - piPointerStartY;
+
+
+      /*
+        Require a real vertical swipe.
+      */
+
+      if(
+        Math.abs(dy) < 60 ||
+        Math.abs(dy) <= Math.abs(dx)
+      ){
+        return;
+      }
+
+
+      /*
+        SWIPE UP
+        PAGE 1 → PAGE 2
+      */
+
+      if(
+        dy < 0 &&
+        currentPage === 1
+      ){
+
+        showPage(2);
+
+        return;
+      }
+
+
+      /*
+        SWIPE DOWN
+        PAGE 2 → PAGE 1
+      */
+
+      if(
+        dy > 0 &&
+        currentPage === 2
+      ){
+
+        showPage(1);
+
+        return;
+      }
+
+    },
+    {passive:false}
+  );
+
+
+  phone.addEventListener(
+    "pointercancel",
+    function(){
+
+      piPointerActive = false;
+
+    },
+    {passive:true}
+  );
+
+})();
+
+
+/* ============================================================
+   KEYBOARD ORIENTATION FIX
+   THE PEAR KEYBOARD IS COUNTER-ROTATED SO IT IS NOT INVERTED
+============================================================ */
+
+(function(){
+
+  const keyboardFix = document.createElement("style");
+
+  keyboardFix.id = "pear-keyboard-orientation-fix";
+
+  keyboardFix.textContent = `
+
+    #pear-keyboard{
+      transform:
+        translateY(120%)
+        rotate(-90deg) !important;
+
+      transform-origin:center center !important;
+    }
+
+    #pear-keyboard.keyboard-show{
+      transform:
+        translateY(0)
+        rotate(-90deg) !important;
+    }
+
+  `;
+
+  document.head.appendChild(keyboardFix);
+
+})();
+
+
+/* ============================================================
+   CAMERA FIX
+   USE FREenove CAMERA WHEN AVAILABLE
+============================================================ */
+
+window.startCamera = async function(){
+
+  const video =
+    document.getElementById(
+      "camera-preview"
+    );
+
+  if(!video){
+    return;
+  }
+
+
+  try{
+
+    stopCamera();
+
+
+    /*
+      Check browser camera support.
+    */
+
+    if(
+      !navigator.mediaDevices ||
+      !navigator.mediaDevices.getUserMedia
+    ){
+
+      throw new Error(
+        "Camera API is unavailable"
+      );
+
+    }
+
+
+    /*
+      FIRST:
+      Ask for camera permission.
+
+      This is important because Chromium
+      often hides USB/Freenove camera names
+      until permission has been granted.
+    */
+
+    const permissionStream =
+      await navigator.mediaDevices.getUserMedia({
+        video:true,
+        audio:false
+      });
+
+
+    permissionStream
+      .getTracks()
+      .forEach(track => track.stop());
+
+
+    /*
+      Find every camera connected to
+      the Raspberry Pi.
+    */
+
+    const devices =
+      await navigator.mediaDevices.enumerateDevices();
+
+
+    const cameras =
+      devices.filter(
+        device =>
+          device.kind === "videoinput"
+      );
+
+
+    if(!cameras.length){
+
+      throw new Error(
+        "No camera was found"
+      );
+
+    }
+
+
+    /*
+      Prefer FREenove.
+
+      If Chromium does not expose the
+      Freenove name, look for common USB
+      camera names.
+    */
+
+    let selectedCamera =
+      cameras.find(
+        device =>
+          /freenove/i.test(
+            device.label
+          )
+      );
+
+
+    if(!selectedCamera){
+
+      selectedCamera =
+        cameras.find(
+          device =>
+            /usb|webcam|camera/i.test(
+              device.label
+            )
+        );
+
+    }
+
+
+    /*
+      If the name is hidden,
+      use the first available camera.
+    */
+
+    if(!selectedCamera){
+
+      selectedCamera =
+        cameras[0];
+
+    }
+
+
+    /*
+      Open the selected camera.
+    */
+
+    cameraStream =
+      await navigator.mediaDevices.getUserMedia({
+
+        video:{
+          deviceId:{
+            exact:
+              selectedCamera.deviceId
+          },
+
+          width:{
+            ideal:1280
+          },
+
+          height:{
+            ideal:720
+          }
+        },
+
+        audio:false
+
+      });
+
+
+    /*
+      Put the live camera feed
+      into the Pear Phone camera app.
+    */
+
+    video.srcObject =
+      cameraStream;
+
+    video.autoplay = true;
+    video.muted = true;
+    video.playsInline = true;
+
+
+    await video.play().catch(
+      function(){}
+    );
+
+
+    /*
+      Make sure the video is actually
+      displaying dimensions before capture.
+    */
+
+    if(
+      video.readyState <
+      HTMLMediaElement.HAVE_CURRENT_DATA
+    ){
+
+      await new Promise(
+        resolve => {
+
+          video.onloadedmetadata =
+            function(){
+
+              video.play()
+                .catch(
+                  function(){}
+                );
+
+              resolve();
+
+            };
+
+        }
+      );
+
+    }
+
+
+  }catch(error){
+
+    console.error(
+      "Pear Phone camera error:",
+      error
+    );
+
+
+    const result =
+      document.getElementById(
+        "camera-result"
+      );
+
+
+    if(result){
+
+      result.innerHTML = `
+
+        <div class="result">
+
+          📷 Camera could not be started.
+
+          <br><br>
+
+          Make sure the Freenove camera is connected
+          to the Raspberry Pi and camera permission
+          is allowed.
+
+        </div>
+
+      `;
+
+    }
+
+  }
+
+};
+
+
+/* ============================================================
+   CAMERA CAPTURE FIX
+   KEEPS YOUR EXISTING CAPTURE BUTTON WORKING
+============================================================ */
+
+window.captureCamera = function(){
+
+  const video =
+    document.getElementById(
+      "camera-preview"
+    );
+
+  const canvas =
+    document.getElementById(
+      "camera-canvas"
+    );
+
+  const result =
+    document.getElementById(
+      "camera-result"
+    );
+
+
+  if(
+    !video ||
+    !canvas ||
+    !result
+  ){
+    return;
+  }
+
+
+  if(
+    !video.videoWidth ||
+    !video.videoHeight
+  ){
+
+    result.innerHTML = `
+
+      <div class="result">
+
+        Camera is not ready yet.
+
+        <br>
+
+        Start the camera first.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  canvas.width =
+    video.videoWidth;
+
+  canvas.height =
+    video.videoHeight;
+
+
+  const context =
+    canvas.getContext("2d");
+
+
+  context.drawImage(
+    video,
+    0,
+    0,
+    canvas.width,
+    canvas.height
+  );
+
+
+  const image =
+    canvas.toDataURL(
+      "image/jpeg",
+      0.92
+    );
+
+
+  result.innerHTML = `
+
+    <div class="result">
+
+      <strong>📸 Photo Captured!</strong>
+
+      <br><br>
+
+      <img
+        src="${image}"
+        style="
+          width:100%;
+          border-radius:10px;
+          display:block;
+        "
+      >
+
+    </div>
+
+  `;
+
+};
+
+
+/* ============================================================
+   END OF ONLY REQUESTED FIXES
+============================================================ */

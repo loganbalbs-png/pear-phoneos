@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+<title>Pear Phone OS</title>
+
+<style>
+
+*{
+
+  box-sizing:border-box;
+
+  -webkit-tap-highlight-color:transparent;
+
+}
+
+html,body{
+
+  margin:0;
+
+  width:100%;
+
+  height:100%;
+
+  overflow:hidden;
+
+  background:#111;
+
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+
+}
+
+body{
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+}
+
+/* =========================
+
+   PEAR PHONE
+
+========================= */
+
+#phone-container{
+
+  position:relative;
+
+  width:min(170vh,1500px);
+
+  aspect-ratio:1212 / 1188;
+
+  background:url("pear-phone.png") center/contain no-repeat;
+
+  transform:rotate(90deg);
+
+  transform-origin:center center;
+
+  touch-action:none;
+
+  user-select:none;
+
+}
+
+/* =========================
+
+   HOTSPOTS
+
+========================= */
+
+.hotspot{
+
+  position:absolute;
+
+  border:0;
+
+  background:transparent;
+
+  padding:0;
+
+  margin:0;
+
+  border-radius:50%;
+
+  cursor:pointer;
+
+  touch-action:manipulation;
+
+  -webkit-appearance:none;
+
+  appearance:none;
+
+  z-index:200;
+
+}
+
+.hotspot:active{
+
+  transform:scale(.93);
+
+}
+
+/* =========================
+
+   PAGE 1
+
+========================= */
+
+#messages{
+
+  left:43.1%;
+
+  top:25.7%;
+
+  width:9.6%;
+
+  aspect-ratio:1;
+
+}
+
+#camera{
+
+  left:54%;
+
+  top:25.7%;
+
+  width:9.6%;
+
+  aspect-ratio:1;
+
+}
+
+#splashface{
+
+  left:38%;
+
+  top:36.1%;
+
+  width:9.6%;
+
+  aspect-ratio:1;
+
+}
+
+#stocks{
+
+  left:47.5%;
+
+  top:36.1%;
+
+  width:9.6%;
+
+  aspect-ratio:1;
+
+}
+
+#maps{
+
+  left:57%;
+
+  top:36.1%;
+
+  width:9.6%;
+
+  aspect-ratio:1;
+
+}
+
+#photos{
+
+  left:38%;
+
+  top:46.9%;
+
+  width:9.6%;
+
+  aspect-ratio:1;
+
+}
+
+#weather{
+
+  left:47.5%;
+
+  top:46.9%;
+
+  width:9.6%;
+
+  aspect-ratio:1;
+
+}
+
+#notes{
+
+  left:57%;
+
+  top:46.9%;
+
+  width:9.6%;
+
+  aspect-ratio:1;
+
+}
+
+#peartunes{
+
+  left:32%;
+
+  top:55.9%;
+
+  width:9.6%;
+
+  aspect-ratio:1;
+
+}
+
+#settings{
+
+  left:42%;
+
+  top:55.9%;
+
+  width:9.6%;
+
+  aspect-ratio:1;
+
+}
+
+#clock{
+
+  left:52%;
+
+  top:55.9%;
+
+  width:9.6%;
+
+  aspect-ratio:1;
+
+}
+
+#videos{
+
+  left:62%;
+
+  top:55.9%;
+
+  width:9.6%;
+
+  aspect-ratio:1;
+
+}
+
+#phone{
+
+  left:32%;
+
+  top:65.9%;
+
+  width:9.6%;
+
+  aspect-ratio:1;
+
+}
+
+#mail{
+
+  left:42%;
+
+  top:65.9%;
+
+  width:9.6%;
+
+  aspect-ratio:1;
+
+}
+
+#compass{
+
+  left:52%;
+
+  top:65.9%;
+
+  width:9.6%;
+
+  aspect-ratio:1;
+
+}
+
+#music{
+
+  left:62%;
+
+  top:65.9%;
+
+  width:9.6%;
+
+  aspect-ratio:1;
+
+}
+
+#home{
+
+  position:absolute;
+
+  left:46%;
+
+  top:78.8%;
+
+  width:8.2%;
+
+  aspect-ratio:1;
+
+  border:0;
+
+  background:transparent;
+
+  border-radius:50%;
+
+  cursor:pointer;
+
+  z-index:400;
+
+}
+
+/* =========================
+   APP WINDOW
+
+========================= */
+
+#overlay{
+
+  position:absolute;
+
+  left:31%;
+
+  top:22%;
+
+  width:38%;
+
+  height:47%;
+
+  z-index:500;
+
+  display:none;
+
+  overflow:hidden;
+
+  background:#f4f5f7;
+
+  border-radius:10px;
+
+  box-shadow:
+
+    0 5px 25px rgba(0,0,0,.55);
+
+}
+
+#overlay.open{
+
+  display:block;
+
+}
+
+#app-window{
+
+  width:100%;
+
+  height:100%;
+
+  display:flex;
+
+  flex-direction:column;
+
+  overflow:hidden;
+
+  background:#f4f5f7;
+
+  color:#111;
+
+}
+
+#app-window .window-header{
+
+  flex:0 0 auto;
+
+  display:flex;
+
+  align-items:center;
+
+  gap:8px;
+
+  padding:8px 10px;
+
+  background:linear-gradient(#fff,#e7e8ea);
+
+  border-bottom:1px solid #ccc;
+
+  font-weight:900;
+
+  font-size:15px;
+
+}
+
+.back{
+
+  width:30px;
+
+  height:30px;
+
+  border-radius:50%;
+
+  border:1px solid #bbb;
+
+  background:linear-gradient(#fff,#ddd);
+
+  font-size:23px;
+
+  cursor:pointer;
+
+}
+
+#app-window .window-body{
+
+  flex:1;
+
+  min-height:0;
+
+  overflow-y:auto;
+
+  padding:12px;
+
+  padding-bottom:15px;
+
+  -webkit-overflow-scrolling:touch;
+
+}
+
+.button{
+
+  padding:9px 13px;
+
+  border-radius:11px;
+
+  border:1px solid #bbb;
+
+  background:linear-gradient(#fff,#ddd);
+
+  font-weight:700;
+
+  cursor:pointer;
+
+}
+
+.row{
+
+  display:flex;
+
+  gap:7px;
+
+}
+
+input,
+
+textarea{
+
+  font-family:inherit;
+
+  font-size:16px;
+
+  padding:9px;
+
+  border:1px solid #bbb;
+
+  border-radius:10px;
+
+  outline:none;
+
+}
+
+textarea{
+
+  width:100%;
+
+  min-height:130px;
+
+}
+
+.bubble{
+
+  padding:9px 12px;
+
+  width:max-content;
+
+  max-width:82%;
+
+  background:#dedfe3;
+
+  border-radius:17px;
+
+  margin-bottom:7px;
+
+}
+
+.bubble.me{
+
+  margin-left:auto;
+
+  background:linear-gradient(#58b9ff,#1389df);
+
+  color:#fff;
+
+}
+
+.stock{
+
+  display:flex;
+
+  justify-content:space-between;
+
+  align-items:center;
+
+  padding:10px;
+
+  margin-bottom:7px;
+
+  background:#fff;
+
+  border:1px solid #ddd;
+
+  border-radius:12px;
+
+}
+
+.photos{
+
+  display:grid;
+
+  grid-template-columns:repeat(3,1fr);
+
+  gap:6px;
+
+}
+
+.photos img{
+
+  width:100%;
+
+  aspect-ratio:1;
+
+  object-fit:cover;
+
+  border-radius:10px;
+
+}
+
+.camera-video{
+
+  width:100%;
+
+  border-radius:14px;
+
+  background:#000;
+
+}
+
+.map{
+
+  height:180px;
+
+  border-radius:15px;
+
+  background:linear-gradient(135deg,#d6e5c7,#e7dfb9);
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  font-size:55px;
+
+}
+
+/* =====================================================
+
+   CUSTOM KEYBOARD
+
+   IMPORTANT: HIDDEN BY DEFAULT
+
+===================================================== */
+
+#pear-keyboard{
+
+  position:absolute;
+
+  left:3%;
+
+  right:3%;
+
+  bottom:3%;
+
+  width:94%;
+
+  padding:6px;
+
+  background:rgba(35,35,40,.98);
+
+  border-radius:11px;
+
+  z-index:9999;
+
+  display:none;
+
+  opacity:0;
+
+  transform:translateY(120%);
+
+  transition:
+
+    transform .28s cubic-bezier(.22,.8,.25,1),
+
+    opacity .2s ease;
+
+  box-shadow:
+
+    0 5px 18px rgba(0,0,0,.55);
+
+  touch-action:manipulation;
+
+}
+
+#pear-keyboard.keyboard-show{
+
+  opacity:1;
+
+  transform:translateY(0);
+
+}
+
+.pear-keyboard-row{
+
+  display:flex;
+
+  gap:3px;
+
+  margin-bottom:3px;
+
+}
+
+.pear-keyboard-row:last-child{
+
+  margin-bottom:0;
+
+}
+
+.pear-keyboard-row button{
+
+  flex:1;
+
+  min-width:0;
+
+  height:29px;
+
+  border:0;
+
+  border-radius:5px;
+
+  background:#f5f5f7;
+
+  color:#111;
+
+  font-size:11px;
+
+  font-weight:800;
+
+  padding:0;
+
+  touch-action:manipulation;
+
+  user-select:none;
+
+}
+
+.pear-keyboard-row button:active{
+
+  transform:scale(.88);
+
+  background:#cfd0d4;
+
+}
+
+.pear-keyboard-row.bottom button:first-child{
+
+  flex:1.2;
+
+}
+
+.pear-keyboard-row.bottom button:nth-child(2){
+
+  flex:5;
+
+}
+
+.pear-keyboard-row.bottom button:last-child{
+
+  flex:1.2;
+
+}
+
+/* Keyboard must NEVER appear over the physical top circles */
+
+#pear-keyboard{
+
+  pointer-events:auto;
+
+}
+
+@media(max-width:700px){
+
+  #phone-container{
+
+    width:100vw;
+
+  }
+
+  #pear-keyboard{
+
+    left:3%;
+
+    width:94%;
+
+  }
+
+  .pear-keyboard-row button{
+
+    height:27px;
+
+    font-size:10px;
+
+  }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div id="phone-container">
+
+  <!-- HOME BUTTON -->
+
+  <button id="home"></button>
+
+
+  <!-- APP WINDOW -->
+
+  <div id="overlay">
+
+    <div id="app-window"></div>
+
+  </div>
+
+</div>
+
+
+<script src="app.js"></script>
+
+</body>
+
+</html>

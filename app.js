@@ -1,7 +1,11 @@
 /* =========================================================
+
    PEAR PHONE OS
+
    FULL APP SCRIPT
-   PAGE 1 ONLY
+
+   PAGE 1 + PAGE 2
+
    ========================================================= */
 
 
@@ -21,17 +25,11 @@ function openApp(title, content) {
 
         <div class="header">
 
-            <button
-                class="back"
-                onclick="closeApp()"
-            >
-                ‹
-            </button>
+            <button class="back" onclick="closeApp()">‹</button>
 
             <span>${title}</span>
 
         </div>
-
 
         <div class="content">
 
@@ -51,8 +49,464 @@ function closeApp() {
         overlay.classList.remove("open");
     }
 
+    hidePearKeyboard();
+
     stopCamera();
-    hideKeyboard();
+}
+
+
+/* =========================================================
+   CUSTOM PEAR KEYBOARD
+   ========================================================= */
+
+let pearKeyboard = null;
+let keyboardTarget = null;
+let keyboardShift = false;
+
+
+function addPearKeyboardStyles() {
+
+    if (document.getElementById("pear-keyboard-styles")) return;
+
+    const style = document.createElement("style");
+
+    style.id = "pear-keyboard-styles";
+
+    style.textContent = `
+
+        #pear-keyboard {
+            position:absolute;
+            left:6px;
+            right:6px;
+            bottom:6px;
+            z-index:9999;
+            display:none;
+            padding:6px;
+            border-radius:10px;
+            background:rgba(35,35,40,.97);
+            box-sizing:border-box;
+            box-shadow:0 3px 14px rgba(0,0,0,.35);
+            user-select:none;
+        }
+
+        #pear-keyboard.open {
+            display:block;
+        }
+
+        #pear-keyboard .pear-key-row {
+            display:flex;
+            gap:4px;
+            margin:4px 0;
+        }
+
+        #pear-keyboard button {
+            flex:1;
+            min-width:0;
+            height:28px;
+            padding:0 3px;
+            border:0;
+            border-radius:5px;
+            background:#f2f2f7;
+            color:#111;
+            font-size:12px;
+            font-weight:600;
+            touch-action:manipulation;
+        }
+
+        #pear-keyboard button.wide {
+            flex:1.7;
+        }
+
+        #pear-keyboard button.space {
+            flex:4;
+        }
+
+        #pear-keyboard button:active {
+            transform:scale(.94);
+        }
+
+    `;
+
+    document.head.appendChild(style);
+}
+
+
+function createPearKeyboard() {
+
+    addPearKeyboardStyles();
+
+    if (pearKeyboard) {
+        pearKeyboard.remove();
+    }
+
+    pearKeyboard = document.createElement("div");
+
+    pearKeyboard.id = "pear-keyboard";
+
+
+    const rows = [
+
+        ["1","2","3","4","5","6","7","8","9","0"],
+
+        ["q","w","e","r","t","y","u","i","o","p"],
+
+        ["a","s","d","f","g","h","j","k","l"],
+
+        ["shift","z","x","c","v","b","n","m","backspace"],
+
+        ["space",".",",","?","!","enter"]
+
+    ];
+
+
+    rows.forEach(row => {
+
+        const rowElement =
+            document.createElement("div");
+
+        rowElement.className =
+            "pear-key-row";
+
+
+        row.forEach(key => {
+
+            const button =
+                document.createElement("button");
+
+            button.type = "button";
+
+            button.dataset.key = key;
+
+
+            if (key === "backspace") {
+
+                button.textContent = "⌫";
+
+                button.className = "wide";
+
+            }
+
+            else if (key === "shift") {
+
+                button.textContent = "⇧";
+
+                button.className = "wide";
+
+            }
+
+            else if (key === "space") {
+
+                button.textContent = "Space";
+
+                button.className = "space";
+
+            }
+
+            else if (key === "enter") {
+
+                button.textContent = "Enter";
+
+                button.className = "wide";
+
+            }
+
+            else {
+
+                button.textContent = key;
+
+            }
+
+
+            button.addEventListener(
+                "pointerdown",
+                function(event) {
+
+                    event.preventDefault();
+
+                    event.stopPropagation();
+
+                    pearKeyboardKey(key);
+
+                }
+            );
+
+
+            rowElement.appendChild(button);
+
+        });
+
+
+        pearKeyboard.appendChild(rowElement);
+
+    });
+
+
+    if (appWindow) {
+        appWindow.appendChild(pearKeyboard);
+    }
+
+}
+
+
+function isKeyboardInput(element) {
+
+    if (!element) return false;
+
+    if (element.tagName === "TEXTAREA") {
+        return true;
+    }
+
+    if (element.tagName !== "INPUT") {
+        return false;
+    }
+
+    return [
+        "text",
+        "search",
+        "email",
+        "url",
+        "tel",
+        "number",
+        "password"
+    ].includes(
+        (element.type || "text").toLowerCase()
+    );
+
+}
+
+
+function showPearKeyboard(element) {
+
+    if (!isKeyboardInput(element)) return;
+
+    keyboardTarget = element;
+
+    keyboardShift = false;
+
+    createPearKeyboard();
+
+    pearKeyboard.classList.add("open");
+
+}
+
+
+function hidePearKeyboard() {
+
+    keyboardTarget = null;
+
+    keyboardShift = false;
+
+    if (pearKeyboard) {
+        pearKeyboard.classList.remove("open");
+    }
+
+}
+
+
+function pearKeyboardKey(key) {
+
+    if (
+        !keyboardTarget ||
+        !document.body.contains(keyboardTarget)
+    ) {
+
+        hidePearKeyboard();
+
+        return;
+
+    }
+
+
+    if (key === "enter") {
+
+        hidePearKeyboard();
+
+        keyboardTarget.blur();
+
+        return;
+
+    }
+
+
+    const start =
+        keyboardTarget.selectionStart ??
+        keyboardTarget.value.length;
+
+    const end =
+        keyboardTarget.selectionEnd ??
+        keyboardTarget.value.length;
+
+
+    if (key === "backspace") {
+
+        if (start !== end) {
+
+            keyboardTarget.value =
+                keyboardTarget.value.slice(0,start) +
+                keyboardTarget.value.slice(end);
+
+            keyboardTarget.setSelectionRange(
+                start,
+                start
+            );
+
+        }
+
+        else if (start > 0) {
+
+            keyboardTarget.value =
+                keyboardTarget.value.slice(0,start-1) +
+                keyboardTarget.value.slice(end);
+
+            keyboardTarget.setSelectionRange(
+                start-1,
+                start-1
+            );
+
+        }
+
+    }
+
+    else if (key === "shift") {
+
+        keyboardShift = !keyboardShift;
+
+    }
+
+    else {
+
+        const value =
+            key === "space"
+                ? " "
+                : (
+                    keyboardShift &&
+                    /^[a-z]$/.test(key)
+                        ? key.toUpperCase()
+                        : key
+                );
+
+
+        keyboardTarget.value =
+            keyboardTarget.value.slice(0,start) +
+            value +
+            keyboardTarget.value.slice(end);
+
+
+        keyboardTarget.setSelectionRange(
+            start + value.length,
+            start + value.length
+        );
+
+
+        keyboardShift = false;
+
+    }
+
+
+    keyboardTarget.dispatchEvent(
+        new Event("input", {
+            bubbles:true
+        })
+    );
+
+}
+
+
+if (appWindow) {
+
+    appWindow.addEventListener(
+        "focusin",
+        event => {
+
+            if (
+                isKeyboardInput(event.target)
+            ) {
+
+                showPearKeyboard(event.target);
+
+            }
+
+        }
+    );
+
+
+    appWindow.addEventListener(
+        "click",
+        event => {
+
+            if (
+                isKeyboardInput(event.target)
+            ) {
+
+                showPearKeyboard(event.target);
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   PAGE 2 REMOVED FROM PHONE UI
+   PAGE 2 APP FUNCTIONS ARE KEPT UNCHANGED
+   ========================================================= */
+
+let currentPage = 1;
+
+
+const phoneContainer =
+    document.getElementById("phone-container");
+
+
+const pageDots =
+    document.getElementById("page-dots");
+
+
+function showPage(page) {
+
+    currentPage = 1;
+
+    if (phoneContainer) {
+
+        phoneContainer.classList.remove(
+            "page-two"
+        );
+
+    }
+
+    if (pageDots) {
+
+        pageDots.textContent = "●";
+
+    }
+
+}
+
+
+if (phoneContainer) {
+
+    const page2Style =
+        document.createElement("style");
+
+    page2Style.textContent = `
+
+        #page2 {
+            display:none !important;
+            opacity:0 !important;
+            pointer-events:none !important;
+        }
+
+        .page2-hotspot {
+            display:none !important;
+            pointer-events:none !important;
+        }
+
+    `;
+
+    document.head.appendChild(page2Style);
+
 }
 
 
@@ -63,21 +517,35 @@ function closeApp() {
 const chats = {
 
     Chloe: [
+
         "Hey!! 👋",
+
         "What are you doing?",
+
         "We should hang out!"
+
     ],
+
 
     Sam: [
+
         "Yo!",
+
         "Did you see this?",
+
         "😂"
+
     ],
 
+
     Cat: [
+
         "Meow.",
+
         "MEOW.",
+
         "😸"
+
     ]
 
 };
@@ -142,6 +610,7 @@ function openMessages() {
         </button>
 
     `);
+
 }
 
 
@@ -152,10 +621,15 @@ function openChat(name) {
         <div id="chatMessages">
 
             ${chats[name].map(
+
                 message =>
+
                 `<div class="message">
+
                     ${message}
+
                 </div>`
+
             ).join("")}
 
         </div>
@@ -177,20 +651,33 @@ function openChat(name) {
         </button>
 
     `);
+
 }
 
 
 function sendMessage(name) {
 
     const input =
-        document.getElementById("messageInput");
+        document.getElementById(
+            "messageInput"
+        );
 
-    if (!input || !input.value.trim()) {
+
+    if (
+        !input ||
+        !input.value.trim()
+    ) {
+
         return;
+
     }
 
+
     const messages =
-        document.getElementById("chatMessages");
+        document.getElementById(
+            "chatMessages"
+        );
+
 
     messages.innerHTML += `
 
@@ -202,16 +689,26 @@ function sendMessage(name) {
 
     `;
 
+
     input.value = "";
+
 
     setTimeout(() => {
 
-        if (!document.getElementById("chatMessages")) {
+        if (
+            !document.getElementById(
+                "chatMessages"
+            )
+        ) {
+
             return;
+
         }
 
-        document.getElementById("chatMessages")
-            .innerHTML += `
+
+        document.getElementById(
+            "chatMessages"
+        ).innerHTML += `
 
             <div class="message">
 
@@ -226,6 +723,7 @@ function sendMessage(name) {
         `;
 
     }, 700);
+
 }
 
 
@@ -255,6 +753,7 @@ function newChat() {
         </button>
 
     `);
+
 }
 
 
@@ -324,6 +823,8 @@ function openCamera() {
 
     `);
 
+    startCamera();
+
 }
 
 
@@ -341,15 +842,17 @@ async function startCamera() {
             );
 
             return;
+
         }
 
-        stopCamera();
 
         cameraStream =
             await navigator.mediaDevices.getUserMedia({
 
                 video: {
+
                     facingMode: "user"
+
                 },
 
                 audio: false
@@ -358,18 +861,22 @@ async function startCamera() {
 
 
         const video =
-            document.getElementById("cameraVideo");
+            document.getElementById(
+                "cameraVideo"
+            );
 
 
         if (video) {
 
-            video.srcObject = cameraStream;
-
-            await video.play().catch(() => {});
+            video.srcObject =
+                cameraStream;
 
         }
 
-    } catch (error) {
+
+    }
+
+    catch (error) {
 
         alert(
             "Camera permission is unavailable. " +
@@ -377,6 +884,7 @@ async function startCamera() {
         );
 
     }
+
 }
 
 
@@ -386,35 +894,48 @@ function stopCamera() {
 
         cameraStream
             .getTracks()
-            .forEach(track => track.stop());
+            .forEach(
+                track => track.stop()
+            );
 
         cameraStream = null;
+
     }
+
 }
 
 
 function takePhoto() {
 
     const video =
-        document.getElementById("cameraVideo");
+        document.getElementById(
+            "cameraVideo"
+        );
+
 
     if (
         !video ||
         !video.srcObject
     ) {
 
-        alert("Start the camera first!");
+        alert(
+            "Start the camera first!"
+        );
 
         return;
+
     }
 
 
     const canvas =
-        document.getElementById("cameraCanvas");
+        document.getElementById(
+            "cameraCanvas"
+        );
 
 
     canvas.width =
         video.videoWidth;
+
 
     canvas.height =
         video.videoHeight;
@@ -432,7 +953,9 @@ function takePhoto() {
 
 
     const image =
-        canvas.toDataURL("image/png");
+        canvas.toDataURL(
+            "image/png"
+        );
 
 
     document.getElementById(
@@ -449,6 +972,7 @@ function takePhoto() {
         >
 
     `;
+
 }
 
 
@@ -468,7 +992,9 @@ function openSplashFace() {
             <b>Chloe</b>
 
             <p>
+
                 Beach day!! ☀️🌊
+
             </p>
 
 
@@ -499,7 +1025,9 @@ function openSplashFace() {
             <b>Sam</b>
 
             <p>
+
                 New Pear Phone! 🍐
+
             </p>
 
 
@@ -525,6 +1053,7 @@ function openSplashFace() {
         </button>
 
     `);
+
 }
 
 
@@ -535,6 +1064,7 @@ function likePost(button) {
 
     span.textContent =
         Number(span.textContent) + 1;
+
 }
 
 
@@ -545,9 +1075,12 @@ function commentPost() {
 
     if (comment) {
 
-        alert("Comment posted! 💬");
+        alert(
+            "Comment posted! 💬"
+        );
 
     }
+
 }
 
 
@@ -571,6 +1104,7 @@ function newPost() {
         </button>
 
     `);
+
 }
 
 
@@ -584,15 +1118,22 @@ function publishPost() {
 
     if (!text.trim()) {
 
-        alert("Write something first!");
+        alert(
+            "Write something first!"
+        );
 
         return;
+
     }
 
 
-    alert("Posted to SplashFace! 🌊");
+    alert(
+        "Posted to SplashFace! 🌊"
+    );
+
 
     openSplashFace();
+
 }
 
 
@@ -603,8 +1144,11 @@ function publishPost() {
 let stockValues = {
 
     AAPL: 238.45,
+
     MSFT: 511.20,
+
     TSLA: 341.88,
+
     NVDA: 178.42
 
 };
@@ -615,7 +1159,6 @@ function openStocks() {
     openApp("Stocks", `
 
         <h2>📈 Stocks</h2>
-
 
         <div id="stocksList"></div>
 
@@ -649,6 +1192,7 @@ function openStocks() {
 
 
     drawStocks();
+
 }
 
 
@@ -658,6 +1202,7 @@ function drawStocks() {
         document.getElementById(
             "stocksList"
         );
+
 
     if (!list) return;
 
@@ -680,13 +1225,16 @@ function drawStocks() {
                 <br>
 
                 <small>
+
                     Tap for details
+
                 </small>
 
             </div>
 
         `)
         .join("");
+
 }
 
 
@@ -700,7 +1248,9 @@ function refreshStocks() {
 
         });
 
+
     drawStocks();
+
 }
 
 
@@ -710,6 +1260,7 @@ function addStock() {
         document.getElementById(
             "stockSearch"
         );
+
 
     const symbol =
         input.value
@@ -726,7 +1277,9 @@ function addStock() {
 
     input.value = "";
 
+
     drawStocks();
+
 }
 
 
@@ -737,7 +1290,9 @@ function stockDetails(symbol) {
         <h2>📊 ${symbol}</h2>
 
         <h1>
+
             $${stockValues[symbol].toFixed(2)}
+
         </h1>
 
 
@@ -753,7 +1308,9 @@ function stockDetails(symbol) {
 
 
         <p>
+
             Today's activity
+
         </p>
 
 
@@ -767,6 +1324,7 @@ function stockDetails(symbol) {
         </button>
 
     `);
+
 }
 
 
@@ -816,7 +1374,9 @@ function openMaps() {
         <div id="mapResults">
 
             <p>
+
                 Search for a destination.
+
             </p>
 
         </div>
@@ -832,6 +1392,7 @@ function openMaps() {
         </button>
 
     `);
+
 }
 
 
@@ -860,7 +1421,6 @@ function searchMap() {
 
             <br><br>
 
-
             <button
                 class="button"
                 onclick="startRoute()"
@@ -873,6 +1433,7 @@ function searchMap() {
         </div>
 
     `;
+
 }
 
 
@@ -881,6 +1442,7 @@ function startRoute() {
     alert(
         "Route started! 🚗"
     );
+
 }
 
 
@@ -888,9 +1450,12 @@ function findMe() {
 
     if (!navigator.geolocation) {
 
-        alert("Location unavailable.");
+        alert(
+            "Location unavailable."
+        );
 
         return;
+
     }
 
 
@@ -898,7 +1463,9 @@ function findMe() {
 
         () => {
 
-            alert("📍 Your location was found!");
+            alert(
+                "📍 Your location was found!"
+            );
 
         },
 
@@ -912,6 +1479,7 @@ function findMe() {
         }
 
     );
+
 }
 
 
@@ -940,6 +1508,7 @@ function openPhotos() {
         ></div>
 
     `);
+
 }
 
 
@@ -961,7 +1530,8 @@ function loadPhotos(event) {
                 new FileReader();
 
 
-            reader.onload = function(event) {
+            reader.onload =
+                function(event) {
 
                 grid.innerHTML += `
 
@@ -984,6 +1554,7 @@ function loadPhotos(event) {
             reader.readAsDataURL(file);
 
         });
+
 }
 
 
@@ -1013,6 +1584,7 @@ function viewPhoto(src) {
         </button>
 
     `);
+
 }
 
 
@@ -1027,17 +1599,23 @@ function openWeather() {
         <div style="text-align:center">
 
             <div class="big-icon">
+
                 ☀️
+
             </div>
 
 
             <h1 id="weatherTemp">
+
                 22°C
+
             </h1>
 
 
             <p id="weatherCondition">
+
                 Sunny
+
             </p>
 
         </div>
@@ -1101,6 +1679,7 @@ function openWeather() {
         </button>
 
     `);
+
 }
 
 
@@ -1109,8 +1688,11 @@ function changeWeather() {
     const weather = [
 
         ["☀️", "Sunny"],
+
         ["🌧️", "Rain"],
+
         ["⛅", "Cloudy"],
+
         ["❄️", "Snow"]
 
     ];
@@ -1119,7 +1701,8 @@ function changeWeather() {
     const choice =
         weather[
             Math.floor(
-                Math.random() * weather.length
+                Math.random() *
+                weather.length
             )
         ];
 
@@ -1156,6 +1739,7 @@ function changeWeather() {
             temp + "°C";
 
     }
+
 }
 
 
@@ -1211,6 +1795,7 @@ function openNotes() {
         <p id="noteStatus"></p>
 
     `);
+
 }
 
 
@@ -1235,6 +1820,7 @@ function saveNote() {
         "noteStatus"
     ).textContent =
         "Saved! ✅";
+
 }
 
 
@@ -1256,6 +1842,7 @@ function clearNote() {
     localStorage.removeItem(
         "pearNote"
     );
+
 }
 
 
@@ -1273,17 +1860,23 @@ function openPearTunes() {
         <div style="text-align:center">
 
             <div class="big-icon">
+
                 🎵
+
             </div>
 
 
             <h2>
+
                 PearTunes
+
             </h2>
 
 
             <p id="songName">
+
                 Pear Phone Radio
+
             </p>
 
 
@@ -1329,6 +1922,7 @@ function openPearTunes() {
         </div>
 
     `);
+
 }
 
 
@@ -1346,6 +1940,7 @@ function playDemoSong() {
         );
 
         return;
+
     }
 
 
@@ -1389,6 +1984,7 @@ function playDemoSong() {
     oscillator.stop(
         context.currentTime + 1.5
     );
+
 }
 
 
@@ -1397,8 +1993,11 @@ function nextSong() {
     const songs = [
 
         "Pear Radio",
+
         "Pear Chill",
+
         "Pear Beats",
+
         "Pear FM"
 
     ];
@@ -1425,6 +2024,7 @@ function nextSong() {
             song;
 
     }
+
 }
 
 
@@ -1456,6 +2056,7 @@ function loadMusic(event) {
 
 
     audio.play();
+
 }
 
 
@@ -1537,6 +2138,7 @@ function openSettings() {
         </div>
 
     `);
+
 }
 
 
@@ -1551,6 +2153,7 @@ function toggleDarkMode() {
 
     appWindow.style.color =
         "white";
+
 }
 
 
@@ -1565,6 +2168,7 @@ function normalMode() {
 
     appWindow.style.color =
         "#111";
+
 }
 
 
@@ -1573,6 +2177,7 @@ function testSound() {
     alert(
         "🔊 Pear Phone sound works!"
     );
+
 }
 
 
@@ -1580,9 +2185,11 @@ function resetPhone() {
 
     localStorage.clear();
 
+
     alert(
         "Pear Phone data reset!"
     );
+
 }
 
 
@@ -1591,6 +2198,7 @@ function resetPhone() {
    ========================================================= */
 
 let stopwatchSeconds = 0;
+
 let stopwatchTimer = null;
 
 
@@ -1601,19 +2209,25 @@ function openClock() {
         <div style="text-align:center">
 
             <div class="big-icon">
+
                 🕐
+
             </div>
 
 
             <h2 id="clockTime">
+
                 ${new Date().toLocaleTimeString()}
+
             </h2>
 
 
             <div class="card">
 
                 <h2 id="stopwatch">
+
                     00:00
+
                 </h2>
 
 
@@ -1668,6 +2282,7 @@ function openClock() {
 
 
     updateClock();
+
 }
 
 
@@ -1690,6 +2305,7 @@ function updateClock() {
         updateClock,
         1000
     );
+
 }
 
 
@@ -1733,6 +2349,7 @@ function startStopwatch() {
                     .padStart(2, "0");
 
         }, 1000);
+
 }
 
 
@@ -1743,12 +2360,14 @@ function stopStopwatch() {
     );
 
     stopwatchTimer = null;
+
 }
 
 
 function resetStopwatch() {
 
     stopStopwatch();
+
 
     stopwatchSeconds = 0;
 
@@ -1765,6 +2384,7 @@ function resetStopwatch() {
             "00:00";
 
     }
+
 }
 
 
@@ -1784,6 +2404,7 @@ function setTimer() {
     ) {
 
         return;
+
     }
 
 
@@ -1799,6 +2420,7 @@ function setTimer() {
         );
 
     }, seconds * 1000);
+
 }
 
 
@@ -1844,6 +2466,7 @@ function openVideos() {
         </button>
 
     `);
+
 }
 
 
@@ -1864,6 +2487,7 @@ function loadVideo(event) {
 
     player.src =
         URL.createObjectURL(file);
+
 }
 
 
@@ -1875,14 +2499,15 @@ function fullscreenVideo() {
         );
 
 
-    if (!video) return;
-
-
-    if (video.requestFullscreen) {
+    if (
+        video &&
+        video.requestFullscreen
+    ) {
 
         video.requestFullscreen();
 
     }
+
 }
 
 
@@ -1890,89 +2515,240 @@ function fullscreenVideo() {
    PHONE
    ========================================================= */
 
+let phoneNumber = "";
+
+
 function openPhone() {
+
+    phoneNumber = "";
+
 
     openApp("Phone", `
 
-        <div style="text-align:center">
+        <h2 style="text-align:center">
 
-            <div class="big-icon">
-                📞
-            </div>
+            📞
 
-
-            <h2>
-                Pear Phone
-            </h2>
+        </h2>
 
 
-            <input
-                id="phoneNumber"
-                placeholder="Phone number"
-                type="tel"
-            >
+        <h2
+            id="phoneNumber"
+            style="text-align:center"
+        ></h2>
 
+
+        <div class="grid">
 
             <button
                 class="button"
-                onclick="callNumber()"
+                onclick="dial('1')"
             >
 
-                📞 Call
+                1
 
             </button>
 
 
             <button
                 class="button"
-                onclick="endCall()"
+                onclick="dial('2')"
             >
 
-                ❌ End
+                2
 
             </button>
 
 
-            <p id="callStatus"></p>
+            <button
+                class="button"
+                onclick="dial('3')"
+            >
+
+                3
+
+            </button>
+
+
+            <button
+                class="button"
+                onclick="dial('4')"
+            >
+
+                4
+
+            </button>
+
+
+            <button
+                class="button"
+                onclick="dial('5')"
+            >
+
+                5
+
+            </button>
+
+
+            <button
+                class="button"
+                onclick="dial('6')"
+            >
+
+                6
+
+            </button>
+
+
+            <button
+                class="button"
+                onclick="dial('7')"
+            >
+
+                7
+
+            </button>
+
+
+            <button
+                class="button"
+                onclick="dial('8')"
+            >
+
+                8
+
+            </button>
+
+
+            <button
+                class="button"
+                onclick="dial('9')"
+            >
+
+                9
+
+            </button>
+
+
+            <button
+                class="button"
+                onclick="dial('*')"
+            >
+
+                *
+
+            </button>
+
+
+            <button
+                class="button"
+                onclick="dial('0')"
+            >
+
+                0
+
+            </button>
+
+
+            <button
+                class="button"
+                onclick="dial('#')"
+            >
+
+                #
+
+            </button>
 
         </div>
 
+
+        <br>
+
+
+        <button
+            class="button"
+            onclick="callNumber()"
+        >
+
+            📞 Call
+
+        </button>
+
+
+        <button
+            class="button"
+            onclick="clearNumber()"
+        >
+
+            Clear
+
+        </button>
+
     `);
+
+}
+
+
+function dial(number) {
+
+    phoneNumber += number;
+
+
+    const display =
+        document.getElementById(
+            "phoneNumber"
+        );
+
+
+    if (display) {
+
+        display.textContent =
+            phoneNumber;
+
+    }
+
+}
+
+
+function clearNumber() {
+
+    phoneNumber = "";
+
+
+    const display =
+        document.getElementById(
+            "phoneNumber"
+        );
+
+
+    if (display) {
+
+        display.textContent = "";
+
+    }
+
 }
 
 
 function callNumber() {
 
-    const number =
-        document.getElementById(
-            "phoneNumber"
-        ).value;
+    if (!phoneNumber) {
 
-
-    if (!number.trim()) return;
-
-
-    document.getElementById(
-        "callStatus"
-    ).textContent =
-        "Calling " + number + "... 📞";
-}
-
-
-function endCall() {
-
-    const status =
-        document.getElementById(
-            "callStatus"
+        alert(
+            "Enter a number first!"
         );
 
-
-    if (status) {
-
-        status.textContent =
-            "Call ended.";
+        return;
 
     }
+
+
+    alert(
+        "Calling " +
+        phoneNumber +
+        " 📞"
+    );
+
 }
 
 
@@ -1984,7 +2760,11 @@ function openMail() {
 
     openApp("Mail", `
 
-        <h2>📧 Mail</h2>
+        <h2>
+
+            📧 Pear Mail
+
+        </h2>
 
 
         <div
@@ -1992,12 +2772,11 @@ function openMail() {
             onclick="readMail()"
         >
 
-            📦 Order Shipped
+            <b>Apple</b>
 
             <br>
 
-            Your Pear Phone accessories
-            are officially on the way!
+            Your Pear Phone order shipped! 📦
 
         </div>
 
@@ -2007,11 +2786,22 @@ function openMail() {
             onclick="readMomMail()"
         >
 
-            ❤️ Mom
+            <b>Mom</b>
 
             <br>
 
-            Don't forget dinner tonight!
+            Don't forget dinner ❤️
+
+        </div>
+
+
+        <div class="card">
+
+            <b>School</b>
+
+            <br>
+
+            New assignment available.
 
         </div>
 
@@ -2026,6 +2816,7 @@ function openMail() {
         </button>
 
     `);
+
 }
 
 
@@ -2034,13 +2825,18 @@ function readMail() {
     openApp("Mail", `
 
         <h2>
+
             📦 Order Shipped
+
         </h2>
 
 
         <p>
+
             Your Pear Phone accessories
+
             are officially on the way!
+
         </p>
 
 
@@ -2054,6 +2850,7 @@ function readMail() {
         </button>
 
     `);
+
 }
 
 
@@ -2062,12 +2859,16 @@ function readMomMail() {
     openApp("Mail", `
 
         <h2>
+
             ❤️ Mom
+
         </h2>
 
 
         <p>
+
             Don't forget dinner tonight!
+
         </p>
 
 
@@ -2081,6 +2882,7 @@ function readMomMail() {
         </button>
 
     `);
+
 }
 
 
@@ -2113,6 +2915,7 @@ function composeMail() {
         </button>
 
     `);
+
 }
 
 
@@ -2137,7 +2940,9 @@ function openCompass() {
 
 
             <h2 id="direction">
+
                 NORTH
+
             </h2>
 
 
@@ -2163,6 +2968,7 @@ function openCompass() {
         </div>
 
     `);
+
 }
 
 
@@ -2173,6 +2979,7 @@ function calibrateCompass() {
     );
 
     randomDirection();
+
 }
 
 
@@ -2181,8 +2988,11 @@ function randomDirection() {
     const directions = [
 
         "NORTH",
+
         "EAST",
+
         "SOUTH",
+
         "WEST"
 
     ];
@@ -2209,6 +3019,529 @@ function randomDirection() {
             direction;
 
     }
+
+}
+
+
+/* =========================================================
+   PAGE 2 — LINGO
+   ========================================================= */
+
+function openLingo() {
+
+    openApp("Lingo", `
+
+        <h2>🌐 Lingo</h2>
+
+
+        <p>
+
+            Type a phrase to translate it.
+
+        </p>
+
+
+        <select id="lingoLanguage">
+
+            <option value="spanish">
+
+                Spanish
+
+            </option>
+
+
+            <option value="french">
+
+                French
+
+            </option>
+
+
+            <option value="italian">
+
+                Italian
+
+            </option>
+
+        </select>
+
+
+        <input
+            id="lingoInput"
+            placeholder="Type something..."
+        >
+
+
+        <button
+            class="button"
+            onclick="translateLingo()"
+        >
+
+            Translate
+
+        </button>
+
+
+        <div
+            id="lingoResult"
+            class="card"
+        >
+
+            Translation will appear here.
+
+        </div>
+
+    `);
+
+}
+
+
+function translateLingo() {
+
+    const text =
+        document.getElementById(
+            "lingoInput"
+        ).value
+        .trim()
+        .toLowerCase();
+
+
+    const language =
+        document.getElementById(
+            "lingoLanguage"
+        ).value;
+
+
+    const dictionary = {
+
+        spanish: {
+
+            hello: "Hola",
+
+            "how are you":
+                "¿Cómo estás?",
+
+            thanks: "Gracias",
+
+            goodbye: "Adiós",
+
+            yes: "Sí",
+
+            no: "No"
+
+        },
+
+
+        french: {
+
+            hello: "Bonjour",
+
+            "how are you":
+                "Comment allez-vous?",
+
+            thanks: "Merci",
+
+            goodbye: "Au revoir",
+
+            yes: "Oui",
+
+            no: "Non"
+
+        },
+
+
+        italian: {
+
+            hello: "Ciao",
+
+            "how are you":
+                "Come stai?",
+
+            thanks: "Grazie",
+
+            goodbye: "Arrivederci",
+
+            yes: "Sì",
+
+            no: "No"
+
+        }
+
+    };
+
+
+    const result =
+        dictionary[language][text] ||
+        "I don't know that phrase yet.";
+
+
+    document.getElementById(
+        "lingoResult"
+    ).textContent = result;
+
+}
+
+
+/* =========================================================
+   PAGE 2 — THUMB
+   ========================================================= */
+
+let thumbScore = 0;
+
+
+function openThumb() {
+
+    thumbScore = 0;
+
+
+    openApp("Thumb", `
+
+        <div style="text-align:center">
+
+            <div class="big-icon">
+
+                👍
+
+            </div>
+
+
+            <h2>
+
+                Thumb Challenge
+
+            </h2>
+
+
+            <p>
+
+                Tap as many times as possible!
+
+            </p>
+
+
+            <h1 id="thumbScore">
+
+                0
+
+            </h1>
+
+
+            <button
+                class="button"
+                style="
+                    font-size:22px;
+                    padding:20px;
+                "
+                onclick="thumbTap()"
+            >
+
+                👍 TAP!
+
+            </button>
+
+        </div>
+
+    `);
+
+}
+
+
+function thumbTap() {
+
+    thumbScore++;
+
+
+    const score =
+        document.getElementById(
+            "thumbScore"
+        );
+
+
+    if (score) {
+
+        score.textContent =
+            thumbScore;
+
+    }
+
+}
+
+
+/* =========================================================
+   PAGE 2 — DANWARP
+   ========================================================= */
+
+function openDanWarp() {
+
+    openApp("DanWarp", `
+
+        <div
+            id="warpBox"
+            style="
+                height:170px;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                background:
+                    radial-gradient(
+                        circle,
+                        #744cff,
+                        #111
+                    );
+                border-radius:12px;
+                color:white;
+                font-size:25px;
+                transition:.4s;
+            "
+        >
+
+            DANWARP
+
+        </div>
+
+
+        <br>
+
+
+        <button
+            class="button"
+            onclick="activateWarp()"
+        >
+
+            🌀 Warp
+
+        </button>
+
+
+        <button
+            class="button"
+            onclick="resetWarp()"
+        >
+
+            Reset
+
+        </button>
+
+    `);
+
+}
+
+
+function activateWarp() {
+
+    const box =
+        document.getElementById(
+            "warpBox"
+        );
+
+
+    if (!box) return;
+
+
+    box.style.transform =
+        "perspective(300px) rotateX(25deg) rotateY(35deg) scale(1.2)";
+
+
+    box.textContent =
+        "🌀 WARPED!";
+
+}
+
+
+function resetWarp() {
+
+    const box =
+        document.getElementById(
+            "warpBox"
+        );
+
+
+    if (!box) return;
+
+
+    box.style.transform =
+        "none";
+
+
+    box.textContent =
+        "DANWARP";
+
+}
+
+
+/* =========================================================
+   PAGE 2 — ZAPLOOK
+   ========================================================= */
+
+function openZapLook() {
+
+    openApp("ZapLook", `
+
+        <div style="text-align:center">
+
+            <div
+                class="big-icon"
+                id="zapEmoji"
+            >
+
+                👀
+
+            </div>
+
+
+            <h2>
+
+                ZapLook
+
+            </h2>
+
+
+            <p id="zapText">
+
+                What will ZapLook find?
+
+            </p>
+
+
+            <button
+                class="button"
+                onclick="zapLook()"
+            >
+
+                ⚡ ZAP!
+
+            </button>
+
+        </div>
+
+    `);
+
+}
+
+
+function zapLook() {
+
+    const things = [
+
+        "🍕 Pizza detected!",
+
+        "🐱 Cat detected!",
+
+        "🏖️ Beach detected!",
+
+        "🍐 Pear detected!",
+
+        "🎮 Gaming detected!",
+
+        "🚗 Car detected!",
+
+        "⭐ Something interesting!",
+
+        "😂 Meme detected!"
+
+    ];
+
+
+    const result =
+        things[
+            Math.floor(
+                Math.random() *
+                things.length
+            )
+        ];
+
+
+    const text =
+        document.getElementById(
+            "zapText"
+        );
+
+
+    if (text) {
+
+        text.textContent =
+            result;
+
+    }
+
+}
+
+
+/* =========================================================
+   PAGE 2 — CONNECT ALL APPS
+   ========================================================= */
+
+function connectPage2Apps() {
+
+    const connections = {
+
+        "p2-lingo":
+            openLingo,
+
+        "p2-splash":
+            openSplashFace,
+
+        "p2-thumb":
+            openThumb,
+
+        "p2-danwarp":
+            openDanWarp,
+
+        "p2-image":
+            openCamera,
+
+        "p2-chrono":
+            openClock,
+
+        "p2-zaplook":
+            openZapLook,
+
+        "p2-weather":
+            openWeather,
+
+        "p2-music":
+            openPearTunes,
+
+        "p2-monkey":
+            openPhotos,
+
+        "p2-remark":
+            openNotes,
+
+        "p2-settings":
+            openSettings,
+
+        "p2-phone":
+            openPhone,
+
+        "p2-mail":
+            openMail,
+
+        "p2-compass":
+            openCompass,
+
+        "p2-music2":
+            openPearTunes
+
+    };
+
+
+    Object.keys(connections)
+        .forEach(id => {
+
+            const element =
+                document.getElementById(id);
+
+
+            if (element) {
+
+                element.onclick =
+                    connections[id];
+
+            }
+
+        });
+
 }
 
 
@@ -2277,18 +3610,13 @@ function connectPage1Apps() {
             const element =
                 document.getElementById(id);
 
-            if (!element) return;
 
+            if (element) {
 
-            element.onclick =
-                function(event) {
+                element.onclick =
+                    connections[id];
 
-                    event.preventDefault();
-                    event.stopPropagation();
-
-                    connections[id]();
-
-                };
+            }
 
         });
 
@@ -2301,534 +3629,23 @@ function connectPage1Apps() {
 
     if (home) {
 
-        home.onclick =
-            function(event) {
+        home.onclick = function() {
 
-                event.preventDefault();
-                event.stopPropagation();
+            closeApp();
 
-                closeApp();
+            showPage(1);
 
-            };
+        };
 
     }
-}
-
-
-/* =========================================================
-   ON-SCREEN KEYBOARD
-   ========================================================= */
-
-let keyboardTarget = null;
-
-
-function createKeyboard() {
-
-    if (
-        document.getElementById(
-            "pear-keyboard"
-        )
-    ) {
-
-        return;
-    }
-
-
-    const keyboard =
-        document.createElement("div");
-
-
-    keyboard.id =
-        "pear-keyboard";
-
-
-    keyboard.innerHTML = `
-
-        <div class="pear-keyboard-row">
-
-            <button data-key="q">q</button>
-            <button data-key="w">w</button>
-            <button data-key="e">e</button>
-            <button data-key="r">r</button>
-            <button data-key="t">t</button>
-            <button data-key="y">y</button>
-            <button data-key="u">u</button>
-            <button data-key="i">i</button>
-            <button data-key="o">o</button>
-            <button data-key="p">p</button>
-
-        </div>
-
-
-        <div class="pear-keyboard-row">
-
-            <button data-key="a">a</button>
-            <button data-key="s">s</button>
-            <button data-key="d">d</button>
-            <button data-key="f">f</button>
-            <button data-key="g">g</button>
-            <button data-key="h">h</button>
-            <button data-key="j">j</button>
-            <button data-key="k">k</button>
-            <button data-key="l">l</button>
-
-        </div>
-
-
-        <div class="pear-keyboard-row">
-
-            <button data-key="z">z</button>
-            <button data-key="x">x</button>
-            <button data-key="c">c</button>
-            <button data-key="v">v</button>
-            <button data-key="b">b</button>
-            <button data-key="n">n</button>
-            <button data-key="m">m</button>
-            <button data-key="backspace">⌫</button>
-
-        </div>
-
-
-        <div class="pear-keyboard-row">
-
-            <button
-                data-key="space"
-                class="space-key"
-            >
-                space
-            </button>
-
-            <button data-key="enter">
-                ↵
-            </button>
-
-            <button data-key="hide">
-                Hide
-            </button>
-
-        </div>
-
-    `;
-
-
-    keyboard.style.cssText = `
-
-        position:fixed;
-        left:0;
-        right:0;
-        bottom:0;
-        z-index:99999;
-        display:none;
-        padding:8px;
-        background:rgba(35,35,35,.96);
-        box-sizing:border-box;
-        box-shadow:0 -4px 18px rgba(0,0,0,.35);
-        touch-action:manipulation;
-
-    `;
-
-
-    keyboard
-        .querySelectorAll(
-            ".pear-keyboard-row"
-        )
-        .forEach(row => {
-
-            row.style.cssText =
-                "display:flex;gap:4px;margin:4px 0;";
-
-        });
-
-
-    keyboard
-        .querySelectorAll("button")
-        .forEach(button => {
-
-            button.style.cssText = `
-                flex:1;
-                min-width:0;
-                height:38px;
-                border:0;
-                border-radius:6px;
-                background:#eee;
-                color:#111;
-                font-size:16px;
-                touch-action:manipulation;
-            `;
-
-
-            button.addEventListener(
-                "click",
-                function(event) {
-
-                    event.preventDefault();
-                    event.stopPropagation();
-
-
-                    if (!keyboardTarget) {
-                        return;
-                    }
-
-
-                    const key =
-                        this.dataset.key;
-
-
-                    if (key === "hide") {
-
-                        hideKeyboard();
-
-                        return;
-
-                    }
-
-
-                    const target =
-                        keyboardTarget;
-
-
-                    const start =
-                        target.selectionStart ??
-                        target.value.length;
-
-
-                    const end =
-                        target.selectionEnd ??
-                        start;
-
-
-                    if (key === "backspace") {
-
-                        if (start !== end) {
-
-                            target.value =
-                                target.value.slice(
-                                    0,
-                                    start
-                                )
-                                +
-                                target.value.slice(
-                                    end
-                                );
-
-
-                            target.setSelectionRange(
-                                start,
-                                start
-                            );
-
-                        }
-
-                        else if (start > 0) {
-
-                            target.value =
-                                target.value.slice(
-                                    0,
-                                    start - 1
-                                )
-                                +
-                                target.value.slice(
-                                    end
-                                );
-
-
-                            target.setSelectionRange(
-                                start - 1,
-                                start - 1
-                            );
-
-                        }
-
-                    }
-
-                    else if (key === "space") {
-
-                        target.value =
-                            target.value.slice(
-                                0,
-                                start
-                            )
-                            +
-                            " "
-                            +
-                            target.value.slice(
-                                end
-                            );
-
-
-                        target.setSelectionRange(
-                            start + 1,
-                            start + 1
-                        );
-
-                    }
-
-                    else if (key === "enter") {
-
-                        if (
-                            target.tagName.toLowerCase()
-                            ===
-                            "textarea"
-                        ) {
-
-                            target.value =
-                                target.value.slice(
-                                    0,
-                                    start
-                                )
-                                +
-                                "\n"
-                                +
-                                target.value.slice(
-                                    end
-                                );
-
-
-                            target.setSelectionRange(
-                                start + 1,
-                                start + 1
-                            );
-
-                        }
-
-                    }
-
-                    else {
-
-                        target.value =
-                            target.value.slice(
-                                0,
-                                start
-                            )
-                            +
-                            key
-                            +
-                            target.value.slice(
-                                end
-                            );
-
-
-                        target.setSelectionRange(
-                            start + 1,
-                            start + 1
-                        );
-
-                    }
-
-
-                    target.dispatchEvent(
-                        new Event(
-                            "input",
-                            {
-                                bubbles:true
-                            }
-                        )
-                    );
-
-
-                    target.focus();
-
-                }
-            );
-
-        });
-
-
-    document.body.appendChild(
-        keyboard
-    );
-}
-
-
-function showKeyboard(target) {
-
-    if (
-        !target ||
-        !/^(INPUT|TEXTAREA)$/.test(
-            target.tagName
-        )
-    ) {
-
-        return;
-    }
-
-
-    keyboardTarget =
-        target;
-
-
-    createKeyboard();
-
-
-    const keyboard =
-        document.getElementById(
-            "pear-keyboard"
-        );
-
-
-    if (keyboard) {
-
-        keyboard.style.display =
-            "block";
-
-    }
-}
-
-
-function hideKeyboard() {
-
-    keyboardTarget = null;
-
-
-    const keyboard =
-        document.getElementById(
-            "pear-keyboard"
-        );
-
-
-    if (keyboard) {
-
-        keyboard.style.display =
-            "none";
-
-    }
-}
-
-
-/* =========================================================
-   KEYBOARD INPUT DETECTION
-   ========================================================= */
-
-document.addEventListener(
-    "focusin",
-    function(event) {
-
-        if (
-            /^(INPUT|TEXTAREA)$/.test(
-                event.target.tagName
-            )
-        ) {
-
-            showKeyboard(
-                event.target
-            );
-
-        }
-
-    }
-);
-
-
-document.addEventListener(
-    "focusout",
-    function() {
-
-        setTimeout(
-            function() {
-
-                if (
-                    !document.activeElement ||
-                    !/^(INPUT|TEXTAREA)$/.test(
-                        document.activeElement.tagName
-                    )
-                ) {
-
-                    hideKeyboard();
-
-                }
-
-            },
-            100
-        );
-
-    }
-);
-
-
-/* =========================================================
-   KEEP PAGE 1 ONLY
-   ========================================================= */
-
-function forcePageOne() {
-
-    const phone =
-        document.getElementById(
-            "phone-container"
-        );
-
-
-    const page2 =
-        document.getElementById(
-            "page2"
-        );
-
-
-    if (phone) {
-
-        phone.classList.remove(
-            "page-two"
-        );
-
-    }
-
-
-    if (page2) {
-
-        page2.style.display =
-            "none";
-
-    }
-
-
-    document
-        .querySelectorAll(
-            ".page2-hotspot"
-        )
-        .forEach(element => {
-
-            element.style.display =
-                "none";
-
-            element.style.pointerEvents =
-                "none";
-
-        });
 
 }
-
-
-window.showPage =
-    function() {
-
-        forcePageOne();
-
-    };
-
-
-setTimeout(
-    function() {
-
-        window.showPage =
-            function() {
-
-                forcePageOne();
-
-            };
-
-
-        forcePageOne();
-
-    },
-    0
-);
 
 
 /* =========================================================
    STARTUP
    ========================================================= */
 
-createKeyboard();
-
 connectPage1Apps();
 
-forcePageOne();
+showPage(1);
